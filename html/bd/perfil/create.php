@@ -1,0 +1,29 @@
+<?php
+
+session_start();
+
+include_once '../conexao.php';
+include_once '../../redirecionar.php';
+
+include('protectAdmin.php');
+
+$nmPerfil = filter_input(INPUT_POST, 'nmPerfil', FILTER_SANITIZE_SPECIAL_CHARS);
+
+$login = $_SESSION['login'];
+
+$queryInsert = $pdoCAT->query("INSERT INTO [portalcompras].[dbo].[PERFIL] VALUES ('$nmPerfil', NULL, '$login')");
+
+$querySelectPerfil = "SELECT MAX(ID_PERFIL) AS ID_PERFIL FROM PERFIL";
+$querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
+while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
+    $idPerfil = $registros['ID_PERFIL'];
+endwhile;
+
+$_SESSION['msg'] = "<p class='center red-text'>" . '<strong>Perfil</strong> cadastrado com <strong>sucesso</strong>.' . "</p>";
+
+$_SESSION['redirecionar'] = '../cadPerfil.php';
+$login = $_SESSION['login'];
+$tela = 'Perfil';
+$acao = 'Perfil ' . $nmPerfil . ' CRIADO';
+$idEvento = $idPerfil;
+redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

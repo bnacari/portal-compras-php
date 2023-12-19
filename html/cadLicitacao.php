@@ -1,0 +1,195 @@
+<?php
+
+include_once 'bd/conexao.php';
+include_once 'includes/header.inc.php';
+include_once 'includes/footer.inc.php';
+include_once 'includes/menu.inc.php';
+
+include('protectAdmin.php');
+
+if ($_SESSION['admin'] == 5) {
+    // Não faça nada ou redirecione para onde for necessário se essas condições forem atendidas.
+} else {
+    header('Location: index.php');
+}
+
+?>
+
+<!-- FORMULÁRIOS DE CADASTRO -->
+<div class="row container">
+    <form action="bd/licitacao/create.php" method="post" class="col s12 formulario" enctype="multipart/form-data">
+        <fieldset class="formulario col s12">
+            <h5 class="light center">Criar Licitação</h5>
+        </fieldset>
+        <p>&nbsp;</p>
+        <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
+            <!-- <h6><strong>Local a Visitar</strong></h6> -->
+            <div class="input-field col s4">
+                <input type="text" id="codLicitacao" name="codLicitacao" required>
+                <label>Código</label>
+            </div>
+
+            <div class="input-field col s4">
+
+                <select name="statusLicitacao" id="statusLicitacao">
+                    <option value='' selected>Selecione uma opção</option>
+                    <option value='Em Andamento'>Em Andamento</option>
+                    <option value='Encerrado'>Encerrada</option>
+                    <option value='Suspenso'>Suspensa</option>
+                </select>
+
+                <label>Status</label>
+            </div>
+
+            <div class="input-field col s4">
+                <input type="text" id="respLicitacao" name="respLicitacao" required>
+                <label>Responsável</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea type="text" id="objLicitacao" name="objLicitacao" required></textarea>
+                <label>Objeto</label>
+            </div>
+            <div class="input-field col s2">
+                <input type="date" id="dtAberLicitacao" name="dtAberLicitacao" required>
+                <label>Data de Abertura</label>
+            </div>
+            <div class="input-field col s2">
+                <input type="time" id="hrAberLicitacao" name="hrAberLicitacao" required>
+                <label>Horário de Abertura</label>
+            </div>
+
+            <div class="input-field col s2">
+                <input type="date" id="dtIniSessLicitacao" name="dtIniSessLicitacao" required>
+                <label>Início da Sessão de Disputa de Preços</label>
+            </div>
+            <div class="input-field col s2">
+                <input type="time" id="hrIniSessLicitacao" name="hrIniSessLicitacao" required>
+                <label>Início da Sessão de Disputa de Preços</label>
+            </div>
+
+            <div class="input-field col s4">
+                <select name="modoLicitacao" id="modoLicitacao" required>
+                    <option value='' selected>Selecione uma opção</option>
+                    <option value='Aberta'>Aberta</option>
+                    <option value='Fechada'>Fechada</option>
+                </select>
+                <label>Modo de Disputa</label>
+            </div>
+
+            <div class="input-field col s4">
+                <select name="criterioLicitacao" id="criterioLicitacao" required>
+                    <option value='' selected>Selecione uma opção</option>
+                    <?php
+                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL ORDER BY NM_CRITERIO";
+                    $querySelect = $pdoCAT->query($querySelect2);
+                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                        echo "<option value='" . $registros["ID_CRITERIO"] . "'>" . $registros["NM_CRITERIO"] . "</option>";
+                    endwhile;
+                    ?>
+                </select>
+                <!-- <input type="text" id="criterioLicitacao" name="criterioLicitacao"> -->
+                <label>Critério de Julgamento</label>
+            </div>
+            <div class="input-field col s4">
+                <input type="text" id="regimeLicitacao" name="regimeLicitacao" required>
+                <label>Regime de Execução</label>
+            </div>
+
+            <div class="input-field col s4">
+                <select name="formaLicitacao" id="formaLicitacao" required>
+                    <option value='' selected>Selecione uma opção</option>
+                    <?php
+                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL ORDER BY NM_FORMA";
+                    $querySelect = $pdoCAT->query($querySelect2);
+                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                        echo "<option value='" . $registros["ID_FORMA"] . "'>" . $registros["NM_FORMA"] . "</option>";
+                    endwhile;
+                    ?>
+                </select>
+                <label>Forma</label>
+            </div>
+
+            <div class="input-field col s4">
+                <input type="text" id="vlLicitacao" name="vlLicitacao" required>
+                <label>Valor Estimado</label>
+            </div>
+
+            <div class="input-field col s4">
+                <input type="text" id="identificadorLicitacao" name="identificadorLicitacao">
+                <label>Identificador</label>
+            </div>
+
+            <div class="input-field col s4">
+                <input type="text" id="localLicitacao" name="localLicitacao" required>
+                <label>Local de Abertura</label>
+            </div>
+            <div class="input-field col s12">
+                <textarea type="text" id="obsLicitacao" name="obsLicitacao" required></textarea>
+                <label>Observação</label>
+            </div>
+        </fieldset>
+
+        <p>&nbsp;</p>
+
+        <fieldset class="formulario">
+            <h6><strong>Anexos</strong></h6>
+
+            <input type="file" id="anexos" name="anexos[]">
+            <table id="fileTable">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- A tabela será preenchida dinamicamente aqui -->
+                </tbody>
+            </table>
+        </fieldset>
+
+        <p>&nbsp;</p>
+
+        <div class="input-field col s2">
+            <button type="submit" class="btn blue">Salvar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // RESPONSÁVEL PELA INCLUSÃO / EXCLUSÃO DE ANEXOS
+    document.addEventListener('DOMContentLoaded', function() {
+        const anexos = document.getElementById('anexos');
+        const fileTableBody = document.getElementById('tableBody');
+
+        anexos.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+
+            for (const file of files) {
+                addFileToTable(file);
+            }
+        }
+
+        function addFileToTable(file) {
+            const row = fileTableBody.insertRow();
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+
+            cell1.textContent = file.name;
+
+            const deleteButton = document.createElement('i');
+            deleteButton.className = 'material-icons delete-icon';
+            deleteButton.textContent = 'remove';
+            deleteButton.style.cursor = 'pointer';
+            deleteButton.addEventListener('click', function() {
+                row.remove();
+            });
+
+            cell2.appendChild(deleteButton);
+        }
+    });
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+</script>

@@ -1,0 +1,69 @@
+<?php
+include_once 'bd/conexao.php';
+include_once 'includes/header.inc.php';
+include_once 'includes/footer.inc.php';
+include_once 'includes/menu.inc.php';
+
+// include('protectAdmin.php');
+
+?>
+<div class="row container">
+    <fieldset class="formulario" id="filtrar">
+        <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar">
+            <h5 class="light center">Filtrar Licitações</h5>
+
+            <div class="input-field col s4">
+                <i class="material-icons prefix">input</i>
+                <input type="text" name="tituloLicitacao" id="tituloLicitacao" maxlength="100">
+                <label for="tituloLicitacao">Buscar por Título ou Objeto</label>
+            </div>
+
+            <div class="input-field col s2">
+                <i class="material-icons prefix">event</i>
+                <input type="date" name="dtIniLicitacao" id="dtIniLicitacao" maxlength="100">
+                <label for="dtIniLicitacao">Data de Abertura</label>
+            </div>
+
+            <div class="input-field col s2">
+                <i class="material-icons prefix">event</i>
+                <input type="date" name="dtFimLicitacao" id="dtFimLicitacao" maxlength="100" value="<?php echo date('Y-m-d'); ?>" required>
+                <label for="dtFimLicitacao">Até</label>
+            </div>
+
+            <div class="input-field col dropdown s3">
+                <div>
+                    <label>Status</label>
+                </div>
+                <select name="statusLicitacao" id="statusLicitacao">
+                    <option value='vazio'>Selecione uma opção</option>
+                    <option value='Em Andamento' selected>Em Andamento</option>
+                    <option value='Suspenso'>Suspensa</option>
+                    <option value='Encerrado'>Encerrada</option>
+                </select>
+            </div>
+
+            <div class="input-field col s1">
+                <input type="submit" value="pesquisar" class="btn blue">
+                <!-- <input type="reset" value="limpar" class="btn red"> -->
+            </div>
+            <div class="input-field col s12">
+                <?php
+                if (isset($_SESSION['msg'])) :
+                    echo $_SESSION['msg'];
+                    $_SESSION['msg'] = '';
+                endif;
+                ?>
+            </div>
+        </form>
+    </fieldset>
+
+    <p>&nbsp;</p>
+
+    <fieldset class="formulario">
+        <h5 class="light">Licitações</h5>
+        <hr>
+        <div class="content3">
+            <?php include_once 'bd/licitacao/read.php'; ?>
+        </div>
+    </fieldset>
+</div>

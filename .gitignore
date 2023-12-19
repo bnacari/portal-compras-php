@@ -1,0 +1,11 @@
+### .gitignore padrão ###
+.svn
+.hg
+.DS_Store
+*.log
+*old*
+*OLD*
+*bkp*
+*BKP*
+*- Copy*
+*.pdf

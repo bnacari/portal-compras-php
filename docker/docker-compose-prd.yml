@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+   portal-compras-php:
+    ports:
+      - 9453:80
+    image: registry.sistemas.cesan.com.br/adm/portal-compras-php:1.0.1
+    env_file:
+      - app-prd.env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - uploads:/var/www/html/uploads
+    restart: always
+
+volumes:
+  uploads:
+    driver_opts:
+      type: "nfs"
+      o: "addr=nfs-docker.sistemas.cesan.com.br,nolock,soft,rw"
+      device: ":/nfs/dwp2/portal-compras-php/uploads"
