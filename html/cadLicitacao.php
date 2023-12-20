@@ -121,18 +121,18 @@ if ($_SESSION['admin'] == 5) {
             </div>
 
             <div class="input-field col s4">
-                <input type="text" id="localLicitacao" name="localLicitacao" required>
+                <input type="text" id="localLicitacao" name="localLicitacao">
                 <label>Local de Abertura</label>
             </div>
             <div class="input-field col s12">
-                <textarea type="text" id="obsLicitacao" name="obsLicitacao" required></textarea>
+                <textarea type="text" id="obsLicitacao" name="obsLicitacao"></textarea>
                 <label>Observação</label>
             </div>
         </fieldset>
 
         <p>&nbsp;</p>
 
-        <fieldset class="formulario">
+        <!-- <fieldset class="formulario">
             <h6><strong>Anexos</strong></h6>
 
             <input type="file" id="anexos" name="anexos[]">
@@ -144,12 +144,12 @@ if ($_SESSION['admin'] == 5) {
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <!-- A tabela será preenchida dinamicamente aqui -->
+
                 </tbody>
             </table>
-        </fieldset>
+        </fieldset> -->
 
-        <p>&nbsp;</p>
+        <!-- <p>&nbsp;</p> -->
 
         <div class="input-field col s2">
             <button type="submit" class="btn blue">Salvar</button>

@@ -34,7 +34,7 @@ $hrAberturaFormatada = date("H:i", strtotime($hrAbertura));
 $dtAberturaLicitacao = $dataAberturaFormatada . ' ' . $hrAberturaFormatada;
 
 $dataInicioFormatada = date("Y-m-d", strtotime($dtIniSessao));
-$hrInicioSessaoFormatada = date("H:i", strtotime($hrInicioSessao));
+$hrInicioSessaoFormatada = date("H:i", strtotime($hrIniSessao));
 $dtIniSessLicitacao = $dataInicioFormatada . ' ' . $hrInicioSessaoFormatada;
 
 // ATUALIZA TABELA LICITAÇÃO

@@ -154,6 +154,9 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                     </li>
                 </ul>
             </li>
+            <li>
+                <a href="cadAnexos.php">Adm Anexos</a>
+            </li>
 
         <?php } ?>
 

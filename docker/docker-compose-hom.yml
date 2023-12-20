@@ -4,7 +4,7 @@ services:
   portal-compras-php:
     ports:
       - 9453:80
-    image: registry.sistemas.cesan.com.br/adm/portal-compras-php:1.0.1
+    image: registry.sistemas.cesan.com.br/adm/portal-compras-php:1.0.4
     env_file:
       - app-hom.env
     volumes:

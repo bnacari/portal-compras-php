@@ -1,11 +1,11 @@
 # visita-agendada-php
 ## Build / Deploy
 
-docker build -t registry.sistemas.cesan.com.br/adm/visita-agendada:1.0.1 .
+docker build -t registry.sistemas.cesan.com.br/adm/portal-compras-php:1.0.1 .
 
-docker push registry.sistemas.cesan.com.br/adm/visita-agendada:1.0.1
+docker push registry.sistemas.cesan.com.br/adm/portal-compras-php:1.0.1
 
-docker-compose-prd -f docker/docker-compose-prd.yml --project-name visita-agendada up -d
+docker-compose-hom -f docker/docker-compose-hom.yml --project-name portal-compras-php up -d
 
 PARA SUBIR A APLICAÇÃO EM PRODUÇÃO, APÓS REALIZAR AS ALTERAÇÕES NECESSÁRIAS, BASTA EXECUTAR:
 Está com o CI/CD CONFIGURADO, basta seguir os passos abaixo.

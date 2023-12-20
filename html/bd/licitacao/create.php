@@ -29,13 +29,13 @@ $identificadorLicitacao = $_POST["identificadorLicitacao"];
 $localLicitacao = $_POST["localLicitacao"];
 $obsLicitacao = $_POST["obsLicitacao"];
 
-$dataAberturaFormatada = date("Y-m-d", strtotime($dtAberLicitacao));
+$dataAberturaFormatada = date("Y-m-d", strtotime($dtAbertura));
 $hrAberturaFormatada = date("H:i", strtotime($hrAbertura));
 $dtAberturaLicitacao = $dataAberturaFormatada . ' ' . $hrAberturaFormatada;
 
 $dataInicioFormatada = date("Y-m-d", strtotime($dtIniSessao));
-$hrInicioSessaoFormatada = date("H:i", strtotime($hrInicioSessao));
-$dtIniSessLicitacao = $dataInicioFormatada . ' ' . $hrInicioSessaoFormatada; // Substitua $hrInicioSessao pela variável correta
+$hrInicioSessaoFormatada = date("H:i", strtotime($hrIniSessao));
+$dtIniSessLicitacao = $dataInicioFormatada . ' ' . $hrInicioSessaoFormatada;
 
 $query = "INSERT INTO [portalcompras].[dbo].[licitacao] VALUES (0, getdate(), '$codLicitacao', '', getdate(), NULL, '$obsLicitacao', '$login')";
 
@@ -73,7 +73,7 @@ if ($stmt) {
     }
 }
 
-$query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', '$statusLicitacao', '$objLicitacao', '$respLicitacao', '$dtAberLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $criterioLicitacao, '$regimeLicitacao', $formaLicitacao, '$vlLicitacao', '$localLicitacao', '$identificadorLicitacao', '$obsLicitacao')";
+$query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', '$statusLicitacao', '$objLicitacao', '$respLicitacao', '$dtAberturaLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $criterioLicitacao, '$regimeLicitacao', $formaLicitacao, '$vlLicitacao', '$localLicitacao', '$identificadorLicitacao', '$obsLicitacao')";
 
 // var_dump($query);
 
@@ -83,7 +83,7 @@ $queryInsertDetalheLicitacao = $pdoCAT->query($query);
 
 $_SESSION['msg'] = "<p class='center red-text'>" . '<strong>Licitação de código ' . $idLicitacao .  '</strong> cadastrada com <strong>sucesso</strong>.' . "</p>";
 
-$_SESSION['redirecionar'] = '../../consultarLicitacao.php';
+$_SESSION['redirecionar'] = '../../editarLicitacao.php?idLicitacao=' . $idLicitacao;
 $login = $_SESSION['login'];
 $tela = 'Licitacao';
 $acao = 'Licitacao ' . $idLicitacao . ' CRIADA';

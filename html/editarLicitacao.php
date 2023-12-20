@@ -68,7 +68,9 @@ endwhile;
 
 <!-- FORMULÁRIOS DE CADASTRO -->
 <div class="row container">
+    <!-- <form action="bd/licitacao/update.php" method="post" class="col s12 formulario"> -->
     <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data">
+
         <fieldset class="formulario col s12">
             <h5 class="light center">Editar Licitação <?php echo $codLicitacao ?></h5>
         </fieldset>
@@ -195,15 +197,14 @@ endwhile;
         <!-- ============================================================================================== -->
 
         <fieldset class="formulario">
-            <!-- <label for="anexos">Anexar Arquivos:</label> -->
-            <form id="myForm" action="upload.php" method="post" enctype="multipart/form-data">
+            <!-- <form id="myForm" action="upload.php" method="post" enctype="multipart/form-data"> -->
                 <div class="input-field col s12">
                     <input type="file" id="fileInput" />
                 </div>
                 <div class="input-field col s2">
                     <button type="button" class="btn green" onclick="uploadFile()">Salvar Arquivo</button>
                 </div>
-            </form>
+            <!-- </form> -->
 
             <div id="filelist">
                 <?php
@@ -360,9 +361,9 @@ endwhile;
     }
 
     // Evita a submissão do formulário quando o botão é clicado
-    $(document).ready(function() {
-        $('#myForm').submit(function(e) {
-            e.preventDefault();
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#myForm').submit(function(e) {
+    //         e.preventDefault();
+    //     });
+    // });
 </script>
