@@ -197,14 +197,12 @@ endwhile;
         <!-- ============================================================================================== -->
 
         <fieldset class="formulario">
-            <!-- <form id="myForm" action="upload.php" method="post" enctype="multipart/form-data"> -->
-                <div class="input-field col s12">
-                    <input type="file" id="fileInput" />
+
+            <div class="input-field col s12">
+                <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                    Arraste e solte os arquivos aqui ou clique para selecionar.
                 </div>
-                <div class="input-field col s2">
-                    <button type="button" class="btn green" onclick="uploadFile()">Salvar Arquivo</button>
-                </div>
-            <!-- </form> -->
+            </div>
 
             <div id="filelist">
                 <?php
@@ -327,43 +325,97 @@ endwhile;
         }
     }
 
-    function uploadFile() {
-        var fileInput = document.getElementById('fileInput');
-        var idLicitacao = document.getElementById('idLicitacao').value;
+    var idLicitacao = document.getElementById('idLicitacao').value;
 
-        // Verifica se algum arquivo foi selecionado
-        if (fileInput.files.length > 0) {
-            var file = fileInput.files[0];
+    function handleDrop(event) {
+        event.preventDefault();
+
+        var files = event.dataTransfer.files;
+        handleFiles(files, idLicitacao);
+    }
+
+    function handleClick(event) {
+        var inputElement = document.createElement("input");
+        inputElement.type = "file";
+        inputElement.multiple = true;
+        inputElement.addEventListener("change", function() {
+            handleFiles(this.files, idLicitacao);
+        });
+        inputElement.click();
+    }
+
+    function handleFiles(files, idLicitacao) {
+        if (files.length > 0) {
             var formData = new FormData();
 
-            // Adiciona o arquivo ao objeto FormData
-            formData.append('file', file);
-            formData.append('idLicitacao', idLicitacao);
-            // Use AJAX para enviar o arquivo
-            $.ajax({
-                url: 'upload.php', // Substitua pelo seu script de upload
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    // Adicione aqui qualquer ação adicional após o upload bem-sucedido
-                    $('#filelist').load(window.location.href + ' #filelist');
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i]);
+            }
 
-                },
-                error: function() {
-                    alert('Erro ao enviar o arquivo.');
+            formData.append('idLicitacao', idLicitacao);
+
+            // Use AJAX para enviar os arquivos
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'upload.php', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Adicione aqui qualquer ação adicional após o upload bem-sucedido
+                    updateFileList();
+                    // Se a inclusão for bem-sucedida, recarregue a lista de arquivos
+                    $('#filelist').load(window.location.href + ' #filelist');
+                } else {
+                    alert('Erro ao enviar os arquivos.');
                 }
-            });
+            };
+            xhr.send(formData);
         } else {
-            alert('Por favor, selecione um arquivo.');
+            alert('Por favor, selecione um ou mais arquivos.');
         }
     }
 
-    // Evita a submissão do formulário quando o botão é clicado
-    // $(document).ready(function() {
-    //     $('#myForm').submit(function(e) {
-    //         e.preventDefault();
-    //     });
-    // });
+    function handleDragOver(event) {
+        event.preventDefault();
+        // Adicione a chamada para uploadFile se necessário
+        document.getElementById('drop-zone').classList.add('dragover');
+    }
+
+    function updateFileList() {
+        // Atualiza a lista de arquivos
+        var filelistElement = document.getElementById('filelist');
+        if (filelistElement) {
+            filelistElement.innerHTML = ''; // Limpa a lista atual
+
+            // Adicione código para obter e exibir a nova lista de arquivos
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get_file_list.php?idLicitacao=' + idLicitacao, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var files = response.files;
+
+                    // Exibe a nova lista de arquivos
+                    if (files.length > 0) {
+                        var fileListHTML = '<ul>';
+                        for (var i = 0; i < files.length; i++) {
+                            fileListHTML += '<li><a href="' + uploadDir + files[i] + '" download>' + files[i] + '</a></li>';
+                        }
+                        fileListHTML += '</ul>';
+                        filelistElement.innerHTML = fileListHTML;
+                    } else {
+                        filelistElement.innerHTML = 'Nenhum arquivo disponível.';
+                    }
+                } else {
+                    alert('Erro ao obter a lista de arquivos.');
+                }
+            };
+            xhr.send();
+        }
+    }
+
+
+    // Adicione um evento de dragleave para remover a classe 'dragover' quando o mouse sai da área de drop-zone
+    document.getElementById('drop-zone').addEventListener('dragleave', function(event) {
+        event.preventDefault();
+        document.getElementById('drop-zone').classList.remove('dragover');
+    });
 </script>

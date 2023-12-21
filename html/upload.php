@@ -3,20 +3,29 @@ $idLicitacao = $_POST['idLicitacao'];
 
 $uploadDir = 'uploads/' . $idLicitacao . "/";
 
-// Verifica se o arquivo foi enviado com sucesso
-if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
-    $fileName = $_FILES['file']['name'];
-    $filePath = $uploadDir . $fileName;
-
-    if (mkdir($uploadDir, 0755, true)) {
-    }
-
-    // Move o arquivo para o diretório desejado
-    move_uploaded_file($_FILES['file']['tmp_name'], $filePath);
-    
-} else {
-    echo 'Erro no envio do arquivo.';
+// Cria o diretório se não existir
+if (!file_exists($uploadDir) && !is_dir($uploadDir)) {
+    mkdir($uploadDir, 0755, true);
 }
 
+// Array para armazenar os nomes dos arquivos enviados
+$uploadedFiles = [];
 
+// Verifica se há arquivos enviados
+if (!empty($_FILES['files']['name'])) {
+    // Loop através de cada arquivo
+    for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+        $fileName = $_FILES['files']['name'][$i];
+        $filePath = $uploadDir . $fileName;
+
+        // Move o arquivo para o diretório desejado
+        if (move_uploaded_file($_FILES['files']['tmp_name'][$i], $filePath)) {
+            $uploadedFiles[] = $fileName;
+        }
+    }
+}
+
+// Retorna os nomes dos arquivos enviados (pode ser processado mais adequadamente conforme necessário)
+echo json_encode(['uploadedFiles' => $uploadedFiles]);
 ?>
+

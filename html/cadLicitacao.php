@@ -46,6 +46,11 @@ if ($_SESSION['admin'] == 5) {
                 <label>Responsável</label>
             </div>
 
+            <div class="input-field col s4">
+                <input type="text" id="respLicitacaoContabilidae" name="respLicitacaoContabilidae" required>
+                <label>Responsável CONTABILIDADE</label>
+            </div>
+
             <div class="input-field col s12">
                 <textarea type="text" id="objLicitacao" name="objLicitacao" required></textarea>
                 <label>Objeto</label>
@@ -132,25 +137,6 @@ if ($_SESSION['admin'] == 5) {
 
         <p>&nbsp;</p>
 
-        <!-- <fieldset class="formulario">
-            <h6><strong>Anexos</strong></h6>
-
-            <input type="file" id="anexos" name="anexos[]">
-            <table id="fileTable">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Excluir</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-
-                </tbody>
-            </table>
-        </fieldset> -->
-
-        <!-- <p>&nbsp;</p> -->
-
         <div class="input-field col s2">
             <button type="submit" class="btn blue">Salvar</button>
         </div>
@@ -192,4 +178,43 @@ if ($_SESSION['admin'] == 5) {
         }
     });
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function perfilTerceiros() {
+        var respSolicitacao = document.getElementById("respSolicitacao").value;
+        var exibirInstituicao = document.querySelector("#respSolicitacao option:checked").getAttribute("data-exibir-instituicao");
+        var esconde = document.getElementById("esconde");
+        var escondeSerieVisita = document.getElementById("escondeSerieVisita");
+        var escondeCursoInstituicao = document.getElementById("escondeCursoInstituicao");
+
+
+        var nmInstituicaoInput = document.getElementById("nmInstituicao");
+        var cidadeInstituicaoInput = document.getElementById("cidadeInstituicao");
+        var serieVisitaInput = document.getElementById("serieVisita");
+        var cursoInstituicaoInput = document.getElementById("cursoInstituicao");
+
+        if (exibirInstituicao == 1) {
+            escondeSerieVisita.style.display = "none";
+            escondeCursoInstituicao.style.display = "none";
+            esconde.style.display = "block";
+            nmInstituicaoInput.required = true;
+            cidadeInstituicaoInput.required = true;
+            serieVisitaInput.required = false;
+            if (respSolicitacao == 6) {
+                escondeSerieVisita.style.display = "block";
+                serieVisitaInput.required = true;
+            }
+            if (respSolicitacao == 11) {
+                escondeCursoInstituicao.style.display = "block";
+                cursoInstituicaoInput.required = true;
+            }
+        } else {
+            esconde.style.display = "none";
+            escondeSerieVisita.style.display = "none";
+            escondeCursoInstituicao.style.display = "none";
+            nmInstituicaoInput.required = false;
+            cidadeInstituicaoInput.required = false;
+            serieVisitaInput.required = false;
+            cursoInstituicaoInput.required = false;
+        }
+    }
 </script>

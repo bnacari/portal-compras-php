@@ -18,7 +18,7 @@ RUN sed -i -e 's/max_execution_time = .*/max_execution_time = 360/' /usr/local/e
 RUN sed -i -e 's/max_input_time = .*/max_input_time = 360/' /usr/local/etc/php/php.ini
 
 # Reiniciar o servidor Apache para aplicar as alterações
-RUN service apache2 restart
+# RUN service apache2 restart
 # COPY --chown=www-data:www-data ldap.so /usr/local/lib/php/extensions/no-debug-non-zts-20180731/
 
 # RUN echo "extension=ldap" >> /usr/local/etc/php/php.ini

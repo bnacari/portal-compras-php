@@ -88,8 +88,14 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
     <div>
         <?php if (isset($_SESSION['login'])) { ?>
             <label class="userLogin">
-                Bem-Vindo, <?php echo $_SESSION['login'] ?>
+                Bem-Vindo, <?php echo $_SESSION['login']; ?>
+                <span style="color: gold;"><?php echo '(' . $_SESSION['nmPerfil'] . ')'; ?></span>
             </label>
+            <?php if ($_SESSION['admin'] == 5) { ?>
+                <a href="cadLicitacao.php" class="add_btn"><i class="material-icons">add_circle_outline</i></a>
+            <?php } ?>
+            <a href="consultarLicitacao.php" class="search_btn"><i class="material-icons">search</i></a>
+
             <a href="logout.php" class="sair_btn"><ion-icon name="exit-outline"></ion-icon></a>
         <?php } else { ?>
             <a href="login.php" class="sair_btn"><ion-icon name="exit-outline"></ion-icon></a>
@@ -115,52 +121,63 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
         <!-- MENU CRIADO RECURSIVAMENTE BASEADO NO CADASTRO DO BANCO DE DADOS -->
         <?php
-        construirMenuHTML($pdoCAT);
-        ?>
+        construirMenuHTML($pdoCAT); ?>
 
-        <?php if ($_SESSION['admin'] == 5) { ?>
-            <hr>
-            <hr>
-            <br>
-            <li>
-                <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
-            </li>
-            <li>
-                <a href="cadCriterio.php">Adm Critérios</a>
-            </li>
-            <li>
-                <a href="cadForma.php">Adm Forma</a>
-            </li>
-            <li><a href="#">Adm Usuários</a>
-                <ul>
-                    <li>
-                        <a href="consultarUsuario.php">Adm Usuário</a>
-                    </li>
-                    <li>
-                        <a href="cadPerfil.php">Adm Perfil</a>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="#">Adm Menus</a>
-                <ul>
-                    <li>
-                        <a href="cadMenu.php">Adm Menu</a>
-                    </li>
-                    <li>
-                        <a href="cadSubMenu.php">Adm SubMenu</a>
-                    </li>
-                    <li>
-                        <a href="cadItemMenu.php">Adm ItemMenu</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="cadAnexos.php">Adm Anexos</a>
-            </li>
 
-        <?php } ?>
 
-        <!-- Adicione mais itens e subitens conforme necessário -->
+        <?php
+        switch ($_SESSION['admin']) {
+            case 5: ?>
+                <hr>
+                <hr>
+                <br>
+                <li>
+                    <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
+                </li>
+                <li>
+                    <a href="cadCriterio.php">Adm Critérios</a>
+                </li>
+                <li>
+                    <a href="cadForma.php">Adm Forma</a>
+                </li>
+                <li><a href="#">Adm Usuários</a>
+                    <ul>
+                        <li>
+                            <a href="consultarUsuario.php">Adm Usuário</a>
+                        </li>
+                        <li>
+                            <a href="cadPerfil.php">Adm Perfil</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#">Adm Menus</a>
+                    <ul>
+                        <li>
+                            <a href="cadMenu.php">Adm Menu</a>
+                        </li>
+                        <li>
+                            <a href="cadSubMenu.php">Adm SubMenu</a>
+                        </li>
+                        <li>
+                            <a href="cadItemMenu.php">Adm ItemMenu</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="cadAnexos.php">Adm Anexos</a>
+                </li>
+            <?php break;
+
+            case 4: ?>
+                <hr>
+                <hr>
+                <br>
+                <li>
+                    <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
+                </li>
+        <?php break;
+        } ?>
+
     </ul>
 </div>
 
