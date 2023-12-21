@@ -32,10 +32,11 @@ if ($_SESSION['admin'] == 5) {
             <div class="input-field col s4">
 
                 <select name="statusLicitacao" id="statusLicitacao">
-                    <option value='' selected>Selecione uma opção</option>
-                    <option value='Em Andamento'>Em Andamento</option>
-                    <option value='Encerrado'>Encerrada</option>
+                    <option value='vazio'>Selecione uma opção</option>
+                    <option value='Em Andamento' selected>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
+                    <option value='Encerrado'>Encerrada</option>
+                    <option value='Rascunho'>Rascunho</option>
                 </select>
 
                 <label>Status</label>
@@ -44,11 +45,6 @@ if ($_SESSION['admin'] == 5) {
             <div class="input-field col s4">
                 <input type="text" id="respLicitacao" name="respLicitacao" required>
                 <label>Responsável</label>
-            </div>
-
-            <div class="input-field col s4">
-                <input type="text" id="respLicitacaoContabilidae" name="respLicitacaoContabilidae" required>
-                <label>Responsável CONTABILIDADE</label>
             </div>
 
             <div class="input-field col s12">

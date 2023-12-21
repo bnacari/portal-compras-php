@@ -28,7 +28,6 @@ $vlLicitacao = $_POST["vlLicitacao"];
 $identificadorLicitacao = $_POST["identificadorLicitacao"];
 $localLicitacao = $_POST["localLicitacao"];
 $obsLicitacao = $_POST["obsLicitacao"];
-
 $dataAberturaFormatada = date("Y-m-d", strtotime($dtAbertura));
 $hrAberturaFormatada = date("H:i", strtotime($hrAbertura));
 $dtAberturaLicitacao = $dataAberturaFormatada . ' ' . $hrAberturaFormatada;
@@ -37,8 +36,9 @@ $dataInicioFormatada = date("Y-m-d", strtotime($dtIniSessao));
 $hrInicioSessaoFormatada = date("H:i", strtotime($hrIniSessao));
 $dtIniSessLicitacao = $dataInicioFormatada . ' ' . $hrInicioSessaoFormatada;
 
-$query = "INSERT INTO [portalcompras].[dbo].[licitacao] VALUES (0, getdate(), '$codLicitacao', '', getdate(), NULL, '$obsLicitacao', '$login')";
-
+$query = "INSERT INTO [portalcompras].[dbo].[licitacao] VALUES (0, getdate(), '$codLicitacao', '', NULL, '$obsLicitacao', '$login')";
+// var_dump($query);
+// exit;
 $queryInsertVisita = $pdoCAT->query($query);
 
 $queryID = "SELECT MAX(ID_LICITACAO) AS ID_LICITACAO FROM LICITACAO";

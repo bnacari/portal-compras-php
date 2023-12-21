@@ -20,15 +20,18 @@
   padding: 15px;
   width: 100%;
   height: 50px;
-  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1);
+  /* Adiciona uma sombra suave */
 }
 
 .imageMenu {
   position: absolute;
   left: 40;
   top: 5;
-  width: 32px;   /* Defina a largura desejada, neste caso, 30 pixels */
-  height: 40px;  /* Defina a altura desejada, neste caso, 50 pixels */
+  width: 32px;
+  /* Defina a largura desejada, neste caso, 30 pixels */
+  height: 40px;
+  /* Defina a altura desejada, neste caso, 50 pixels */
 }
 
 .left2 h3 {
@@ -48,7 +51,7 @@
 
 .userLogin {
   position: absolute;
-  right: 125;
+  right: 155;
   top: 15;
   font-size: 15px;
   text-decoration: none;
@@ -62,52 +65,15 @@
   transition-property: background;
 }
 
-.search_btn {
-  position: absolute;
-  right: 60;
-  top: 8;
-  padding: 5px;
-  color: #fff;
-}
-
-.search_btn:hover {
-  /* background: #4a9fcf; */
-  color: #00ADEF;
-}
-
-.add_btn {
-  position: absolute;
-  right: 90;
-  top: 9;
-  padding: 5px;
-  color: #fff;
-}
-
-.add_btn:hover {
-  /* background: #4a9fcf; */
-  color: #00ADEF;
-}
-
-.sair_btn {
-  position: absolute;
-  right: 25;
-  top: 5;
-  padding: 5px;
-  /* background: #51b3ec; */
-  text-decoration: none;
+.up_menu_btn {
   float: right;
-  /* margin-top: -35px;
-  margin-right: 5px; */
-  border-radius: 2px;
-  font-size: 30px;
-  font-weight: 500;
+  margin-right: 14px;
+  margin-top: -2px;
+  font-size: 25px;
   color: #fff;
-  transition: 0.5s;
-  transition-property: background;
 }
 
-.sair_btn:hover {
-  /* background: #4a9fcf; */
+.up_menu_btn:hover {
   color: #00ADEF;
 }
 
@@ -122,7 +88,8 @@
   background: #193446;
   transition: 0.5s;
   transition-property: left;
-  box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra ao lado direito */
+  box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1);
+  /* Adiciona uma sombra ao lado direito */
 }
 
 .sidebar2 .submenu {
@@ -130,10 +97,12 @@
   background: #2b5775;
   position: absolute;
   width: 300px;
-  height: 100%; /* Ajuste para ocupar a altura inteira da tela */
+  height: 100%;
+  /* Ajuste para ocupar a altura inteira da tela */
   padding-top: 250px;
   box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1);
-  left: 35px; /* Ajuste conforme necessário para alinhar com o item do menu principal */
+  left: 35px;
+  /* Ajuste conforme necessário para alinhar com o item do menu principal */
   top: 0;
 }
 
@@ -392,74 +361,129 @@
 
   /*visita*/
 
-  .rTableVisita tbody tr td:nth-child(1) {width: 2%;}
+  .rTableVisita tbody tr td:nth-child(1) {
+    width: 2%;
+  }
 
   /*data*/
-  .rTableVisita tbody tr td:nth-child(2) {width: 7%;}
+  .rTableVisita tbody tr td:nth-child(2) {
+    width: 7%;
+  }
 
   /*local*/
-  .rTableVisita tbody tr td:nth-child(3) {width: 15%;}
+  .rTableVisita tbody tr td:nth-child(3) {
+    width: 15%;
+  }
 
   /*tipo*/
-  .rTableVisita tbody tr td:nth-child(4) {width: 7%;}
+  .rTableVisita tbody tr td:nth-child(4) {
+    width: 7%;
+  }
 
   /*nome*/
-  .rTableVisita tbody tr td:nth-child(5) {width: 12%;}
+  .rTableVisita tbody tr td:nth-child(5) {
+    width: 12%;
+  }
 
   /*tel*/
-  .rTableVisita tbody tr td:nth-child(6) {width: 9%;}
+  .rTableVisita tbody tr td:nth-child(6) {
+    width: 9%;
+  }
 
   /*mail*/
-  .rTableVisita tbody tr td:nth-child(7) {width: 12%;}
+  .rTableVisita tbody tr td:nth-child(7) {
+    width: 12%;
+  }
 
   /*empregados inscritos*/
-  .rTableVisita tbody tr td:nth-child(8) {width: 7%;}
+  .rTableVisita tbody tr td:nth-child(8) {
+    width: 7%;
+  }
 
   /*inscrever*/
-  .rTableVisita tbody tr td:nth-child(9) {width: 2%;}
+  .rTableVisita tbody tr td:nth-child(9) {
+    width: 2%;
+  }
 
   /*inscrever*/
-  .rTableVisita tbody tr td:nth-child(10) {width: 7%;}
+  .rTableVisita tbody tr td:nth-child(10) {
+    width: 7%;
+  }
 
   /*inscrever*/
-  .rTableVisita tbody tr td:nth-child(11) {width: 2%;}
-    /*inscrever*/
-  .rTableVisita tbody tr td:nth-child(12) {width: 2%;}
+  .rTableVisita tbody tr td:nth-child(11) {
+    width: 2%;
+  }
+
+  /*inscrever*/
+  .rTableVisita tbody tr td:nth-child(12) {
+    width: 2%;
+  }
 
 
-  .rTableLicitacao tbody tr td:nth-child(1) { width: 80%;} /*data*/
-  .rTableLicitacao tbody tr td:nth-child(2) { width: 10%;} /*local*/
-  .rTableLicitacao tbody tr td:nth-child(3) { width: 10%;} /*tipo*/
+  .rTableLicitacao tbody tr td:nth-child(1) {
+    width: 80%;
+  }
+
+  /*data*/
+  .rTableLicitacao tbody tr td:nth-child(2) {
+    width: 10%;
+  }
+
+  /*local*/
+  .rTableLicitacao tbody tr td:nth-child(3) {
+    width: 10%;
+  }
+
+  /*tipo*/
   /* .rTableLicitacao tbody tr td:nth-child(4) {width: 7%;} /*nome*/
   /* .rTableLicitacao tbody tr td:nth-child(5) {width: 12%;}  */
 
 
   /*inscrever*/
-  .rTableCancel tbody tr td:nth-child(1) { width: 10%;}
+  .rTableCancel tbody tr td:nth-child(1) {
+    width: 10%;
+  }
 
   /*data*/
-  .rTableCancel tbody tr td:nth-child(2) { width: 5%;}
+  .rTableCancel tbody tr td:nth-child(2) {
+    width: 5%;
+  }
 
   /*nome*/
-  .rTableCancel tbody tr td:nth-child(3) { width: 15%;}
+  .rTableCancel tbody tr td:nth-child(3) {
+    width: 15%;
+  }
 
   /*local*/
-  .rTableCancel tbody tr td:nth-child(4) { width: 15%;}
+  .rTableCancel tbody tr td:nth-child(4) {
+    width: 15%;
+  }
 
   /*data*/
-  .rTableCancel tbody tr td:nth-child(5) { width: 10%;}
+  .rTableCancel tbody tr td:nth-child(5) {
+    width: 10%;
+  }
 
   /*motivo*/
-  .rTableCancel tbody tr td:nth-child(6) { width: 15%;}
+  .rTableCancel tbody tr td:nth-child(6) {
+    width: 15%;
+  }
 
   /*data aprovação*/
-  .rTableCancel tbody tr td:nth-child(7) { width: 10%;}
+  .rTableCancel tbody tr td:nth-child(7) {
+    width: 10%;
+  }
 
   /*login aprovador*/
-  .rTableCancel tbody tr td:nth-child(8) { width: 8%;}
+  .rTableCancel tbody tr td:nth-child(8) {
+    width: 8%;
+  }
 
   /*cancelar*/
-  .rTableCancel tbody tr td:nth-child(8) { width: 5%;}
+  .rTableCancel tbody tr td:nth-child(8) {
+    width: 5%;
+  }
 
   .rTableLocal tbody tr td:nth-child(1) {
     width: 10%;
@@ -626,8 +650,8 @@
   border-color: #eee;
   background-color: #FFFFFF;
   border-radius: 10px;
-  box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
-              0 32px 64px -48px rgba(0,0,0,0.5);
+  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
+    0 32px 64px -48px rgba(0, 0, 0, 0.5);
 }
 
 .logoLogin {
@@ -2802,7 +2826,7 @@ body {
   /*AZUL MÁSCULO (PADRÃO BITOCA)*/
   /* background: #E3F2FD;  */
   /*AZUL CALCINHA (PADRÃO CESAN)*/
-  background: #E1EEFB; 
+  background: #E1EEFB;
   justify-content: center;
   align-items: center;
   margin: 0;
@@ -3089,8 +3113,9 @@ button:-moz-focusring,
 /**
  * Correct the padding in Firefox.
  */
- fieldset {
-  position: relative; /* Add this line */
+fieldset {
+  position: relative;
+  /* Add this line */
   /* padding: 0.35em 0.75em 0.625em; */
   padding: 25px;
   padding-top: 30px;
@@ -3100,14 +3125,16 @@ button:-moz-focusring,
   border: none;
   /* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1),
     0 42px 24px -48px rgba(0, 0, 0, 0.5); */
-  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+  /* Adiciona uma sombra suave */
 }
 
 .custom-fieldset {
   border: 0.2px solid;
   display: inline-block;
-  padding: 4px; 
-  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+  padding: 4px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+  /* Adiciona uma sombra suave */
   width: 150px;
   text-align: center;
   color: #737478;
@@ -3121,16 +3148,20 @@ button:-moz-focusring,
   background-color: #d91807;
   color: #d91807;
 }
+
 .custom-fieldset.suspenso label {
-  color: #fff; /* Cor da fonte quando 'suspenso' */
+  color: #fff;
+  /* Cor da fonte quando 'suspenso' */
 }
 
 .custom-fieldset.encerrado {
   background-color: #3bb33f;
   color: #3bb33f;
 }
+
 .custom-fieldset.encerrado label {
-  color: #fff; /* Cor da fonte quando 'suspenso' */
+  color: #fff;
+  /* Cor da fonte quando 'suspenso' */
 }
 
 .custom-label {
@@ -3146,8 +3177,10 @@ legend {
   max-width: 100%;
   padding: 0;
   white-space: normal;
-  position: absolute; /* Change this line */
-  top: -18px; /* Adjust the value to move the legend up */
+  position: absolute;
+  /* Change this line */
+  top: -18px;
+  /* Adjust the value to move the legend up */
 }
 
 /**
@@ -3310,6 +3343,7 @@ a {
 /* TRECHO RESPONSÁVEL PELA RESPONSIVIDADE DOS CAMPOS */
 /* OBRIGA O CAMPO A PULAR PARA PRÓXIMA LINHA */
 @media only screen and (max-width: 1000px) {
+
   .hide-on-small-only,
   .hide-on-small-and-down {
     display: none !important;
@@ -3326,31 +3360,32 @@ a {
     margin-bottom: 10px;
   }
 
- .userLogin {
-    display: none; /* oculta a classe userLogin em telas menores que 600px */
+  .userLogin {
+    display: none;
+    /* oculta a classe userLogin em telas menores que 600px */
   }
- 
-/*RESPONSÁVEL PELA RESPONSIVIDADE DOS INPUTS DAS TELAS. 
+
+  /*RESPONSÁVEL PELA RESPONSIVIDADE DOS INPUTS DAS TELAS. 
   O <form> precisa estar dentro do <fieldset> e o <form> passado conforme abaixo
   <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar"> */
   #formFiltrar .hide-on-small-only,
   #formFiltrar .hide-on-small-and-down {
-      display: none !important;
+    display: none !important;
   }
 
   #formFiltrar .formulario {
-      display: flex;
-      flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   #formFiltrar .input-field {
-      flex: 0 0 calc(100% - 15px);
-      margin-right: 10px;
-      margin-bottom: 10px;
+    flex: 0 0 calc(100% - 15px);
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 
   #formFiltrar .userLogin {
-      display: none;
+    display: none;
   }
 }
 
@@ -4023,6 +4058,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s2 {
   width: 16.6666666667%;
   margin-left: auto;
@@ -4030,6 +4066,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s3 {
   width: 25%;
   margin-left: auto;
@@ -4037,6 +4074,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s4 {
   width: 33.3333333333%;
   margin-left: auto;
@@ -4044,13 +4082,15 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
-  .row .col.dropdown.s5 {
+
+.row .col.dropdown.s5 {
   width: 41.6666666667%;
   margin-left: auto;
   left: auto;
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s6 {
   width: 50%;
   margin-left: auto;
@@ -4058,6 +4098,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s7 {
   width: 52.33%;
   margin-left: auto;
@@ -4065,6 +4106,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s8 {
   width: 66.66%;
   margin-left: auto;
@@ -4072,6 +4114,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s9 {
   width: 75%;
   margin-left: auto;
@@ -4079,6 +4122,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s10 {
   width: 83.33%;
   margin-left: auto;
@@ -4086,6 +4130,7 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s11 {
   width: 91.66%;
   margin-left: auto;
@@ -4093,8 +4138,9 @@ table span.badge {
   right: auto;
   bottom: 18px;
 }
+
 .row .col.dropdown.s12 {
-    width: 100%;
+  width: 100%;
   margin-left: auto;
   left: auto;
   right: auto;
@@ -6124,6 +6170,7 @@ button.btn-floating {
 .btn-block {
   display: block;
 }
+
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 .dropdown-content {
@@ -6886,24 +6933,27 @@ textarea.materialize-textarea+label:after,
   display: none;
 }
 
-#mostrarOcultar:not(:checked) ~ fieldset#filtrar {
-  display: none;
-}
-#mostrarOcultar:checked ~ fieldset#filtrar {
-  display: block;
-}
-#mostrarOcultar:not(:checked) ~ fieldset#exibirFiltro {
-  display: block;
-}
-#mostrarOcultar:checked ~ fieldset#exibirFiltro {
+#mostrarOcultar:not(:checked)~fieldset#filtrar {
   display: none;
 }
 
-#mostrarOcultar:checked + #labelMostrarOcultar i::before {
+#mostrarOcultar:checked~fieldset#filtrar {
+  display: block;
+}
+
+#mostrarOcultar:not(:checked)~fieldset#exibirFiltro {
+  display: block;
+}
+
+#mostrarOcultar:checked~fieldset#exibirFiltro {
+  display: none;
+}
+
+#mostrarOcultar:checked+#labelMostrarOcultar i::before {
   content: attr(data-hidden-icon);
 }
 
-#mostrarOcultar:not(:checked) + #labelMostrarOcultar i::before {
+#mostrarOcultar:not(:checked)+#labelMostrarOcultar i::before {
   content: attr(data-visible-icon);
 }
 
@@ -6918,8 +6968,10 @@ textarea.materialize-textarea+label:after,
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 #modal.modal {
-  width: 90% !important; /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
-  max-height: 90% !important; /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
+  width: 90% !important;
+  /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
+  max-height: 90% !important;
+  /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
 }
 
 /* Se você quiser centralizar o modal na tela */
@@ -6933,24 +6985,27 @@ textarea.materialize-textarea+label:after,
   display: none;
 }
 
-#mostrarOcultarCalendar:not(:checked) ~ fieldset#filtrar {
-  display: none;
-}
-#mostrarOcultarCalendar:checked ~ fieldset#filtrar {
-  display: block;
-}
-#mostrarOcultarCalendar:not(:checked) ~ fieldset#exibirFiltro {
-  display: block;
-}
-#mostrarOcultarCalendar:checked ~ fieldset#exibirFiltro {
+#mostrarOcultarCalendar:not(:checked)~fieldset#filtrar {
   display: none;
 }
 
-#mostrarOcultarCalendar:checked + #labelmostrarOcultarCalendar i::before {
+#mostrarOcultarCalendar:checked~fieldset#filtrar {
+  display: block;
+}
+
+#mostrarOcultarCalendar:not(:checked)~fieldset#exibirFiltro {
+  display: block;
+}
+
+#mostrarOcultarCalendar:checked~fieldset#exibirFiltro {
+  display: none;
+}
+
+#mostrarOcultarCalendar:checked+#labelmostrarOcultarCalendar i::before {
   content: attr(data-hidden-icon);
 }
 
-#mostrarOcultarCalendar:not(:checked) + #labelmostrarOcultarCalendar i::before {
+#mostrarOcultarCalendar:not(:checked)+#labelmostrarOcultarCalendar i::before {
   content: attr(data-visible-icon);
 }
 
@@ -6993,7 +7048,7 @@ textarea.materialize-textarea+label:after,
   outline: none;
   padding-top: 10px;
   padding-left: 10px;
-  border-radius: 6px;  
+  border-radius: 6px;
 }
 
 .textarea:read-only {
@@ -7383,7 +7438,8 @@ select:disabled {
 /* CONFIGURAÇÃO DO MENU */
 
 #menu {
-  display: none; /* Inicia oculto por padrão */
+  display: none;
+  /* Inicia oculto por padrão */
   position: fixed;
   top: 40;
   left: 0;

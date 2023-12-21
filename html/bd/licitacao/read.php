@@ -30,9 +30,11 @@ if ($statusLicitacaoFilter !== 'vazio') {
         $statusLicitacaoFilter = "like 'Suspenso'";
     } else if ($statusLicitacaoFilter == 'Encerrado') {
         $statusLicitacaoFilter = "like 'Encerrado'";
+    } else if ($statusLicitacaoFilter == 'Rascunho') {
+        $statusLicitacaoFilter = "like 'Rascunho'";
     }
 } else {
-    $statusLicitacaoFilter = 'IS NOT NULL';
+    $statusLicitacaoFilter = "NOT LIKE 'Rascunho'";
 }
 
 if (isset($dtIniLicitacaoFilter)) {

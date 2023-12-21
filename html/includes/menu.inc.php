@@ -91,15 +91,15 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 Bem-Vindo, <?php echo $_SESSION['login']; ?>
                 <span style="color: gold;"><?php echo '(' . $_SESSION['nmPerfil'] . ')'; ?></span>
             </label>
-            <?php if ($_SESSION['admin'] == 5) { ?>
-                <a href="cadLicitacao.php" class="add_btn"><i class="material-icons">add_circle_outline</i></a>
-            <?php } ?>
-            <a href="consultarLicitacao.php" class="search_btn"><i class="material-icons">search</i></a>
-
-            <a href="logout.php" class="sair_btn"><ion-icon name="exit-outline"></ion-icon></a>
+            <a href="logout.php" class="up_menu_btn"><ion-icon name="exit-outline"></ion-icon></a>
         <?php } else { ?>
-            <a href="login.php" class="sair_btn"><ion-icon name="exit-outline"></ion-icon></a>
+            <a href="login.php" class="up_menu_btn"><ion-icon name="enter-outline"></ion-icon></a>
         <?php } ?>
+
+        <?php if ($_SESSION['admin'] == 5) { ?>
+            <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="duplicate-outline"></ion-icon></a>
+        <?php } ?>
+        <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
     </div>
 </header>
 

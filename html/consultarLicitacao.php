@@ -26,7 +26,7 @@ include_once 'includes/menu.inc.php';
 
             <div class="input-field col s2">
                 <i class="material-icons prefix">event</i>
-                <input type="date" name="dtFimLicitacao" id="dtFimLicitacao" maxlength="100" value="<?php echo date('Y-m-d'); ?>" required>
+                <input type="date" name="dtFimLicitacao" id="dtFimLicitacao" maxlength="100" value="<?php echo date('Y-m-d', strtotime('+1 day')) ?>" required>
                 <label for="dtFimLicitacao">Até</label>
             </div>
 
@@ -39,6 +39,9 @@ include_once 'includes/menu.inc.php';
                     <option value='Em Andamento' selected>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
                     <option value='Encerrado'>Encerrada</option>
+                    <?php if ($_SESSION['admin'] == 5) { ?>
+                        <option value='Rascunho'>Rascunho</option>
+                    <?php } ?>
                 </select>
             </div>
 

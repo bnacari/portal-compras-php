@@ -92,6 +92,7 @@ endwhile;
                     <option value='Em Andamento' <?php echo ($statusLicitacao === 'Em Andamento') ? 'selected' : ''; ?>>Em Andamento</option>
                     <option value='Encerrado' <?php echo ($statusLicitacao === 'Encerrado') ? 'selected' : ''; ?>>Encerrada</option>
                     <option value='Suspenso' <?php echo ($statusLicitacao === 'Suspenso') ? 'selected' : ''; ?>>Suspensa</option>
+                    <option value='Rascunho' <?php echo ($statusLicitacao === 'Rascunho') ? 'selected' : ''; ?>>Rascunho</option>
                 </select>
                 <label>Status</label>
             </div>
@@ -187,7 +188,7 @@ endwhile;
                 <label>Local de Abertura</label>
             </div>
             <div class="input-field col s12">
-                <textarea type="text" name="obsLicitacao" id="obsLicitacao" required><?php echo $obsLicitacao ?> </textarea>
+                <textarea type="text" name="obsLicitacao" id="obsLicitacao"><?php echo $obsLicitacao ?> </textarea>
                 <label>Observação</label>
             </div>
         </fieldset>
