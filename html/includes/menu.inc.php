@@ -5,6 +5,7 @@ session_start();
 include_once '../bd/conexao.php';
 // include('protectAdmin.php');
 
+$login = $_SESSION['login'];
 
 // Função para obter os menus principais
 function obterMenusPrincipais($pdoCAT)
@@ -89,18 +90,35 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         <?php if (isset($_SESSION['login'])) { ?>
             <label class="userLogin">
                 Bem-Vindo, <?php echo $_SESSION['login']; ?>
-                <span style="color: gold;"><?php echo '(' . $_SESSION['nmPerfil'] . ')'; ?></span>
+                <span style="color: gold;"><?php
+                                            if (isset($_SESSION['nmPerfil'])) {
+                                                echo '(' . $_SESSION['nmPerfil'] . ')';
+                                            } ?></span>
             </label>
             <a href="logout.php" class="up_menu_btn"><ion-icon name="exit-outline"></ion-icon></a>
         <?php } else { ?>
             <a href="login.php" class="up_menu_btn"><ion-icon name="enter-outline"></ion-icon></a>
+        <?php }
+
+        if (strpos($login, '@') !== false) { ?>
+            <a href="trocaSenhaUsuario.php" class="up_menu_btn"><ion-icon name="key-outline"></ion-icon></ion-icon></a>
+
         <?php } ?>
 
         <?php if ($_SESSION['admin'] == 5) { ?>
-            <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="duplicate-outline"></ion-icon></a>
+            <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="add-circle-outline"></ion-icon></a>
         <?php } ?>
         <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
     </div>
+
+    <label class="msg">
+        <?php
+        if (isset($_SESSION['msg'])) :
+            echo $_SESSION['msg'];
+            $_SESSION['msg'] = '';
+        endif;
+        ?>
+    </label>
 </header>
 
 <div id="modalCadastro" class="modal">
@@ -175,8 +193,23 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <li>
                     <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
                 </li>
-        <?php break;
-        } ?>
+            <?php break;
+        }
+
+        if (strpos($login, '@') !== false) { ?>
+            <hr>
+            <hr>
+            <br>
+            <li>
+                <a href="trocaSenhaUsuario.php">Trocar Senha</a>
+            </li>
+
+        <?php }
+
+        ?>
+        <li>
+            <a href="consultarAtualizacao.php">Adm Envio de E-mail</a>
+        </li>
 
     </ul>
 </div>

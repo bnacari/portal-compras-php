@@ -4,7 +4,7 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 
-// include('protectAdmin.php');
+include('protectAdmin.php');
 
 ?>
 <div class="row container">
@@ -49,14 +49,7 @@ include_once 'includes/menu.inc.php';
                 <input type="submit" value="pesquisar" class="btn blue">
                 <!-- <input type="reset" value="limpar" class="btn red"> -->
             </div>
-            <div class="input-field col s12">
-                <?php
-                if (isset($_SESSION['msg'])) :
-                    echo $_SESSION['msg'];
-                    $_SESSION['msg'] = '';
-                endif;
-                ?>
-            </div>
+           
         </form>
     </fieldset>
 

@@ -77,6 +77,15 @@
   color: #00ADEF;
 }
 
+.msg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  color: gold;
+}
+
 .sidebar2 {
   z-index: 99999;
   position: fixed;
@@ -3164,6 +3173,16 @@ fieldset {
   /* Cor da fonte quando 'suspenso' */
 }
 
+.custom-fieldset.rascunho {
+  background-color: #0868A5;
+  color: #0868A5;
+}
+
+.custom-fieldset.rascunho label {
+  color: #fff;
+  /* Cor da fonte quando 'rascunho' */
+}
+
 .custom-label {
   text-align: center;
   color: #132835;
@@ -3201,16 +3220,7 @@ textarea {
   overflow: auto;
 }
 
-/**
- * 1. Add the correct box sizing in IE 10-.
- * 2. Remove the padding in IE 10-.
- */
-[type="checkbox"],
-[type="radio"] {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-}
+
 
 /**
  * Correct the cursor style of increment and decrement buttons in Chrome.
@@ -3903,11 +3913,10 @@ table span.badge {
   font-feature-settings: 'liga';
 }
 
+/* CONFIGURAÇÃO CONTAINER */
 .container {
   position: relative;
-  /* left: 0; */
-  top: 15;
-  /* margin: 0 auto; */
+  top: 55;
   width: 98%;
 }
 
@@ -6216,13 +6225,7 @@ button.btn-floating {
   transition: color 0.3s ease;
 }
 
-.input-field.col .dropdown-content [type="checkbox"]+label {
-  top: 1px;
-  left: 0;
-  height: 18px;
-  -webkit-transform: none;
-  transform: none;
-}
+
 
 .dropdown-trigger {
   cursor: pointer;
@@ -6967,6 +6970,99 @@ textarea.materialize-textarea+label:after,
 
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  background-color: #fafafa;
+  padding: 0;
+  max-height: 70%;
+  width: 55%;
+  margin: auto;
+  overflow-y: auto;
+  border-radius: 2px;
+  will-change: top, opacity;
+}
+
+.modal:focus {
+  outline: none;
+}
+
+@media only screen and (max-width: 992px) {
+  .modal {
+    width: 80%;
+  }
+}
+
+.modal h1, .modal h2, .modal h3, .modal h4 {
+  margin-top: 0;
+}
+
+.modal .modal-content {
+  padding: 24px;
+}
+
+.modal .modal-close {
+  cursor: pointer;
+}
+
+.modal .modal-footer {
+  border-radius: 0 0 2px 2px;
+  background-color: #fafafa;
+  padding: 4px 6px;
+  height: 56px;
+  width: 100%;
+  text-align: right;
+}
+
+.modal .modal-footer .btn, .modal .modal-footer .btn-large, .modal .modal-footer .btn-small, .modal .modal-footer .btn-flat {
+  margin: 6px 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  z-index: 999;
+  top: -25%;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 125%;
+  width: 100%;
+  background: #000;
+  display: none;
+  will-change: opacity;
+}
+
+.modal.modal-fixed-footer {
+  padding: 0;
+  height: 70%;
+}
+
+.modal.modal-fixed-footer .modal-content {
+  position: absolute;
+  height: calc(100% - 56px);
+  max-height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.modal.modal-fixed-footer .modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  position: absolute;
+  bottom: 0;
+}
+
+.modal.bottom-sheet {
+  top: auto;
+  bottom: -100%;
+  margin: 0;
+  width: 100%;
+  max-height: 45%;
+  border-radius: 0;
+  will-change: bottom, opacity;
+}
+
 #modal.modal {
   width: 90% !important;
   /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
@@ -7017,6 +7113,13 @@ textarea.materialize-textarea+label:after,
   color: #0867A4;
 }
 
+.align-right {
+  float: right;
+}
+
+.align-left {
+  float: left;
+}
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 .input-field {
@@ -7252,24 +7355,6 @@ textarea.materialize-textarea {
   cursor: pointer;
 }
 
-.switch label input[type=checkbox] {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.switch label input[type=checkbox]:checked+.lever {
-  background-color: #84c7c1;
-}
-
-.switch label input[type=checkbox]:checked+.lever:before,
-.switch label input[type=checkbox]:checked+.lever:after {
-  left: 18px;
-}
-
-.switch label input[type=checkbox]:checked+.lever:after {
-  background-color: #0868A5;
-}
 
 .switch label .lever {
   content: "";
@@ -7311,31 +7396,6 @@ textarea.materialize-textarea {
   -webkit-box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
-
-input[type=checkbox]:checked:not(:disabled)~.lever:active::before,
-input[type=checkbox]:checked:not(:disabled).tabbed:focus~.lever::before {
-  -webkit-transform: scale(2.4);
-  transform: scale(2.4);
-  background-color: rgba(38, 166, 154, 0.15);
-}
-
-input[type=checkbox]:not(:disabled)~.lever:active:before,
-input[type=checkbox]:not(:disabled).tabbed:focus~.lever::before {
-  -webkit-transform: scale(2.4);
-  transform: scale(2.4);
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.switch input[type=checkbox][disabled]+.lever {
-  cursor: default;
-  background-color: rgba(0, 0, 0, 0.12);
-}
-
-.switch label input[type=checkbox][disabled]+.lever:after,
-.switch label input[type=checkbox][disabled]:checked+.lever:after {
-  background-color: #949494;
-}
-
 .select2-container--default .select2-selection--multiple {
   width: 100%;
   /* Defina o tamanho desejado aqui */
@@ -7425,7 +7485,7 @@ select:disabled {
   left: 5px;
   color: #fff;
   font-size: 25px;
-  margin: -1px 0;
+  margin: 25px 0;
   cursor: pointer;
   transition: 0.5s;
   transition-property: color;
@@ -7461,6 +7521,7 @@ select:disabled {
 #menu ul {
   list-style: none;
   padding: 0;
+  padding-top: 10;
   margin: 0;
   background-color: #193446;
   width: 100%;
@@ -7541,4 +7602,16 @@ select:disabled {
 
 #progress-message {
   margin-top: 10px;
+}
+
+
+/* Estilo da área do checkbox (pode ser substituído por uma imagem personalizada) */
+/* CHECKBOX */
+input[type="checkbox"] + label {
+  position: relative;
+  top: -27px;
+  padding-left: 20px; /* Espaçamento à esquerda para a área do checkbox */
+  cursor: pointer;
+  display: inline-block;
+  line-height: 20px; /* Ajuste conforme necessário para o tamanho da área do checkbox */
 }

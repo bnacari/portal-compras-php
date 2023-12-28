@@ -10,6 +10,8 @@ $acao = filter_input(INPUT_GET, 'acao', FILTER_SANITIZE_SPECIAL_CHARS);
 $idEvento = filter_input(INPUT_GET, 'idEvento', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $queryLOG = $pdoCAT->query("INSERT INTO auditoria VALUES('$login', GETDATE(), '$tela', '$acao', $idEvento)");
+// var_dump($queryLOG);
+// exit();
 
 $redirecionar = $_SESSION['redirecionar'];
 

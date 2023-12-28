@@ -41,15 +41,6 @@ endwhile;
 
         <fieldset class="formulario col s12">
             <h5 class="light center">Criar solicitação de agendamento</h5>
-
-            <div class="input-field col s12">
-                <?php
-                if (isset($_SESSION['msg'])) :
-                    echo $_SESSION['msg'];
-                    $_SESSION['msg'] = '';
-                endif;
-                ?>
-            </div>
         </fieldset>
 
         <p>&nbsp;</p>

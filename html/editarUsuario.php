@@ -13,32 +13,34 @@ if ($_SESSION['admin'] == 5) {
     header('Location: index.php');
 }
 
-$matricula = filter_input(INPUT_GET, 'matricula', FILTER_SANITIZE_NUMBER_INT);
+// $matricula = filter_input(INPUT_GET, 'matricula', FILTER_SANITIZE_NUMBER_INT);
+$email = filter_input(INPUT_GET, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
 
 /////////////////////////////////////////////////////////////////////////
 
-
-$queryAdmin = "SELECT MAT_ADM FROM ADMINISTRADOR WHERE MAT_ADM = $matricula";
-
+$queryAdmin = "SELECT EMAIL_ADM FROM ADMINISTRADOR WHERE EMAIL_ADM like '$email'";
 $querySelect = $pdoCAT->query($queryAdmin);
 
-$existeUsuario = 0;
+// $existeUsuario = 0;
 
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-    $existeUsuario = $registros['MAT_ADM'];
+    $existeUsuario = $registros['EMAIL_ADM'];
 endwhile;
 
-if ($existeUsuario != 0) {
+// var_dump($existeUsuario);
+// exit();
+
+if (isset($existeUsuario)) {
     $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].ADMINISTRADOR A 
                         LEFT JOIN PERFIL P ON P.ID_PERFIL = A.ID_PERFIL
-                        WHERE MAT_ADM = $matricula ";
+                        WHERE EMAIL_ADM = '$email'";
     $querySelect = $pdoCAT->query($querySelect2);
+
     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
         $idPerfilUsuario = $registros['ID_PERFIL'];
         $nmUsuario = $registros['NM_ADM'];
         $nmPerfilUsuario = $registros['NM_PERFIL'];
     endwhile;
-    /////////////////////////////////////////////////////////////////////////
 
 } else {
     $queryInsert = "SELECT [ID]
@@ -54,18 +56,23 @@ if ($existeUsuario != 0) {
                     ,[IsEnabled]
                     ,[objectCategory]
                 FROM [ADCache].[dbo].[Users]
-                where initials = $matricula";
+                where mail like '$email'";
+    var_dump($queryInsert);
+    // exit();
 
     $queryInsert2 = $pdoCAT->query($queryInsert);
 
     while ($registros = $queryInsert2->fetch(PDO::FETCH_ASSOC)) :
+        $matricula = $registros['initials'];
         $nmUsuario = $registros['displayName'];
         $mail = $registros['mail'];
         $login = $registros['sAMAccountName'];
     endwhile;
 
     $loginCriador = $_SESSION['login'];
-    $querySelect2 = "INSERT INTO ADMINISTRADOR VALUES ($matricula, '$nmUsuario', '$mail', GETDATE(), 'A', '$loginCriador', '$login', NULL)";
+    $querySelect2 = "INSERT INTO ADMINISTRADOR VALUES ($matricula, '$nmUsuario', '$mail', GETDATE(), 'A', '$loginCriador', '$login', NULL, NULL)";
+    // var_dump($querySelect2);
+    // exit();
     $querySelect = $pdoCAT->query($querySelect2);
 
     // REGISTRO DE LOG
@@ -92,9 +99,10 @@ if ($existeUsuario != 0) {
         <p>&nbsp;</p>
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
             <!-- <h6><strong>Local a Visitar</strong></h6> -->
+
             <div class="input-field col s4">
-                <input type="text" id="matricula" name="matricula" value="<?php echo $matricula ?>" readonly>
-                <label>Matrícula</label>
+                <input type="text" id="email" name="email" value="<?php echo $email ?>" readonly>
+                <label>E-mail</label>
             </div>
 
             <div class="input-field col s4">

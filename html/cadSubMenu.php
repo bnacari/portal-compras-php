@@ -43,14 +43,6 @@ include('protectAdmin.php');
                 <button type="submit" class="btn blue">CADASTRAR</button>
             </div>
 
-            <div class="input-field col s12">
-                <?php
-                if (isset($_SESSION['msg'])) :
-                    echo $_SESSION['msg'];
-                    $_SESSION['msg'] = '';
-                endif;
-                ?>
-            </div>
         </form>
     </fieldset>
     <p>&nbsp;</p>

@@ -4,6 +4,9 @@ include_once 'bd/conexao.php';
 include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
+include_once 'redirecionar.php';
+
+include('protectAdmin.php');
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
@@ -35,6 +38,13 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
     $obsLicitacao = $registros['OBS_LICITACAO'];
 endwhile;
+
+$_SESSION['redirecionar'] = 'viewLicitacao.php?idLicitacao=' . $idLicitacao;
+$login = $_SESSION['login'];
+$tela = 'Licitação';
+$acao = 'Visualizada';
+$idEvento = $idLicitacao;
+$queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$tela', '$acao', $idEvento)");
 
 ?>
 <!-- FORMULÁRIOS DE CADASTRO -->
@@ -257,3 +267,51 @@ endwhile;
         </div>
     </form>
 </div>
+
+<!-- MODAL ============================================================================= -->
+<?php 
+// VERIFICO SE O USUÁRIO JÁ ESTÁ CADASTRADO PARA RECEBER FUTURAS ATUALIZAÇÕES NA LICITAÇÃO
+$email = $_SESSION['email'];
+$queryUpdateLicitacao = "SELECT ID_ATUALIZACAO 
+                            FROM ATUALIZACAO 
+                            WHERE ID_LICITACAO = $idLicitacao 
+                            AND EMAIL_ADM LIKE '$email' 
+                            AND DT_EXC_ATUALIZACAO IS NULL";
+$queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
+while ($registros = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC)) :
+    $idAtualizacao = $registros['ID_ATUALIZACAO'];
+endwhile;
+
+if (!isset($idAtualizacao)) { ?>
+<div class="materialize-content">
+    <div id="modalAtualizacao" class="modal">
+        <div class="modal-content">
+            <h5>Receber Atualizações</h5>
+            <form action='bd/licitacao/enviarAtualizacao.php?idLicitacao=<?php echo $idLicitacao; ?>' method="post">
+                <br>
+                <div class="input-field">
+                    <input type="checkbox" name="enviarAtualizacao" id="enviarAtualizacao" required>
+                    <label for="enviarAtualizacao">Tenho interesse em receber atualizações sobre essa licitação.</label>
+                </div>
+                <br>
+                <button type="submit" class="btn blue">Enviar</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<!--FIM MODAL ============================================================================= -->
+
+<script>
+    $(document).ready(function() {
+        // Inicializa o modal
+        $('.modal').modal();
+
+        // Aguarda 500 milissegundos (ou ajuste conforme necessário) antes de abrir o modal
+        $('#modalAtualizacao').modal('open');
+
+    });
+</script>

@@ -10,61 +10,13 @@ session_start();
 require '../vendor/autoload.php';
 include_once 'bd/conexao.php';
 
-$idVisita = filter_input(INPUT_GET, 'idVisita', FILTER_SANITIZE_SPECIAL_CHARS);
-
-$queryVisita = "SELECT V.*, L.NM_LOCAL, P.NM_PUBLICO
-                FROM [VisitaAgendada].[dbo].[VISITA] V
-                LEFT JOIN LOCAL L ON L.ID_LOCAL = V.ID_LOCAL
-                LEFT JOIN PUBLICO P ON P.ID_PUBLICO = V.ID_PUBLICO
-                WHERE V.ID_VISITA = $idVisita
-                ORDER BY ID_VISITA";
-
-$queryVisita2 = $pdoCAT->query($queryVisita);
-
-while ($registros = $queryVisita2->fetch(PDO::FETCH_ASSOC)) :
-
-    $nmResponsavel = $registros['NM_RESP_VISITA'];
-    $emailResponsavel = $registros['EMAIL_RESP_VISITA'];
-    $telResponsavel = $registros['TEL_RESP_VISITA'];
-    $localVisitado = $registros['NM_LOCAL'];
-    $respSolicitacao = $registros['NM_PUBLICO'];
-    $tipoVisita = $registros['TIPO_VISITA'];
-    $dtINIVisita = $registros['DT_INI_VISITA'];
-    $dtFIMVisita = $registros['DT_FIM_VISITA'];
-    $turnoVisita = $registros['TURNO_VISITA'];
-    $numVisitantes = $registros['NUM_VISITANTES'];
-    $objVisita = $registros['OBJ_VISITA'];
-    $deficiente = $registros['DEFICIENTE'];
-    $necessidadeDeficiente = $registros['NECESSIDADE_DEFICIENTE'];
-    $nmInstituicao = $registros['NM_INSTITUICAO'];
-    $endInstituicao = $registros['END_INSTITUICAO'];
-    $bairroInstituicao = $registros['BAIRRO_INSTITUICAO'];
-    $cidadeInstituicao = $registros['CIDADE_INSTITUICAO'];
-    $telInstituicao = $registros['TEL_INSTITUICAO'];
-    $emailInstituicao = $registros['EMAIL_INSTITUICAO'];
-
-    $dtINIVisitaFormatada = date("Ymd\THis\Z", strtotime($dtINIVisita . ' +3 hours'));
-    $dtFIMVisitaFormatada = date("Ymd\THis\Z", strtotime($dtFIMVisita . ' +3 hours'));
-
-endwhile;
-
-$icsContent = "BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Your Organization//Your App//EN
-METHOD:PUBLISH
-BEGIN:VEVENT
-SUMMARY:$localVisitado
-DESCRIPTION:$objVisita
-DTSTART:$dtINIVisitaFormatada
-DTEND:$dtFIMVisitaFormatada
-LOCATION:$localVisitado
-END:VEVENT
-END:VCALENDAR";
-//fim do anexo do calendário
+$emailUsuario = filter_input(INPUT_GET, 'emailUsuario', FILTER_SANITIZE_SPECIAL_CHARS);
+$idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
 $mail = new PHPMailer(true);
 $serverName = $_SERVER['SERVER_NAME'];
-$link = $serverName . '/viewVisita.php?idVisita=' . $idVisita;
+$linkLogin = $serverName . '/login.php';
+$linkLicitacao = $serverName . '/viewLicitacao.php?idLicitacao=' . $idLicitacao;
 
 try {
     //Server settings
@@ -72,45 +24,101 @@ try {
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = 'app-mail.sistemas.cesan.com.br';                     //Set the SMTP server to send through
     $mail->SMTPAuth   = false;                                   //Enable SMTP authentication
-    $mail->Username   = 'educa.ambiental@cesan.com.br';                     //SMTP username
+    $mail->Username   = 'compras@cesan.com.br';                     //SMTP username
     $mail->Port       = 25;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     $mail->SMTPAutoTLS = false;
 
     //Recipients
-    $mail->setFrom('educa.ambiental@cesan.com.br', 'CESAN - Visita Agendada');
-    $mail->addAddress('educa.ambiental@cesan.com.br', 'CESAN - Visita Agendada');
-    // $mail->addAddress('bruno.nacari@cesan.com.br', 'CESAN - Visita Agendada');
-    $mail->addCC($emailResponsavel, 'CESAN - Visita Agendada');     //Add a recipient
+    $mail->setFrom('compras@cesan.com.br', 'CESAN - Portal de Compras');
 
-    //trecho que anexa o calendário ao e-mail enviado
-    $icsFileName = 'VisitaAgendada.ics';
-    $mail->addStringAttachment($icsContent, $icsFileName, 'base64', 'text/calendar');
+    // SE FOR RECUPERAÇÃO DE SENHA =======================================================================================================================
+    if (isset($emailUsuario)) {
 
-    //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->CharSet = 'UTF-8';                      // Set charset to UTF-8
-    $mail->Encoding = 'base64';
-    $mail->Subject = 'Visita criada por: ' . $nmResponsavel . '(Cód.: ' . $idVisita . ')';
-    $mail->Body    = '<b>Solicitação de Visita cadastrada com sucesso. </b></br></br>';
-    $mail->Body    .= 'Nome do Solicitante: <b>' . $nmResponsavel . '</b></br>';
-    $mail->Body    .= 'Telefone de Contato: <b>' . $telResponsavel . '</b></br>';
-    $mail->Body    .= 'E-mail de Contato: <b>' . $emailResponsavel . '</b></br>';
-    $mail->Body    .= 'Foi solicitada uma visita em: <b>' . $localVisitado . '</b></br>';
-    $mail->Body    .= 'Público Solicitante: <b>' . $respSolicitacao . '</b></br>';
-    $mail->Body    .= 'Quando: <b>' . $dtINIVisita . '</b></br>';
-    $mail->Body    .= 'Período: <b>' . $turnoVisita . '</b></br>';
-    $mail->Body    .= 'Número de Participantes: <b>' . $numVisitantes . '</b></br>';
-    $mail->Body    .= 'Objetivo da Visita: <b>' . $objVisita . '</b></br></br>';
-    $mail->Body    .= '<b>Link de acesso: </b><a href="' . $link . '">' . $link . '</a></br>';
+        $querySelectPerfil = "SELECT * FROM ADMINISTRADOR WHERE EMAIL_ADM LIKE '$emailUsuario'";
+        $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
+        while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
+            $nmUsuario = $registros['NM_ADM'];
+            $email = $registros['EMAIL_ADM'];
+            $senha = $registros['SENHA'];
 
-    $mail->send();
+            $mail->addAddress($email, 'CESAN - Portal de Compras');
 
-    // $_SESSION['msg'] = "<p class='center red-text'>" . '<strong>Visita ' . $idVisita . ' cadastrada com sucesso.' . "</p>";
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->CharSet = 'UTF-8';                      // Set charset to UTF-8
+            $mail->Encoding = 'base64';
+            $mail->Subject = 'Recuperação de Senha';
+            $mail->Body    = '<b>Solicitação de Visita cadastrada com sucesso. </b></br></br>';
+            $mail->Body    .= ' Nome do Solicitante: <b>' . $nmUsuario . '</b></br>';
+            $mail->Body    .= ' E-mail de Contato: <b>' . $email . '</b></br>';
+            $mail->Body    .= ' Senha: <b>' . $senha . '</b></br>';
+            $mail->Body    .= ' Link de acesso: <a href="' . $linkLogin . '">' . $linkLogin . '</a></br>';
 
-    echo "<script>location.href='consultarLicitacao.php';</script>";
+            $mail->send();
+        endwhile;
 
-    // echo "<script>window.history.back();</script>";
+        $_SESSION['msg'] = "<p class='center red-text'>" . 'Senha enviada para e-mail cadastrado.' . "</p>";
 
+        echo "<script>location.href='login.php';</script>";
+
+        if (!isset($email)) {
+            $_SESSION['msg'] = "<p class='center red-text'>" . 'E-mail NÃO cadastrado.' . "</p>";
+
+            echo "<script>location.href='login.php';</script>";
+        }
+
+        // SE FOR ENVIO DE EMAIL PARA ATUALIZAÇÃO EM LICITAÇÃO =======================================================================================================================
+    } else if (isset($idLicitacao)) {
+
+        $querySelectAtualizacao = "SELECT ADM.NM_ADM, A.EMAIL_ADM, DL.* 
+                                    FROM ATUALIZACAO A 
+                                    LEFT JOIN ADMINISTRADOR ADM ON ADM.ID_ADM = A.ID_ADM
+                                    LEFT JOIN DETALHE_LICITACAO DL ON A.ID_LICITACAO = DL.ID_LICITACAO
+                                    WHERE ADM.STATUS LIKE 'A'
+                                    AND A.DT_EXC_ATUALIZACAO IS NULL
+                                    AND A.ID_LICITACAO = $idLicitacao
+                                    ";
+
+        $querySelectAtualizacao2 = $pdoCAT->query($querySelectAtualizacao);
+
+        while ($registros = $querySelectAtualizacao2->fetch(PDO::FETCH_ASSOC)) :
+            $nmUsuario = $registros['NM_ADM'];
+            $email = $registros['EMAIL_ADM'];
+
+            $codLicitacao = $registros['COD_LICITACAO'];
+            $statusLicitacao = $registros['STATUS_LICITACAO'];
+            $objLicitacao = $registros['OBJETO_LICITACAO'];
+            $respLicitacao = $registros['PREG_RESP_LICITACAO'];
+            $dtAbertura = $registros['DT_ABER_LICITACAO'];
+            $dtIniSessao = $registros['DT_INI_SESS_LICITACAO'];
+            $modoLicitacao = $registros['MODO_LICITACAO'];
+            $criterioLicitacao = $registros['CRITERIO_LICITACAO'];
+            $regimeLicitacao = $registros['REGIME_LICITACAO'];
+            $formaLicitacao = $registros['FORMA_LICITACAO'];
+            $vlLicitacao = $registros['VL_LICITACAO'];
+            $localLicitacao = $registros['LOCAL_ABER_LICITACAO'];
+            $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
+            $obsLicitacao = $registros['OBS_LICITACAO'];
+
+            $mail->addAddress($email, 'CESAN - Portal de Compras');
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->CharSet = 'UTF-8';                      // Set charset to UTF-8
+            $mail->Encoding = 'base64';
+            $mail->Subject = 'Licitação Atualizada';
+            $mail->Body    = '<b>A licitação de código ' . $codLicitacao . ' sofreu atualizações. </b></br></br>';
+            $mail->Body    .= ' Acesse o site <a href="' . $linkLicitacao . '">' . $linkLicitacao . '</a> para maiores informações.</br>';
+
+            $mail->send();
+
+            // var_dump($email);
+        endwhile;
+        
+        $_SESSION['msg'] = "Licitação atualizada com sucesso.";
+
+        echo "<script>location.href='index.php';</script>";
+    }
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }

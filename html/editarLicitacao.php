@@ -12,6 +12,8 @@ if ($_SESSION['admin'] == 5) {
     header('Location: index.php');
 }
 
+$perfilUsuario = $_SESSION['admin'];
+
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
 $querySelect2 = "SELECT L.*, DET.*
@@ -81,13 +83,20 @@ endwhile;
 
         <p>&nbsp;</p>
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
-            <!-- <h6><strong>Local a Visitar</strong></h6> -->
-            <div class="input-field col s4">
+
+            <!-- <div id="perfilAdmin">
+                <p>TESTE ADMINISTRADOR</p>
+            </div>
+            <div id="perfilContador">
+                <p>TESTE CONTADOR</p>
+            </div> -->
+
+
+            <div class="input-field col s4" id="perfilAdmin">
                 <input type="text" name="codLicitacao" id="codLicitacao" value="<?php echo $codLicitacao ?>">
                 <label>Código</label>
             </div>
-
-            <div class="input-field col s4">
+            <div class="input-field col s4" id="perfilContador">
                 <select name="statusLicitacao" id="statusLicitacao" required>
                     <option value='Em Andamento' <?php echo ($statusLicitacao === 'Em Andamento') ? 'selected' : ''; ?>>Em Andamento</option>
                     <option value='Encerrado' <?php echo ($statusLicitacao === 'Encerrado') ? 'selected' : ''; ?>>Encerrada</option>
@@ -230,7 +239,7 @@ endwhile;
                         foreach ($files as $file) {
                             echo '<tr>';
                             echo '<td><a href="' . $directory . '/' . $file . '" download>' . $file . '</a></td>';
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
                             echo '</tr>';
                         }
 
@@ -280,7 +289,7 @@ endwhile;
                     foreach ($anexos as $anexo) {
                         echo '<tr>';
                         echo '<td><a href="' . $anexo['linkAnexo'] . '" download>' . $anexo['nmAnexo'] . '</a></td>';
-                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
+                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
                         echo '</tr>';
                     }
 
@@ -290,7 +299,6 @@ endwhile;
                 ?>
             </div>
         </fieldset>
-
 
         <p>&nbsp;</p>
 
@@ -303,6 +311,27 @@ endwhile;
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
 <script>
+    // Função para mostrar/ocultar campos com base no perfil do usuário
+    function atualizarCampos() {
+        var perfilUsuario = "<?php echo $perfilUsuario; ?>";
+
+        // Mostra/oculta campos com base no perfil
+        if (perfilUsuario === '5') {
+            document.getElementById('perfilAdmin').style.display = 'block';
+            document.getElementById('perfilContador').style.display = 'block';
+
+        } else if (perfilUsuario === '4') {
+            document.getElementById('perfilContador').style.display = 'block';
+            document.getElementById('perfilAdmin').style.display = 'none';
+
+        } else {
+            document.getElementById('perfilAdmin').style.display = 'none';
+            document.getElementById('perfilContador').style.display = 'none';
+        }
+    }
+    // Executa a função ao carregar a página
+    window.onload = atualizarCampos;
+
     function confirmDelete(file, directory) {
         if (confirm('Tem certeza que deseja excluir o arquivo?')) {
             // Use AJAX para excluir o arquivo

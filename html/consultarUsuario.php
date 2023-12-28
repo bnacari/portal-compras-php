@@ -42,14 +42,7 @@ include('protectAdmin.php');
                 <input type="submit" value="pesquisar" class="btn blue">
                 <!-- <input type="reset" value="limpar" class="btn red"> -->
             </div>
-            <div class="input-field col s12">
-                <?php
-                if (isset($_SESSION['msg'])) :
-                    echo $_SESSION['msg'];
-                    $_SESSION['msg'] = '';
-                endif;
-                ?>
-            </div>
+           
         </form>
     </fieldset>
     <p>&nbsp;</p>
@@ -69,6 +62,7 @@ include('protectAdmin.php');
                             <th>Unidade</th>
                             <th>e-mail</th>
                             <th>Perfil</th>
+                            <th>Ativar/Desativar</th>
                             <!-- <th style="text-align: center;">Setar Administrador?</th> -->
                             <th>Editar</th>
                         </tr>
