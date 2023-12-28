@@ -3,7 +3,7 @@
 session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('protectAdmin.php');
+include('protect.php');
 
 $senhaAtual = $_POST['senhaAtual'];
 $senhaNova = $_POST['senhaNova'];

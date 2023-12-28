@@ -3,7 +3,7 @@
 include_once 'bd/conexao.php';
 include_once 'redirecionar.php';
 
-include('protectAdmin.php');
+include('protect.php');
 
 $lgnCriador = $_SESSION['login'];
 

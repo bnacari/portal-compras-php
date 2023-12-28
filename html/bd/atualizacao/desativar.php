@@ -3,7 +3,7 @@
 session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('protectAdmin.php');
+include('protect.php');
 
 $idAtualizacao = filter_input(INPUT_GET, 'idAtualizacao', FILTER_SANITIZE_SPECIAL_CHARS);
 

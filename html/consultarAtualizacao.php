@@ -4,7 +4,7 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 
-include('protectAdmin.php');
+include('protect.php');
 
 ?>
 <div class="row container">

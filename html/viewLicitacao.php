@@ -6,7 +6,7 @@ include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 include_once 'redirecionar.php';
 
-include('protectAdmin.php');
+include('protect.php');
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
