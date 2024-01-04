@@ -33,6 +33,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Submenu</strong> atual
 $_SESSION['redirecionar'] = '../../cadSubMenu.php';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
-$acao = 'SubMenu ' . $idSubMenu . ' ATUALIZADO';
+$acao = 'ATUALIZADO';
 $idEvento = $idSubMenu;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

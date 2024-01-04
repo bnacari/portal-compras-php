@@ -24,6 +24,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Criterio</strong> desa
 $_SESSION['redirecionar'] = '../cadCriterio.php';
 $login = $_SESSION['login'];
 $tela = 'Criterio';
-$acao = 'Criterio ' . $nmCriterio . ' DESATIVADO';
+$acao = 'DESATIVADO';
 $idEvento = $idCriterio;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

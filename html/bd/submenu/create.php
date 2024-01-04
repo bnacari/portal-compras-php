@@ -32,6 +32,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>SubMenu</strong> cadas
 $_SESSION['redirecionar'] = '../../cadSubMenu.php';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
-$acao = 'SubMenu ' . $idSubMenu . ' CRIADO';
+$acao = 'CRIADO';
 $idEvento = $idSubMenu;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

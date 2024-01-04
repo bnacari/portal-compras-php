@@ -142,7 +142,6 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         construirMenuHTML($pdoCAT); ?>
 
 
-
         <?php
         switch ($_SESSION['admin']) {
             case 5: ?>
@@ -157,6 +156,9 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 </li>
                 <li>
                     <a href="cadForma.php">Adm Forma</a>
+                </li>
+                <li>
+                    <a href="cadTipo.php">Adm Tipo Contratação</a>
                 </li>
                 <li><a href="#">Adm Usuários</a>
                     <ul>
@@ -222,6 +224,15 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
     document.addEventListener('DOMContentLoaded', function() {
         var menuToggle = document.getElementById('menuToggle');
         var menu = document.getElementById('menu');
+        const container = document.querySelector('.container');
+
+        //mantém o MENU aberto ao carregar a página
+        if (window.innerWidth >= 520) {
+            // Mantém o MENU aberto ao carregar a página
+            menu.style.display = 'block';
+            container.style.left = '140';
+            container.style.width = 'calc(95% - 200px)';
+        }
 
         menuToggle.addEventListener('click', function() {
             if (menu.style.display === 'none') {

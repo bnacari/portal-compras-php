@@ -50,6 +50,6 @@ $_SESSION['msg'] = "Senha atualizada com <strong>sucesso</strong>.";
 $_SESSION['redirecionar'] = '../trocaSenhaUsuario.php';
 $login = $_SESSION['login'];
 $tela = 'Troca Senha';
-$acao = 'Senha atualizada para ' . $login;
+$acao = 'Senha atualizada';
 $idEvento = 0;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

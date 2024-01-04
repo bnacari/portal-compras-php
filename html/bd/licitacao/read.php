@@ -53,6 +53,7 @@ $querySelect2 = "SELECT
                     LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
                 WHERE
                     D.STATUS_LICITACAO $statusLicitacaoFilter
+                    AND L.DT_EXC_LICITACAO IS NULL
                 ";
 
 $querySelect2 .= " AND (L.COD_LICITACAO $tituloLicitacaoFilterSQL OR D.OBJETO_LICITACAO $tituloLicitacaoFilterSQL)";
@@ -90,7 +91,9 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
                 </a> ";
     if ($_SESSION['admin'] == 5) {
         echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:red; font-size:20px'><ion-icon name='settings-outline'></ion-icon></a>";
-        // echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao'><fieldset class='custom-fieldset-editar'><h7>Editar</h7></fieldset></a>";
+        // echo "<a href='bd/licitacao/delete.php?idLicitacao=$idLicitacao' style='color:red; font-size:20px'><ion-icon name='settings-outline'></ion-icon></a>";
+        echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:red; font-size:20px; padding-left:10px'><ion-icon name='trash-bin-outline'></ion-icon></a>";
+
     }
     echo "</p>
             <p style='color:#9E9E9E'>$objLicitacao</p>
@@ -111,3 +114,14 @@ endwhile;
 
 echo "</tbody>";
 echo "</table>";
+
+echo "
+<script>
+function confirmDelete(idLicitacao) {
+    var resposta = confirm('Tem certeza que deseja excluir a licitação?');
+
+    if (resposta) {
+        window.location.href = 'bd/licitacao/delete.php?idLicitacao=' + idLicitacao;
+    }
+}
+</script>";

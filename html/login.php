@@ -28,7 +28,7 @@ $_SESSION['admin'] = 0;
                 <div class="input-field col s12">
                     <i class="material-icons prefix">person</i>
                     <input type="text" name="login" id="login" maxlength="100" required autofocus>
-                    <label for="usuario">Login / E-mail</label>
+                    <label for="usuario">Login / E-mail (usuário externo)</label>
                 </div>
 
                 <div class="input-field col s12">

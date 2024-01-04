@@ -17,6 +17,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Forma</strong> ativada
 $_SESSION['redirecionar'] = '../../cadForma.php';
 $login = $_SESSION['login'];
 $tela = 'Forma';
-$acao = 'Forma ' . $idForma . ' ATIVADO';
+$acao = 'ATIVADO';
 $idEvento = $idForma;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

@@ -24,12 +24,28 @@ if ($_SESSION['admin'] == 5) {
         <p>&nbsp;</p>
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
             <!-- <h6><strong>Local a Visitar</strong></h6> -->
-            <div class="input-field col s4">
+
+            <div class="input-field col s3">
+                <select name="tipoLicitacao" id="tipoLicitacao" required>
+                    <option value='' selected>Selecione uma opção</option>
+                    <?php
+                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO";
+                    $querySelect = $pdoCAT->query($querySelect2);
+                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
+                    endwhile;
+                    ?>
+                </select>
+                <!-- <input type="text" id="criterioLicitacao" name="criterioLicitacao"> -->
+                <label>Tipo de Contratação</label>
+            </div>
+
+            <div class="input-field col s3">
                 <input type="text" id="codLicitacao" name="codLicitacao" required>
                 <label>Código</label>
             </div>
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
 
                 <select name="statusLicitacao" id="statusLicitacao">
                     <option value='vazio'>Selecione uma opção</option>
@@ -42,7 +58,7 @@ if ($_SESSION['admin'] == 5) {
                 <label>Status</label>
             </div>
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
                 <input type="text" id="respLicitacao" name="respLicitacao" required>
                 <label>Responsável</label>
             </div>
@@ -74,6 +90,7 @@ if ($_SESSION['admin'] == 5) {
                     <option value='' selected>Selecione uma opção</option>
                     <option value='Aberta'>Aberta</option>
                     <option value='Fechada'>Fechada</option>
+                    <option value='Hibrida'>Híbrida</option>
                 </select>
                 <label>Modo de Disputa</label>
             </div>

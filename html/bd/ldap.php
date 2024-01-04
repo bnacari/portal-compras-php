@@ -34,7 +34,7 @@ if (strpos($login, '@') !== false) {
         $_SESSION['redirecionar'] = '../index.php';
         $login = $_SESSION['login'];
         $tela = 'Login';
-        $acao = 'Login ' . $login;
+        $acao = 'Login';
         $idEvento = 0;
         redirecionar("../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
 
@@ -80,7 +80,7 @@ if ($ldapcon) {
         $_SESSION['redirecionar'] = '../index.php';
         $login = $_SESSION['login'];
         $tela = 'Login';
-        $acao = 'Login ' . $login;
+        $acao = 'Login';
         $idEvento = 0;
         redirecionar("../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
 

@@ -10,9 +10,9 @@ include('protectAdmin.php');
 
 <!-- FORMULÁRIOS DE CADASTRO -->
 <div class="row container">
-    <form class="col s12 formulario">
+    <fieldset class="formulario col s12">
+        <form class="col s12 formulario">
 
-        <fieldset class="formulario col s12">
             <h5 class="light center">Administrar Anexos</h5>
             <input type="hidden" id="idLicitacao" value="anexos" />
 
@@ -21,50 +21,51 @@ include('protectAdmin.php');
                     Arraste e solte os arquivos aqui ou clique para selecionar.
                 </div>
             </div>
-        </fieldset>
-        <p>&nbsp;</p>
+        </form>
 
-        <fieldset class="formulario col s12">
-            <div id="filelist">
-                <?php
-                $directory = "uploads/anexos";
+    </fieldset>
+    <p>&nbsp;</p>
 
-                // Array para armazenar os anexos
-                $anexos = array();
+    <fieldset class="formulario col s12">
+        <div id="filelist">
+            <?php
+            $directory = "uploads/anexos";
 
-                // Verifique se o diretório existe
-                if (is_dir($directory)) {
-                    // Liste os arquivos no diretório
-                    $files = scandir($directory);
+            // Array para armazenar os anexos
+            $anexos = array();
 
-                    // Exclua . e ..
-                    $files = array_diff($files, array('.', '..'));
+            // Verifique se o diretório existe
+            if (is_dir($directory)) {
+                // Liste os arquivos no diretório
+                $files = scandir($directory);
 
-                    if (!empty($files)) {
-                        echo '</br>';
-                        // Crie a estrutura HTML para exibir os arquivos em uma grid
-                        echo '<div class="grid">';
+                // Exclua . e ..
+                $files = array_diff($files, array('.', '..'));
 
-                        echo '<table><thead><tr><th><h6><strong>Anexos</strong></h6></th><th>Link (clique para copiar)</th><th>Excluir</th></tr></thead><tbody>';
+                if (!empty($files)) {
+                    echo '</br>';
+                    // Crie a estrutura HTML para exibir os arquivos em uma grid
+                    echo '<div class="grid">';
 
-                        foreach ($files as $file) {
-                            $filePath = $directory . '/' . $file;
+                    echo '<table><thead><tr><th><h6><strong>Anexos</strong></h6></th><th>Link (clique para copiar)</th><th>Excluir</th></tr></thead><tbody>';
 
-                            echo '<tr>';
-                            echo '<td><a href="' . $filePath . '" download>' . $file . '</a></td>';
-                            echo '<td><a href="#" class="copy-link" data-clipboard-text="' . $filePath . '">' . $filePath . '</a></td>';
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
-                            echo '</tr>';
-                        }
+                    foreach ($files as $file) {
+                        $filePath = $directory . '/' . $file;
 
-                        echo '</tbody></table>';
-                        echo '</div>';
+                        echo '<tr>';
+                        echo '<td><a href="' . $filePath . '" download>' . $file . '</a></td>';
+                        echo '<td><a href="#" class="copy-link" data-clipboard-text="' . $filePath . '">' . $filePath . '</a></td>';
+                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
+                        echo '</tr>';
                     }
+
+                    echo '</tbody></table>';
+                    echo '</div>';
                 }
-                ?>
-            </div>
-        </fieldset>
-    </form>
+            }
+            ?>
+        </div>
+    </fieldset>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>

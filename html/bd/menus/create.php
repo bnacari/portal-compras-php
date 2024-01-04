@@ -31,6 +31,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Menu</strong> cadastra
 $_SESSION['redirecionar'] = '../../cadMenu.php';
 $login = $_SESSION['login'];
 $tela = 'Menu';
-$acao = 'Menu ' . $idMenu . ' CRIADO';
+$acao = 'CRIADO';
 $idEvento = $idMenu;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

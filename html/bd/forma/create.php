@@ -30,6 +30,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Forma</strong> cadastr
 $_SESSION['redirecionar'] = '../../cadForma.php';
 $login = $_SESSION['login'];
 $tela = 'Forma';
-$acao = 'Forma ' . $idForma . ' CRIADA';
+$acao = 'CRIADA';
 $idEvento = $idForma;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

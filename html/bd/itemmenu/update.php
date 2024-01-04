@@ -33,6 +33,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Itemmenu</strong> atua
 $_SESSION['redirecionar'] = '../../cadItemMenu.php';
 $login = $_SESSION['login'];
 $tela = 'ItemMenu';
-$acao = 'ItemMenu ' . $idItemMenu . ' ATUALIZADO';
+$acao = 'ATUALIZADO';
 $idEvento = $idItemMenu;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

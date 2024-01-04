@@ -29,6 +29,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
     $dtLicitacao = $registros['DT_LICITACAO'];
     $tituloLicitacao = $registros['COD_LICITACAO'];
+    $tipoLicitacao = $registros['TIPO_LICITACAO'];
     $codLicitacao = $registros['COD_LICITACAO'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $objLicitacao = $registros['OBJETO_LICITACAO'];
@@ -38,6 +39,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $hrAberLicitacao = date('H:i', strtotime($registros['DT_ABER_LICITACAO']));
     $hrIniSessLicitacao = date('H:i', strtotime($registros['DT_INI_SESS_LICITACAO']));
     $modoLicitacao = $registros['MODO_LICITACAO'];
+    $tipoLicitacao = $registros['TIPO_LICITACAO'];
     $criterioLicitacao = $registros['CRITERIO_LICITACAO'];
     $regimeLicitacao = $registros['REGIME_LICITACAO'];
     $formaLicitacao = $registros['FORMA_LICITACAO'];
@@ -47,6 +49,16 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $obsLicitacao = $registros['OBS_LICITACAO'];
 endwhile;
 
+if (isset($tipoLicitacao)) {
+    $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO = $tipoLicitacao";
+    $querySelect = $pdoCAT->query($querySelect2);
+
+    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+        $idTipo = $registros['ID_TIPO'];
+        $nmTipo = $registros['NM_TIPO'];
+        $dtExcTipo = $registros['DT_EXC_TIPO'];
+    endwhile;
+}
 $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[CRITERIO_LICITACAO] WHERE ID_CRITERIO = $criterioLicitacao";
 $querySelect = $pdoCAT->query($querySelect2);
 
@@ -74,7 +86,7 @@ endwhile;
     <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data">
 
         <fieldset class="formulario col s12">
-            <h5 class="light center">Editar Licitação <?php echo $codLicitacao ?></h5>
+            <h5 class="light center">Editar Licitação <?php echo $nmTipo ?> <?php echo $codLicitacao ?></h5>
         </fieldset>
 
         <input type="text" name="idLicitacao" id="idLicitacao" value="<?php echo $idLicitacao ?>" style="display:none" readonly required>
@@ -91,12 +103,30 @@ endwhile;
                 <p>TESTE CONTADOR</p>
             </div> -->
 
+            <div class="input-field col s3">
+                <select name="tipoLicitacao" id="tipoLicitacao" required>
+                    <option value='' disabled>Selecione uma opção</option>
+                    <?php
+                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL";
+                    $querySelect = $pdoCAT->query($querySelect2);
 
-            <div class="input-field col s4" id="perfilAdmin">
+                    echo "<option value='" . $idTipo . "' selected>" . $nmTipo . "</option>";
+                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                        // Verifica se o ID é diferente do ID já selecionado
+                        if ($registros["ID_TIPO"] != $idTipo) {
+                            echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
+                        }
+                    endwhile;
+                    ?>
+                </select>
+                <label>Tipo de Contratação</label>
+            </div>
+
+            <div class="input-field col s3" id="perfilAdmin">
                 <input type="text" name="codLicitacao" id="codLicitacao" value="<?php echo $codLicitacao ?>">
                 <label>Código</label>
             </div>
-            <div class="input-field col s4" id="perfilContador">
+            <div class="input-field col s3" id="perfilContador">
                 <select name="statusLicitacao" id="statusLicitacao" required>
                     <option value='Em Andamento' <?php echo ($statusLicitacao === 'Em Andamento') ? 'selected' : ''; ?>>Em Andamento</option>
                     <option value='Encerrado' <?php echo ($statusLicitacao === 'Encerrado') ? 'selected' : ''; ?>>Encerrada</option>
@@ -106,7 +136,7 @@ endwhile;
                 <label>Status</label>
             </div>
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
                 <input type="text" name="respLicitacao" id="respLicitacao" value="<?php echo $respLicitacao ?>" required>
                 <label>Responsável</label>
             </div>
@@ -137,6 +167,7 @@ endwhile;
                 <select name="modoLicitacao" id="modoLicitacao" required>
                     <option value='Aberta' <?php echo ($modoLicitacao === 'Aberta') ? 'selected' : ''; ?>>Aberta</option>
                     <option value='Fechada' <?php echo ($modoLicitacao === 'Fechada') ? 'selected' : ''; ?>>Fechada</option>
+                    <option value='Hibrida' <?php echo ($modoLicitacao === 'Hibrida') ? 'selected' : ''; ?>>Híbrida</option>
                 </select>
                 <label>Modo de Disputa</label>
             </div>

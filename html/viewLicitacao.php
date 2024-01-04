@@ -10,7 +10,7 @@ include('protect.php');
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
-$querySelect2 = "SELECT L.*, DET.*
+$querySelect2 = "SELECT L.*, L.COD_LICITACAO, DET.*
                     FROM [PortalCompras].[dbo].[LICITACAO] L
                     LEFT JOIN DETALHE_LICITACAO DET ON DET.ID_LICITACAO = L.ID_LICITACAO
                     LEFT JOIN ANEXO A ON A.ID_LICITACAO = L.ID_LICITACAO
@@ -22,7 +22,7 @@ $querySelect = $pdoCAT->query($querySelect2);
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
     $dtLicitacao = $registros['DT_LICITACAO'];
-    $tituloLicitacao = $registros['COD_LICITACAO'];
+    // $tituloLicitacao = $registros['TITULO'];
     $codLicitacao = $registros['COD_LICITACAO'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $objLicitacao = $registros['OBJETO_LICITACAO'];
@@ -31,6 +31,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $dtIniSessLicitacao = date('d/m/Y H:i', strtotime($registros['DT_INI_SESS_LICITACAO']));
     $modoLicitacao = $registros['MODO_LICITACAO'];
     $criterioLicitacao = $registros['CRITERIO_LICITACAO'];
+    $tipoLicitacao = $registros['TIPO_LICITACAO'];
     $regimeLicitacao = $registros['REGIME_LICITACAO'];
     $formaLicitacao = $registros['FORMA_LICITACAO'];
     $vlLicitacao = $registros['VL_LICITACAO'];
@@ -38,6 +39,16 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
     $obsLicitacao = $registros['OBS_LICITACAO'];
 endwhile;
+
+if (isset($tipoLicitacao)) {
+    $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO = $tipoLicitacao";
+    $querySelect = $pdoCAT->query($querySelect2);
+
+    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+        $idTipo = $registros['ID_TIPO'];
+        $nmTipo = $registros['NM_TIPO'];
+    endwhile;
+}
 
 $_SESSION['redirecionar'] = 'viewLicitacao.php?idLicitacao=' . $idLicitacao;
 $login = $_SESSION['login'];
@@ -52,7 +63,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
     <form action="consultarLicitacao.php" class="col s12" enctype="multipart/form-data">
         <fieldset class="formulario col s12">
             <p>&nbsp;</p>
-            <h5 class="light center"><?php echo $tituloLicitacao ?></h5>
+            <h5 class="light center"><?php echo $nmTipo ?> <?php echo $codLicitacao ?></h5>
             <p>&nbsp;</p>
         </fieldset>
 
@@ -60,22 +71,37 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 
         <fieldset class="formulario">
             <!-- <h6><strong>Dados cadastrados</strong></h6> -->
+            <?php if (isset($tipoLicitacao) && $tipoLicitacao !== '') { ?>
+                <div class="input-field col s3">
+                    <select name="tipoLicitacao" id="tipoLicitacao">
+                        <?php
+                        $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO = $tipoLicitacao";
+                        $querySelect = $pdoCAT->query($querySelect2);
+                        while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                            echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
+                        endwhile;
+                        ?>
+                    </select>
+                    <label>Tipo de Contratação</label>
+                </div>
+            <?php } ?>
+
             <?php if (isset($codLicitacao) && $codLicitacao !== '') { ?>
-                <div class="input-field col s4">
+                <div class="input-field col s3">
                     <input type="text" value="<?php echo $codLicitacao ?>" readonly>
                     <label>Código</label>
                 </div>
             <?php } ?>
 
             <?php if (isset($statusLicitacao) && $statusLicitacao !== '') { ?>
-                <div class="input-field col s4">
+                <div class="input-field col s3">
                     <input type="text" value="<?php echo $statusLicitacao ?>" readonly>
                     <label>Status</label>
                 </div>
             <?php } ?>
 
             <?php if (isset($respLicitacao) && $respLicitacao !== '') { ?>
-                <div class="input-field col s4">
+                <div class="input-field col s3">
                     <input type="text" value="<?php echo $respLicitacao ?>" readonly>
                     <label>Responsável</label>
                 </div>
@@ -189,20 +215,20 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
             // TRECHO PARA LICITAÇÕES 13.303
             if ($idLicitacao > 2000) {
                 $queryAnexo = "WITH RankedAnexos AS (
-            SELECT
-                ID_LICITACAO,
-                NM_ANEXO,
-                LINK_ANEXO,
-                ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
-            FROM ANEXO
-            WHERE ID_LICITACAO = $idLicitacao
-        )
-        SELECT
-            ID_LICITACAO,
-            MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN LINK_ANEXO END) AS NM_ANEXO,
-            MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO
-        FROM RankedAnexos
-        GROUP BY ID_LICITACAO, rn;";
+                                    SELECT
+                                        ID_LICITACAO,
+                                        NM_ANEXO,
+                                        LINK_ANEXO,
+                                        ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
+                                    FROM ANEXO
+                                    WHERE ID_LICITACAO = $idLicitacao
+                                )
+                                SELECT
+                                    ID_LICITACAO,
+                                    MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN LINK_ANEXO END) AS NM_ANEXO,
+                                    MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO
+                                FROM RankedAnexos
+                                GROUP BY ID_LICITACAO, rn;";
             } else {
                 // TRECHO PARA LICITAÇÕES TACLACODE
                 $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO FROM ANEXO WHERE ID_LICITACAO = $idLicitacao";
@@ -269,7 +295,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 </div>
 
 <!-- MODAL ============================================================================= -->
-<?php 
+<?php
 // VERIFICO SE O USUÁRIO JÁ ESTÁ CADASTRADO PARA RECEBER FUTURAS ATUALIZAÇÕES NA LICITAÇÃO
 $email = $_SESSION['email'];
 $queryUpdateLicitacao = "SELECT ID_ATUALIZACAO 
@@ -283,25 +309,25 @@ while ($registros = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC)) :
 endwhile;
 
 if (!isset($idAtualizacao)) { ?>
-<div class="materialize-content">
-    <div id="modalAtualizacao" class="modal">
-        <div class="modal-content">
-            <h5>Receber Atualizações</h5>
-            <form action='bd/licitacao/enviarAtualizacao.php?idLicitacao=<?php echo $idLicitacao; ?>' method="post">
-                <br>
-                <div class="input-field">
-                    <input type="checkbox" name="enviarAtualizacao" id="enviarAtualizacao" required>
-                    <label for="enviarAtualizacao">Tenho interesse em receber atualizações sobre essa licitação.</label>
-                </div>
-                <br>
-                <button type="submit" class="btn blue">Enviar</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+    <div class="materialize-content">
+        <div id="modalAtualizacao" class="modal">
+            <div class="modal-content">
+                <h5>Receber Atualizações</h5>
+                <form action='bd/licitacao/enviarAtualizacao.php?idLicitacao=<?php echo $idLicitacao; ?>' method="post">
+                    <br>
+                    <div class="input-field">
+                        <input type="checkbox" name="enviarAtualizacao" id="enviarAtualizacao" required>
+                        <label for="enviarAtualizacao">Tenho interesse em receber atualizações sobre essa licitação.</label>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn blue">Enviar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+            </div>
         </div>
     </div>
-</div>
 <?php } ?>
 <!--FIM MODAL ============================================================================= -->
 

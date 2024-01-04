@@ -24,6 +24,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>Perfil</strong> ativad
 $_SESSION['redirecionar'] = '../cadPerfil.php';
 $login = $_SESSION['login'];
 $tela = 'Perfil';
-$acao = 'Perfil ' . $nmPerfil . ' ATIVADO';
+$acao = 'ATIVADO';
 $idEvento = $idPerfil;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");

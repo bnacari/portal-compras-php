@@ -19,6 +19,6 @@ $_SESSION['msg'] = "<p class='center red-text'>".'<strong>ItemMenu</strong> ativ
 $_SESSION['redirecionar'] = '../../cadItemMenu.php';
 $login = $_SESSION['login'];
 $tela = 'ItemMenu';
-$acao = 'ItemMenu ' . $idItemMenu . ' ATIVADO';
+$acao = 'ATIVADO';
 $idEvento = $idItemMenu;
 redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
