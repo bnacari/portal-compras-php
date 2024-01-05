@@ -85,7 +85,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     // echo "<td>$idLicitacao</td>";
     // echo "<td title='$objLicitacao'><strong>$tituloLicitacao</strong></td>";
     echo "<td title='$objLicitacao'>
-            <p>            
+            <p>
                 <a href='viewLicitacao.php?idLicitacao=$idLicitacao'>
                     <strong><h7>$tituloLicitacao</h7></strong>
                 </a> ";
