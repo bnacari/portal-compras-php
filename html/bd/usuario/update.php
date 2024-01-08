@@ -3,7 +3,7 @@
 session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $matricula = $_POST['matricula'];
 $idPerfil = $_POST['perfilUsuario'];

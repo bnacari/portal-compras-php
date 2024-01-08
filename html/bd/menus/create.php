@@ -5,7 +5,7 @@ session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 // if(isset($_POST["descricao"])) {
 //     //vem da tela de cadastro de OCORRENCIA

@@ -3,7 +3,7 @@ session_start();
 
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $pattern = "/^\d{4}-\d{2}-\d{2}$/";
 $patternTime = "/^\d{2}:\d{2}$/";

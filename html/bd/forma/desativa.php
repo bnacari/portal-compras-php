@@ -4,7 +4,7 @@ session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $idForma = filter_input(INPUT_GET, 'idForma', FILTER_SANITIZE_NUMBER_INT);
 

@@ -5,7 +5,7 @@ session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $nmItemMenu = filter_input(INPUT_POST, 'nmItemMenu',   FILTER_SANITIZE_SPECIAL_CHARS) ;
 $idSubMenu = filter_input(INPUT_POST, 'idSubMenu',   FILTER_SANITIZE_SPECIAL_CHARS) ;

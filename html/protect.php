@@ -7,6 +7,6 @@ if (!isset($_SESSION)) {
 // Caso o usuário tente acessar qq trecho do sistema sem login realizado, o sistema direciona para a tela de LOGOUT
 if ($_SESSION['sucesso'] != 1) {
     
-    $_SESSION['redirecionar'] = 'login.php';
+    $_SESSION['redirecionar'] = '../../login.php';
     redirecionar($_SESSION['redirecionar']);
 }

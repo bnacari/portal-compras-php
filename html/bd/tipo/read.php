@@ -1,6 +1,8 @@
 <?php
 include_once 'bd/conexao.php';
 include_once 'redirecionar.php';
+include_once('../../protectAdmin.php');
+
 
 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] ORDER BY [NM_TIPO]";
 

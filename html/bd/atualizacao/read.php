@@ -2,7 +2,7 @@
 
 include_once 'bd/conexao.php';
 include_once 'redirecionar.php';
-include('protect.php');
+include_once('../../protect.php');
 
 $login = $_SESSION['login'];
 

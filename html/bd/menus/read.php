@@ -2,7 +2,7 @@
 include_once 'bd/conexao.php';
 include_once 'redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[menu] ORDER BY [NM_MENU]";
 

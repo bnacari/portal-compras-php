@@ -3,7 +3,7 @@ session_start();
 
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $idCriterio = filter_input(INPUT_GET, 'idCriterio', FILTER_SANITIZE_SPECIAL_CHARS);
 $nmCriterio = filter_input(INPUT_GET, 'nmCriterio', FILTER_SANITIZE_SPECIAL_CHARS);

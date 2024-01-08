@@ -1,7 +1,7 @@
 <?php
 
 include_once 'bd/conexao.php';
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_SPECIAL_CHARS);
 $perfilUsuario = filter_input(INPUT_POST, 'perfilUsuario', FILTER_SANITIZE_SPECIAL_CHARS);

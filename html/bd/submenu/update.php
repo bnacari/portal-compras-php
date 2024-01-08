@@ -4,7 +4,7 @@ session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $idSubMenu = $_POST['idSubMenu'];
 $nmSubMenu = $_POST['nmSubMenu'];

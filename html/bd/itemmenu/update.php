@@ -4,7 +4,7 @@ session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $idItemMenu = $_POST['idItemMenu'];
 $nmItemMenu = $_POST['nmItemMenu'];

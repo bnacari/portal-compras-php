@@ -5,7 +5,7 @@ session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
 
-include('protectAdmin.php');
+include_once('../../protectAdmin.php');
 
 $nmTipo = filter_input(INPUT_POST, 'nmTipo', FILTER_SANITIZE_SPECIAL_CHARS);
 
