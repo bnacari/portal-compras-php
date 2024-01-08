@@ -31,6 +31,10 @@ $vlLicitacao = $_POST["vlLicitacao"];
 $identificadorLicitacao = $_POST["identificadorLicitacao"];
 $localLicitacao = $_POST["localLicitacao"];
 $obsLicitacao = $_POST["obsLicitacao"];
+$permitirAtualizacao = $_POST["permitirAtualizacao"];
+
+if ($permitirAtualizacao == 'on') { $permitirAtualizacao = 1; }  else { $permitirAtualizacao = 0; }  
+
 $dataAberturaFormatada = date("Y-m-d", strtotime($dtAbertura));
 $hrAberturaFormatada = date("H:i", strtotime($hrAbertura));
 $dtAberturaLicitacao = $dataAberturaFormatada . ' ' . $hrAberturaFormatada;
@@ -76,7 +80,9 @@ if ($stmt) {
     }
 }
 
-$query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', '$statusLicitacao', '$objLicitacao', '$respLicitacao', '$dtAberturaLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $tipoLicitacao, $criterioLicitacao, '$regimeLicitacao', $formaLicitacao, '$vlLicitacao', '$localLicitacao', '$identificadorLicitacao', '$obsLicitacao', NULL)";
+$query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', '$statusLicitacao', '$objLicitacao', '$respLicitacao', 
+                    '$dtAberturaLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $tipoLicitacao, $criterioLicitacao, '$regimeLicitacao', $formaLicitacao, 
+                    '$vlLicitacao', '$localLicitacao', '$identificadorLicitacao', '$obsLicitacao', NULL, $permitirAtualizacao)";
 
 // var_dump($query);
 

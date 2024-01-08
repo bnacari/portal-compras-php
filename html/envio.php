@@ -14,9 +14,13 @@ $emailUsuario = filter_input(INPUT_GET, 'emailUsuario', FILTER_SANITIZE_SPECIAL_
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
 $mail = new PHPMailer(true);
-$serverName = $_SERVER['SERVER_NAME'];
-$linkLogin = $serverName . '/login.php';
-$linkLicitacao = $serverName . '/viewLicitacao.php?idLicitacao=' . $idLicitacao;
+
+$protocolo = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'];
+$porta = $_SERVER['SERVER_PORT'];
+
+$linkLicitacao = "$protocolo://$host/viewLicitacao.php?idLicitacao=". $idLicitacao;
+$linkLogin = "$protocolo://$host/login.php";
 
 try {
     //Server settings

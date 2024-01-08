@@ -47,6 +47,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $localLicitacao = $registros['LOCAL_ABER_LICITACAO'];
     $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
     $obsLicitacao = $registros['OBS_LICITACAO'];
+    $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 endwhile;
 
 if (isset($tipoLicitacao)) {
@@ -192,7 +193,7 @@ endwhile;
             </div>
 
             <div class="input-field col s4">
-                <input type="text" name="regimeLicitacao" id="regimeLicitacao" required value="<?php echo $regimeLicitacao ?>">
+                <input type="text" name="regimeLicitacao" id="regimeLicitacao" value="<?php echo $regimeLicitacao ?>">
                 <label>Regime de Execução</label>
             </div>
             <div class="input-field col s4">
@@ -231,6 +232,12 @@ endwhile;
                 <textarea type="text" name="obsLicitacao" id="obsLicitacao"><?php echo $obsLicitacao ?> </textarea>
                 <label>Observação</label>
             </div>
+
+            <div class="input-field col s12">
+                <input type="checkbox" name="permitirAtualizacao" id="permitirAtualizacao" <?php echo ($permitirAtualizacao == 1) ? 'checked' : ''; ?>>
+                <label for="permitirAtualizacao">Permitir que os usuários sejam lembrados para futuras atualizações da licitação?</label>
+            </div>
+
         </fieldset>
 
         <p>&nbsp;</p>

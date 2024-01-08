@@ -30,6 +30,9 @@ $vlLicitacao = $_POST["vlLicitacao"];
 $identificadorLicitacao = $_POST["identificadorLicitacao"];
 $localLicitacao = $_POST["localLicitacao"];
 $obsLicitacao = $_POST["obsLicitacao"];
+$permitirAtualizacao = $_POST["permitirAtualizacao"];
+
+if ($permitirAtualizacao == 'on') { $permitirAtualizacao = 1; }  else { $permitirAtualizacao = 0; }  
 
 $dataAberturaFormatada = date("Y-m-d", strtotime($dtAbertura));
 $hrAberturaFormatada = date("H:i", strtotime($hrAbertura));
@@ -63,8 +66,12 @@ $queryUpdate = "UPDATE [portalcompras].[dbo].DETALHE_LICITACAO
                     [VL_LICITACAO]='$vlLicitacao',
                     [LOCAL_ABER_LICITACAO]='$localLicitacao',
                     [IDENTIFICADOR_LICITACAO]='$identificadorLicitacao',
-                    [OBS_LICITACAO]='$obsLicitacao'
+                    [OBS_LICITACAO]='$obsLicitacao',
+                    [ENVIO_ATUALIZACAO_LICITACAO]=$permitirAtualizacao
                 WHERE [ID_LICITACAO]=$idLicitacao";
+
+// var_dump($queryUpdate);
+// exit();
 
 $queryUpdate2 = $pdoCAT->query($queryUpdate);
 

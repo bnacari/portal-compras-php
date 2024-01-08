@@ -19,7 +19,7 @@ $_SESSION['msg'] = '';
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
 // ATUALIZA TABELA LICITAÇÃO
-$queryUpdateLicitacao = "INSERT INTO [portalcompras].[dbo].ATUALIZACAO VALUES ($idUsuario, '$emailUsuario', $idLicitacao, NULL)";
+$queryUpdateLicitacao = "INSERT INTO [portalcompras].[dbo].ATUALIZACAO VALUES (getdate(), $idUsuario, '$emailUsuario', $idLicitacao, NULL)";
 // var_dump($queryUpdateLicitacao);
 // exit();
 $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);

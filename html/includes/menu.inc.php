@@ -231,7 +231,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             // Mantém o MENU aberto ao carregar a página
             menu.style.display = 'block';
             container.style.left = '140';
-            container.style.width = 'calc(95% - 200px)';
+            container.style.width = 'calc(94% - 200px)';
         }
 
         menuToggle.addEventListener('click', function() {
@@ -279,7 +279,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             if (!isMenuOpen) {
                 menu.style.display = 'none';
                 container.style.left = '140';
-                container.style.width = 'calc(95% - 200px)';
+                container.style.width = 'calc(94% - 200px)';
             } else {
                 menu.style.display = 'block';
                 container.style.left = '0';
@@ -301,7 +301,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             } else {
                 menu.style.display = 'block';
                 container.style.left = '140';
-                container.style.width = 'calc(95% - 200px)';
+                container.style.width = 'calc(94% - 200px)';
             }
 
             isMenuOpen = !isMenuOpen;

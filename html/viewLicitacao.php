@@ -38,6 +38,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $localLicitacao = $registros['LOCAL_ABER_LICITACAO'];
     $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
     $obsLicitacao = $registros['OBS_LICITACAO'];
+    $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 endwhile;
 
 if (isset($tipoLicitacao)) {
@@ -308,7 +309,7 @@ while ($registros = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC)) :
     $idAtualizacao = $registros['ID_ATUALIZACAO'];
 endwhile;
 
-if (!isset($idAtualizacao)) { ?>
+if (!isset($idAtualizacao) && $permitirAtualizacao == 1) { ?>
     <div class="materialize-content">
         <div id="modalAtualizacao" class="modal">
             <div class="modal-content">

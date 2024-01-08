@@ -110,7 +110,7 @@ if ($_SESSION['admin'] == 5) {
                 <label>Critério de Julgamento</label>
             </div>
             <div class="input-field col s4">
-                <input type="text" id="regimeLicitacao" name="regimeLicitacao" required>
+                <input type="text" id="regimeLicitacao" name="regimeLicitacao">
                 <label>Regime de Execução</label>
             </div>
 
@@ -146,6 +146,12 @@ if ($_SESSION['admin'] == 5) {
                 <textarea type="text" id="obsLicitacao" name="obsLicitacao"></textarea>
                 <label>Observação</label>
             </div>
+
+            <div class="input-field col s12">
+                <input type="checkbox" name="permitirAtualizacao" id="permitirAtualizacao">
+                <label for="enviarAtualizacao">Permitir que os usuários sejam lembrados para futuras atualizações da licitação?</label>
+            </div>
+
         </fieldset>
 
         <p>&nbsp;</p>
