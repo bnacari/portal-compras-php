@@ -230,8 +230,13 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         if (window.innerWidth >= 600) {
             // Mantém o MENU aberto ao carregar a página
             menu.style.display = 'block';
-            container.style.left = '140';
+            container.style.left = '130';
             container.style.width = 'calc(94% - 200px)';
+            container.style.top = '60';
+
+        } else {
+            container.style.top = '60';
+            container.style.left = '-3';
         }
 
         menuToggle.addEventListener('click', function() {
@@ -239,6 +244,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 menu.style.display = 'block';
             } else {
                 menu.style.display = 'none';
+                container.style.top = '60';
             }
         });
     });
@@ -278,7 +284,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
             if (!isMenuOpen) {
                 menu.style.display = 'none';
-                container.style.left = '140';
+                container.style.left = '130';
                 container.style.width = 'calc(94% - 200px)';
             } else {
                 menu.style.display = 'block';
@@ -291,7 +297,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
         sidebarBtn.addEventListener('mouseenter', function() {
             menu.style.display = 'block';
-            container.style.left = '140';
+            container.style.left = '130';
             container.style.width = 'calc(95% - 200px)';
 
             if (isMenuOpen) {
@@ -300,7 +306,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 container.style.width = '98%';
             } else {
                 menu.style.display = 'block';
-                container.style.left = '140';
+                container.style.left = '130';
                 container.style.width = 'calc(94% - 200px)';
             }
 
