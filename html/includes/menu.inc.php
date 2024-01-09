@@ -205,13 +205,14 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             <li>
                 <a href="trocaSenhaUsuario.php">Trocar Senha</a>
             </li>
+            <li>
+                <a href="consultarAtualizacao.php">Adm Envio de E-mail</a>
+            </li>
 
         <?php }
 
         ?>
-        <li>
-            <a href="consultarAtualizacao.php">Adm Envio de E-mail</a>
-        </li>
+
 
     </ul>
 </div>
