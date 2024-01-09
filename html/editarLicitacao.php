@@ -84,7 +84,7 @@ endwhile;
 <!-- FORMULÁRIOS DE CADASTRO -->
 <div class="row container">
     <!-- <form action="bd/licitacao/update.php" method="post" class="col s12 formulario"> -->
-    <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data">
+    <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data" onsubmit="return validarFormulario()">
 
         <fieldset class="formulario col s12">
             <h5 class="light center">Editar Licitação <?php echo $nmTipo ?> <?php echo $codLicitacao ?></h5>
@@ -105,7 +105,7 @@ endwhile;
             </div> -->
 
             <div class="input-field col s3">
-                <select name="tipoLicitacao" id="tipoLicitacao" required>
+                <select name="tipoLicitacao" id="tipoLicitacao">
                     <option value='' disabled>Selecione uma opção</option>
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL";
@@ -165,7 +165,7 @@ endwhile;
             </div>
 
             <div class="input-field col s4">
-                <select name="modoLicitacao" id="modoLicitacao" required>
+                <select name="modoLicitacao" id="modoLicitacao">
                     <option value='Aberta' <?php echo ($modoLicitacao === 'Aberta') ? 'selected' : ''; ?>>Aberta</option>
                     <option value='Fechada' <?php echo ($modoLicitacao === 'Fechada') ? 'selected' : ''; ?>>Fechada</option>
                     <option value='Hibrida' <?php echo ($modoLicitacao === 'Hibrida') ? 'selected' : ''; ?>>Híbrida</option>
@@ -174,7 +174,7 @@ endwhile;
             </div>
 
             <div class="input-field col s4">
-                <select name="criterioLicitacao" id="criterioLicitacao" required>
+                <select name="criterioLicitacao" id="criterioLicitacao">
                     <option value='' disabled>Selecione uma opção</option>
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL";
@@ -197,7 +197,7 @@ endwhile;
                 <label>Regime de Execução</label>
             </div>
             <div class="input-field col s4">
-                <select name="formaLicitacao" id="formaLicitacao" required>
+                <select name="formaLicitacao" id="formaLicitacao">
                     <option value='' disabled>Selecione uma opção</option>
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL";
@@ -276,7 +276,7 @@ endwhile;
 
                         foreach ($files as $file) {
                             echo '<tr>';
-                            echo '<td><a href="' . $directory . '/' . $file . '" download>' . $file . '</a></td>';
+                            echo '<td><a href="' . $directory . '/' . $file . '" target="_blank">' . $file . '</a></td>';
                             echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
                             echo '</tr>';
                         }
@@ -326,7 +326,7 @@ endwhile;
 
                     foreach ($anexos as $anexo) {
                         echo '<tr>';
-                        echo '<td><a href="' . $anexo['linkAnexo'] . '" download>' . $anexo['nmAnexo'] . '</a></td>';
+                        echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
                         echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
                         echo '</tr>';
                     }
@@ -349,6 +349,33 @@ endwhile;
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
 <script>
+    function validarFormulario() {
+        var tipoLicitacao = document.getElementById('tipoLicitacao').value;
+        var modoLicitacao = document.getElementById('modoLicitacao').value;
+        var formaLicitacao = document.getElementById('formaLicitacao').value;
+        var criterioLicitacao = document.getElementById('criterioLicitacao').value;
+
+        if (tipoLicitacao === '') {
+            alert('Por favor, selecione uma opção para o Tipo de Contratação.');
+            return false; // Evita o envio do formulário se a validação falhar
+        }
+        if (modoLicitacao === '') {
+            alert('Por favor, selecione uma opção para o Modo de Disputa.');
+            return false; // Evita o envio do formulário se a validação falhar
+        }
+        if (criterioLicitacao === '') {
+            alert('Por favor, selecione uma opção para o Critério de Julgamento.');
+            return false; // Evita o envio do formulário se a validação falhar
+        }
+        if (formaLicitacao === '') {
+            alert('Por favor, selecione uma opção para o Forma.');
+            return false; // Evita o envio do formulário se a validação falhar
+        }
+
+        // Continue com o envio do formulário se a validação passar
+        return true;
+    }
+
     // Função para mostrar/ocultar campos com base no perfil do usuário
     function atualizarCampos() {
         var perfilUsuario = "<?php echo $perfilUsuario; ?>";
@@ -465,7 +492,7 @@ endwhile;
                     if (files.length > 0) {
                         var fileListHTML = '<ul>';
                         for (var i = 0; i < files.length; i++) {
-                            fileListHTML += '<li><a href="' + uploadDir + files[i] + '" download>' + files[i] + '</a></li>';
+                            fileListHTML += '<li><a href="' + uploadDir + files[i] + '">' + files[i] + '</a></li>';
                         }
                         fileListHTML += '</ul>';
                         filelistElement.innerHTML = fileListHTML;

@@ -276,7 +276,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 
                 foreach ($anexos as $anexo) {
                     echo '<tr>';
-                    echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank" download>' . $anexo['nmAnexo'] . '</a></td>';
+                    echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
                     echo '</tr>';
                 }
 

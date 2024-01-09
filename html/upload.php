@@ -18,6 +18,15 @@ if (!empty($_FILES['files']['name'])) {
         $fileName = $_FILES['files']['name'][$i];
         $filePath = $uploadDir . $fileName;
 
+        // Verifica se o arquivo já existe no diretório
+        $fileCount = 1;
+        while (file_exists($filePath)) {
+            // Renomeia o arquivo adicionando um número ao final
+            $fileName = pathinfo($_FILES['files']['name'][$i], PATHINFO_FILENAME) . '_' . $fileCount . '.' . pathinfo($_FILES['files']['name'][$i], PATHINFO_EXTENSION);
+            $filePath = $uploadDir . $fileName;
+            $fileCount++;
+        }
+
         // Move o arquivo para o diretório desejado
         if (move_uploaded_file($_FILES['files']['tmp_name'][$i], $filePath)) {
             $uploadedFiles[] = $fileName;
@@ -28,4 +37,3 @@ if (!empty($_FILES['files']['name'])) {
 // Retorna os nomes dos arquivos enviados (pode ser processado mais adequadamente conforme necessário)
 echo json_encode(['uploadedFiles' => $uploadedFiles]);
 ?>
-

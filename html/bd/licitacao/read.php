@@ -42,15 +42,15 @@ if (isset($dtIniLicitacaoFilter)) {
 } else {
     $dtIniLicitacaoFilterSQL = " IS NOT NULL";
     $dtFimLicitacaoFilter = " IS NOT NULL";
-
 }
 
 $querySelect2 = "SELECT  
-                    DISTINCT(L.ID_LICITACAO), L.COD_LICITACAO, D.STATUS_LICITACAO, L.DT_LICITACAO, D.OBJETO_LICITACAO
-                FROM
+                    DISTINCT L.ID_LICITACAO, L.COD_LICITACAO, D.STATUS_LICITACAO, L.DT_LICITACAO, D.OBJETO_LICITACAO, TIPO.NM_TIPO AS TIPO_LICITACAO
+                    FROM
                     LICITACAO L
                     LEFT JOIN ANEXO A ON L.ID_LICITACAO = A.ID_LICITACAO
                     LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
+                    LEFT JOIN TIPO_LICITACAO TIPO ON D.TIPO_LICITACAO = TIPO.ID_TIPO
                 WHERE
                     D.STATUS_LICITACAO $statusLicitacaoFilter
                     AND L.DT_EXC_LICITACAO IS NULL
@@ -75,10 +75,17 @@ echo "<tbody>";
 
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
-    $tituloLicitacao = $registros['COD_LICITACAO'];
+    $tipoLicitacao = $registros['TIPO_LICITACAO'];
+    $codLicitacao = $registros['COD_LICITACAO'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $dtLicitacao = date('d/m/Y', strtotime($registros['DT_LICITACAO']));
     $objLicitacao = $registros['OBJETO_LICITACAO'];
+
+    if (isset($tipoLicitacao)) {
+        $tituloLicitacao = $tipoLicitacao . ' - ' . $codLicitacao;
+    } else {
+        $tituloLicitacao = $codLicitacao;
+    }
 
     echo "<tr>";
 
@@ -93,7 +100,6 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
         echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:red; font-size:20px'><ion-icon name='settings-outline'></ion-icon></a>";
         // echo "<a href='bd/licitacao/delete.php?idLicitacao=$idLicitacao' style='color:red; font-size:20px'><ion-icon name='settings-outline'></ion-icon></a>";
         echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:red; font-size:20px; padding-left:10px'><ion-icon name='trash-bin-outline'></ion-icon></a>";
-
     }
     echo "</p>
             <p style='color:#9E9E9E'>$objLicitacao</p>
