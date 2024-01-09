@@ -227,7 +227,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         const container = document.querySelector('.container');
 
         //mantém o MENU aberto ao carregar a página
-        if (window.innerWidth >= 520) {
+        if (window.innerWidth >= 600) {
             // Mantém o MENU aberto ao carregar a página
             menu.style.display = 'block';
             container.style.left = '140';
