@@ -49,6 +49,10 @@ if (isset($tipoLicitacao)) {
         $idTipo = $registros['ID_TIPO'];
         $nmTipo = $registros['NM_TIPO'];
     endwhile;
+
+    $tituloLicitacao = $nmTipo . ' - ' . $codLicitacao;
+} else {
+    $tituloLicitacao = $codLicitacao;
 }
 
 $_SESSION['redirecionar'] = 'viewLicitacao.php?idLicitacao=' . $idLicitacao;
@@ -64,7 +68,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
     <form action="consultarLicitacao.php" class="col s12" enctype="multipart/form-data">
         <fieldset class="formulario col s12">
             <p>&nbsp;</p>
-            <h5 class="light center"><?php echo $nmTipo ?> <?php echo $codLicitacao ?></h5>
+            <h5 class="light center"><?php echo $tituloLicitacao ?></h5>
             <p>&nbsp;</p>
         </fieldset>
 

@@ -277,7 +277,7 @@ endwhile;
                         foreach ($files as $file) {
                             echo '<tr>';
                             echo '<td><a href="' . $directory . '/' . $file . '" target="_blank">' . $file . '</a></td>';
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
                             echo '</tr>';
                         }
 
@@ -327,7 +327,7 @@ endwhile;
                     foreach ($anexos as $anexo) {
                         echo '<tr>';
                         echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
-                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
+                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\', \'' . $idLicitacao . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
                         echo '</tr>';
                     }
 
@@ -397,7 +397,7 @@ endwhile;
     // Executa a função ao carregar a página
     window.onload = atualizarCampos;
 
-    function confirmDelete(file, directory) {
+    function confirmDelete(file, directory, idLicitacao) {
         if (confirm('Tem certeza que deseja excluir o arquivo?')) {
             // Use AJAX para excluir o arquivo
             $.ajax({
@@ -405,7 +405,8 @@ endwhile;
                 type: 'GET',
                 data: {
                     file: file,
-                    directory: directory
+                    directory: directory,
+                    idLicitacao: idLicitacao
                 },
                 success: function(response) {
                     // Se a exclusão for bem-sucedida, recarregue a lista de arquivos

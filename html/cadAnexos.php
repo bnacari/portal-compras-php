@@ -55,7 +55,7 @@ include('protectAdmin.php');
                         echo '<tr>';
                         echo '<td><a href="' . $filePath . '" download>' . $file . '</a></td>';
                         echo '<td><a href="#" class="copy-link" data-clipboard-text="' . $filePath . '">' . $filePath . '</a></td>';
-                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
+                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . 'anexos' . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
                         echo '</tr>';
                     }
 
@@ -84,7 +84,7 @@ include('protectAdmin.php');
         alert('Erro ao copiar o caminho do arquivo.');
     });
 
-    function confirmDelete(file, directory) {
+    function confirmDelete(file, directory, idLicitacao) {
         if (confirm('Tem certeza que deseja excluir o arquivo?')) {
             // Use AJAX para excluir o arquivo
             $.ajax({
@@ -92,7 +92,8 @@ include('protectAdmin.php');
                 type: 'GET',
                 data: {
                     file: file,
-                    directory: directory
+                    directory: directory,
+                    idLicitacao: idLicitacao
                 },
                 success: function(response) {
                     // Se a exclusão for bem-sucedida, recarregue a lista de arquivos

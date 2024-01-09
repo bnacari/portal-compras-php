@@ -85,7 +85,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
         $tituloLicitacao = $tipoLicitacao . ' - ' . $codLicitacao;
     } else {
         $tituloLicitacao = $codLicitacao;
-    }
+    } 
 
     echo "<tr>";
 

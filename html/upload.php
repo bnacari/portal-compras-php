@@ -1,4 +1,7 @@
 <?php
+session_start();
+include_once 'bd/conexao.php';
+
 $idLicitacao = $_POST['idLicitacao'];
 
 $uploadDir = 'uploads/' . $idLicitacao . "/";
@@ -31,9 +34,20 @@ if (!empty($_FILES['files']['name'])) {
         if (move_uploaded_file($_FILES['files']['tmp_name'][$i], $filePath)) {
             $uploadedFiles[] = $fileName;
         }
+
+        if ($idLicitacao == 'anexos') { 
+            $idLicitacao = 0; 
+            $tela = 'Anexos';
+        } else {
+            $tela = 'Licitação';
+        }
+
+        $login = $_SESSION['login'];
+        $acao = 'Inserir Anexo: ' . $fileName;
+        $idEvento = $idLicitacao;
+        $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$tela', '$acao', $idEvento)");
     }
 }
 
 // Retorna os nomes dos arquivos enviados (pode ser processado mais adequadamente conforme necessário)
 echo json_encode(['uploadedFiles' => $uploadedFiles]);
-?>
