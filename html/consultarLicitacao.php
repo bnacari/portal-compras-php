@@ -8,7 +8,7 @@ include_once 'includes/menu.inc.php';
 
 ?>
 <div class="row container">
-    <fieldset class="formulario" id="filtrar">
+    <fieldset class="formulario">
         <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar">
             <h5 class="light center">Filtrar Licitações</h5>
 

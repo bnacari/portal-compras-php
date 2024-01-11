@@ -45,7 +45,7 @@ if (isset($dtIniLicitacaoFilter)) {
 }
 
 $querySelect2 = "SELECT  
-                    DISTINCT L.ID_LICITACAO, L.COD_LICITACAO, D.STATUS_LICITACAO, L.DT_LICITACAO, D.OBJETO_LICITACAO, TIPO.NM_TIPO AS TIPO_LICITACAO
+                    DISTINCT L.ID_LICITACAO, D.COD_LICITACAO, D.STATUS_LICITACAO, L.DT_LICITACAO, D.OBJETO_LICITACAO, TIPO.NM_TIPO AS NM_TIPO
                     FROM
                     LICITACAO L
                     LEFT JOIN ANEXO A ON L.ID_LICITACAO = A.ID_LICITACAO
@@ -56,7 +56,7 @@ $querySelect2 = "SELECT
                     AND L.DT_EXC_LICITACAO IS NULL
                 ";
 
-$querySelect2 .= " AND (L.COD_LICITACAO $tituloLicitacaoFilterSQL OR D.OBJETO_LICITACAO $tituloLicitacaoFilterSQL)";
+$querySelect2 .= " AND (D.COD_LICITACAO $tituloLicitacaoFilterSQL OR D.OBJETO_LICITACAO $tituloLicitacaoFilterSQL)";
 // var_dump($tituloLicitacaoFilterSQL);
 
 $querySelect2 .= " AND L.DT_LICITACAO $dtIniLicitacaoFilterSQL ";
@@ -75,7 +75,7 @@ echo "<tbody>";
 
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
-    $tipoLicitacao = $registros['TIPO_LICITACAO'];
+    $tipoLicitacao = $registros['NM_TIPO'];
     $codLicitacao = $registros['COD_LICITACAO'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $dtLicitacao = date('d/m/Y', strtotime($registros['DT_LICITACAO']));
@@ -84,7 +84,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     if (isset($tipoLicitacao)) {
         $tituloLicitacao = $tipoLicitacao . ' - ' . $codLicitacao;
     } else {
-        $tituloLicitacao = $codLicitacao;
+        $tituloLicitacao = $codLicitacao; 
     } 
 
     echo "<tr>";

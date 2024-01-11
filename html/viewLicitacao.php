@@ -10,7 +10,7 @@ include_once 'redirecionar.php';
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
-$querySelect2 = "SELECT L.*, L.COD_LICITACAO, DET.*
+$querySelect2 = "SELECT L.*, DET.COD_LICITACAO AS COD_LIC, DET.*
                     FROM [PortalCompras].[dbo].[LICITACAO] L
                     LEFT JOIN DETALHE_LICITACAO DET ON DET.ID_LICITACAO = L.ID_LICITACAO
                     LEFT JOIN ANEXO A ON A.ID_LICITACAO = L.ID_LICITACAO
@@ -23,7 +23,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
     $dtLicitacao = $registros['DT_LICITACAO'];
     // $tituloLicitacao = $registros['TITULO'];
-    $codLicitacao = $registros['COD_LICITACAO'];
+    $codLicitacao = $registros['COD_LIC'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $objLicitacao = $registros['OBJETO_LICITACAO'];
     $respLicitacao = $registros['PREG_RESP_LICITACAO'];
@@ -47,7 +47,7 @@ if (isset($tipoLicitacao)) {
 
     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
         $idTipo = $registros['ID_TIPO'];
-        $nmTipo = $registros['NM_TIPO'];
+        $nmTipo = $registros['NM_TIPO']; 
     endwhile;
 
     $tituloLicitacao = $nmTipo . ' - ' . $codLicitacao;

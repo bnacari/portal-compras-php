@@ -213,7 +213,6 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
         ?>
 
-
     </ul>
 </div>
 
@@ -222,34 +221,61 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 <script src="../materialize/js/main.js"></script>
 
 <script>
+    function isMobile() {
+        return /Mobi|Android/i.test(navigator.userAgent);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         var menuToggle = document.getElementById('menuToggle');
         var menu = document.getElementById('menu');
         const container = document.querySelector('.container');
+        const sidebarBtn = document.getElementById('sidebar_btn');
 
         //mantém o MENU aberto ao carregar a página
-        if (window.innerWidth >= 600) {
+        if (!isMobile()) {
             // Mantém o MENU aberto ao carregar a página
             menu.style.display = 'block';
-            container.style.left = '130';
-            container.style.width = 'calc(94% - 200px)';
+            container.style.left = '100';
             container.style.top = '60';
+            if (!isMobile()) {
+                container.style.width = 'calc(94% - 110px)';
+            } else {
+                container.style.width = 'calc(94% - 170px)';
+            }
 
         } else {
             container.style.top = '60';
-            container.style.left = '-3';
+            container.style.left = '0';
+            container.style.width = '98%';
         }
 
-        menuToggle.addEventListener('click', function() {
-            if (menu.style.display === 'none') {
+        let isMenuOpen = false;
+
+        sidebarBtn.addEventListener('click', function() {
+            if (!isMenuOpen) {
                 menu.style.display = 'block';
+                container.style.left = '100';
+
+                if (!isMobile()) {
+                    container.style.width = 'calc(94% - 110px)';
+                } else {
+                    container.style.width = 'calc(94% - 170px)';
+                }
             } else {
                 menu.style.display = 'none';
-                container.style.top = '60';
+                container.style.left = '0';
+                container.style.width = '98%';
             }
+
+            isMenuOpen = !isMenuOpen;
+        });
+
+        checkbox.addEventListener('change', function() {
+            menu.style.display = checkbox.checked ? 'block' : 'none';
         });
     });
 
+    // MODAL ============================================================================================================
     // Mostrar modal ao clicar no botão ou link desejado
     function showModal(title, content) {
         var modal = document.getElementById('modalCadastro');
@@ -267,55 +293,10 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         document.getElementById('modalCadastro').style.display = 'none';
     }
 
-    // Fechar modal se clicar fora da área do modal
+    // Fechar modal ao clicar fora da área do modal
     window.onclick = function(event) {
         if (event.target == document.getElementById('modalCadastro')) {
             document.getElementById('modalCadastro').style.display = 'none';
         }
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebarBtn = document.getElementById('sidebar_btn');
-        const menu = document.getElementById('menu');
-        const container = document.querySelector('.container');
-
-        let isMenuOpen = false;
-
-        sidebarBtn.addEventListener('click', function() {
-
-            if (!isMenuOpen) {
-                menu.style.display = 'none';
-                container.style.left = '130';
-                container.style.width = 'calc(94% - 200px)';
-            } else {
-                menu.style.display = 'block';
-                container.style.left = '0';
-                container.style.width = '98%';
-            }
-
-            isMenuOpen = !isMenuOpen;
-        });
-
-        sidebarBtn.addEventListener('mouseenter', function() {
-            menu.style.display = 'block';
-            container.style.left = '130';
-            container.style.width = 'calc(95% - 200px)';
-
-            if (isMenuOpen) {
-                menu.style.display = 'none';
-                container.style.left = '0';
-                container.style.width = '98%';
-            } else {
-                menu.style.display = 'block';
-                container.style.left = '130';
-                container.style.width = 'calc(94% - 200px)';
-            }
-
-            isMenuOpen = !isMenuOpen;
-        });
-
-        checkbox.addEventListener('change', function() {
-            menu.style.display = checkbox.checked ? 'block' : 'none';
-        });
-    });
 </script>

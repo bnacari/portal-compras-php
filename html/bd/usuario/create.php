@@ -3,7 +3,7 @@
 session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include_once('../../protectAdmin.php');
+// include_once '../../protectAdmin.php';
 
 $nmUsuario = $_POST['nomeUsuarioNovo'];
 $senhaUsuario = $_POST['senhaUsuarioNovo'];
@@ -49,7 +49,7 @@ $querySelectPerfil2 = $pdoCAT->query($queryAdmin2);
 
 $_SESSION['msg'] = "<p class='center red-text'>" . 'Usuário <strong>cadastrado</strong> com <strong>sucesso</strong>.' . "</p>";
 
-$_SESSION['redirecionar'] = '../login.php';
+$_SESSION['redirecionar'] = '../../login.php';
 $login = $_SESSION['login'];
 $tela = 'Login';
 $acao = 'Usuário cadastrado: ' . $nmUsuario;

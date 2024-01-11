@@ -12,7 +12,7 @@ $queryUpdateLINK = "UPDATE [portalcompras].[dbo].[menu] SET DT_EXC_MENU = NULL W
 
 $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>Menu</strong> ativado com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Menu ativado com sucesso.";
 
 // header("Location: ../../consultarUsuario.php");
 

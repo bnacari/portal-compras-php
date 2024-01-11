@@ -26,7 +26,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 // var_dump($queryUpdate2);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>Menu</strong> atualizado com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Menu atualizado com sucesso.";
 
 
 $_SESSION['redirecionar'] = '../../cadMenu.php';
