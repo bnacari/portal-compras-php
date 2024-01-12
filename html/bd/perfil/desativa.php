@@ -16,8 +16,7 @@ endwhile;
 $queryUpdatePerfil = "UPDATE [portalcompras].[dbo].[PERFIL] SET DT_EXC_PERFIL = GETDATE() WHERE ID_PERFIL = $idPerfil";
 $queryUpdatePerfil2 = $pdoCAT->query($queryUpdatePerfil);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>Perfil</strong> desativado com <strong>sucesso</strong>.'."</p>";
-
+$_SESSION['msg'] = "Perfil desativado com sucesso.";
 // header("Location: ../../consultarUsuario.php");
 
 $_SESSION['redirecionar'] = '../cadPerfil.php';

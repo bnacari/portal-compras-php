@@ -47,7 +47,7 @@ if ($email == $emailUsuario) {
 $queryAdmin2 = "INSERT INTO ADMINISTRADOR VALUES (00000, '$nmUsuario', '$emailUsuario',  GETDATE(), 'A', 'externo', '$emailUsuario', 6, '$senhaUsuario')";
 $querySelectPerfil2 = $pdoCAT->query($queryAdmin2);
 
-$_SESSION['msg'] = "<p class='center red-text'>" . 'Usuário <strong>cadastrado</strong> com <strong>sucesso</strong>.' . "</p>";
+$_SESSION['msg'] = "Usuário cadastrado com sucesso.";
 
 $_SESSION['redirecionar'] = '../../login.php';
 $login = $_SESSION['login'];

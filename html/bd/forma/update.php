@@ -16,7 +16,7 @@ $queryUpdate = "UPDATE [portalcompras].[dbo].[FORMA]
 
 $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>Forma</strong> atualizada com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Forma atualizada com sucesso.";
 
 $_SESSION['redirecionar'] = '../../cadForma.php';
 $login = $_SESSION['login'];

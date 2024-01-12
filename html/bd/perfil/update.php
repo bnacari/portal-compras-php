@@ -22,7 +22,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 // var_dump($queryUpdate2);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>Perfil</strong> atualizado com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Perfil atualizado com sucesso.";
 
 $_SESSION['redirecionar'] = '../cadPerfil.php';
 $login = $_SESSION['login'];

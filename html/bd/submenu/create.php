@@ -27,7 +27,7 @@ while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
 endwhile;
 // var_dump($queryInsert);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>SubMenu</strong> cadastrado com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Submenu cadastrado com sucesso.";
 
 $_SESSION['redirecionar'] = '../../cadSubMenu.php';
 $login = $_SESSION['login'];

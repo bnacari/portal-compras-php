@@ -19,7 +19,7 @@ endwhile;
 if (isset($existeUsuario)) {
     $queryUpdate = $pdoCAT->query("UPDATE ADMINISTRADOR SET STATUS = 'I' WHERE EMAIL_ADM like '$email'");
 
-    $_SESSION['msg'] = "Usuário <strong>desativado</strong> com <strong>sucesso.</strong>";
+    $_SESSION['msg'] = "Usuário desativado com sucesso.";
 
     $_SESSION['redirecionar'] = '../../consultarUsuario.php';
     $login = $_SESSION['login'];
@@ -30,6 +30,6 @@ if (isset($existeUsuario)) {
 
 } else {
 
-    $_SESSION['msg'] = "Usuário <strong>não</strong> é Administrador.";
+    $_SESSION['msg'] = "Usuário não é Administrador.";
     header("Location: ../../consultarUsuario.php");
 }

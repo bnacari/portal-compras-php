@@ -45,7 +45,7 @@ $queryAdmin2 = "UPDATE ADMINISTRADOR SET SENHA = '$senhaNova' WHERE EMAIL_ADM LI
 
 $queryDesativar = $pdoCAT->query($queryAdmin2);
 
-$_SESSION['msg'] = "Senha atualizada com <strong>sucesso</strong>.";
+$_SESSION['msg'] = "Senha atualizada com sucesso.";
 
 $_SESSION['redirecionar'] = '../trocaSenhaUsuario.php';
 $login = $_SESSION['login'];

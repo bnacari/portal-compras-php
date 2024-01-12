@@ -19,7 +19,7 @@ while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
     $idPerfil = $registros['ID_PERFIL'];
 endwhile;
 
-$_SESSION['msg'] = "<p class='center red-text'>" . '<strong>Perfil</strong> cadastrado com <strong>sucesso</strong>.' . "</p>";
+$_SESSION['msg'] = "Perfil cadastrado com sucesso.";
 
 $_SESSION['redirecionar'] = '../cadPerfil.php';
 $login = $_SESSION['login'];

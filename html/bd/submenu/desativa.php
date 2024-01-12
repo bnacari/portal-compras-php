@@ -15,7 +15,7 @@ $queryUpdateLINK = "UPDATE [portalcompras].[dbo].[submenu] SET DT_EXC_SUBMENU = 
 
 $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>SubMenu</strong> desativado com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Submenu desativado com sucesso.";
 
 // header("Location: ../../consultarUsuario.php");
 

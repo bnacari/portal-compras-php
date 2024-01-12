@@ -19,7 +19,7 @@ while ($registros = $querySelectCriterio2->fetch(PDO::FETCH_ASSOC)) :
     $idCriterio = $registros['ID_CRITERIO'];
 endwhile;
 
-$_SESSION['msg'] = "<p class='center red-text'>" . '<strong>Criterio</strong> cadastrado com <strong>sucesso</strong>.' . "</p>";
+$_SESSION['msg'] = "Criterio cadastrado com sucesso.";
 
 $_SESSION['redirecionar'] = '../cadCriterio.php';
 $login = $_SESSION['login'];

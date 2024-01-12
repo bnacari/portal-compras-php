@@ -15,7 +15,7 @@ $queryUpdateLINK = "UPDATE [portalcompras].[dbo].[itemmenu] SET DT_EXC_ITEMMENU 
 
 $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>ItemMenu</strong> desativado com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "ItemMenu desativado com sucesso.";
 
 // header("Location: ../../consultarUsuario.php");
 

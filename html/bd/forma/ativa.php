@@ -12,7 +12,7 @@ $queryUpdateLINK = "UPDATE [portalcompras].[dbo].[forma] SET DT_EXC_FORMA = NULL
 
 $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
-$_SESSION['msg'] = "<p class='center red-text'>".'<strong>Forma</strong> ativada com <strong>sucesso</strong>.'."</p>";
+$_SESSION['msg'] = "Forma ativada com sucesso.";
 
 $_SESSION['redirecionar'] = '../../cadForma.php';
 $login = $_SESSION['login'];

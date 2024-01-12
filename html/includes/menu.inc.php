@@ -111,14 +111,46 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
     </div>
 
-    <label class="msg">
-        <?php
-        if (isset($_SESSION['msg'])) :
-            echo $_SESSION['msg'];
-            $_SESSION['msg'] = '';
-        endif;
+
+
+    <?php
+
+    function isMobile()
+    {
+        // Lista de palavras-chave que podem indicar um dispositivo móvel
+        $mobileKeywords = array('Android', 'iPhone', 'iPad', 'Windows Phone', 'BlackBerry', 'Opera Mini', 'Symbian', 'Mobile');
+
+        // Obtém o cabeçalho "User-Agent" do navegador
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+        // Verifica se o User-Agent contém alguma palavra-chave móvel
+        foreach ($mobileKeywords as $keyword) {
+            if (stripos($userAgent, $keyword) !== false) {
+                return true; // É um dispositivo móvel
+            }
+        }
+
+        return false; // Não é um dispositivo móvel
+    }
+
+    if (isMobile()) {
+        if (isset($_SESSION['msg']) && $_SESSION['msg'] !== '') { ?>
+            <fieldset class="fieldset-msg" id="fieldsetMsg">
+                <label class="msg">
+                    <?php echo $_SESSION['msg'];
+                    $_SESSION['msg'] = ''; ?>
+                </label>
+            </fieldset>
+        <?php }
+    } else {
         ?>
-    </label>
+        <label class="msg">
+            <?php echo $_SESSION['msg'];
+            $_SESSION['msg'] = ''; ?>
+        </label>
+    <?php
+    } ?>
+
 </header>
 
 <div id="modalCadastro" class="modal">
@@ -270,8 +302,30 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             isMenuOpen = !isMenuOpen;
         });
 
-        checkbox.addEventListener('change', function() {
-            menu.style.display = checkbox.checked ? 'block' : 'none';
+        // checkbox.addEventListener('change', function() {
+        //     menu.style.display = checkbox.checked ? 'block' : 'none';
+        // });
+    });
+
+    // ===================================================================================================================
+    // CONFIGURA O CLIQUE PARA ABRIR OS SUBMENUS
+    $(document).ready(function() {
+        // Adiciona um manipulador de eventos de clique para os itens de menu com submenus
+        $('#menu li:has(ul)').click(function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Impede a propagação do evento de clique para evitar a ativação do clique no documento
+        });
+
+        // Impede que o clique no submenu propague para o documento
+        $('#menu ul ul').click(function(e) {
+            e.stopPropagation();
+        });
+
+        // Fecha o FIELDSET-MSG ao clicar em qq local da página
+        $(document).click(function(e) {
+            if (!$(e.target).closest('#fieldsetMsg').length) {
+                $('#fieldsetMsg').hide();
+            }
         });
     });
 

@@ -16,7 +16,7 @@ endwhile;
 $queryUpdateCriterio = "UPDATE [portalcompras].[dbo].[CRITERIO_LICITACAO] SET DT_EXC_CRITERIO = NULL WHERE ID_CRITERIO = $idCriterio";
 $queryUpdateCriterio2 = $pdoCAT->query($queryUpdateCriterio);
 
-$_SESSION['msg'] = "Criterio ativado com <strong>sucesso.";
+$_SESSION['msg'] = "Criterio ativado com sucesso.";
 
 // header("Location: ../../consultarUsuario.php");
 

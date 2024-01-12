@@ -42,7 +42,7 @@
   margin: 0px 40;
   /* text-transform: uppercase; */
   font-size: 22px;
-  font-weight: 800;
+  /* font-weight: 800; */
 }
 
 .left2 span {
@@ -83,7 +83,14 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 15px;
-  color: gold;
+  color: floralwhite;
+}
+
+.fieldset-msg {
+  background-color: #005596; 
+  top: 5px; 
+  width: 100%; 
+  text-align:center;
 }
 
 .sidebar2 {
@@ -97,7 +104,7 @@
   background: #193446;
   transition: 0.5s;
   transition-property: left;
-  box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1); */
   /* Adiciona uma sombra ao lado direito */
 }
 
@@ -109,7 +116,7 @@
   height: 100%;
   /* Ajuste para ocupar a altura inteira da tela */
   padding-top: 250px;
-  box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 5px 0 3px rgba(0, 0, 0, 0.1); */
   left: 35px;
   /* Ajuste conforme necessário para alinhar com o item do menu principal */
   top: 0;
@@ -659,8 +666,8 @@
   border-color: #eee;
   background-color: #FFFFFF;
   border-radius: 10px;
-  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
-    0 32px 64px -48px rgba(0, 0, 0, 0.5);
+  /* box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
+    0 32px 64px -48px rgba(0, 0, 0, 0.5); */
 }
 
 @media only screen and (max-width: 520px) {
@@ -2841,7 +2848,7 @@ body {
   /*AZUL MÁSCULO (PADRÃO BITOCA)*/
   /* background: #E3F2FD;  */
   /*AZUL CALCINHA (PADRÃO CESAN)*/
-  background: #E1EEFB;
+  background: #F9F9F9;
   justify-content: center;
   align-items: center;
   margin: 0;
@@ -7501,20 +7508,13 @@ select:disabled {
   color: #51b3ec;
 }
 
-/* RESPONSIVIDADE DO MENU */
-/* @media screen and (max-width: 700px) {
-  #menu {
-    font-size: 12px;
-    width: 20%;
-  }
-} */
 
 /* CONFIGURAÇÃO DO MENU */
 #menu {
   display: none;
   width: 200px;
   position: fixed;
-  top: 40;
+  top: 20px;
   left: 0;
   background-color: #193446;
   color: #fff;
@@ -7529,7 +7529,6 @@ select:disabled {
   margin-right: 100%;
   /* ajuste o valor conforme necessário para a largura do menu */
   padding: 20px;
-
 }
 
 #menu ul {
@@ -7563,14 +7562,10 @@ select:disabled {
   display: none;
   position: absolute;
   top: 0;
-  left: 20%;
+  left: 50%;
   width: 100%;
   background-color: #132835;
 
-}
-
-#menu li:hover>ul {
-  display: block;
 }
 
 /* SUBMENU */
@@ -7579,6 +7574,10 @@ select:disabled {
   margin-left: 10px;
   background-color: #132835; 
 
+}
+
+#menu li:hover>ul {
+  display: block;
 }
 
 /* ITEMSUBMENU */
@@ -7590,13 +7589,15 @@ select:disabled {
 /* ITEMSUBMENU */
 #menu ul ul ul {
   top: 0;
-  left: 15%;
+  left: 50%;
   background-color: #193446;
+  width: 250px;
 }
 
 /* ITEMSUBMENU */
 #menu ul ul ul li{
   background-color: #193446;
+  width: 240px;
 }
 
 #menu ul ul ul li:hover>ul {

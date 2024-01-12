@@ -45,7 +45,7 @@ if (isset($matricula)) {
 }
     $queryDesativar = $pdoCAT->query($queryAdmin2);
 
-    $_SESSION['msg'] = "<p class='center red-text'>" . 'Usuário <strong>alterado</strong> com <strong>sucesso</strong>.' . "</p>";
+    $_SESSION['msg'] = "Usuário atualizado com sucesso.";
 
     // header("Location: ../../consultarUsuario.php");
 
