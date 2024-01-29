@@ -1,0 +1,116 @@
+image: registry.sistemas.cesan.com.br/ops/docker/compose:debian-1.29.2
+
+.before_script_template:
+  before_script:
+      - |
+        echo "$DOCKER_REGISTRY_PASS" | \
+        docker login $DOCKER_REGISTRY_HOST \
+        --username $DOCKER_REGISTRY_USER --password-stdin
+
+stages:
+  - setup
+  - build
+  - deploy
+
+setup:
+  stage: setup
+  script:
+    - BUILD_TIMESTAMP=$(date '+%Y%m%dT%H%M%S')
+    - APP_VERSION=$(cat version)
+    - IMAGE_TAG_BASE=registry.sistemas.cesan.com.br/adm/portal-compras-php
+    - echo "IMAGE_STAGING_TAG=${IMAGE_TAG_BASE}:${APP_VERSION}-${BUILD_TIMESTAMP}" >> setup.env
+    - echo "IMAGE_PRODUCTION_TAG=${IMAGE_TAG_BASE}:${APP_VERSION}" >> setup.env
+  only:
+    - staging
+    - master
+  artifacts:
+    reports:
+      dotenv: setup.env
+
+build_staging:
+  extends: .before_script_template
+  stage: build
+  script:
+    - |
+      docker image build \
+      -t "${IMAGE_STAGING_TAG}" -f Dockerfile .
+    - docker image push "${IMAGE_STAGING_TAG}"
+    - docker image rm "${IMAGE_STAGING_TAG}"
+  dependencies:
+    - setup
+  only:
+    - staging
+  tags:
+    - compose
+
+deploy_staging:
+  extends: .before_script_template
+  stage: deploy
+  variables:
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "/cert/adm/dwh2"
+    DOCKER_HOST: "dwh2.sistemas.cesan.com.br:2376"
+  script:
+    - |
+      IMAGE_TAG="${IMAGE_STAGING_TAG}" \
+      docker-compose \
+      -f docker/docker-compose-hom.yml pull
+    - |
+      IMAGE_TAG="${IMAGE_STAGING_TAG}" \
+      docker-compose \
+      -f docker/docker-compose-hom.yml \
+      --project-name portal-compras-php up -d --force-recreate
+  dependencies:
+    - setup
+  environment:
+    name: staging
+  only:
+    - staging
+  tags:
+    - compose
+
+build_production:
+  extends: .before_script_template
+  stage: build
+  script:
+    - |
+      docker image build \
+      -t "${IMAGE_PRODUCTION_TAG}" -f Dockerfile .
+    - docker image push "${IMAGE_PRODUCTION_TAG}"
+    - docker image rm "${IMAGE_PRODUCTION_TAG}"
+  dependencies:
+    - setup
+  only:
+    - master
+  tags:
+    - compose
+
+deploy_production:
+  extends: .before_script_template
+  stage: deploy
+  variables:
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "/cert/adm/dwp2"
+    DOCKER_HOST: "dwp2.sistemas.cesan.com.br:2376"
+  script:
+    - |
+      IMAGE_TAG="${IMAGE_PRODUCTION_TAG}" \
+      AUTOHEAL_CHECK_IMAGE_TAG="${IMAGE_PRODUCTION_TAG}" \
+      docker-compose \
+      -f docker/docker-compose-prd.yml pull
+    - |
+      IMAGE_TAG="${IMAGE_PRODUCTION_TAG}" \
+      AUTOHEAL_CHECK_IMAGE_TAG="${IMAGE_PRODUCTION_TAG}" \
+      docker-compose \
+      -f docker/docker-compose-prd.yml \
+      --project-name portal-compras-php up -d --force-recreate 
+  dependencies:
+    - setup
+  # when: manual
+  allow_failure: false
+  environment:
+    name: production
+  only:
+    - master
+  tags:
+    - compose

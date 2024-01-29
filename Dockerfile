@@ -1,7 +1,7 @@
 FROM registry.sistemas.cesan.com.br/library/cesan/php:7.3-apache-pdo
 
 COPY --chown=www-data:www-data html /var/www/html
-COPY --chown=www-data:www-data TCPDF-main /var/www/TCPDF-main
+# COPY --chown=www-data:www-data TCPDF-main /var/www/TCPDF-main
 COPY --chown=www-data:www-data vendor /var/www/vendor
 
 RUN \
