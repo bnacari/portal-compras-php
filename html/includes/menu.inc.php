@@ -283,6 +283,8 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             container.style.top = '60';
             container.style.left = '0';
             container.style.width = '100%';
+            // Chame a função para abrir a página no modo fullscreen
+            abrirFullscreen();
         }
 
         let isMenuOpen = false;
@@ -356,6 +358,21 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
     window.onclick = function(event) {
         if (event.target == document.getElementById('modalCadastro')) {
             document.getElementById('modalCadastro').style.display = 'none';
+        }
+    }
+
+    // Função para abrir a página no modo fullscreen
+    function abrirFullscreen() {
+        var elem = document.documentElement; // obtém o elemento raiz do documento
+
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen(); // Padrão W3C
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen(); // Para Firefox
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen(); // Para Chrome, Safari e Opera
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen(); // Para o Internet Explorer
         }
     }
 </script>
