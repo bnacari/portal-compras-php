@@ -17,6 +17,8 @@ $_SESSION['msg'] = '';
 
 // $idLicitacao = $_POST['idLicitacao'];
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
+// var_dump($idLicitacao);
+// exit();
 
 // ATUALIZA TABELA LICITAÇÃO
 $queryUpdateLicitacao = "INSERT INTO [portalcompras].[dbo].ATUALIZACAO VALUES (getdate(), $idUsuario, '$emailUsuario', $idLicitacao, NULL)";
@@ -26,7 +28,7 @@ $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
 
 $_SESSION['msg'] = "Usuário " . $emailUsuario . " receberá atualizações.";
 
-$_SESSION['redirecionar'] = '../../viewLicitacao.php?idLicitacao='.$idLicitacao;
+$_SESSION['redirecionar'] = '../consultarLicitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitação';
 $acao = 'Receber Atualização';

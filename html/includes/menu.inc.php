@@ -237,10 +237,13 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             <li>
                 <a href="trocaSenhaUsuario.php">Trocar Senha</a>
             </li>
+
+        <?php }
+
+        if (isset($_SESSION['login'])) { ?>
             <li>
                 <a href="consultarAtualizacao.php">Adm Envio de E-mail</a>
             </li>
-
         <?php }
 
         ?>
@@ -269,34 +272,36 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             menu.style.display = 'block';
             container.style.left = '100';
             container.style.top = '60';
+
             if (!isMobile()) {
-                container.style.width = 'calc(94% - 110px)';
+                container.style.width = 'calc(93% - 110px)';
             } else {
-                container.style.width = 'calc(94% - 170px)';
+                container.style.width = 'calc(93% - 170px)';
             }
 
         } else {
             container.style.top = '60';
             container.style.left = '0';
-            container.style.width = '98%';
+            container.style.width = '100%';
         }
 
         let isMenuOpen = false;
 
+        //posicionamento do menu após click no botão
         sidebarBtn.addEventListener('click', function() {
             if (!isMenuOpen) {
                 menu.style.display = 'block';
                 container.style.left = '100';
 
                 if (!isMobile()) {
-                    container.style.width = 'calc(94% - 110px)';
+                    container.style.width = 'calc(93% - 110px)';
                 } else {
-                    container.style.width = 'calc(94% - 170px)';
+                    container.style.width = 'calc(93% - 170px)';
                 }
             } else {
                 menu.style.display = 'none';
                 container.style.left = '0';
-                container.style.width = '98%';
+                container.style.width = '100%';
             }
 
             isMenuOpen = !isMenuOpen;

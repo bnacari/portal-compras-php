@@ -45,7 +45,7 @@ if (isset($dtIniLicitacaoFilter)) {
 }
 
 $querySelect2 = "SELECT  
-                    DISTINCT L.ID_LICITACAO, D.COD_LICITACAO, D.STATUS_LICITACAO, L.DT_LICITACAO, D.OBJETO_LICITACAO, TIPO.NM_TIPO AS NM_TIPO
+                    DISTINCT D.*, L.ID_LICITACAO, L.DT_LICITACAO, TIPO.NM_TIPO AS NM_TIPO
                     FROM
                     LICITACAO L
                     LEFT JOIN ANEXO A ON L.ID_LICITACAO = A.ID_LICITACAO
@@ -80,12 +80,26 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $dtLicitacao = date('d/m/Y', strtotime($registros['DT_LICITACAO']));
     $objLicitacao = $registros['OBJETO_LICITACAO'];
+    $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 
     if (isset($tipoLicitacao)) {
         $tituloLicitacao = $tipoLicitacao . ' - ' . $codLicitacao;
     } else {
-        $tituloLicitacao = $codLicitacao; 
-    } 
+        $tituloLicitacao = $codLicitacao;
+    }
+    // VERIFICO SE O USUÁRIO JÁ ESTÁ CADASTRADO PARA RECEBER FUTURAS ATUALIZAÇÕES NA LICITAÇÃO
+    $idAtualizacao = null;
+    $email = $_SESSION['email'];
+    $queryUpdateLicitacao = "SELECT ID_ATUALIZACAO 
+                            FROM ATUALIZACAO 
+                            WHERE ID_LICITACAO = $idLicitacao 
+                            AND EMAIL_ADM LIKE '$email' 
+                            AND DT_EXC_ATUALIZACAO IS NULL";
+    $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
+    while ($registros = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC)) :
+        $idAtualizacao = $registros['ID_ATUALIZACAO'];
+    endwhile;
+
 
     echo "<tr>";
 
@@ -97,12 +111,21 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
                     <strong><h7>$tituloLicitacao</h7></strong>
                 </a> ";
     if ($_SESSION['admin'] == 5) {
-        echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:red; font-size:20px'><ion-icon name='settings-outline'></ion-icon></a>";
-        // echo "<a href='bd/licitacao/delete.php?idLicitacao=$idLicitacao' style='color:red; font-size:20px'><ion-icon name='settings-outline'></ion-icon></a>";
-        echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:red; font-size:20px; padding-left:10px'><ion-icon name='trash-bin-outline'></ion-icon></a>";
+        echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:#999999;' title='Editar Licitação'><i class='material-icons'>tune</i></a>";
+
+        echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:#999999; padding-left:5px' title='Apagar Licitação'><i class='material-icons'>delete</i></a>";
     }
+
+    if ($permitirAtualizacao == 1 && isset($email)) {
+        if (!isset($idAtualizacao)) {
+            echo "<a href='#' onclick='enviarAtualizacao($idLicitacao)' style='color:#FF1919; padding-left:5px' title='Usuário receberá notificação em caso de atualização da licitação.'><i class='material-icons'>favorite_border</i></a>";
+        } else {
+            echo "<a href='#' onclick='desativarAtualizacao($idAtualizacao)' style='color:#FF1919; padding-left:5px' title='Usuário deixará de receber notificação em caso de atualização da licitação.'><i class='material-icons'>favorite</i></a>";
+        }
+    }
+
     echo "</p>
-            <p style='color:#9E9E9E'>$objLicitacao</p>
+            <p style='color:#999999'>$objLicitacao</p>
             <label class='custom-label'><strong>$dtLicitacao</strong></label>";
     if ($statusLicitacao == 'Em Andamento') {
         echo "<fieldset class='custom-fieldset'><label class='custom-label'>$statusLicitacao</label></fieldset>";
@@ -129,5 +152,17 @@ function confirmDelete(idLicitacao) {
     if (resposta) {
         window.location.href = 'bd/licitacao/delete.php?idLicitacao=' + idLicitacao;
     }
+}
+
+function enviarAtualizacao(idLicitacao) {
+    
+    window.location.href = 'bd/licitacao/enviarAtualizacao.php?idLicitacao=' + idLicitacao;
+    
+}
+
+function desativarAtualizacao(idAtualizacao) {
+    
+    window.location.href = 'bd/atualizacao/desativar.php?idAtualizacao=' + idAtualizacao;
+    
 }
 </script>";

@@ -38,7 +38,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $localLicitacao = $registros['LOCAL_ABER_LICITACAO'];
     $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
     $obsLicitacao = $registros['OBS_LICITACAO'];
-    $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
+    // $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 endwhile;
 
 if (isset($tipoLicitacao)) {
@@ -299,50 +299,3 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
         </form>
 </div>
 
-<!-- MODAL ============================================================================= -->
-<?php
-// VERIFICO SE O USUÁRIO JÁ ESTÁ CADASTRADO PARA RECEBER FUTURAS ATUALIZAÇÕES NA LICITAÇÃO
-$email = $_SESSION['email'];
-$queryUpdateLicitacao = "SELECT ID_ATUALIZACAO 
-                            FROM ATUALIZACAO 
-                            WHERE ID_LICITACAO = $idLicitacao 
-                            AND EMAIL_ADM LIKE '$email' 
-                            AND DT_EXC_ATUALIZACAO IS NULL";
-$queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
-while ($registros = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC)) :
-    $idAtualizacao = $registros['ID_ATUALIZACAO'];
-endwhile;
-
-if (!isset($idAtualizacao) && $permitirAtualizacao == 1) { ?>
-    <div class="materialize-content">
-        <div id="modalAtualizacao" class="modal">
-            <div class="modal-content">
-                <h5>Receber Atualizações</h5>
-                <form action='bd/licitacao/enviarAtualizacao.php?idLicitacao=<?php echo $idLicitacao; ?>' method="post">
-                    <br>
-                    <div class="input-field">
-                        <input type="checkbox" name="enviarAtualizacao" id="enviarAtualizacao" required>
-                        <label for="enviarAtualizacao">Tenho interesse em receber atualizações sobre essa licitação.</label>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn blue">Enviar</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
-            </div>
-        </div>
-    </div>
-<?php } ?>
-<!--FIM MODAL ============================================================================= -->
-
-<script>
-    $(document).ready(function() {
-        // Inicializa o modal
-        $('.modal').modal();
-
-        // Aguarda 500 milissegundos (ou ajuste conforme necessário) antes de abrir o modal
-        $('#modalAtualizacao').modal('open');
-
-    });
-</script>

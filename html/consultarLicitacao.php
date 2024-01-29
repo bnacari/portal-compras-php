@@ -19,13 +19,13 @@ include_once 'includes/menu.inc.php';
             </div>
 
             <div class="input-field col s2">
-                <i class="material-icons prefix">event</i>
+                <!-- <i class="material-icons prefix">event</i> -->
                 <input type="date" name="dtIniLicitacao" id="dtIniLicitacao" maxlength="100">
                 <label for="dtIniLicitacao">Data de Abertura</label>
             </div>
 
             <div class="input-field col s2">
-                <i class="material-icons prefix">event</i>
+                <!-- <i class="material-icons prefix">event</i> -->
                 <input type="date" name="dtFimLicitacao" id="dtFimLicitacao" maxlength="100" value="<?php echo date('Y-m-d', strtotime('+1 day')) ?>" required>
                 <label for="dtFimLicitacao">Até</label>
             </div>
