@@ -13,6 +13,11 @@
   box-sizing: border-box;
 }
 
+
+#exitFullscreenButton {
+  display: none; /* Inicialmente oculto */
+}
+
 .header2 {
   z-index: 9999999;
   position: fixed;
