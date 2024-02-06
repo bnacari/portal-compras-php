@@ -1,5 +1,6 @@
 <?php
 include_once 'bd/conexao.php';
+session_start();
 
 $_SESSION['sucesso'] = 0;
 $_SESSION['admin'] = 0;
@@ -169,6 +170,20 @@ $_SESSION['admin'] = 0;
                     <input class="form-control" placeholder="Senha" type="password" name="senha" id="senha">
                 </div>
 
+                <?php
+                if (isset($_SESSION['msg'])) : ?>
+                    <center>
+                        <p class="text-center">
+
+                            <?php
+                            echo $_SESSION['msg'];
+                            $_SESSION['msg'] = '';
+                            ?>
+                        </p>
+                    </center>
+                <?php endif; ?>
+
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block"> Acessar </button>
                 </div>
@@ -187,17 +202,17 @@ $_SESSION['admin'] = 0;
             <div id="modalCriarUsuario" class="modal">
                 <div class="modal-content">
                     <h5>Registrar Usuário</h5>
-                    <form action="bd/usuario/create.php" method="post">
+                    <form action="bd/usuario/create.php" method="post" onsubmit="return validarFormulario()">
                         <!-- Adicione os campos necessários (nome, e-mail, senha) aqui -->
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                <span class="input-group-text"><i class="fa fa-user"></i> </span>
                             </div>
                             <input class="form-control" placeholder="Nome" type="text" name="nomeUsuarioNovo" id="nomeUsuarioNovo" maxlength="100" autofocus>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                <span class="input-group-text"> <i class="fa fa-envelope"></i></span>
                             </div>
                             <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" autofocus>
                         </div>
@@ -222,11 +237,11 @@ $_SESSION['admin'] = 0;
             <div id="modalEsqueciSenha" class="modal">
                 <div class="modal-content">
                     <h5>Esqueci a Senha</h5>
-                    <form action="bd/usuario/esqueciSenha.php" method="post">
+                    <form action="bd/usuario/esqueciSenha.php" method="post" onsubmit="return validarFormulario()">
                         <!-- Adicione os campos necessários (nome, e-mail, senha) aqui -->
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                             </div>
                             <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" autofocus>
                         </div>
@@ -235,13 +250,9 @@ $_SESSION['admin'] = 0;
                     </form>
                 </div>
             </div>
-
-
         </div>
 
     </div>
-
-
     </body>
 
     </html>
@@ -253,4 +264,16 @@ $_SESSION['admin'] = 0;
         $(document).ready(function() {
             $('.modal').modal();
         });
+
+        function validarFormulario() {
+            var senhaUsuarioNovo = document.getElementById('senhaUsuarioNovo').value;
+            var senhaUsuarioNovo2 = document.getElementById('senhaUsuarioNovo2').value;
+
+            if (senhaUsuarioNovo != senhaUsuarioNovo2) {
+                alert('Senhas diferentes!');
+                return false; // Evita o envio do formulário se a validação falhar
+            }
+
+            return true;
+        }
     </script>
