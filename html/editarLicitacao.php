@@ -147,25 +147,26 @@ endwhile;
                 <label>Objeto</label>
             </div>
             <div class="input-field col s2">
-                <input type="date" name="dtAberLicitacao" id="dtAberLicitacao" required value="<?php echo $dtAberLicitacao ?>">
+                <input type="date" name="dtAberLicitacao" id="dtAberLicitacao" value="<?php echo $dtAberLicitacao ?>">
                 <label>Data de Abertura</label>
             </div>
             <div class="input-field col s2">
-                <input type="time" name="hrAberLicitacao" id="hrAberLicitacao" required value="<?php echo $hrAberLicitacao ?>">
+                <input type="time" name="hrAberLicitacao" id="hrAberLicitacao" value="<?php echo $hrAberLicitacao ?>">
                 <label>Horário de Abertura</label>
             </div>
 
             <div class="input-field col s2">
-                <input type="date" name="dtIniSessLicitacao" id="dtIniSessLicitacao" required value="<?php echo $dtIniSessLicitacao ?>">
+                <input type="date" name="dtIniSessLicitacao" id="dtIniSessLicitacao" value="<?php echo $dtIniSessLicitacao ?>">
                 <label>Início da Sessão de Disputa de Preços</label>
             </div>
             <div class="input-field col s2">
-                <input type="time" name="hrIniSessLicitacao" id="hrIniSessLicitacao" required value="<?php echo $hrIniSessLicitacao ?>">
+                <input type="time" name="hrIniSessLicitacao" id="hrIniSessLicitacao" value="<?php echo $hrIniSessLicitacao ?>">
                 <label>Horário</label>
             </div>
 
             <div class="input-field col s4">
                 <select name="modoLicitacao" id="modoLicitacao">
+                    <option value='' <?php echo ($modoLicitacao === '') ? 'selected' : ''; ?>>Selecione uma opção</option>
                     <option value='Aberta' <?php echo ($modoLicitacao === 'Aberta') ? 'selected' : ''; ?>>Aberta</option>
                     <option value='Fechada' <?php echo ($modoLicitacao === 'Fechada') ? 'selected' : ''; ?>>Fechada</option>
                     <option value='Hibrida' <?php echo ($modoLicitacao === 'Hibrida') ? 'selected' : ''; ?>>Híbrida</option>
@@ -175,12 +176,15 @@ endwhile;
 
             <div class="input-field col s4">
                 <select name="criterioLicitacao" id="criterioLicitacao">
-                    <option value='' disabled>Selecione uma opção</option>
+                    <!-- <option value='' disabled>Selecione uma opção</option> -->
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL";
                     $querySelect = $pdoCAT->query($querySelect2);
-
-                    echo "<option value='" . $idCriterio . "' selected>" . $nmCriterio . "</option>";
+                    if ($idCriterio != 0) {
+                        echo "<option value='" . $idCriterio . "' selected>" . $nmCriterio . "</option>";
+                    } else {
+                        echo "<option value='0' selected>Selecione uma opção</option>";
+                    }
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
                         // Verifica se o ID é diferente do ID já selecionado
                         if ($registros["ID_CRITERIO"] != $idCriterio) {
@@ -198,12 +202,16 @@ endwhile;
             </div>
             <div class="input-field col s4">
                 <select name="formaLicitacao" id="formaLicitacao">
-                    <option value='' disabled>Selecione uma opção</option>
+                    <!-- <option value='' disabled>Selecione uma opção</option> -->
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL";
                     $querySelect = $pdoCAT->query($querySelect2);
 
-                    echo "<option value='" . $idForma . "' selected>" . $nmForma . "</option>";
+                    if ($idForma != 0) {
+                        echo "<option value='" . $idForma . "' selected>" . $nmForma . "</option>";
+                    } else {
+                        echo "<option value='0' selected>Selecione uma opção</option>";
+                    }
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
                         // Verifica se o ID é diferente do ID já selecionado
                         if ($registros["ID_FORMA"] != $idForma) {
@@ -215,17 +223,17 @@ endwhile;
                 <label>Forma</label>
             </div>
             <div class="input-field col s4">
-                <input type="text" name="vlLicitacao" id="vlLicitacao" required value="<?php echo $vlLicitacao ?>">
+                <input type="text" name="vlLicitacao" id="vlLicitacao" value="<?php echo $vlLicitacao ?>">
                 <label>Valor Estimado</label>
             </div>
 
             <div class="input-field col s4">
-                <input type="text" name="identificadorLicitacao" id="identificadorLicitacao" required value="<?php echo $identificadorLicitacao ?>">
+                <input type="text" name="identificadorLicitacao" id="identificadorLicitacao" value="<?php echo $identificadorLicitacao ?>">
                 <label>Identificador</label>
             </div>
 
             <div class="input-field col s4">
-                <input type="text" name="localLicitacao" id="localLicitacao" required value="<?php echo $localLicitacao ?>">
+                <input type="text" name="localLicitacao" id="localLicitacao" value="<?php echo $localLicitacao ?>">
                 <label>Local de Abertura</label>
             </div>
             <div class="input-field col s12">
@@ -351,24 +359,9 @@ endwhile;
 <script>
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;
-        var modoLicitacao = document.getElementById('modoLicitacao').value;
-        var formaLicitacao = document.getElementById('formaLicitacao').value;
-        var criterioLicitacao = document.getElementById('criterioLicitacao').value;
 
         if (tipoLicitacao === '') {
             alert('Por favor, selecione uma opção para o Tipo de Contratação.');
-            return false; // Evita o envio do formulário se a validação falhar
-        }
-        if (modoLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Modo de Disputa.');
-            return false; // Evita o envio do formulário se a validação falhar
-        }
-        if (criterioLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Critério de Julgamento.');
-            return false; // Evita o envio do formulário se a validação falhar
-        }
-        if (formaLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Forma.');
             return false; // Evita o envio do formulário se a validação falhar
         }
 

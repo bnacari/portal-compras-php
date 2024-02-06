@@ -37,51 +37,50 @@ if ($_SESSION['admin'] == 5) {
                     ?>
                 </select>
                 <!-- <input type="text" id="criterioLicitacao" name="criterioLicitacao"> -->
-                <label>Tipo de Contratação</label>
+                <label>Tipo de Contratação *</label>
             </div>
 
             <div class="input-field col s3">
                 <input type="text" id="codLicitacao" name="codLicitacao" required>
-                <label>Código</label>
+                <label>Código *</label>
             </div>
 
             <div class="input-field col s3">
-
                 <select name="statusLicitacao" id="statusLicitacao">
-                    <option value='vazio'>Selecione uma opção</option>
+                    <option value=''>Selecione uma opção</option>
                     <option value='Em Andamento' selected>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
                     <option value='Encerrado'>Encerrada</option>
                     <option value='Rascunho'>Rascunho</option>
                 </select>
 
-                <label>Status</label>
+                <label>Status *</label>
             </div>
 
             <div class="input-field col s3">
                 <input type="text" id="respLicitacao" name="respLicitacao" required>
-                <label>Responsável</label>
+                <label>Responsável *</label>
             </div>
 
             <div class="input-field col s12">
                 <textarea type="text" id="objLicitacao" name="objLicitacao" required></textarea>
-                <label>Objeto</label>
+                <label>Objeto *</label>
             </div>
             <div class="input-field col s2">
-                <input type="date" id="dtAberLicitacao" name="dtAberLicitacao" required>
+                <input type="date" id="dtAberLicitacao" name="dtAberLicitacao">
                 <label>Data de Abertura</label>
             </div>
             <div class="input-field col s2">
-                <input type="time" id="hrAberLicitacao" name="hrAberLicitacao" required>
+                <input type="time" id="hrAberLicitacao" name="hrAberLicitacao">
                 <label>Horário de Abertura</label>
             </div>
 
             <div class="input-field col s2">
-                <input type="date" id="dtIniSessLicitacao" name="dtIniSessLicitacao" required>
+                <input type="date" id="dtIniSessLicitacao" name="dtIniSessLicitacao">
                 <label>Início da Sessão de Disputa de Preços</label>
             </div>
             <div class="input-field col s2">
-                <input type="time" id="hrIniSessLicitacao" name="hrIniSessLicitacao" required>
+                <input type="time" id="hrIniSessLicitacao" name="hrIniSessLicitacao">
                 <label>Início da Sessão de Disputa de Preços</label>
             </div>
 
@@ -97,7 +96,7 @@ if ($_SESSION['admin'] == 5) {
 
             <div class="input-field col s4">
                 <select name="criterioLicitacao" id="criterioLicitacao">
-                    <option value='' selected>Selecione uma opção</option>
+                    <option value='0' selected>Selecione uma opção</option>
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL ORDER BY NM_CRITERIO";
                     $querySelect = $pdoCAT->query($querySelect2);
@@ -116,7 +115,7 @@ if ($_SESSION['admin'] == 5) {
 
             <div class="input-field col s4">
                 <select name="formaLicitacao" id="formaLicitacao">
-                    <option value='' selected>Selecione uma opção</option>
+                    <option value='0' selected>Selecione uma opção</option>
                     <?php
                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL ORDER BY NM_FORMA";
                     $querySelect = $pdoCAT->query($querySelect2);
@@ -129,7 +128,7 @@ if ($_SESSION['admin'] == 5) {
             </div>
 
             <div class="input-field col s4">
-                <input type="text" id="vlLicitacao" name="vlLicitacao" required>
+                <input type="text" id="vlLicitacao" name="vlLicitacao">
                 <label>Valor Estimado</label>
             </div>
 
@@ -163,28 +162,28 @@ if ($_SESSION['admin'] == 5) {
 </div>
 
 <script>
+    // function exibirAlertaStatus() {
+    //     alert("Por favor, preencha o campo 'Status'");
+    // }
+    // function exibirAlertaTipoContratacao() {
+    //     alert("Por favor, preencha o campo 'Tipo Contratação'");
+    // }
+    
+
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;
-        var modoLicitacao = document.getElementById('modoLicitacao').value;
-        var formaLicitacao = document.getElementById('formaLicitacao').value;
-        var criterioLicitacao = document.getElementById('criterioLicitacao').value;
-
+        var statusLicitacao = document.getElementById('statusLicitacao').value;
+       
         if (tipoLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Tipo de Contratação.');
+            alert('Por favor, selecione uma opção para o "Tipo de Contratação".');
             return false; // Evita o envio do formulário se a validação falhar
         }
-        if (modoLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Modo de Disputa.');
+
+        if (statusLicitacao === '') {
+            alert('Por favor, selecione uma opção para o "Status".');
             return false; // Evita o envio do formulário se a validação falhar
         }
-        if (criterioLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Critério de Julgamento.');
-            return false; // Evita o envio do formulário se a validação falhar
-        }
-        if (formaLicitacao === '') {
-            alert('Por favor, selecione uma opção para o Forma.');
-            return false; // Evita o envio do formulário se a validação falhar
-        }
+        
 
         // Continue com o envio do formulário se a validação passar
         return true;

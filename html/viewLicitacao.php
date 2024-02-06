@@ -119,14 +119,14 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                     </div>
                 <?php } ?>
 
-                <?php if (isset($dtAberLicitacao) && $dtAberLicitacao !== '') { ?>
+                <?php if (isset($dtAberLicitacao) && date('Y', strtotime($dtAberLicitacao)) != 1969) { ?>
                     <div class="input-field col s4">
                         <input type="text" value="<?php echo $dtAberLicitacao ?>" readonly>
                         <label>Data e Horário de Abertura</label>
                     </div>
                 <?php } ?>
 
-                <?php if (isset($dtIniSessLicitacao) && $dtIniSessLicitacao !== '') { ?>
+                <?php if (isset($dtIniSessLicitacao) && date('Y', strtotime($dtIniSessLicitacao)) != 1969) { ?>
                     <div class="input-field col s4">
                         <input type="text" value="<?php echo $dtIniSessLicitacao ?>" readonly>
                         <label>Início da Sessão de Disputa de Preços</label>

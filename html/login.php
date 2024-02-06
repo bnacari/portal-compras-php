@@ -1,94 +1,221 @@
 <?php
 include_once 'bd/conexao.php';
-include_once 'includes/header.inc.php';
-include_once 'includes/footer.inc.php';
-// include_once 'includes/menu.inc.php';
+
 $_SESSION['sucesso'] = 0;
 $_SESSION['admin'] = 0;
 
 ?>
 
-<html>
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f1f1f1;
+    }
 
-<head>
-</head>
+    .logoLogin {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 55px;
+        height: 70px;
+    }
 
-<body class="container2">
+    .modal {
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .modal:focus {
+        outline: none;
+    }
+
+    @media only screen and (max-width: 992px) {
+        .modal {
+            width: 80%;
+        }
+    }
+
+    .modal h1,
+    .modal h2,
+    .modal h3,
+    .modal h4 {
+        margin-top: 0;
+    }
+
+    .modal .modal-content {
+        padding: 24px;
+    }
+
+    .modal .modal-close {
+        cursor: pointer;
+    }
+
+    .modal .modal-footer {
+        border-radius: 0 0 2px 2px;
+        background-color: #fafafa;
+        padding: 4px 6px;
+        height: 56px;
+        width: 100%;
+        text-align: right;
+    }
+
+    .modal .modal-footer .btn,
+    .modal .modal-footer .btn-large,
+    .modal .modal-footer .btn-small,
+    .modal .modal-footer .btn-flat {
+        margin: 6px 0;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        z-index: 999;
+        top: -25%;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        height: 125%;
+        width: 100%;
+        background: #000;
+        display: none;
+        will-change: opacity;
+    }
+
+    .modal.modal-fixed-footer {
+        padding: 0;
+        height: 70%;
+    }
+
+    .modal.modal-fixed-footer .modal-content {
+        position: absolute;
+        height: calc(100% - 56px);
+        max-height: 100%;
+        width: 100%;
+        overflow-y: auto;
+    }
+
+    .modal.modal-fixed-footer .modal-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        position: absolute;
+        bottom: 0;
+    }
+
+    .modal.bottom-sheet {
+        top: auto;
+        bottom: -100%;
+        margin: 0;
+        width: 100%;
+        max-height: 45%;
+        border-radius: 0;
+        will-change: bottom, opacity;
+    }
+
+    #modal.modal {
+        width: 90% !important;
+        /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
+        max-height: 90% !important;
+        /* Ajuste o valor conforme necessário, pode ser em pixels, porcentagem, etc. */
+    }
+
+    /* Se você quiser centralizar o modal na tela */
+    #modal.modal {
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    @media screen and (max-width: 480px) {}
+</style>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link type="text/css" rel="stylesheet" href="materialize/css/login.css" media="screen,projection" />
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+
+<div class="container">
     <div>
-        <img src="imagens/logo_icon.png" class="logoLogin">
-        <br />
-        <h5><a href="index.php">Portal de Compras</a></h5>
-        <br />
+        <br>
+        <!-- <div class="card bg-light"> -->
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <img src="imagens/logo_icon.png" class="logoLogin">
+            </div>
+            <h4 class="card-title mt-3 text-center"><a href="index.php">
+                    <h5>Portal de Compras</h5>
+                </a>
+            </h4>
+            <p class="text-center"></p>
 
-        <form action="bd/ldap.php" method="post">
-            <fieldset class="login">
-                <!-- <legend><img src="imagens/batman-icon.png" alt="[imagem]" width="100"></legend> -->
-                <h5 class="light center">Login</h5>
-
-                <div class="input-field col s12">
-                    <i class="material-icons prefix">person</i>
-                    <input type="text" name="login" id="login" maxlength="100" required autofocus>
-                    <label for="usuario">Login / E-mail (usuário externo)</label>
+            <form action="bd/ldap.php" method="post">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Usuário" type="text" name="login" id="login" maxlength="100" autofocus>
                 </div>
 
-                <div class="input-field col s12">
-                    <i class="material-icons prefix">password</i>
-                    <input type="password" name="senha" id="senha" maxlength="15" required>
-                    <label for="nome">Senha</label>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input class="form-control" placeholder="Senha" type="password" name="senha" id="senha">
                 </div>
 
-                <center>
-                    <h8>
-                        <?php
-                        if (isset($_SESSION['msg'])) :
-                            echo $_SESSION['msg'];
-                            $_SESSION['msg'] = '';
-                        endif;
-                        ?>
-                    </h8>
-                </center>
-
-                <div class="input-field col s6">
-                    <center>
-                        <input type="submit" value="Login" class="btn blue">
-                        <!-- <input type="reset" value="limpar" class="btn red"> -->
-                    </center>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Acessar </button>
                 </div>
-
-            </fieldset>
-        </form>
+            </form>
+        </article>
 
         <div class="materialize-content">
-            <a href="#modalCriarUsuario" class="modal-trigger align-right">Registrar Usuário</a>
-            <a href="#modalEsqueciSenha" class="modal-trigger align-left">Esqueci a senha</a>
+            <div class="container" style="display: flex; justify-content: center;">
+                <div>
+                    <p><a href="#modalCriarUsuario" class="modal-trigger align-center">Registrar Usuário</a></p>
+                    <p><a href="#modalEsqueciSenha" class="modal-trigger align-center">Esqueci a senha</a></p>
+                </div>
+            </div>
+
 
             <div id="modalCriarUsuario" class="modal">
                 <div class="modal-content">
                     <h5>Registrar Usuário</h5>
                     <form action="bd/usuario/create.php" method="post">
                         <!-- Adicione os campos necessários (nome, e-mail, senha) aqui -->
-                        <div class="input-field">
-                            <input type="text" name="nomeUsuarioNovo" id="nomeUsuarioNovo" required>
-                            <label for="nome">Nome</label>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            </div>
+                            <input class="form-control" placeholder="Nome" type="text" name="nomeUsuarioNovo" id="nomeUsuarioNovo" maxlength="100" autofocus>
                         </div>
-                        <div class="input-field">
-                            <input type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" required>
-                            <label for="email">E-mail</label>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            </div>
+                            <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" autofocus>
                         </div>
-                        <div class="input-field">
-                            <input type="password" name="senhaUsuarioNovo" id="senhaUsuarioNovo" maxlength="12" required>
-                            <label for="senha">Senha (máximo 12 caracteres)</label>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                            </div>
+                            <input class="form-control" placeholder="Senha (máximo 12 caracteres)" type="password" name="senhaUsuarioNovo" id="senhaUsuarioNovo">
+                        </div>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                            </div>
+                            <input class="form-control" placeholder="Repetir Senha" type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2">
                         </div>
 
-                        <div class="input-field">
-                            <input type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2" maxlength="12" required>
-                            <label for="senha">Repetir Senha</label>
-                        </div>
-                        <button type="submit" class="btn blue">Criar Usuário</button>
+                        <button type="submit" class="btn btn-primary btn-block"> Criar Usuário </button>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
                 </div>
             </div>
 
@@ -97,15 +224,15 @@ $_SESSION['admin'] = 0;
                     <h5>Esqueci a Senha</h5>
                     <form action="bd/usuario/esqueciSenha.php" method="post">
                         <!-- Adicione os campos necessários (nome, e-mail, senha) aqui -->
-                        <div class="input-field">
-                            <input type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" required>
-                            <label for="email">E-mail</label>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            </div>
+                            <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" autofocus>
                         </div>
-                        <button type="submit" class="btn blue">Enviar</button>
+
+                        <button type="submit" class="btn btn-primary btn-block"> Enviar </button>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
                 </div>
             </div>
 
@@ -115,15 +242,15 @@ $_SESSION['admin'] = 0;
     </div>
 
 
-</body>
+    </body>
 
-</html>
+    </html>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $('.modal').modal();
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            $('.modal').modal();
+        });
+    </script>

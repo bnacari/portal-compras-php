@@ -80,11 +80,24 @@ if ($stmt) {
     }
 }
 
+if (!isset($objLicitacao)) { $objLicitacao = ''; }
+if (!isset($modoLicitacao)) { $modoLicitacao = ''; }
+if (!isset($criterioLicitacao)) { $criterioLicitacao = ''; }
+if (!isset($tipoLicitacao)) { $tipoLicitacao = ''; }
+if (!isset($regimeLicitacao)) { $regimeLicitacao = ''; }
+if (!isset($formaLicitacao)) { $formaLicitacao = ''; }
+if (!isset($vlLicitacao)) { $vlLicitacao = ''; }
+if (!isset($identificadorLicitacao)) { $identificadorLicitacao = ''; }
+if (!isset($localLicitacao)) { $localLicitacao = ''; }
+if (!isset($obsLicitacao)) { $obsLicitacao = ''; }
+if (!isset($permitirAtualizacao)) { $obpermitirAtualizacaojLicitacao = ''; }
+
 $query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', '$statusLicitacao', '$objLicitacao', '$respLicitacao', 
-                    '$dtAberturaLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $tipoLicitacao, $criterioLicitacao, '$regimeLicitacao', $formaLicitacao, 
+                    '$dtAberturaLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $tipoLicitacao, '$criterioLicitacao', '$regimeLicitacao', '$formaLicitacao', 
                     '$vlLicitacao', '$localLicitacao', '$identificadorLicitacao', '$obsLicitacao', NULL, $permitirAtualizacao)";
 
 // var_dump($query);
+// exit();
 
 $queryInsertDetalheLicitacao = $pdoCAT->query($query);
 

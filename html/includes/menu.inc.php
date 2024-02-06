@@ -109,10 +109,6 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="add-circle-outline"></ion-icon></a>
         <?php } ?>
         <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
-        <a href="#" id="fullscreenButton" class="up_menu_btn"><i class="bi bi-fullscreen"></i></a>
-        <a href="#" id="exitFullscreenButton" class="up_menu_btn"><i class="bi bi-fullscreen-exit"></i></a>
-
-
     </div>
 
     <?php
@@ -361,53 +357,4 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         }
     }
 
-    // Função para abrir a página no modo fullscreen
-    function abrirFullscreen() {
-        var elem = document.documentElement; // obtém o elemento raiz do documento
-
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen(); // Padrão W3C
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen(); // Para Firefox
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen(); // Para Chrome, Safari e Opera
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen(); // Para o Internet Explorer
-        }
-    }
-    // Função para fechar o modo fullscreen
-    function fecharFullscreen() {
-        if (document.exitFullscreen) {
-            document.exitFullscreen(); // Padrão W3C
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen(); // Para Firefox
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen(); // Para Chrome, Safari e Opera
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen(); // Para o Internet Explorer
-        }
-    }
-
-    document.getElementById('fullscreenButton').addEventListener('click', function() {
-        abrirFullscreen();
-    });
-
-    // Adicione um ouvinte de evento de clique ao botão de fechar fullscreen
-    document.getElementById('exitFullscreenButton').addEventListener('click', function() {
-        fecharFullscreen();
-    });
-    
-    // Adicione um ouvinte de evento para detectar mudanças no estado de fullscreen
-    document.addEventListener('fullscreenchange', function() {
-        // Verifique se o documento está em modo fullscreen
-        if (document.fullscreenElement) {
-            // Está em fullscreen, oculte o botão de abrir fullscreen e mostre o botão de fechar fullscreen
-            document.getElementById('fullscreenButton').style.display = 'none';
-            document.getElementById('exitFullscreenButton').style.display = 'inline-block';
-        } else {
-            // Não está em fullscreen, mostre o botão de abrir fullscreen e oculte o botão de fechar fullscreen
-            document.getElementById('fullscreenButton').style.display = 'inline-block';
-            document.getElementById('exitFullscreenButton').style.display = 'none';
-        }
-    });
 </script>

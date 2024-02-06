@@ -19,7 +19,7 @@ $protocolo = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 
 $host = $_SERVER['HTTP_HOST'];
 $porta = $_SERVER['SERVER_PORT'];
 
-$linkLicitacao = "$protocolo://$host/viewLicitacao.php?idLicitacao=". $idLicitacao;
+$linkLicitacao = "$protocolo://$host/viewLicitacao.php?idLicitacao=" . $idLicitacao;
 $linkLogin = "$protocolo://$host/login.php";
 
 try {
@@ -61,12 +61,12 @@ try {
             $mail->send();
         endwhile;
 
-        $_SESSION['msg'] = "<p class='center red-text'>" . 'Senha enviada para e-mail cadastrado.' . "</p>";
+        $_SESSION['msg'] = "Senha enviada para o e-mail cadastrado.";
 
         echo "<script>location.href='login.php';</script>";
 
         if (!isset($email)) {
-            $_SESSION['msg'] = "<p class='center red-text'>" . 'E-mail NÃO cadastrado.' . "</p>";
+            $_SESSION['msg'] = "E-mail NÃO cadastrado.";
 
             echo "<script>location.href='login.php';</script>";
         }
@@ -116,9 +116,9 @@ try {
 
             $mail->send();
 
-            // var_dump($email);
+        // var_dump($email);
         endwhile;
-        
+
         $_SESSION['msg'] = "Licitação atualizada com sucesso.";
 
         echo "<script>location.href='index.php';</script>";
