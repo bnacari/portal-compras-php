@@ -109,7 +109,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="add-circle-outline"></ion-icon></a>
         <?php } ?>
         <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
-        <a href="#contatoModal" class="up_menu_btn" data-toggle="modal"><ion-icon name="chatbox-outline"></ion-icon></a>
+        <a href="#contatoModal" class="up_menu_btn" data-toggle="modal" ><ion-icon name="chatbox-outline"></ion-icon></a>
 
     </div>
 
@@ -264,7 +264,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <p class="descricao3">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
                 <ul class="list-group">
                     <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> (27) 2127-5119</li>
-                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> licitacoes@cesan.com.br</li>
+                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> <a href="mailto:licitacoes@cesan.com.br">licitacoes@cesan.com.br</a></li>
                 </ul>
             </div>
             <div class="modal-body">
@@ -274,7 +274,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <br>
                 <ul class="list-group">
                     <p class="descricao2">Pregoeiros</p>
-                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> pregao@cesan.com.br</li>
+                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> <a href="mailto:pregao@cesan.com.br">pregao@cesan.com.br</a></li>
                     <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Luciana Spinassé - (27) 2127-5299</li>
                     <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Fernando Cordeiro - (27) 2127-5418</li>
                     <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Mirelle Ino - (27) 2127-5429</li>
@@ -282,7 +282,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <br>
                 <ul class="list-group">
                     <p class="descricao2">Cadastro de Fornecedores</p>
-                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> cadastrofornecedor@cesan.com.br</li>
+                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> <a href="mailto:cadastrofornecedor@cesan.com.br">cadastrofornecedor@cesan.com.br</a></li>
                 </ul>
             </div>
             <div class="modal-footer">
