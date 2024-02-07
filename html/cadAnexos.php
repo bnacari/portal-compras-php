@@ -55,7 +55,7 @@ include('protectAdmin.php');
                         echo '<tr>';
                         echo '<td><a href="' . $filePath . '" download>' . $file . '</a></td>';
                         echo '<td><a href="#" class="copy-link" data-clipboard-text="' . $filePath . '">' . $filePath . '</a></td>';
-                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . 'anexos' . '\')" style="color:red" title="Excluir Arquivo"><i class="material-icons">remove</i></a></td>';
+                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . 'anexos' . '\')" style="color:red" title="Excluir Arquivo"><i class="bi bi-x-circle"></i></a></td>';
                         echo '</tr>';
                     }
 

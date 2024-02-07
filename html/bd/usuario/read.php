@@ -62,9 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($_SESSION['admin'] == 5) {
             if ($unidade == 'externo') {
                 if ($status == 'A') {
-                    echo "<td style='text-align: center;'><a href='bd/usuario/desativa.php?email=$email' style='color:red'><i class='bi bi-dash'></i></a></td>";
+                    echo "<td style='text-align: center;'><a href='bd/usuario/desativa.php?email=$email' style='color:red'><i class='bi bi-x-circle'></i></a></td>";
                 } else {
-                    echo "<td style='text-align: center;'><a href='bd/usuario/ativa.php?email=$email'><i class='bi bi-check2'></i></a></td>";
+                    echo "<td style='text-align: center;'><a href='bd/usuario/ativa.php?email=$email'><i class='bi bi-check-lg'></i></a></td>";
                 }
             }
             else {

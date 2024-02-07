@@ -37,9 +37,9 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     echo "<td>$lgnCriador</td>";
 
     if ($status == null) {
-        echo "<td style='text-align: center;'><a href='bd/perfil/desativa.php?idPerfil=$idPerfil' title='Desativar Perfil' style='color: red;'><i class='bi bi-dash'></i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/perfil/desativa.php?idPerfil=$idPerfil' title='Desativar Perfil' style='color: red;'><i class='bi bi-x-circle'></i></a></td>";
     } else {
-        echo "<td style='text-align: center;'><a href='bd/perfil/ativa.php?idPerfil=$idPerfil' title='Ativar Perfil'><i class='bi bi-check2'></i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/perfil/ativa.php?idPerfil=$idPerfil' title='Ativar Perfil'><i class='bi bi-check-lg'></i></a></td>";
     }
 
     echo "<td style='text-align: center;'>

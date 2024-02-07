@@ -119,28 +119,31 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                     </div>
                 <?php } ?>
 
-                <?php if (isset($dtAberLicitacao) && date('Y', strtotime($dtAberLicitacao)) != 1969) { ?>
+                <?php 
+                echo "<script>alert($dtAberLicitacao);</script>";
+                
+                if (isset($dtAberLicitacao) && !strpos($dtAberLicitacao, '/1969')) { ?>
                     <div class="input-field col s4">
                         <input type="text" value="<?php echo $dtAberLicitacao ?>" readonly>
                         <label>Data e Horário de Abertura</label>
                     </div>
                 <?php } ?>
 
-                <?php if (isset($dtIniSessLicitacao) && date('Y', strtotime($dtIniSessLicitacao)) != 1969) { ?>
+                <?php if (isset($dtIniSessLicitacao) && !strpos($dtIniSessLicitacao, '/1969')) { ?>
                     <div class="input-field col s4">
                         <input type="text" value="<?php echo $dtIniSessLicitacao ?>" readonly>
                         <label>Início da Sessão de Disputa de Preços</label>
                     </div>
                 <?php } ?>
 
-                <?php if (isset($modoLicitacao) && $modoLicitacao !== '') { ?>
+                <?php if (isset($modoLicitacao) && $modoLicitacao != '0') { ?>
                     <div class="input-field col s4">
                         <input type="text" value="<?php echo $modoLicitacao ?>" readonly>
                         <label>Modo de Disputa</label>
                     </div>
                 <?php } ?>
 
-                <?php if (isset($criterioLicitacao) && $criterioLicitacao !== '') { ?>
+                <?php if (isset($criterioLicitacao) && $criterioLicitacao != '0') { ?>
                     <div class="input-field col s4">
                         <select name="criterioLicitacao" id="criterioLicitacao">
                             <?php
@@ -162,7 +165,8 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                     </div>
                 <?php } ?>
 
-                <?php if (isset($formaLicitacao) && $formaLicitacao !== '') { ?>
+                <?php 
+                if (isset($formaLicitacao) && $formaLicitacao != 0) { ?>
                     <div class="input-field col s4">
                         <select name="regimeLicitacao" id="regimeLicitacao">
                             <?php

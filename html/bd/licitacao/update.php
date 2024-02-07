@@ -32,7 +32,19 @@ $localLicitacao = $_POST["localLicitacao"];
 $obsLicitacao = $_POST["obsLicitacao"];
 $permitirAtualizacao = $_POST["permitirAtualizacao"];
 
-if ($permitirAtualizacao == 'on') { $permitirAtualizacao = 1; }  else { $permitirAtualizacao = 0; }  
+// Remove os espaços em branco do início e do final da string
+$str_sem_espacos = trim($obsLicitacao);
+
+// Verifica se a string resultante é vazia
+if (empty($str_sem_espacos)) {
+    $obsLicitacao = '';
+}
+
+if ($permitirAtualizacao == 'on') {
+    $permitirAtualizacao = 1;
+} else {
+    $permitirAtualizacao = 0;
+}
 
 $dataAberturaFormatada = date("Y-m-d", strtotime($dtAbertura));
 $hrAberturaFormatada = date("H:i", strtotime($hrAbertura));
@@ -102,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // $_SESSION['msg'] = "Licitação atualizada com sucesso!";
 
-$_SESSION['redirecionar'] = '../../envio.php?idLicitacao='.$idLicitacao;
+$_SESSION['redirecionar'] = '../../envio.php?idLicitacao=' . $idLicitacao;
 // $_SESSION['redirecionar'] = '../../consultarLicitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitacao';

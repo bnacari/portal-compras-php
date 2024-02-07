@@ -86,7 +86,7 @@ if ($_SESSION['admin'] == 5) {
 
             <div class="input-field col s4">
                 <select name="modoLicitacao" id="modoLicitacao">
-                    <option value='' selected>Selecione uma opção</option>
+                    <option value='0' selected>Selecione uma opção</option>
                     <option value='Aberta'>Aberta</option>
                     <option value='Fechada'>Fechada</option>
                     <option value='Hibrida'>Híbrida</option>

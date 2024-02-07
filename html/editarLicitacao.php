@@ -146,10 +146,23 @@ endwhile;
                 <textarea type="text" name="objLicitacao" id="objLicitacao" required><?php echo $objLicitacao ?> </textarea>
                 <label>Objeto</label>
             </div>
+
+            <?php
+            if (date('Y', strtotime($dtAberLicitacao)) == 1969) {
+                $dtAberLicitacao = '';
+                $hrAberLicitacao = '';
+            }
+            ?>
             <div class="input-field col s2">
                 <input type="date" name="dtAberLicitacao" id="dtAberLicitacao" value="<?php echo $dtAberLicitacao ?>">
                 <label>Data de Abertura</label>
             </div>
+            <?php
+            if (date('Y', strtotime($dtIniSessLicitacao)) == 1969) {
+                $dtIniSessLicitacao = '';
+                $hrIniSessLicitacao = '';
+            }
+            ?>
             <div class="input-field col s2">
                 <input type="time" name="hrAberLicitacao" id="hrAberLicitacao" value="<?php echo $hrAberLicitacao ?>">
                 <label>Horário de Abertura</label>
@@ -166,7 +179,7 @@ endwhile;
 
             <div class="input-field col s4">
                 <select name="modoLicitacao" id="modoLicitacao">
-                    <option value='' <?php echo ($modoLicitacao === '') ? 'selected' : ''; ?>>Selecione uma opção</option>
+                    <option value='0' <?php echo ($modoLicitacao === '0') ? 'selected' : '0'; ?>>Selecione uma opção</option>
                     <option value='Aberta' <?php echo ($modoLicitacao === 'Aberta') ? 'selected' : ''; ?>>Aberta</option>
                     <option value='Fechada' <?php echo ($modoLicitacao === 'Fechada') ? 'selected' : ''; ?>>Fechada</option>
                     <option value='Hibrida' <?php echo ($modoLicitacao === 'Hibrida') ? 'selected' : ''; ?>>Híbrida</option>
@@ -285,7 +298,7 @@ endwhile;
                         foreach ($files as $file) {
                             echo '<tr>';
                             echo '<td><a href="' . $directory . '/' . $file . '" target="_blank">' . $file . '</a></td>';
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo"><i class="bi bi-x-circle"></i></a></td>';
                             echo '</tr>';
                         }
 

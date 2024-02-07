@@ -35,9 +35,9 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     echo "<td>$lgnCriadorCriterio</td>";
 
     if ($dtExcCriterio == null) {
-        echo "<td style='text-align: center;'><a href='bd/criterio/desativa.php?idCriterio=$idCriterio' title='Desativar Criterio' style='color: red;'><i class='bi bi-dash'></i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/criterio/desativa.php?idCriterio=$idCriterio' title='Desativar Criterio' style='color: red;'><i class='bi bi-x-circle'></i></a></td>";
     } else {
-        echo "<td style='text-align: center;'><a href='bd/criterio/ativa.php?idCriterio=$idCriterio' title='Ativar Criterio'><i class='bi bi-check2'></i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/criterio/ativa.php?idCriterio=$idCriterio' title='Ativar Criterio'><i class='bi bi-check-lg'></i></a></td>";
     }
 
     echo "<td style='text-align: center;'>

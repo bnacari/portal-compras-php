@@ -37,9 +37,9 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 
 
     if ($dtExcMenu == null) {
-        echo "<td style='text-align: center;'><a href='bd/menus/desativa.php?idMenu=$idMenu' title='Desativar Menus' style='color: red;'><i class='bi bi-dash'></i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/menus/desativa.php?idMenu=$idMenu' title='Desativar Menus' style='color: red;'><i class='bi bi-x-circle'></i></a></td>";
     } else {
-        echo "<td style='text-align: center;'><a href='bd/menus/ativa.php?idMenu=$idMenu' title='Ativar Menu'><i class='bi bi-check2'></i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/menus/ativa.php?idMenu=$idMenu' title='Ativar Menu'><i class='bi bi-check-lg'></i></a></td>";
     }
 
     echo "<td style='text-align: center;'>

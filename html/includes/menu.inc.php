@@ -95,21 +95,23 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                                                 echo $_SESSION['nmPerfil'];
                                             } ?></span>
             </label>
-            <a href="logout.php" class="up_menu_btn"><ion-icon name="exit-outline"></ion-icon></a>
+            <a href="logout.php" class="up_menu_btn" title="Sair"><i class="bi bi-box-arrow-up-right"></i></a>
         <?php } else { ?>
-            <a href="login.php" class="up_menu_btn"><ion-icon name="enter-outline"></ion-icon></a>
+            <a href="login.php" class="up_menu_btn" title="Entrar"><i class="bi bi-box-arrow-in-up-right"></i></ion-icon></a>
         <?php }
 
         if (strpos($login, '@') !== false) { ?>
-            <a href="trocaSenhaUsuario.php" class="up_menu_btn"><ion-icon name="key-outline"></ion-icon></ion-icon></a>
+            <a href="trocaSenhaUsuario.php" class="up_menu_btn" title="Trocar Senha"><i class="bi bi-key"></i></a>
 
         <?php } ?>
 
         <?php if ($_SESSION['admin'] == 5) { ?>
-            <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="add-circle-outline"></ion-icon></a>
+            <a href="cadLicitacao.php" class="up_menu_btn" title="Cadastrar Licitação"><i class="bi bi-plus-circle"></i></a>
         <?php } ?>
-        <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
-        <a href="#contatoModal" class="up_menu_btn" data-toggle="modal" ><ion-icon name="chatbox-outline"></ion-icon></a>
+        <a href="consultarLicitacao.php" class="up_menu_btn" title="Pesquisar Licitações"><i class="bi bi-search"></i></a>
+        <a href="#contatoModal" class="up_menu_btn" data-toggle="modal" title="Contatos"><i class="bi bi-chat-right-dots"></i></a>
+
+
 
     </div>
 
