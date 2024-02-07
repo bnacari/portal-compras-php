@@ -34,9 +34,9 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 
 
     if ($dtExcForma == null) {
-        echo "<td style='text-align: center;'><a href='bd/forma/desativa.php?idForma=$idForma' title='Desativar Formas' style='color: red;'><i class='material-icons'>close</i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/forma/desativa.php?idForma=$idForma' title='Desativar Formas' style='color: red;'><i class='bi bi-dash'></i></a></td>";
     } else {
-        echo "<td style='text-align: center;'><a href='bd/forma/ativa.php?idForma=$idForma' title='Ativar Forma'><i class='material-icons'>check</i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/forma/ativa.php?idForma=$idForma' title='Ativar Forma'><i class='bi bi-check2'></i></a></td>";
     }
 
     echo "<td style='text-align: center;'>

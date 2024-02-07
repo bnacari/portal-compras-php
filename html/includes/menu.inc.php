@@ -89,10 +89,10 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
     <div>
         <?php if (isset($_SESSION['login'])) { ?>
             <label class="userLogin">
-                Bem-Vindo, <?php echo $_SESSION['login']; ?>
+                Bem-Vindo, <?php echo $_SESSION['login'] . ' | '; ?>
                 <span style="color: gold;"><?php
                                             if (isset($_SESSION['nmPerfil'])) {
-                                                echo '(' . $_SESSION['nmPerfil'] . ')';
+                                                echo $_SESSION['nmPerfil'];
                                             } ?></span>
             </label>
             <a href="logout.php" class="up_menu_btn"><ion-icon name="exit-outline"></ion-icon></a>
@@ -109,6 +109,8 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             <a href="cadLicitacao.php" class="up_menu_btn"><ion-icon name="add-circle-outline"></ion-icon></a>
         <?php } ?>
         <a href="consultarLicitacao.php" class="up_menu_btn"><ion-icon name="search-outline"></ion-icon></a>
+        <a href="#contatoModal" class="up_menu_btn" data-toggle="modal"><ion-icon name="chatbox-outline"></ion-icon></a>
+
     </div>
 
     <?php
@@ -249,11 +251,62 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
     </ul>
 </div>
 
+<!-- contatoModal -->
+<div class="modal fade" id="contatoModal" tabindex="-1" role="dialog" aria-labelledby="contatoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contatoModalLabel">Contatos</h5>
+            </div>
+            <div class="modal-body">
+                <p class="descricao1">Informações, dúvidas e esclarecimentos sobre licitação Cesan</p>
+                <p class="descricao2">Comissão Permanente de Licitações (CPL)</p>
+                <p class="descricao3">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> (27) 2127-5119</li>
+                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> licitacoes@cesan.com.br</li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <p class="descricao1">Informações, dúvidas e esclarecimentos sobre pregões, dispensas eletrônicas e cadastro de fornecedores</p>
+                <p class="descricao2">Divisão de Compras e Suprimentos (A-DCS)</p>
+                <p class="descricao3">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES. CEP: 29.164-018</p>
+                <br>
+                <ul class="list-group">
+                    <p class="descricao2">Pregoeiros</p>
+                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> pregao@cesan.com.br</li>
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Luciana Spinassé - (27) 2127-5299</li>
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Fernando Cordeiro - (27) 2127-5418</li>
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Mirelle Ino - (27) 2127-5429</li>
+                </ul>
+                <br>
+                <ul class="list-group">
+                    <p class="descricao2">Cadastro de Fornecedores</p>
+                    <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> cadastrofornecedor@cesan.com.br</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <!--========== MAIN JS ==========-->
 <script src="../materialize/js/main.js"></script>
 
 <script>
+    function openModal() {
+        document.getElementById("contatoModal").style.display = "block";
+    }
+
+    // Função para fechar o modal
+    function closeModal() {
+        document.getElementById("contatoModal").style.display = "none";
+    }
+
     function isMobile() {
         return /Mobi|Android/i.test(navigator.userAgent);
     }
@@ -356,5 +409,4 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             document.getElementById('modalCadastro').style.display = 'none';
         }
     }
-
 </script>

@@ -76,7 +76,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     echo "</td>";
     // echo "<td>$dtExcAtualizacao</td>";
     if (!isset($dtExcAtualizacao)) {
-        echo "<td style='text-align: center;'><a href='bd/atualizacao/desativar.php?idAtualizacao=$idAtualizacao' style='color:red' title='Não desejo ser lembrado sobre futuras atualizações'><i class='material-icons'>close</i></a></td>";
+        echo "<td style='text-align: center;'><a href='bd/atualizacao/desativar.php?idAtualizacao=$idAtualizacao' style='color:red' title='Não desejo ser lembrado sobre futuras atualizações'><i class='bi bi-dash'></i></a></td>";
     }
     echo "</tr>";
 endwhile;

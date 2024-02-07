@@ -18,7 +18,7 @@ include('protectAdmin.php');
 
             <div class="input-field col s12">
                 <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
-                    Arraste e solte os arquivos aqui ou clique para selecionar.
+                    <i class="bi bi-upload"></i> <br>Arraste e solte os arquivos aqui ou clique para selecionar.
                 </div>
             </div>
         </form>

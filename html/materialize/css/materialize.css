@@ -51,7 +51,7 @@
 
 .userLogin {
   position: absolute;
-  right: 155;
+  right: 185;
   top: 15;
   font-size: 15px;
   text-decoration: none;
@@ -73,6 +73,10 @@
   color: #fff;
 }
 
+i.bi {
+  font-size: 1.6em;
+}
+
 .up_menu_btn:hover {
   color: #00ADEF;
 }
@@ -87,10 +91,10 @@
 }
 
 .fieldset-msg {
-  background-color: #005596; 
-  top: 5px; 
-  width: 100%; 
-  text-align:center;
+  background-color: #005596;
+  top: 5px;
+  width: 100%;
+  text-align: center;
 }
 
 .sidebar2 {
@@ -6987,33 +6991,65 @@ textarea.materialize-textarea+label:after,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
-
+/* Estilos para o modal */
 .modal {
   display: none;
+  /* Oculta o modal por padrão */
   position: fixed;
+  /* Fixa o modal na tela */
+  z-index: 99999999999999999999;
+  /* Coloca o modal sobre outros elementos */
   left: 0;
-  right: 0;
-  background-color: #fafafa;
-  padding: 0;
-  max-height: 70%;
-  width: 55%;
-  margin: auto;
-  overflow-y: auto;
-  border-radius: 2px;
-  will-change: top, opacity;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  /* Adiciona rolagem se necessário */
+  background-color: rgb(0, 0, 0);
+  /* Fundo preto */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Fundo preto com transparência */
+}
+
+/* Estilos para o conteúdo do modal */
+.modal-content {
+  background-color: #fefefe;
+  margin: 0 auto; /* Remover a margem vertical e alinhar horizontalmente */
+  border: none; /* Remover a borda */
+  border-radius: 0; /* Remover o arredondamento dos cantos */
+  width: 80%; /* Largura do modal */
+  max-width: 600px; /* Largura máxima do modal */
+}
+
+/* Estilos para o botão de fechar */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modal:focus {
   outline: none;
 }
 
-@media only screen and (max-width: 992px) {
+/* @media only screen and (max-width: 992px) {
   .modal {
     width: 80%;
   }
-}
+} */
 
-.modal h1, .modal h2, .modal h3, .modal h4 {
+.modal h1,
+.modal h2,
+.modal h3,
+.modal h4 {
   margin-top: 0;
 }
 
@@ -7034,7 +7070,10 @@ textarea.materialize-textarea+label:after,
   text-align: right;
 }
 
-.modal .modal-footer .btn, .modal .modal-footer .btn-large, .modal .modal-footer .btn-small, .modal .modal-footer .btn-flat {
+.modal .modal-footer .btn,
+.modal .modal-footer .btn-large,
+.modal .modal-footer .btn-small,
+.modal .modal-footer .btn-flat {
   margin: 6px 0;
 }
 
@@ -7095,6 +7134,43 @@ textarea.materialize-textarea+label:after,
   transform: translate(-50%, -50%) !important;
 }
 
+
+.descricao1 {
+  color: #132835;
+  /* Azul */
+  font-weight: bold;
+  /* font-style: italic; */
+}
+
+.descricao2 {
+  color: #193446;
+  /* Azul mais claro */
+  font-weight: bold;
+  font-style: italic;
+}
+
+.descricao3 {
+  color: #B7B7B7;
+  /* Azul mais claro ainda */
+  font-style: italic;
+}
+
+/* Estilo personalizado para o modal */
+.modal-header {
+  background-color: #0868A5; /* Cor de fundo desejada */
+  color: white; /* Cor do texto */
+  border-bottom: none; /* Remover a borda inferior */
+  padding: 20px; /* Espaçamento interno */
+}
+
+.modal-title {
+  font-weight: bold;
+}
+
+.modal-body {
+  padding: 30px;
+}
+
 #mostrarOcultarCalendar {
   display: none;
 }
@@ -7138,6 +7214,7 @@ textarea.materialize-textarea+label:after,
 .align-left {
   float: left;
 }
+
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
 .input-field {
@@ -7414,6 +7491,7 @@ textarea.materialize-textarea {
   -webkit-box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
+
 .select2-container--default .select2-selection--multiple {
   width: 100%;
   /* Defina o tamanho desejado aqui */
@@ -7561,7 +7639,7 @@ select:disabled {
 }
 
 /* SUBMENU */
-#menu ul ul { 
+#menu ul ul {
   z-index: 1;
   margin-left: 0;
   display: none;
@@ -7574,10 +7652,10 @@ select:disabled {
 }
 
 /* SUBMENU */
-#menu ul ul li { 
+#menu ul ul li {
   position: relative;
   margin-left: 10px;
-  background-color: #132835; 
+  background-color: #132835;
 
 }
 
@@ -7601,7 +7679,7 @@ select:disabled {
 }
 
 /* ITEMSUBMENU */
-#menu ul ul ul li{
+#menu ul ul ul li {
   background-color: #193446;
   width: 240px;
 }
@@ -7628,7 +7706,8 @@ select:disabled {
   height: 0;
   border-style: solid;
   border-width: 5px 0 5px 5px;
-  border-color: transparent transparent transparent gold; /* Altere a cor conforme necessário */
+  border-color: transparent transparent transparent gold;
+  /* Altere a cor conforme necessário */
 }
 
 
@@ -7663,11 +7742,15 @@ select:disabled {
 
 /* Estilo da área do checkbox (pode ser substituído por uma imagem personalizada) */
 /* CHECKBOX */
-input[type="checkbox"] + label {
+input[type="checkbox"]+label {
   position: relative;
   top: -27px;
-  padding-left: 20px; /* Espaçamento à esquerda para a área do checkbox */
+  padding-left: 20px;
+  /* Espaçamento à esquerda para a área do checkbox */
   cursor: pointer;
   display: inline-block;
-  line-height: 20px; /* Ajuste conforme necessário para o tamanho da área do checkbox */
+  line-height: 20px;
+  /* Ajuste conforme necessário para o tamanho da área do checkbox */
 }
+
+
