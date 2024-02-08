@@ -4,15 +4,17 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 
-include('protectAdmin.php');
+// include_once('protect.php');
 
-if ($_SESSION['admin'] == 5) {
-    // Não faça nada ou redirecione para onde for necessário se essas condições forem atendidas.
-} else {
-    header('Location: index.php');
+foreach ($_SESSION['perfil'] as $perfil) {
+    $idPerfil[] = $perfil['idPerfil'];
+
+    if ($perfil['idPerfil'] == 9) {
+        $isAdmin = 1;
+    }
 }
 
-$perfilUsuario = $_SESSION['admin'];
+$idPerfilFinal = implode(',', $idPerfil);
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
@@ -39,7 +41,6 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $hrAberLicitacao = date('H:i', strtotime($registros['DT_ABER_LICITACAO']));
     $hrIniSessLicitacao = date('H:i', strtotime($registros['DT_INI_SESS_LICITACAO']));
     $modoLicitacao = $registros['MODO_LICITACAO'];
-    $tipoLicitacao = $registros['TIPO_LICITACAO'];
     $criterioLicitacao = $registros['CRITERIO_LICITACAO'];
     $regimeLicitacao = $registros['REGIME_LICITACAO'];
     $formaLicitacao = $registros['FORMA_LICITACAO'];
@@ -49,6 +50,18 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $obsLicitacao = $registros['OBS_LICITACAO'];
     $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 endwhile;
+
+foreach ($_SESSION['perfil'] as $perfil) {
+    if ($perfil['idPerfil'] == $tipoLicitacao || isset($_SESSION['isAdmin'])) {
+       $isAdminProtect = 1;
+    }
+}
+if ($isAdminProtect != 1) {
+    $_SESSION['msg'] = 'Usuário tentando acessar área restrita!';
+    header('Location: index.php');
+    exit;
+}
+
 
 if (isset($tipoLicitacao)) {
     $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO = $tipoLicitacao";
@@ -98,7 +111,7 @@ endwhile;
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
 
             <!-- <div id="perfilAdmin">
-                <p>TESTE ADMINISTRADOR</p>
+                <p>TESTE USUARIO</p>
             </div>
             <div id="perfilContador">
                 <p>TESTE CONTADOR</p>
@@ -108,8 +121,13 @@ endwhile;
                 <select name="tipoLicitacao" id="tipoLicitacao">
                     <option value='' disabled>Selecione uma opção</option>
                     <?php
-                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL";
-                    $querySelect = $pdoCAT->query($querySelect2);
+                    if (isset($isAdmin)) {
+                        $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' ORDER BY NM_TIPO";
+                        $querySelect = $pdoCAT->query($querySelect2);
+                    } else {
+                        $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' AND ID_TIPO IN ($idPerfilFinal) ORDER BY NM_TIPO";
+                        $querySelect = $pdoCAT->query($querySelect2);
+                    }
 
                     echo "<option value='" . $idTipo . "' selected>" . $nmTipo . "</option>";
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
@@ -383,25 +401,6 @@ endwhile;
     }
 
     // Função para mostrar/ocultar campos com base no perfil do usuário
-    function atualizarCampos() {
-        var perfilUsuario = "<?php echo $perfilUsuario; ?>";
-
-        // Mostra/oculta campos com base no perfil
-        if (perfilUsuario === '5') {
-            document.getElementById('perfilAdmin').style.display = 'block';
-            document.getElementById('perfilContador').style.display = 'block';
-
-        } else if (perfilUsuario === '4') {
-            document.getElementById('perfilContador').style.display = 'block';
-            document.getElementById('perfilAdmin').style.display = 'none';
-
-        } else {
-            document.getElementById('perfilAdmin').style.display = 'none';
-            document.getElementById('perfilContador').style.display = 'none';
-        }
-    }
-    // Executa a função ao carregar a página
-    window.onload = atualizarCampos;
 
     function confirmDelete(file, directory, idLicitacao) {
         if (confirm('Tem certeza que deseja excluir o arquivo?')) {

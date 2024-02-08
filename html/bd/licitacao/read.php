@@ -3,8 +3,6 @@
 include_once 'bd/conexao.php';
 include_once 'redirecionar.php';
 
-// include('protect.php');
-
 $lgnCriador = $_SESSION['login'];
 
 $tituloLicitacaoFilter = filter_input(INPUT_POST, 'tituloLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -75,6 +73,7 @@ echo "<tbody>";
 
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
+    $idTipoLicitacao = $registros['TIPO_LICITACAO'];
     $tipoLicitacao = $registros['NM_TIPO'];
     $codLicitacao = $registros['COD_LICITACAO'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
@@ -110,10 +109,14 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
                 <a href='viewLicitacao.php?idLicitacao=$idLicitacao'>
                     <strong><h7>$tituloLicitacao</h7></strong>
                 </a> ";
-    if ($_SESSION['admin'] == 5) {
-        echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:#999999;' title='Editar Licitação'><i class='material-icons'>tune</i></a>";
 
-        echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:#999999; padding-left:5px' title='Apagar Licitação'><i class='material-icons'>delete</i></a>";
+    foreach ($_SESSION['perfil'] as $perfil) {
+        // Verifica se o ID do perfil é igual a 9
+        if ($perfil['idPerfil'] == 9 || $perfil['idPerfil'] == $idTipoLicitacao ) {
+            echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:#999999;' title='Editar Licitação'><i class='material-icons'>tune</i></a>";
+
+            echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:#999999; padding-left:5px' title='Apagar Licitação'><i class='material-icons'>delete</i></a>";
+        }
     }
 
     if ($permitirAtualizacao == 1 && isset($email)) {

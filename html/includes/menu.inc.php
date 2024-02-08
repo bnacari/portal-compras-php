@@ -89,7 +89,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
     <div>
         <?php if (isset($_SESSION['login'])) { ?>
             <label class="userLogin">
-                Bem-Vindo, <?php echo $_SESSION['login'] . ' | '; ?>
+                Bem-Vindo, <?php echo $_SESSION['login']; ?>
                 <span style="color: gold;"><?php
                                             if (isset($_SESSION['nmPerfil'])) {
                                                 echo $_SESSION['nmPerfil'];
@@ -105,7 +105,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
         <?php } ?>
 
-        <?php if ($_SESSION['admin'] == 5) { ?>
+        <?php if (isset($_SESSION['isAdmin'])) { ?>
             <a href="cadLicitacao.php" class="up_menu_btn" title="Cadastrar Licitação"><i class="bi bi-plus-circle"></i></a>
         <?php } ?>
         <a href="consultarLicitacao.php" class="up_menu_btn" title="Pesquisar Licitações"><i class="bi bi-search"></i></a>
@@ -177,14 +177,17 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
 
         <?php
-        switch ($_SESSION['admin']) {
-            case 5: ?>
-                <hr>
-                <hr>
-                <br>
-                <li>
-                    <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
-                </li>
+        if (!empty($_SESSION['perfil'])) { ?>
+            <hr>
+            <hr>
+            <br>
+            <li>
+                <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
+            </li>
+            <?php }
+        foreach ($_SESSION['perfil'] as $perfil) {
+            // Verifica se o ID do perfil é igual a 9
+            if ($perfil['idPerfil'] == 9) { ?>
                 <li>
                     <a href="cadCriterio.php">Adm Critérios</a>
                 </li>
@@ -194,15 +197,15 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <li>
                     <a href="cadTipo.php">Adm Tipo Contratação</a>
                 </li>
-                <li><a href="#">Adm Usuários</a>
-                    <ul>
+                <li><a href="consultarUsuario.php">Adm Usuários</a>
+                    <!-- <ul>
                         <li>
                             <a href="consultarUsuario.php">Adm Usuário</a>
                         </li>
                         <li>
                             <a href="cadPerfil.php">Adm Perfil</a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </li>
                 <li><a href="#">Adm Menus</a>
                     <ul>
@@ -220,19 +223,14 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <li>
                     <a href="cadAnexos.php">Adm Anexos</a>
                 </li>
-            <?php break;
-
-            case 4: ?>
-                <hr>
-                <hr>
-                <br>
-                <li>
-                    <a href="cadLicitacao.php" style="color:gold">Criar Licitação</a>
-                </li>
-            <?php break;
+        <?php // Se encontrou o ID 9, você pode sair do loop
+                break;
+            }
         }
+        ?>
 
-        if (strpos($login, '@') !== false) { ?>
+
+        <?php if (strpos($login, '@') !== false) { ?>
             <hr>
             <hr>
             <br>

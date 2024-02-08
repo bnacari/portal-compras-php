@@ -13,7 +13,7 @@ $loginADM   = null;
 
 if (strpos($login, '@') !== false) {
 
-    $querySelect2 = "SELECT * FROM ADMINISTRADOR WHERE EMAIL_ADM LIKE '$login' AND STATUS LIKE 'A'";
+    $querySelect2 = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$login' AND STATUS LIKE 'A'";
     $querySelect = $pdoCAT->query($querySelect2);
 
     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
@@ -27,7 +27,7 @@ if (strpos($login, '@') !== false) {
     if ($senha === $senhaBanco) {
         $_SESSION['sucesso'] = 1;
         $_SESSION['login'] = $login;
-        $_SESSION['admin'] = 0;
+        $_SESSION['perfil'] = 0;
         $_SESSION['email'] = $emailUsuario;
         $_SESSION['idUsuario'] = $idUsuario;
 
@@ -59,23 +59,37 @@ if ($ldapcon) {
 
         $_SESSION['login'] = $login;
 
-        $querySelect2 = "SELECT A.ID_PERFIL, P.NM_PERFIL, A.EMAIL_ADM, A.ID_ADM
-                            FROM ADMINISTRADOR A
-                            LEFT JOIN PERFIL P ON A.ID_PERFIL = P.ID_PERFIL
-                            WHERE LGN_ADM = '$login' AND STATUS = 'A'";
+        $querySelect2 = "SELECT U.ID_ADM, U.EMAIL_ADM, PU.ID_TIPO_LICITACAO, TL.NM_TIPO
+                            FROM USUARIO U 
+                            LEFT JOIN PERFIL_USUARIO PU ON U.ID_ADM = PU.ID_USUARIO
+                            LEFT JOIN TIPO_LICITACAO TL ON TL.ID_TIPO = PU.ID_TIPO_LICITACAO 
+                         WHERE U.LGN_ADM = '$login' AND U.STATUS = 'A'";
+
         $querySelect = $pdoCAT->query($querySelect2);
 
-        while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-            $idUsuario = $registros['ID_ADM'];
-            $idPerfil = $registros['ID_PERFIL'];
-            $nmPerfil = $registros['NM_PERFIL'];
-            $emailUsuario = $registros['EMAIL_ADM'];
-        endwhile;
+        $perfilUsuario = array();
+        $emailUsuario = null;
+        $idUsuario = null;
 
-        $_SESSION['admin'] = $idPerfil;
-        $_SESSION['nmPerfil'] = $nmPerfil;
+        while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) {
+            $idUsuario = $registros['ID_ADM'];
+            $emailUsuario = $registros['EMAIL_ADM'];
+            // Adicione cada ID_TIPO_LICITACAO ao array $perfilUsuario
+            $perfilUsuario[] = array(
+                'idPerfil' => $registros['ID_TIPO_LICITACAO'],
+                'nmPerfil' => $registros['NM_TIPO']
+            );
+        }
+
+        $_SESSION['perfil'] = $perfilUsuario;
         $_SESSION['email'] = $emailUsuario;
         $_SESSION['idUsuario'] = $idUsuario;
+
+        foreach ($_SESSION['perfil'] as $perfil) {
+            if ($perfil['idPerfil'] == 9) {
+                $_SESSION['isAdmin'] = 1;
+            }
+        }
 
         $_SESSION['redirecionar'] = '../index.php';
         $login = $_SESSION['login'];
@@ -83,12 +97,11 @@ if ($ldapcon) {
         $acao = 'Login';
         $idEvento = 0;
         redirecionar("../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
-
     } else {
-        
+
         $_SESSION['sucesso'] = 0;
 
-        $_SESSION['admin'] = 0;
+        $_SESSION['perfil'] = 0;
 
         $_SESSION['login'] = '';
 

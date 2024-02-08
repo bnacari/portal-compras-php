@@ -28,11 +28,10 @@ include('protectAdmin.php');
                 <select name="perfilUsuario" id="perfilUsuario" required oninvalid="exibirAlertaRespSolicitacao()" onchange="changeRespSolicitacao()">
                     <option value='0' selected>Selecione uma opção</option>
                     <?php
-                    $querySelect2 = "SELECT * FROM portalcompras.dbo.[PERFIL] WHERE DT_EXC_PERFIL IS NULL ORDER BY NM_PERFIL";
+                    $querySelect2 = "SELECT * FROM TIPO_LICITACAO WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO";
                     $querySelect = $pdoCAT->query($querySelect2);
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                        // echo "<option value='" . $registros["ID_PERFIL"] . ">" . $registros["NM_PERFIL"] . "</option>";
-                        echo "<option value='" . $registros["ID_PERFIL"] . "'>" . $registros["NM_PERFIL"] . "</option>";
+                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
                     endwhile;
                     ?>
                 </select>

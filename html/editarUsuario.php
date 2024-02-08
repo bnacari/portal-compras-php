@@ -7,41 +7,46 @@ include_once 'includes/menu.inc.php';
 
 include('protectAdmin.php');
 
-if ($_SESSION['admin'] == 5) {
-    // Não faça nada ou redirecione para onde for necessário se essas condições forem atendidas.
-} else {
-    header('Location: index.php');
-}
-
 // $matricula = filter_input(INPUT_GET, 'matricula', FILTER_SANITIZE_NUMBER_INT);
 $email = filter_input(INPUT_GET, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
 
 /////////////////////////////////////////////////////////////////////////
 
-$queryAdmin = "SELECT EMAIL_ADM FROM ADMINISTRADOR WHERE EMAIL_ADM like '$email'";
+$queryAdmin = "SELECT * FROM USUARIO WHERE EMAIL_ADM like '$email'";
 $querySelect = $pdoCAT->query($queryAdmin);
 
 // $existeUsuario = 0;
 
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $existeUsuario = $registros['EMAIL_ADM'];
+    $idUsuario = $registros['ID_ADM'];
 endwhile;
 
 // var_dump($existeUsuario);
 // exit();
 
 if (isset($existeUsuario)) {
-    $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].ADMINISTRADOR A 
-                        LEFT JOIN PERFIL P ON P.ID_PERFIL = A.ID_PERFIL
-                        WHERE EMAIL_ADM = '$email'";
-    $querySelect = $pdoCAT->query($querySelect2);
+    $queryLE = "SELECT U.*, TL.*
+    FROM USUARIO U 
+    LEFT JOIN PERFIL_USUARIO PU ON U.ID_ADM = PU.ID_USUARIO
+    LEFT JOIN TIPO_LICITACAO TL ON TL.ID_TIPO = PU.ID_TIPO_LICITACAO 
+    WHERE U.ID_ADM = $idUsuario";
 
-    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-        $idPerfilUsuario = $registros['ID_PERFIL'];
-        $nmUsuario = $registros['NM_ADM'];
-        $nmPerfilUsuario = $registros['NM_PERFIL'];
+    $querySelectLE = $pdoCAT->query($queryLE);
+
+    $perfilUsuario = array();
+    while ($registrosLE = $querySelectLE->fetch(PDO::FETCH_ASSOC)) :
+        $nmPerfil = $registrosLE['NM_TIPO'];
+        $idPerfil = $registrosLE['ID_TIPO'];
+        $nmUsuario = $registrosLE['NM_ADM'];
+        $registroPU = array(
+            'NM_TIPO' => $nmPerfil,
+            'ID_TIPO' => $idPerfil
+        );
+
+        // Adicione o novo registro ao array $registros
+        $perfilUsuario[] = $registroPU;
     endwhile;
-
 } else {
     $queryInsert = "SELECT [ID]
                     ,[sAMAccountName]
@@ -57,7 +62,7 @@ if (isset($existeUsuario)) {
                     ,[objectCategory]
                 FROM [ADCache].[dbo].[Users]
                 where mail like '$email'";
-    var_dump($queryInsert);
+    // var_dump($queryInsert);
     // exit();
 
     $queryInsert2 = $pdoCAT->query($queryInsert);
@@ -70,7 +75,7 @@ if (isset($existeUsuario)) {
     endwhile;
 
     $loginCriador = $_SESSION['login'];
-    $querySelect2 = "INSERT INTO ADMINISTRADOR VALUES ($matricula, '$nmUsuario', '$mail', GETDATE(), 'A', '$loginCriador', '$login', NULL, NULL)";
+    $querySelect2 = "INSERT INTO USUARIO VALUES ($matricula, '$nmUsuario', '$mail', GETDATE(), 'A', '$loginCriador', '$login', NULL, NULL)";
     // var_dump($querySelect2);
     // exit();
     $querySelect = $pdoCAT->query($querySelect2);
@@ -100,6 +105,8 @@ if (isset($existeUsuario)) {
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
             <!-- <h6><strong>Local a Visitar</strong></h6> -->
 
+            <input type="text" id="idUsuario" name="idUsuario" value="<?php echo $idUsuario ?>" readonly style="display: none">
+
             <div class="input-field col s4">
                 <input type="text" id="email" name="email" value="<?php echo $email ?>" readonly>
                 <label>E-mail</label>
@@ -111,18 +118,32 @@ if (isset($existeUsuario)) {
             </div>
 
             <div class="input-field col s4">
-                <select name="perfilUsuario" id="perfilUsuario" required>
-                    <option value='' disabled>Selecione uma opção</option>
+                <select name="perfilUsuario[]" id="perfilUsuario" multiple>
                     <?php
-                    $querySelect2 = "SELECT * FROM portalcompras.dbo.[PERFIL] WHERE DT_EXC_PERFIL IS NULL";
+                    $querySelect2 = "SELECT * FROM TIPO_LICITACAO WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO";
                     $querySelect = $pdoCAT->query($querySelect2);
 
-                    echo "<option value='" . $idPerfilUsuario . "' selected>" . $nmPerfilUsuario . "</option>";
+                    $queryPerfilUsuario = "SELECT TL.*
+                                            FROM USUARIO U 
+                                            LEFT JOIN PERFIL_USUARIO PU ON U.ID_ADM = PU.ID_USUARIO
+                                            LEFT JOIN TIPO_LICITACAO TL ON TL.ID_TIPO = PU.ID_TIPO_LICITACAO 
+                                            WHERE U.ID_ADM = $idUsuario";
+                    $queryPerfisUsuario = $pdoCAT->query($queryPerfilUsuario);
+
+                    // Obtenha os valores selecionados do banco de dados e armazene-os em $valoresSelecionados
+                    $perfisUsuario = array();
+                    while ($row = $queryPerfisUsuario->fetch(PDO::FETCH_ASSOC)) {
+                        $perfisUsuario[] = $row["ID_TIPO"];
+                    }
+
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                        // Verifica se o ID é diferente do ID já selecionado
-                        if ($registros["ID_PERFIL"] != $idPerfilUsuario) {
-                            echo "<option value='" . $registros["ID_PERFIL"] . "'>" . $registros["NM_PERFIL"] . "</option>";
-                        }
+                        $valorLE = $registros["ID_TIPO"];
+                        $descricaoLE = $registros["NM_TIPO"];
+
+                        // Verifique se o valor está na lista de valores selecionados
+                        $selecionadoLE = in_array($valorLE, $perfisUsuario) ? 'selected' : '';
+
+                        echo "<option value='" . $valorLE . "' $selecionadoLE>" . $descricaoLE . "</option>";
                     endwhile;
                     ?>
                 </select>

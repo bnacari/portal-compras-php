@@ -19,7 +19,7 @@ if ($_SESSION['sucesso'] == 1) {
     exit();
 }
 
-$querySelectPerfil = "SELECT * FROM ADMINISTRADOR WHERE EMAIL_ADM LIKE '$emailUsuario'";
+$querySelectPerfil = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$emailUsuario'";
 $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
 while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
     $nmUsuario = $registros['NM_ADM'];
@@ -41,7 +41,7 @@ if (!isset($email)) {
     exit();
 }
 
-$queryAdmin2 = "UPDATE ADMINISTRADOR SET SENHA = '$senhaNova' WHERE EMAIL_ADM LIKE '$emailUsuario'";
+$queryAdmin2 = "UPDATE USUARIO SET SENHA = '$senhaNova' WHERE EMAIL_ADM LIKE '$emailUsuario'";
 
 $queryDesativar = $pdoCAT->query($queryAdmin2);
 

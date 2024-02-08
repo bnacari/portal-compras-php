@@ -15,19 +15,16 @@ $pagina_atual = basename($_SERVER['PHP_SELF']);
 
 // var_dump($pagina_atual);
 
+$isAdmin = null;
 // Caso o usuário tente acessar qq trecho do sistema sem login realizado, o sistema direciona para a tela de LOGOUT
-if ($_SESSION['admin'] != 5) {
-
-    // if ($pagina_atual != 'cadLicitacao.php') {
-        $_SESSION['redirecionar'] = 'index.php';
-        redirecionar($_SESSION['redirecionar']);
-        exit();
-    // } 
+foreach ($_SESSION['perfil'] as $perfil) {
+    if ($perfil['idPerfil'] == 9) {
+        $isAdmin = 1;
+    }
 }
 
-// if (($_SESSION['admin'] == 4 && $pagina_atual != 'cadLicitacao.php')) {
-//     // $_SESSION['msg'] = 'Usuário não possui permissão para esta tela.';
-
-//     $_SESSION['redirecionar'] = 'index.php';
-//     redirecionar($_SESSION['redirecionar']);
-// }
+if (!isset($isAdmin)){
+    $_SESSION['redirecionar'] = 'index.php';
+    redirecionar($_SESSION['redirecionar']);
+    exit();
+}

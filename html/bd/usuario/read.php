@@ -9,17 +9,25 @@ $perfilUsuario = filter_input(INPUT_POST, 'perfilUsuario', FILTER_SANITIZE_SPECI
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recuperar e processar os dados do formulário
     // var_dump($perfilUsuario);
-    $querySelect2 = "SELECT *
-                    FROM [ADCache].[dbo].[Users] U 
-                    FULL OUTER JOIN portalcompras.dbo.ADMINISTRADOR A ON A.EMAIL_ADM COLLATE SQL_Latin1_General_CP1_CI_AI = U.mail COLLATE SQL_Latin1_General_CP1_CI_AI 
-                    LEFT JOIN portalcompras.dbo.PERFIL p on P.ID_PERFIL = A.ID_PERFIL
-                    WHERE 
-                    (sAMAccountName LIKE '$nome' OR displayName LIKE '%$nome%' OR A.NM_ADM like '%$nome%' OR A.EMAIL_ADM LIKE '%$nome%')
+    $querySelect2 = "WITH UserLicitacao AS (
+                        SELECT 
+                            U.*,
+                            A.*
+                        FROM [ADCache].[dbo].[Users] U 
+                        FULL OUTER JOIN portalcompras.dbo.USUARIO A ON A.EMAIL_ADM COLLATE SQL_Latin1_General_CP1_CI_AI = U.mail COLLATE SQL_Latin1_General_CP1_CI_AI 
+                        LEFT JOIN portalcompras.dbo.PERFIL_USUARIO PU on pu.ID_USUARIO = A.ID_ADM
+                        LEFT JOIN portalcompras.dbo.TIPO_LICITACAO TL ON TL.ID_TIPO = PU.ID_TIPO_LICITACAO
+                        WHERE
+                        (U.sAMAccountName LIKE '%$nome%' OR U.displayName LIKE '%$nome%' OR A.NM_ADM like '%$nome%' OR A.EMAIL_ADM LIKE '%$nome%')
                     ";
 
     if ($perfilUsuario != 0) {
-        $querySelect2 .= " AND P.ID_PERFIL = $perfilUsuario";
+        $querySelect2 .= " AND PU.ID_TIPO_LICITACAO = $perfilUsuario";
     }
+
+    $querySelect2 .= ")
+    SELECT distinct *
+    FROM UserLicitacao ";
 
     $querySelect = $pdoCAT->query($querySelect2);
 
@@ -45,8 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $administrador = $registros['ID_ADM'];
         $status = $registros['STATUS'];
-        $nmPerfil = $registros['NM_PERFIL'];
-        $idPerfil = $registros['ID_PERFIL'];
+        $nmPerfil = $registros['NM_TIPO'];
+        $idPerfil = $registros['ID_TIPO'];
 
 
         echo "<tr>";
@@ -59,21 +67,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <td>$nmPerfil</td>
             ";
 
-        if ($_SESSION['admin'] == 5) {
-            if ($unidade == 'externo') {
-                if ($status == 'A') {
-                    echo "<td style='text-align: center;'><a href='bd/usuario/desativa.php?email=$email' style='color:red'><i class='bi bi-x-circle'></i></a></td>";
+        foreach ($_SESSION['perfil'] as $perfil) {
+            if ($perfil['idPerfil'] == 9) {
+                if ($unidade == 'externo') {
+                    if ($status == 'A') {
+                        echo "<td style='text-align: center;'><a href='bd/usuario/desativa.php?email=$email' style='color:red'><i class='bi bi-x-circle'></i></a></td>";
+                    } else {
+                        echo "<td style='text-align: center;'><a href='bd/usuario/ativa.php?email=$email'><i class='bi bi-check-lg'></i></a></td>";
+                    }
                 } else {
-                    echo "<td style='text-align: center;'><a href='bd/usuario/ativa.php?email=$email'><i class='bi bi-check-lg'></i></a></td>";
+                    echo "<td style='text-align: center;'></td>";
                 }
-            }
-            else {
-                echo "<td style='text-align: center;'></td>";
             }
         }
 
-        if ($_SESSION['admin'] == 5) {
+        foreach ($_SESSION['perfil'] as $perfil) {
+            if ($perfil['idPerfil'] == 9) {
                 echo "<td style='text-align: center;'><a href='editarUsuario.php?email=$email'><i class='bi bi-sliders'></i></a></td>";
+            }
         }
 
         echo "</tr>";

@@ -27,7 +27,7 @@ if ($senhaUsuario != $senhaUsuario2) {
     exit();
 }
 
-$querySelectPerfil = "SELECT * FROM ADMINISTRADOR WHERE EMAIL_ADM LIKE '$emailUsuario'";
+$querySelectPerfil = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$emailUsuario'";
 $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
 while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
     $email = $registros['EMAIL_ADM'];
@@ -40,11 +40,11 @@ if ($email == $emailUsuario) {
     exit();
 }
 
-// $queryAdmin2 = "INSERT INTO ADMINISTRADOR (MAT_ADM, NM_ADM, EMAIL_ADM, DT_CADASTRO, STATUS, LGN_CRIADOR, LGN_ADM, ID_PERFIL, SENHA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+// $queryAdmin2 = "INSERT INTO USUARIO (MAT_ADM, NM_ADM, EMAIL_ADM, DT_CADASTRO, STATUS, LGN_CRIADOR, LGN_ADM, ID_PERFIL, SENHA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 // $stmt = $pdoCAT->prepare($queryAdmin2);
 // $stmt->execute([00000, $nmUsuario, $email,  GETDATE(), 'A', $login, 'externo', 6, "$senhaUsuario"]);
 
-$queryAdmin2 = "INSERT INTO ADMINISTRADOR VALUES (00000, '$nmUsuario', '$emailUsuario',  GETDATE(), 'A', 'externo', '$emailUsuario', 6, '$senhaUsuario')";
+$queryAdmin2 = "INSERT INTO USUARIO VALUES (00000, '$nmUsuario', '$emailUsuario',  GETDATE(), 'A', 'externo', '$emailUsuario', 6, '$senhaUsuario')";
 $querySelectPerfil2 = $pdoCAT->query($queryAdmin2);
 
 $_SESSION['msg'] = "Usuário cadastrado com sucesso.";

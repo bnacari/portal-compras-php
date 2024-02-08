@@ -38,7 +38,7 @@ try {
     // SE FOR RECUPERAÇÃO DE SENHA =======================================================================================================================
     if (isset($emailUsuario)) {
 
-        $querySelectPerfil = "SELECT * FROM ADMINISTRADOR WHERE EMAIL_ADM LIKE '$emailUsuario'";
+        $querySelectPerfil = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$emailUsuario'";
         $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
         while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
             $nmUsuario = $registros['NM_ADM'];
@@ -76,7 +76,7 @@ try {
 
         $querySelectAtualizacao = "SELECT ADM.NM_ADM, A.EMAIL_ADM, DL.* 
                                     FROM ATUALIZACAO A 
-                                    LEFT JOIN ADMINISTRADOR ADM ON ADM.ID_ADM = A.ID_ADM
+                                    LEFT JOIN USUARIO ADM ON ADM.ID_ADM = A.ID_ADM
                                     LEFT JOIN DETALHE_LICITACAO DL ON A.ID_LICITACAO = DL.ID_LICITACAO
                                     WHERE ADM.STATUS LIKE 'A'
                                     AND A.DT_EXC_ATUALIZACAO IS NULL

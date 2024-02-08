@@ -39,7 +39,7 @@ include_once 'includes/menu.inc.php';
                     <option value='Em Andamento' selected>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
                     <option value='Encerrado'>Encerrada</option>
-                    <?php if ($_SESSION['admin'] == 5) { ?>
+                    <?php if (isset($_SESSION['isAdmin'])) { ?>
                         <option value='Rascunho'>Rascunho</option>
                     <?php } ?>
                 </select>

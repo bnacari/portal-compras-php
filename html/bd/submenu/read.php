@@ -49,7 +49,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
         echo "<td style='text-align: center;'><a href='bd/submenu/ativa.php?idSubMenu=$idSubMenu' title='Ativar Menu'><i class='bi bi-check-lg'></i></a></td>";
     }
 
-    if ($_SESSION['admin'] == 5) {
+    if (isset($_SESSION['isAdmin'])) {
         echo "<td style='text-align: center;'><a href='editarSubMenu.php?idSubMenu=$idSubMenu'><i class='material-icons'>edit</i></a></td>";
     }
     

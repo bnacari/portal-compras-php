@@ -5,13 +5,17 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 
-include('protectAdmin.php');
+include('protectPerfil.php');
 
-if ($_SESSION['admin'] == 5) {
-    // Não faça nada ou redirecione para onde for necessário se essas condições forem atendidas.
-} else {
-    header('Location: index.php');
+foreach ($_SESSION['perfil'] as $perfil) {
+    $idPerfil[] = $perfil['idPerfil'];
+
+    if ($perfil['idPerfil'] == 9) {
+        $isAdmin = 1;
+    }
 }
+
+$idPerfilFinal = implode(',', $idPerfil);
 
 ?>
 
@@ -29,8 +33,14 @@ if ($_SESSION['admin'] == 5) {
                 <select name="tipoLicitacao" id="tipoLicitacao">
                     <option value='' selected>Selecione uma opção</option>
                     <?php
-                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO";
-                    $querySelect = $pdoCAT->query($querySelect2);
+
+                    if (isset($isAdmin)) {
+                        $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' ORDER BY NM_TIPO";
+                        $querySelect = $pdoCAT->query($querySelect2);
+                    } else {
+                        $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' AND ID_TIPO IN ($idPerfilFinal) ORDER BY NM_TIPO";
+                        $querySelect = $pdoCAT->query($querySelect2);
+                    }
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
                         echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
                     endwhile;
@@ -168,12 +178,12 @@ if ($_SESSION['admin'] == 5) {
     // function exibirAlertaTipoContratacao() {
     //     alert("Por favor, preencha o campo 'Tipo Contratação'");
     // }
-    
+
 
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;
         var statusLicitacao = document.getElementById('statusLicitacao').value;
-       
+
         if (tipoLicitacao === '') {
             alert('Por favor, selecione uma opção para o "Tipo de Contratação".');
             return false; // Evita o envio do formulário se a validação falhar
@@ -183,7 +193,7 @@ if ($_SESSION['admin'] == 5) {
             alert('Por favor, selecione uma opção para o "Status".');
             return false; // Evita o envio do formulário se a validação falhar
         }
-        
+
 
         // Continue com o envio do formulário se a validação passar
         return true;

@@ -7,7 +7,7 @@ include_once('../../protectAdmin.php');
 
 $email = filter_input(INPUT_GET, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
 
-$queryAdmin = "SELECT ID_ADM,EMAIL_ADM FROM ADMINISTRADOR WHERE EMAIL_ADM LIKE '$email' AND STATUS like 'I'";
+$queryAdmin = "SELECT ID_ADM,EMAIL_ADM FROM USUARIO WHERE EMAIL_ADM LIKE '$email' AND STATUS like 'I'";
 
 $queryDesativar = $pdoCAT->query($queryAdmin);
 
@@ -17,7 +17,7 @@ while ($registros = $queryDesativar->fetch(PDO::FETCH_ASSOC)) :
 endwhile;
 
 if (isset($existeUsuario)) {
-    $queryUpdate = $pdoCAT->query("UPDATE ADMINISTRADOR SET STATUS = 'A' WHERE EMAIL_ADM like '$email'");
+    $queryUpdate = $pdoCAT->query("UPDATE USUARIO SET STATUS = 'A' WHERE EMAIL_ADM like '$email'");
 
     $_SESSION['msg'] = "Usuário ativado com sucesso.";
 

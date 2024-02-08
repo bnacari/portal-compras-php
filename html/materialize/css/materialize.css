@@ -7674,14 +7674,14 @@ select:disabled {
   top: 0;
   left: 50%;
   background-color: #193446;
-  width: 300px;
+  width: 500px;
   font-size: 12px;
 }
 
 /* ITEMSUBMENU */
 #menu ul ul ul li {
   background-color: #193446;
-  width: 240px;
+  width: 490px;
 }
 
 #menu ul ul ul li:hover>ul {
