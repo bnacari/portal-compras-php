@@ -53,7 +53,7 @@ endwhile;
 
 foreach ($_SESSION['perfil'] as $perfil) {
     if ($perfil['idPerfil'] == $tipoLicitacao || isset($_SESSION['isAdmin'])) {
-       $isAdminProtect = 1;
+        $isAdminProtect = 1;
     }
 }
 if ($isAdminProtect != 1) {
@@ -450,7 +450,13 @@ endwhile;
             var formData = new FormData();
 
             for (var i = 0; i < files.length; i++) {
-                formData.append('files[]', files[i]);
+                // Verifica se o arquivo é do tipo PDF
+                if (files[i].type === 'application/pdf') {
+                    formData.append('files[]', files[i]);
+                } else {
+                    alert('O arquivo "' + files[i].name + '" não é um PDF. Por favor, selecione apenas arquivos PDF.');
+                    return; // Encerra a função se encontrar um arquivo que não é PDF
+                }
             }
 
             formData.append('idLicitacao', idLicitacao);
@@ -473,6 +479,7 @@ endwhile;
             alert('Por favor, selecione um ou mais arquivos.');
         }
     }
+
 
     function handleDragOver(event) {
         event.preventDefault();
