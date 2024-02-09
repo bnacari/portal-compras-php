@@ -59,7 +59,7 @@
   width: 32px;
   /* Defina a largura desejada, neste caso, 30 pixels */
   height: 40px;
-  /* Defina a altura desejada, neste caso, 50 pixels */
+  z-index: 999999999;
 }
 
 .left2 h3 {
@@ -71,6 +71,7 @@
   /* text-transform: uppercase; */
   font-size: 22px;
   /* font-weight: 800; */
+  z-index: 99999999999999;
 }
 
 .left2 span {
@@ -327,10 +328,14 @@ i.bi {
   padding: 5px 0;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 500px) {
   .content3 {
     width: 100%;
     margin-left: 30px;
+  }
+
+  .header2 {
+    width: 52%;
   }
 
   /* SUBMENU */
@@ -354,8 +359,9 @@ i.bi {
   }
 
   .left2 h3 {
-    top: 17;
+    top: 15;
     font-size: 18px;
+    top: 5;
   }
 
   .rTable thead {
@@ -7660,7 +7666,7 @@ select:disabled {
   background-color: #193446;
   color: #fff;
   padding: 15px;
-  z-index: 2;
+  z-index: 2 !important;
   border-radius: 8px;
   height: 100%;
   font-size: 14px;
