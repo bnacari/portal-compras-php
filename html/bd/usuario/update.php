@@ -15,6 +15,8 @@ $idUsuario = $_POST['idUsuario'];
 // var_dump($email);
 // exit();
 
+$login = $_SESSION['login'];
+$tela = 'Usuário';
 
 if (isset($_POST['perfilUsuario']) && is_array($_POST['perfilUsuario'])) {
     // Recupere o array de valores selecionados
@@ -22,16 +24,16 @@ if (isset($_POST['perfilUsuario']) && is_array($_POST['perfilUsuario'])) {
     // var_dump($perfilUsuarioSelecionadas);
     // exit();
     $queryInsertidPerfil = $pdoCAT->query("DELETE FROM [PERFIL_USUARIO] WHERE ID_USUARIO = $idUsuario");
-    // echo "<br>";
 
     foreach ($perfilUsuarioSelecionadas as $idPerfil) {
         $queryInsertidPerfil = $pdoCAT->query("INSERT INTO [PERFIL_USUARIO] VALUES ($idUsuario, $idPerfil)");
-        // echo "ID perfil: " . $idPerfil . "<br>";
-        // echo "matricula: " . $_SESSION['idUsuario'] . "<br>";
+
+        $acao = 'Perfil Inserido: ' . $idPerfil;
+        $idEvento = $idUsuario;
+        $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$tela', '$acao', $idEvento)");
     }
 
-
-    $querySelectPerfil = "SELECT NM_PERFIL FROM PERFIL WHERE ID_PERFIL = $idPerfil";
+    $querySelectPerfil = "SELECT NM_TIPO FROM TIPO_LICITACAO WHERE ID_TIPO = $idPerfil";
     $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
     while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
         $nmPerfil = $registros['NM_PERFIL'];
@@ -61,23 +63,7 @@ while ($registros = $queryDesativar->fetch(PDO::FETCH_ASSOC)) :
 
 endwhile;
 
-
-
-if (isset($matricula)) {
-    $queryAdmin2 = "UPDATE USUARIO SET ID_PERFIL = $idPerfil WHERE MAT_ADM = '$matricula'";
-} else {
-    $queryAdmin2 = "UPDATE USUARIO SET ID_PERFIL = $idPerfil WHERE EMAIL_ADM LIKE '$email'";
-}
-$queryDesativar = $pdoCAT->query($queryAdmin2);
-
 $_SESSION['msg'] = "Usuário atualizado com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
-
-
-$_SESSION['redirecionar'] = '../consultarUsuario.php';
-$login = $_SESSION['login'];
-$tela = 'Usuário';
-$acao = 'Perfil atualizado para ' . $nmPerfil;
-$idEvento = $idUsuario;
-redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
+$_SESSION['redirecionar'] = '../../consultarUsuario.php';
+redirecionar($_SESSION['redirecionar']);
