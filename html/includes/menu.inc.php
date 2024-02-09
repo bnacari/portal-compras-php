@@ -71,21 +71,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 }
 
 ?>
-
-<header class="header2">
-    <input type="checkbox" id="check" checked>
-
-    <label class="label2" for="check" id="menuToggle">
-        <ion-icon name="menu-outline" id="sidebar_btn"></ion-icon>
-    </label>
-    <div class="left2">
-        <img src="imagens/logo_icon.png" class="imageMenu" alt="">
-    </div>
-    <div class="left2">
-        <a href="index.php">
-            <h3>Portal de Compras</h3>
-        </a>
-    </div>
+<div class="header3">
     <div>
         <?php if (isset($_SESSION['login'])) { ?>
             <label class="userLogin">
@@ -111,6 +97,23 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
 
     </div>
+</div>
+
+<header class="header2">
+    <input type="checkbox" id="check" checked>
+
+    <label class="label2" for="check" id="menuToggle">
+        <ion-icon name="menu-outline" id="sidebar_btn"></ion-icon>
+    </label>
+    <div class="left2">
+        <img src="imagens/logo_icon.png" class="imageMenu" alt="">
+    </div>
+    <div class="left2">
+        <a href="index.php">
+            <h3>Portal de Compras</h3>
+        </a>
+    </div>
+
 
     <?php
 
