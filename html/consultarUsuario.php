@@ -60,7 +60,7 @@ include('protectAdmin.php');
                             <th>Nome</th>
                             <th>Unidade</th>
                             <th>e-mail</th>
-                            <th>Perfil</th>
+                            <!-- <th>Perfil</th> -->
                             <th>Ativar/Desativar</th>
                             <!-- <th style="text-align: center;">Setar Administrador?</th> -->
                             <th>Editar</th>

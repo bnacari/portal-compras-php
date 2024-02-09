@@ -121,9 +121,9 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 
     if ($permitirAtualizacao == 1 && isset($email)) {
         if (!isset($idAtualizacao)) {
-            echo "<a href='#' onclick='enviarAtualizacao($idLicitacao)' style='color:#FF1919; padding-left:5px' title='Usuário receberá notificação em caso de atualização da licitação.'><i class='material-icons'>favorite_border</i></a>";
+            echo "<a href='#' onclick='enviarAtualizacao($idLicitacao)' style='color:#FF1919; padding-left:5px' title='Usuário receberá notificação em caso de atualização da licitação.'><i class='bi bi-bell'></i></a>";
         } else {
-            echo "<a href='#' onclick='desativarAtualizacao($idAtualizacao)' style='color:#FF1919; padding-left:5px' title='Usuário deixará de receber notificação em caso de atualização da licitação.'><i class='material-icons'>favorite</i></a>";
+            echo "<a href='#' onclick='desativarAtualizacao($idAtualizacao)' style='color:#FF1919; padding-left:5px' title='Usuário deixará de receber notificação em caso de atualização da licitação.'><i class='bi bi-bell-fill'></i></a>";
         }
     }
 

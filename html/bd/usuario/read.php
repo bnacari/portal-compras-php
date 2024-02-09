@@ -64,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <td>$nome</td>
             <td>$unidade</td>
             <td>$email</td>
-            <td>$nmPerfil</td>
             ";
 
         foreach ($_SESSION['perfil'] as $perfil) {
