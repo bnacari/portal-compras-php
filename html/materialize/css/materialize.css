@@ -299,10 +299,24 @@ i.bi {
   padding: 5px 0;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 700px) {
   .content3 {
     width: 100%;
     margin-left: 30px;
+  }
+
+  /* SUBMENU */
+  #menu ul ul {
+    left: 30% !important;
+  }
+
+  /* ITEMSUBMENU */
+  #menu ul ul ul {
+    left: 50% !important;
+  }
+
+  #menu ul ul ul {
+    width: 50% !important;
   }
 
   .up_menu_btn {
@@ -7026,11 +7040,16 @@ textarea.materialize-textarea+label:after,
 /* Estilos para o conteúdo do modal */
 .modal-content {
   background-color: #fefefe;
-  margin: 0 auto; /* Remover a margem vertical e alinhar horizontalmente */
-  border: none; /* Remover a borda */
-  border-radius: 0; /* Remover o arredondamento dos cantos */
-  width: 80%; /* Largura do modal */
-  max-width: 600px; /* Largura máxima do modal */
+  margin: 0 auto;
+  /* Remover a margem vertical e alinhar horizontalmente */
+  border: none;
+  /* Remover a borda */
+  border-radius: 0;
+  /* Remover o arredondamento dos cantos */
+  width: 80%;
+  /* Largura do modal */
+  max-width: 600px;
+  /* Largura máxima do modal */
 }
 
 /* Estilos para o botão de fechar */
@@ -7169,10 +7188,14 @@ textarea.materialize-textarea+label:after,
 
 /* Estilo personalizado para o modal */
 .modal-header {
-  background-color: #0868A5; /* Cor de fundo desejada */
-  color: white; /* Cor do texto */
-  border-bottom: none; /* Remover a borda inferior */
-  padding: 20px; /* Espaçamento interno */
+  background-color: #0868A5;
+  /* Cor de fundo desejada */
+  color: white;
+  /* Cor do texto */
+  border-bottom: none;
+  /* Remover a borda inferior */
+  padding: 20px;
+  /* Espaçamento interno */
 }
 
 .modal-title {
@@ -7573,9 +7596,6 @@ select:disabled {
   fill: rgba(0, 0, 0, 0.42);
 }
 
-
-
-
 .prefix~.select-wrapper {
   margin-left: 3rem;
   width: 92%;
@@ -7585,7 +7605,6 @@ select:disabled {
 .prefix~label {
   margin-left: 3rem;
 }
-
 
 .label2 #sidebar_btn {
   z-index: 999;
@@ -7602,7 +7621,6 @@ select:disabled {
 .label2 #sidebar_btn:hover {
   color: #51b3ec;
 }
-
 
 /* CONFIGURAÇÃO DO MENU */
 #menu {
@@ -7627,6 +7645,7 @@ select:disabled {
 }
 
 #menu ul {
+  z-index: 1;
   list-style: none;
   padding: 0;
   padding-top: 10;
@@ -7655,13 +7674,17 @@ select:disabled {
   z-index: 1;
   margin-left: 0;
   display: none;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100%;
+  position: fixed;
+  /* Alterado para fixed */
+  top: 50;
+  /* Agora o submenu abrirá no topo da página */
+  left: 5%;
+  width: 30%;
   background-color: #132835;
-
+  height: 100%;
+  /* Adicionando esta linha */
 }
+
 
 /* SUBMENU */
 #menu ul ul li {
@@ -7677,23 +7700,18 @@ select:disabled {
 
 /* ITEMSUBMENU */
 #menu ul ul ul {
-  top: 0;
-  left: 100%;
-}
-
-/* ITEMSUBMENU */
-#menu ul ul ul {
-  top: 0;
-  left: 50%;
+  left: 10%;
+  top: 50;
+  /* Agora o submenu abrirá no topo da página */
   background-color: #193446;
-  width: 500px;
-  font-size: 12px;
+  width: 30%;
+  /* font-size: 12px; */
 }
 
 /* ITEMSUBMENU */
 #menu ul ul ul li {
   background-color: #193446;
-  width: 490px;
+  width: 95%;
 }
 
 #menu ul ul ul li:hover>ul {
@@ -7764,5 +7782,3 @@ input[type="checkbox"]+label {
   line-height: 20px;
   /* Ajuste conforme necessário para o tamanho da área do checkbox */
 }
-
-

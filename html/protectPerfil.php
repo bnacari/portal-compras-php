@@ -9,7 +9,7 @@ if (!isset($_SESSION)) {
 
 // echo "<script>alert($idLicitacao);</script>;";
 
-// Caso o usuário tente acessar qq trecho do sistema sem login realizado, o sistema direciona para a tela de LOGOUT
+// Caso o usuário tente acessar qq trecho do sistema sem permissão, o sistema direciona para a tela de index
 if (empty($_SESSION['perfil']))
 {
     $_SESSION['redirecionar'] = 'index.php';

@@ -198,15 +198,8 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <li>
                     <a href="cadTipo.php">Adm Tipo Contratação</a>
                 </li>
-                <li><a href="consultarUsuario.php">Adm Usuários</a>
-                    <!-- <ul>
-                        <li>
-                            <a href="consultarUsuario.php">Adm Usuário</a>
-                        </li>
-                        <li>
-                            <a href="cadPerfil.php">Adm Perfil</a>
-                        </li>
-                    </ul> -->
+                <li>
+                    <a href="consultarUsuario.php">Adm Usuários</a>
                 </li>
                 <li><a href="#">Adm Menus</a>
                     <ul>
