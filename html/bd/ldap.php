@@ -5,6 +5,7 @@ session_start();
 include_once '../includes/header.inc.php';
 include_once 'conexao.php';
 include_once '../redirecionar.php';
+
 // include_once '../api.php';
 
 $login      = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);

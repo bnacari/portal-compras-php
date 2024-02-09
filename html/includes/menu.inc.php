@@ -105,7 +105,8 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
         <?php } ?>
 
-        <?php if (isset($_SESSION['isAdmin'])) { ?>
+        <?php if (!empty($_SESSION['perfil'])) {
+        ?>
             <a href="cadLicitacao.php" class="up_menu_btn" title="Cadastrar Licitação"><i class="bi bi-plus-circle"></i></a>
         <?php } ?>
         <a href="consultarLicitacao.php" class="up_menu_btn" title="Pesquisar Licitações"><i class="bi bi-search"></i></a>
