@@ -20,7 +20,7 @@ include('protectAdmin.php');
 
             <div class="input-field col s6">
                 <i class="material-icons prefix">input</i>
-                <input type="text" name="nome" id="nome" maxlength="100" style="text-transform: uppercase" value='nacari' autofocus>
+                <input type="text" name="nome" id="nome" maxlength="100" style="text-transform: uppercase" autofocus>
                 <label for="nome">Nome/Login do Usuário</label>
             </div>
 
