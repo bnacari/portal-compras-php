@@ -3441,6 +3441,11 @@ a {
     display: none !important;
   }
 
+  fieldset {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
   .formulario {
     display: flex;
     flex-wrap: wrap;
