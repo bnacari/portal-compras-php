@@ -13,7 +13,7 @@ include('protectAdmin.php');
 <div class="row container">
     <fieldset class="formulario">
         <form action="bd/tipo/create.php" method="post" class="col s12 formulario" id="formFiltrar">
-            <h5 class="light center">Administrar Critérios</h5>
+            <h5 class="light" style="color: #404040">Administrar Critérios</h5>
             <div class="input-field col s12">
                 <label>Critério</label>
                 <input type="text" id="nmTipo" name="nmTipo" required autofocus>
@@ -28,7 +28,7 @@ include('protectAdmin.php');
 
     <fieldset class="formulario">
         <div>
-            <h5 class="light">Tipos de Contratação Cadastrados</h5>
+            <h5 class="light" style="color: #404040">Tipos de Contratação Cadastrados</h5>
             <hr>
         </div>
 

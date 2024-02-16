@@ -16,7 +16,7 @@ include('protectAdmin.php');
         <form action="consultarUsuario.php" method="post" class="col s12 formulario" id="formFiltrar">
 
             <!-- <legend><img src="imagens/batman-icon.png" alt="[imagem]" width="100"></legend> -->
-            <h5 class="light center">Administrar Usuários</h5>
+            <h5 class="light" style="color: #404040">Administrar Usuários</h5>
 
             <div class="input-field col s6">
                 <i class="material-icons prefix">input</i>
@@ -48,7 +48,7 @@ include('protectAdmin.php');
 
     <fieldset class="formulario">
         <div class="col s12">
-            <h5 class="light">Usuários Cadastrados</h5>
+            <h5 class="light" style="color: #404040">Usuários Cadastrados</h5>
             <hr>
 
             <div class="content3">

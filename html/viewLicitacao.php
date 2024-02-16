@@ -68,7 +68,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
         <form action="consultarLicitacao.php" enctype="multipart/form-data">
             <fieldset class="formulario col s12">
                 <p>&nbsp;</p>
-                <h5 class="light center"><?php echo $tituloLicitacao ?></h5>
+                <h5 class="light" style="color: #404040"><?php echo $tituloLicitacao ?></h5>
                 <p>&nbsp;</p>
             </fieldset>
 

@@ -23,7 +23,7 @@ $idPerfilFinal = implode(',', $idPerfil);
 <div class="row container">
     <form action="bd/licitacao/create.php" method="post" class="col s12 formulario" enctype="multipart/form-data" onsubmit="return validarFormulario()">
         <fieldset class="formulario col s12">
-            <h5 class="light center">Criar Licitação</h5>
+            <h5 class="light" style="color: #404040">Criar Licitação</h5>
         </fieldset>
         <p>&nbsp;</p>
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">

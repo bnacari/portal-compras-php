@@ -13,7 +13,7 @@ include('protectAdmin.php');
     <fieldset class="formulario col s12">
         <form class="col s12 formulario">
 
-            <h5 class="light center">Administrar Anexos</h5>
+            <h5 class="light" style="color: #404040">Administrar Anexos</h5>
             <input type="hidden" id="idLicitacao" value="anexos" />
 
             <div class="input-field col s12">

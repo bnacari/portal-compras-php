@@ -15,7 +15,7 @@ include_once 'includes/menu.inc.php';
 
         <form action="bd/usuario/trocaSenha.php" method="post" class="col s12 formulario" id="formFiltrar">
 
-            <h5 class="light center">Trocar Senha</h5>
+            <h5 class="light" style="color: #404040">Trocar Senha</h5>
 
             <div class="input-field col s12">
                 <label>Senha Atual</label>

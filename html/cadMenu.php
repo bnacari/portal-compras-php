@@ -15,7 +15,7 @@ include('protectAdmin.php');
 
         <form action="bd/menus/create.php" method="post" class="col s12 formulario" id="formFiltrar">
 
-            <h5 class="light center">Administrar Menus</h5>
+            <h5 class="light" style="color: #404040">Administrar Menus</h5>
 
             <div class="input-field col s12">
                 <label>Nome Menu</label>
@@ -37,7 +37,7 @@ include('protectAdmin.php');
     <p>&nbsp;</p>
 
     <fieldset class="formulario">
-        <h5 class="light">Menus Cadastrados</h5>
+        <h5 class="light" style="color: #404040">Menus Cadastrados</h5>
         <hr>
         <div class="content3">
             <?php include_once 'bd/menus/read.php'; ?>

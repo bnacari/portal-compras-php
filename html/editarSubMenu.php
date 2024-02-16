@@ -38,7 +38,7 @@ endwhile;
 <div class="row container">
     <form action="bd/submenu/update.php" method="post" class="col s12 formulario" id="formFiltrar">
         <fieldset class="formulario col s12">
-            <h5 class="light center">Editar Submenu</h5>
+            <h5 class="light" style="color: #404040">Editar Submenu</h5>
         </fieldset>
 
         <input style="display:none" type="text" id="idSubMenu" name="idSubMenu" value="<?php echo $idSubMenu ?>">

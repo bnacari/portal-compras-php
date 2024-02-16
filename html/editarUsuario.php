@@ -96,7 +96,7 @@ if (isset($existeUsuario)) {
 <div class="row container">
     <form action="bd/usuario/update.php" method="post" class="col s12 formulario" id="formFiltrar">
         <fieldset class="formulario col s12" style="padding:15px; border-color:#eee; border-radius:10px">
-            <h5 class="light center">Editar Usuário</h5>
+            <h5 class="light" style="color: #404040">Editar Usuário</h5>
         </fieldset>
 
         <div id="idUsuario" data-id="<?php echo $idUsuario; ?>"></div>

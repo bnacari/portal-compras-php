@@ -10,7 +10,7 @@ include_once 'includes/menu.inc.php';
 <div class="row container">
     <fieldset class="formulario">
         <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar">
-            <h5 class="light center">Filtrar Licitações</h5>
+            <h5 class="light" style="color: #404040">Filtrar Licitações</h5>
 
             <div class="input-field col s4">
                 <i class="material-icons prefix">input</i>
@@ -56,7 +56,7 @@ include_once 'includes/menu.inc.php';
     <p>&nbsp;</p>
 
     <fieldset class="formulario">
-        <h5 class="light">Licitações</h5>
+        <h5 class="light" style="color: #404040">Licitações</h5>
         <hr>
         <div class="content3">
             <?php include_once 'bd/licitacao/read.php'; ?>

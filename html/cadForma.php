@@ -15,7 +15,7 @@ include('protectAdmin.php');
 
         <form action="bd/forma/create.php" method="post" class="col s12 formulario" id="formFiltrar">
 
-            <h5 class="light center">Administrar Forma de Licitação</h5>
+            <h5 class="light" style="color: #404040">Administrar Forma de Licitação</h5>
 
             <div class="input-field col s12">
                 <label>Nome</label>
@@ -32,7 +32,7 @@ include('protectAdmin.php');
     <p>&nbsp;</p>
 
     <fieldset class="formulario">
-        <h5 class="light">Formas de Licitação Cadastradas</h5>
+        <h5 class="light" style="color: #404040">Formas de Licitação Cadastradas</h5>
         <hr>
         <div class="content3">
             <?php include_once 'bd/forma/read.php'; ?>

@@ -31,9 +31,9 @@
   content: '';
   position: absolute;
   top: 0;
-  left: calc(100% - 50px);
+  left: calc(100% );
   /* Ajuste o valor conforme necessário para a inclinação da diagonal */
-  width: 110px;
+  width: 60px;
   /* Ajuste o valor conforme necessário para a inclinação da diagonal */
   height: 100%;
   background: #fff;
@@ -701,7 +701,7 @@ i.bi {
 }
 
 .container2 h5 {
-  font-weight: 700;
+  font-weight: 800;
   text-align: center;
 }
 

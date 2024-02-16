@@ -100,7 +100,7 @@ endwhile;
     <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data" onsubmit="return validarFormulario()">
 
         <fieldset class="formulario col s12">
-            <h5 class="light center">Editar Licitação <?php echo $nmTipo ?> <?php echo $codLicitacao ?></h5>
+            <h5 class="light" style="color: #404040">Editar Licitação <?php echo $nmTipo ?> <?php echo $codLicitacao ?></h5>
         </fieldset>
 
         <input type="text" name="idLicitacao" id="idLicitacao" value="<?php echo $idLicitacao ?>" style="display:none" readonly required>
