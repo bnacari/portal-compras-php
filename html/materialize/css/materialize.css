@@ -16,11 +16,12 @@
 .header2 {
   z-index: 10;
   position: fixed;
-  background: #132835;
+  background: #ffffff;
   padding: 15px;
   width: 25%;
-  height: 50px;
-  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+  height: 60px;
+  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1);
+  /* Adiciona uma sombra suave */
   /* overflow: hidden;  */
   /* top: 10; */
 }
@@ -30,32 +31,37 @@
   content: '';
   position: absolute;
   top: 0;
-  left: calc(100% - 50px); /* Ajuste o valor conforme necessário para a inclinação da diagonal */
-  width: 100px; /* Ajuste o valor conforme necessário para a inclinação da diagonal */
+  left: calc(100% - 50px);
+  /* Ajuste o valor conforme necessário para a inclinação da diagonal */
+  width: 110px;
+  /* Ajuste o valor conforme necessário para a inclinação da diagonal */
   height: 100%;
-  background: #132835; /* Cor de fundo correspondente */
+  background: #fff;
+  /* Cor de fundo correspondente */
   transform-origin: top left;
-  transform: skewX(-45deg); /* Inclinação da diagonal */
-  box-shadow: 4px 0 2px rgba(0, 0, 0, 0.1); /* Adiciona sombra à diagonal */
+  transform: skewX(-45deg);
+  /* Inclinação da diagonal */
+  box-shadow: 4px 0 2px rgba(0, 0, 0, 0.1);
+  /* Adiciona sombra à diagonal */
 }
 
 .header3 {
   z-index: 1;
   position: fixed;
-  background: rgb(29, 61, 82);
+  background: #01499B;
   padding: 15px;
   width: 100%;
   height: 50px;
-  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.1);
   /* overflow: hidden;  */
-  top: -10;
+  top: 0;
 }
 
 
 .imageMenu {
   position: absolute;
   left: 40;
-  top: 5;
+  top: 10;
   width: 32px;
   /* Defina a largura desejada, neste caso, 30 pixels */
   height: 40px;
@@ -65,12 +71,12 @@
 .left2 h3 {
   position: absolute;
   left: 45;
-  top: 15;
-  color: #fff;
+  top: 20;
+  color: #005596;
   margin: 0px 40;
   /* text-transform: uppercase; */
   font-size: 22px;
-  /* font-weight: 800; */
+  font-weight: 800;
   z-index: 99999999999999;
 }
 
@@ -81,7 +87,7 @@
 .userLogin {
   position: absolute;
   right: 185;
-  top: 20;
+  top: 15;
   font-size: 15px;
   text-decoration: none;
   float: right;
@@ -97,7 +103,7 @@
 .up_menu_btn {
   float: right;
   margin-right: 14px;
-  margin-top: 5px;
+  margin-top: 0px;
   font-size: 12px;
   color: #fff;
   z-index: 999;
@@ -354,14 +360,13 @@ i.bi {
 
   .up_menu_btn {
     margin-right: 14px;
-    margin-top: 7px;
+    margin-top: 5px;
     font-size: 9px;
   }
 
   .left2 h3 {
-    top: 15;
+    top: 10;
     font-size: 18px;
-    top: 5;
   }
 
   .rTable thead {
@@ -2912,7 +2917,7 @@ body {
   /*AZUL MÁSCULO (PADRÃO BITOCA)*/
   /* background: #E3F2FD;  */
   /*AZUL CALCINHA (PADRÃO CESAN)*/
-  background: #F9F9F9;
+  background: #F6F8FC;
   justify-content: center;
   align-items: center;
   margin: 0;
@@ -3430,7 +3435,6 @@ a {
   -ms-flex-align: center;
   align-items: center;
 }
-
 
 /* TRECHO RESPONSÁVEL PELA RESPONSIVIDADE DOS CAMPOS */
 /* OBRIGA O CAMPO A PULAR PARA PRÓXIMA LINHA */
@@ -5437,11 +5441,8 @@ h6 {
 }
 
 h7 {
-  font-size: 1.05rem;
-  line-height: 110%;
-  margin: 0.7666666667rem 0 0.46rem 0;
+  font-size: 1.1rem;
   color: #004E8C;
-
 }
 
 em {
@@ -7651,9 +7652,9 @@ select:disabled {
   z-index: 999;
   position: fixed;
   left: 5px;
-  color: #fff;
+  color: #005596;
   font-size: 25px;
-  margin: 25px 0;
+  margin: 30px 0;
   cursor: pointer;
   transition: 0.5s;
   transition-property: color;
@@ -7670,7 +7671,7 @@ select:disabled {
   position: fixed;
   top: 20px;
   left: 0;
-  background: rgb(29, 61, 82);
+  background: #01499B;
   color: #fff;
   padding: 15px;
   z-index: 2 !important;
@@ -7691,7 +7692,7 @@ select:disabled {
   padding: 0;
   padding-top: 10;
   margin: 0;
-  background: rgb(29, 61, 82);
+  background: #01499B;
   width: 100%;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -7721,7 +7722,7 @@ select:disabled {
   /* Agora o submenu abrirá no topo da página */
   left: 5%;
   width: 30%;
-  background-color: #132835;
+  background-color: #00ADEF;
   height: 100%;
   /* Adicionando esta linha */
 }
@@ -7731,7 +7732,8 @@ select:disabled {
 #menu ul ul li {
   position: relative;
   margin-left: 10px;
-  background-color: #132835;
+  background-color: #00ADEF;
+  margin-top: 10px;
 
 }
 
@@ -7744,14 +7746,14 @@ select:disabled {
   left: 10%;
   top: 50;
   /* Agora o submenu abrirá no topo da página */
-  background-color: #193446;
+  background-color: #01499B;
   width: 30%;
   /* font-size: 12px; */
 }
 
 /* ITEMSUBMENU */
 #menu ul ul ul li {
-  background-color: #193446;
+  background-color: #01499B;
   width: 95%;
 }
 
