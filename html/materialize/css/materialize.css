@@ -7722,7 +7722,7 @@ select:disabled {
   top: 50;
   /* Agora o submenu abrirá no topo da página */
   left: 5%;
-  width: 30%;
+  width: 20%;
   background-color: #00ADEF;
   height: 100%;
   /* Adicionando esta linha */
@@ -7748,8 +7748,10 @@ select:disabled {
   top: 50;
   /* Agora o submenu abrirá no topo da página */
   background-color: #01499B;
-  width: 30%;
+  width: 20%;
   /* font-size: 12px; */
+  overflow-y: auto; /* Adicionando scroll vertical */
+  max-height: 100%; /* Definindo altura máxima para o submenu */
 }
 
 /* ITEMSUBMENU */
@@ -7763,6 +7765,7 @@ select:disabled {
   top: 0;
   left: 100%;
 }
+
 
 /* SETAS INDICANDO SE EXISTE SUBMENU */
 #menu li {
