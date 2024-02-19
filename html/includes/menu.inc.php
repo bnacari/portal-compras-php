@@ -74,9 +74,8 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 <div class="header3">
     <div>
         <?php if (isset($_SESSION['login'])) { ?>
-            <label class="userLogin">
-                | Bem-Vindo, <?php echo $_SESSION['login']; ?>
-            </label>
+            <label class="userLogin">Bem-Vindo, <?php echo $_SESSION['login']; ?></label>
+            
             <a href="logout.php" class="up_menu_btn" title="Sair"><i class="bi bi-box-arrow-up-right"></i></a>
         <?php } else { ?>
             <a href="login.php" class="up_menu_btn" title="Entrar"><i class="bi bi-box-arrow-in-up-right"></i></ion-icon></a>

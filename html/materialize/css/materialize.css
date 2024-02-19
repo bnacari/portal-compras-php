@@ -7679,6 +7679,8 @@ select:disabled {
   border-radius: 8px;
   height: 100%;
   font-size: 14px;
+  overflow-y: auto; /* Adicionando scroll vertical */
+  max-height: 100%; /* Definindo altura máxima para o submenu */
 }
 
 #content {
@@ -7726,6 +7728,8 @@ select:disabled {
   background-color: #00ADEF;
   height: 100%;
   /* Adicionando esta linha */
+  overflow-y: auto; /* Adicionando scroll vertical */
+  max-height: 100%; /* Definindo altura máxima para o submenu */
 }
 
 
