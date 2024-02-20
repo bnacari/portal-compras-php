@@ -81,7 +81,5 @@ include('protectAdmin.php');
             // placeholder: 'Selecione as partes do corpo',
             allowClear: true
         });
-
-
     });
 </script>

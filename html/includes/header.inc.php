@@ -39,7 +39,7 @@ session_start();
 
     
 
-    <title>Portal de Compras</title>
+    <title>Portal de Compras | Cesan</title>
 
 </head>
 

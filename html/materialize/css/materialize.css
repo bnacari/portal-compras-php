@@ -347,6 +347,7 @@ i.bi {
   /* SUBMENU */
   #menu ul ul {
     left: 30% !important;
+    width: 30% !important;
   }
 
   /* ITEMSUBMENU */
@@ -7570,13 +7571,6 @@ textarea.materialize-textarea {
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
-.select2-container--default .select2-selection--multiple {
-  width: 100%;
-  /* Defina o tamanho desejado aqui */
-  max-width: 80vw;
-  /* Limitar a largura máxima para evitar expansão excessiva */
-}
-
 /* Select Field DROPDOWN DROPDOWNS
    ========================================================================== */
 select {
@@ -7728,8 +7722,6 @@ select:disabled {
   background-color: #00ADEF;
   height: 100%;
   /* Adicionando esta linha */
-  overflow-y: auto; /* Adicionando scroll vertical */
-  max-height: 100%; /* Definindo altura máxima para o submenu */
 }
 
 
