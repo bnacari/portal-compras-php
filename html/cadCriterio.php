@@ -14,12 +14,12 @@ include('protectAdmin.php');
     <fieldset class="formulario">
         <form action="bd/criterio/create.php" method="post" class="col s12 formulario" id="formFiltrar">
             <h5 class="light" style="color: #404040">Administrar Critérios</h5>
-            <div class="input-field col s12">
+            <div class="input-field col s10">
                 <label>Critério</label>
                 <input type="text" id="nmCriterio" name="nmCriterio" required autofocus>
             </div>
 
-            <div class="input-field col s2">
+            <div class="input-field col s12">
                 <button type="submit" class="btn blue">CADASTRAR</button>
             </div>
         </form>

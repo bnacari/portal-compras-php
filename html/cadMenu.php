@@ -27,7 +27,7 @@ include('protectAdmin.php');
                 <input type="text" id="linkMenu" name="linkMenu">
             </div>
 
-            <div class="input-field col s2">
+            <div class="input-field col s12">
                 <button type="submit" class="btn blue">CADASTRAR</button>
             </div>
 

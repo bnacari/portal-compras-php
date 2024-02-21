@@ -23,6 +23,11 @@ include('protectAdmin.php');
             </div>
 
             <div class="input-field col s6">
+                <label>Link ItemMenu</label>
+                <input type="text" id="linkItemMenu" name="linkItemMenu">
+            </div>
+
+            <div class="input-field col s12">
                 <select name="idSubMenu" id="idSubMenu" required>
                     <option value='' disabled>Selecione uma opção</option>
                     <?php
@@ -36,11 +41,6 @@ include('protectAdmin.php');
             </div>
 
             <div class="input-field col s12">
-                <label>Link ItemMenu</label>
-                <input type="text" id="linkItemMenu" name="linkItemMenu">
-            </div>
-
-            <div class="input-field col s2">
                 <button type="submit" class="btn blue">CADASTRAR</button>
             </div>
 

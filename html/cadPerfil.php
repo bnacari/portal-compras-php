@@ -19,7 +19,7 @@ include('protectAdmin.php');
                 <input type="text" id="nmPerfil" name="nmPerfil" required autofocus>
             </div>
 
-            <div class="input-field col s2">
+            <div class="input-field col s12">
                 <button type="submit" class="btn blue">CADASTRAR</button>
             </div>
 

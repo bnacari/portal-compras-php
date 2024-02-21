@@ -152,7 +152,7 @@ if (isset($existeUsuario)) {
 
         <p>&nbsp;</p>
 
-        <div class="input-field col s2">
+        <div class="input-field col s12">
             <button type="submit" class="btn blue">Salvar</button>
         </div>
     </form>

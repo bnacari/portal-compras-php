@@ -68,7 +68,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         echo '</ul>';
     }
     echo '</li>';
-}
+} 
 
 ?>
 <div class="header3">
