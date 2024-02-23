@@ -126,7 +126,6 @@ $_SESSION['perfil'] = 0;
     .mx-auto {
         max-width: 400px;
     }
-
 </style>
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -292,4 +291,42 @@ $_SESSION['perfil'] = 0;
 
         return true;
     }
+
+    function validarRegistrarUsuario() {
+        var emailUsuarioNovo = document.getElementById('emailUsuarioNovo').value;
+
+        var emailPattern = /@cesan\.com\.br/i; // Expressão regular para procurar '@cesan.com.br'
+
+        if (emailPattern.test(emailUsuarioNovo)) {
+            // Se o email contiver '@cesan.com.br'
+            alert('Usuários da Cesan devem usar login/senha do AD para acessar o Portal de Compras.');
+        }
+    }
+
+    // Associar a função de validação ao evento de mudança de valor no campo de email
+    document.getElementById('emailUsuarioNovo').addEventListener('input', validarRegistrarUsuario);
+
+    function validarLogin() {
+        var loginInput = document.getElementById('login'); // Referência ao elemento input
+        var login = loginInput.value;
+
+        var emailPattern = /@cesan\.com\.br/i; // Expressão regular para procurar '@cesan.com.br'
+
+        if (emailPattern.test(login)) {
+            // Se o email contiver '@cesan.com.br'
+            alert('Usuários da Cesan devem usar login/senha do AD sem o @cesan.com.br');
+
+            // Remover '@cesan.com.br' do email
+            var novoLogin = login.replace('@cesan.com.br', '');
+
+            // Atribuir o novo valor do login ao elemento input
+            loginInput.value = novoLogin;
+
+            // Agora o campo de login contém o novo valor sem '@cesan.com.br'
+            console.log(loginInput.value);
+        }
+    }
+
+    document.getElementById('login').addEventListener('input', validarLogin);
+
 </script>
