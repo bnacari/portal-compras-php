@@ -24,8 +24,13 @@ if (strpos($login, '@') !== false) {
         $senhaBanco  = $registros['SENHA'];
     endwhile;
 
+    // var_dump($senha);
+    // var_dump($senhaBanco);
+    // exit();
+
     // Comparar a senha calculada com a senha armazenada no banco de dados
-    if ($senha === $senhaBanco) {
+    if (password_verify($senha, $senhaBanco)) {
+
         $_SESSION['sucesso'] = 1;
         $_SESSION['login'] = $login;
         $_SESSION['perfil'] = 0;

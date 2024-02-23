@@ -10,10 +10,12 @@ $senhaUsuario = $_POST['senhaUsuarioNovo'];
 $senhaUsuario2 = $_POST['senhaUsuarioNovo2'];
 $emailUsuario = $_POST['emailUsuarioNovo'];
 
-$salt = bin2hex(random_bytes(16)); // Gera um salt de 16 bytes e converte para hexadecimal
-$senhaComSalt = $senhaUsuario . $salt;
+// $salt = bin2hex(random_bytes(16)); // Gera um salt de 16 bytes e converte para hexadecimal
+// $senhaComSalt = $senhaUsuario . $salt;
 // Use uma função de hash segura, como bcrypt ou SHA-256
-$senhaHash = hash('sha256', $senhaComSalt);
+// $senhaHash = hash('sha256', $senhaComSalt);
+
+$senhaHash = password_hash($senhaUsuario, PASSWORD_DEFAULT);
 
 // var_dump($salt);
 // var_dump($senhaComSalt);
@@ -44,7 +46,7 @@ if ($email == $emailUsuario) {
 // $stmt = $pdoCAT->prepare($queryAdmin2);
 // $stmt->execute([00000, $nmUsuario, $email,  GETDATE(), 'A', $login, 'externo', 6, "$senhaUsuario"]);
 
-$queryAdmin2 = "INSERT INTO USUARIO VALUES (00000, '$nmUsuario', '$emailUsuario',  GETDATE(), 'A', 'externo', '$emailUsuario', 6, '$senhaUsuario')";
+$queryAdmin2 = "INSERT INTO USUARIO VALUES (00000, '$nmUsuario', '$emailUsuario',  GETDATE(), 'A', 'externo', '$emailUsuario', 6, '$senhaHash')";
 $querySelectPerfil2 = $pdoCAT->query($queryAdmin2);
 
 $_SESSION['msg'] = "Usuário cadastrado com sucesso.";

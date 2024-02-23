@@ -68,14 +68,14 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         echo '</ul>';
     }
     echo '</li>';
-} 
+}
 
 ?>
 <div class="header3">
     <div>
         <?php if (isset($_SESSION['login'])) { ?>
             <label class="userLogin">Bem-Vindo, <?php echo $_SESSION['login']; ?></label>
-            
+
             <a href="logout.php" class="up_menu_btn" title="Sair"><i class="bi bi-box-arrow-up-right"></i></a>
         <?php } else { ?>
             <a href="login.php" class="up_menu_btn" title="Entrar"><i class="bi bi-box-arrow-in-up-right"></i></ion-icon></a>
@@ -93,7 +93,24 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         <a href="consultarLicitacao.php" class="up_menu_btn" title="Pesquisar Licitações"><i class="bi bi-search"></i></a>
         <a href="#contatoModal" class="up_menu_btn" data-toggle="modal" title="Contatos"><i class="bi bi-chat-right-dots"></i></a>
 
-
+        <?php
+        if (isMobile()) {
+            if (isset($_SESSION['msg']) && $_SESSION['msg'] !== '') { ?>
+                <fieldset class="fieldset-msg" id="fieldsetMsg">
+                    <label class="msg">
+                        <?php echo $_SESSION['msg'];
+                        $_SESSION['msg'] = ''; ?>
+                    </label>
+                </fieldset>
+            <?php }
+        } else {
+            ?>
+            <label class="msg">
+                <?php echo $_SESSION['msg'];
+                $_SESSION['msg'] = ''; ?>
+            </label>
+        <?php
+        } ?>
 
     </div>
 </div>
@@ -134,23 +151,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         return false; // Não é um dispositivo móvel
     }
 
-    if (isMobile()) {
-        if (isset($_SESSION['msg']) && $_SESSION['msg'] !== '') { ?>
-            <fieldset class="fieldset-msg" id="fieldsetMsg">
-                <label class="msg">
-                    <?php echo $_SESSION['msg'];
-                    $_SESSION['msg'] = ''; ?>
-                </label>
-            </fieldset>
-        <?php }
-    } else {
-        ?>
-        <label class="msg">
-            <?php echo $_SESSION['msg'];
-            $_SESSION['msg'] = ''; ?>
-        </label>
-    <?php
-    } ?>
+    ?>
 
 </header>
 

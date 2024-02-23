@@ -9,7 +9,7 @@ include_once 'includes/menu.inc.php';
 ?>
 <div class="row container">
     <fieldset class="formulario">
-        <h5 class="light" style="color: #404040">Licitações que receberá e-mail em futuras atualizações</h5>
+        <h5 class="light" style="color: #404040">Licitações cujo usuário receberá e-mail em futuras atualizações</h5>
         <hr>
         <div class="content3">
             <?php include_once 'bd/atualizacao/read.php'; ?>

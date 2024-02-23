@@ -154,14 +154,14 @@ $_SESSION['perfil'] = 0;
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                 </div>
-                <input class="form-control" placeholder="Usuário" type="text" name="login" id="login" maxlength="100" autofocus>
+                <input class="form-control" placeholder="Usuário" type="text" name="login" id="login" maxlength="100" required autofocus>
             </div>
 
             <div class="form-group input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                 </div>
-                <input class="form-control" placeholder="Senha" type="password" name="senha" id="senha">
+                <input class="form-control" placeholder="Senha" type="password" name="senha" id="senha" required>
             </div>
 
             <?php

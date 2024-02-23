@@ -73,14 +73,14 @@ if ($response === false) {
         exit();
     }
 
-    echo "<table class='rTable'>";
-    echo "<thead><tr><th>Nome</th><th>Unidade</th><th>Matrícula</th><th>E-mail</th><th>Cargo</th></tr></thead><tbody><tr>";
-    echo "<td>$data->name</td>";
-    echo "<td>$dataUnidade->acronym - $dataUnidade->name</td>";
-    echo "<td>$data->personnelNumber</td>";
-    echo "<td>$data->email</td>";
-    echo "<td>$data->position</td>";
-    echo "</tr></tbody></table>";
+    // echo "<table class='rTable'>";
+    // echo "<thead><tr><th>Nome</th><th>Unidade</th><th>Matrícula</th><th>E-mail</th><th>Cargo</th></tr></thead><tbody><tr>";
+    // echo "<td>$data->name</td>";
+    // echo "<td>$dataUnidade->acronym - $dataUnidade->name</td>";
+    // echo "<td>$data->personnelNumber</td>";
+    // echo "<td>$data->email</td>";
+    // echo "<td>$data->position</td>";
+    // echo "</tr></tbody></table>";
 
     // echo "Nome: " . $data->name . "<br>";
     // echo "Unidade: " . $dataUnidade->acronym . " - " . $dataUnidade->name ."<br>";

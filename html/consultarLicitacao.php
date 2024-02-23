@@ -30,7 +30,7 @@ include_once 'includes/menu.inc.php';
                 <label for="dtFimLicitacao">Até</label>
             </div>
 
-            <div class="input-field col dropdown s3">
+            <div class="input-field col dropdown s2">
                 <div>
                     <label>Status</label>
                 </div>
@@ -45,7 +45,7 @@ include_once 'includes/menu.inc.php';
                 </select>
             </div>
 
-            <div class="input-field col s1">
+            <div class="input-field col s2">
                 <input type="submit" value="pesquisar" class="btn blue">
                 <!-- <input type="reset" value="limpar" class="btn red"> -->
             </div>
