@@ -3,24 +3,13 @@
 session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-// include_once '../../protectAdmin.php';
 
 $nmUsuario = $_POST['nomeUsuarioNovo'];
 $senhaUsuario = $_POST['senhaUsuarioNovo'];
 $senhaUsuario2 = $_POST['senhaUsuarioNovo2'];
 $emailUsuario = $_POST['emailUsuarioNovo'];
 
-// $salt = bin2hex(random_bytes(16)); // Gera um salt de 16 bytes e converte para hexadecimal
-// $senhaComSalt = $senhaUsuario . $salt;
-// Use uma função de hash segura, como bcrypt ou SHA-256
-// $senhaHash = hash('sha256', $senhaComSalt);
-
 $senhaHash = password_hash($senhaUsuario, PASSWORD_DEFAULT);
-
-// var_dump($salt);
-// var_dump($senhaComSalt);
-// var_dump($senhaHash);
-// exit();
 
 //verifica se o usuário digitou as senhas iguais
 if ($senhaUsuario != $senhaUsuario2) {
@@ -41,10 +30,6 @@ if ($email == $emailUsuario) {
     echo "<script>window.history.back();</script>";
     exit();
 }
-
-// $queryAdmin2 = "INSERT INTO USUARIO (MAT_ADM, NM_ADM, EMAIL_ADM, DT_CADASTRO, STATUS, LGN_CRIADOR, LGN_ADM, ID_PERFIL, SENHA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-// $stmt = $pdoCAT->prepare($queryAdmin2);
-// $stmt->execute([00000, $nmUsuario, $email,  GETDATE(), 'A', $login, 'externo', 6, "$senhaUsuario"]);
 
 $queryAdmin2 = "INSERT INTO USUARIO VALUES (00000, '$nmUsuario', '$emailUsuario',  GETDATE(), 'A', 'externo', '$emailUsuario', 6, '$senhaHash')";
 $querySelectPerfil2 = $pdoCAT->query($queryAdmin2);

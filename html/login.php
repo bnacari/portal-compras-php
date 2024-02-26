@@ -302,8 +302,6 @@ $_SESSION['perfil'] = 0;
             alert('Usuários da Cesan devem usar login/senha do AD para acessar o Portal de Compras.');
         }
     }
-
-    // Associar a função de validação ao evento de mudança de valor no campo de email
     document.getElementById('emailUsuarioNovo').addEventListener('input', validarRegistrarUsuario);
 
     function validarLogin() {
@@ -321,12 +319,8 @@ $_SESSION['perfil'] = 0;
 
             // Atribuir o novo valor do login ao elemento input
             loginInput.value = novoLogin;
-
-            // Agora o campo de login contém o novo valor sem '@cesan.com.br'
-            console.log(loginInput.value);
         }
     }
-
     document.getElementById('login').addEventListener('input', validarLogin);
 
 </script>
