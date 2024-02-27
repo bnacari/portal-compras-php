@@ -3,18 +3,19 @@ include_once 'bd/conexao.php';
 include_once 'redirecionar.php';
 
 // Verifica se o parâmetro 'path' foi passado na URL
-if(isset($_GET['path'])) {
+if (isset($_GET['path'])) {
     // Atribui o valor do parâmetro 'path' a uma variável
     $path = $_GET['path'];
-    
+
     // Use o valor de $path conforme necessário
-    echo "O valor do parâmetro 'path' é: " . $path;
+    // echo "O valor do parâmetro 'path' é: " . $path;
 } else {
     // Caso o parâmetro 'path' não seja passado, faça algo ou mostre uma mensagem de erro
-    echo "O parâmetro 'path' não foi passado na URL.";
+    // echo "O parâmetro 'path' não foi passado na URL.";
+    redirecionar("consultarLicitacao.php");
 }
 
-$path = '/credenciamento-of-proposal-cesan-105-2023';
+// $path = '/credenciamento-of-proposal-cesan-105-2023';
 
 $path = str_replace('/', '', $path);
 
@@ -28,9 +29,9 @@ $tipo = $primeira_palavra[0];
 $cod = $ultimas_palavras[0];
 $ano = $ultimas_palavras[1];
 
-echo "<br><br>Primeira palavra: " . $tipo . "<br>";
-echo "<br>Penúltima palavra: " . $cod . "<br>";
-echo "<br>Última palavra: " . $ano . "<br><br>";
+// echo "<br><br>Primeira palavra: " . $tipo . "<br>";
+// echo "<br>Penúltima palavra: " . $cod . "<br>";
+// echo "<br>Última palavra: " . $ano . "<br><br>";
 
 // // Atribuindo cada palavra a uma variável individualmente
 // foreach ($array_palavras as $i => $palavra) {
@@ -60,11 +61,9 @@ $querySelect = $pdoCAT->query($querySelect2);
 
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
-    
-    var_dump($idLicitacao);
+
+// var_dump($idLicitacao);
 
 endwhile;
 
-// redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
-
-?>
+redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
