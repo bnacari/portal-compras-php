@@ -14,7 +14,9 @@ if(isset($_GET['path'])) {
     echo "O parâmetro 'path' não foi passado na URL.";
 }
 
-// $path = 'credenciamento-of-proposal-cesan-105-2023';
+$path = '/credenciamento-of-proposal-cesan-105-2023';
+
+$path = str_replace('/', '', $path);
 
 $explodePath = explode("-", $path);
 
@@ -63,6 +65,6 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 
 endwhile;
 
-redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
+// redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
 
 ?>
