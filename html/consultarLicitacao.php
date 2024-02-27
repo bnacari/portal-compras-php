@@ -21,7 +21,7 @@ include_once 'includes/menu.inc.php';
             <div class="input-field col s3">
                 <select name="tipoLicitacao" id="tipoLicitacao">
                     <?php
-                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] ";
+                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO <> 9 AND DT_EXC_TIPO IS NULL";
                     $querySelect = $pdoCAT->query($querySelect2); ?>
                     <option value='vazio'>Selecione uma opção</option>
                     <?php while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
