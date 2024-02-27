@@ -12,7 +12,7 @@ if (isset($_GET['path'])) {
 } else {
     // Caso o parâmetro 'path' não seja passado, faça algo ou mostre uma mensagem de erro
     // echo "O parâmetro 'path' não foi passado na URL.";
-    redirecionar("consultarLicitacao.php");
+    redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
 }
 
 // $path = '/credenciamento-of-proposal-cesan-105-2023';
@@ -23,6 +23,10 @@ $explodePath = explode("-", $path);
 
 $ultimas_palavras = array_slice($explodePath, -2);
 $primeira_palavra = array_slice($explodePath, 0);
+
+if ($primeira_palavra == 'licitacao') {
+    $primeira_palavra = 'licitação';
+}
 
 // Atribuindo as duas últimas palavras a variáveis
 $tipo = $primeira_palavra[0];
