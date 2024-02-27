@@ -233,6 +233,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                                         ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
                                     FROM ANEXO
                                     WHERE ID_LICITACAO = $idLicitacao
+                                    AND DT_EXC_ANEXO IS NULL
                                 )
                                 SELECT
                                     ID_LICITACAO,
@@ -242,7 +243,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                                 GROUP BY ID_LICITACAO, rn;";
             } else {
                 // TRECHO PARA LICITAÇÕES TACLACODE
-                $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO FROM ANEXO WHERE ID_LICITACAO = $idLicitacao";
+                $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO FROM ANEXO WHERE ID_LICITACAO = $idLicitacao AND DT_EXC_ANEXO IS NULL";
             }
 
             $queryAnexo2 = $pdoCAT->query($queryAnexo);

@@ -316,7 +316,7 @@ endwhile;
                         foreach ($files as $file) {
                             echo '<tr>';
                             echo '<td><a href="' . $directory . '/' . $file . '" target="_blank">' . $file . '</a></td>';
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo"><i class="bi bi-x-circle"></i></a></td>';
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo 2"><i class="bi bi-x-circle"></i></a></td>';
                             echo '</tr>';
                         }
 
@@ -332,20 +332,25 @@ endwhile;
                     ID_LICITACAO,
                     NM_ANEXO,
                     LINK_ANEXO,
+                    DT_EXC_ANEXO, -- Adicionando a coluna DT_EXC_ANEXO
                     ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
                 FROM ANEXO
                 WHERE ID_LICITACAO = $idLicitacao
+                -- AND DT_EXC_ANEXO IS NULL
+
             )
             SELECT
                 ID_LICITACAO,
                 MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN LINK_ANEXO END) AS NM_ANEXO,
-                MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO
+                MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO,
+                MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN DT_EXC_ANEXO END) AS DT_EXC_ANEXO -- Nova coluna DT_EXC_ANEXO
+
             FROM RankedAnexos
             GROUP BY ID_LICITACAO, rn;";
 
                     // TRECHO PARA LICITAÇÕES TACLACODE
                 } else {
-                    $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO FROM ANEXO WHERE ID_LICITACAO = $idLicitacao";
+                    $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO, DT_EXC_ANEXO FROM ANEXO WHERE ID_LICITACAO = $idLicitacao";
                 }
 
                 $queryAnexo2 = $pdoCAT->query($queryAnexo);
@@ -355,18 +360,25 @@ endwhile;
                     $anexos[] = array(
                         'nmAnexo' => $registros['NM_ANEXO'],
                         'linkAnexo' => $registros['LINK_ANEXO'],
+                        'dtExcAnexo' => $registros['DT_EXC_ANEXO'],
                     );
                 }
 
                 // Exiba os anexos
                 if (!empty($anexos)) {
                     echo '<div class="grid">';
-                    echo '<table><thead><tr><th><h6><strong>Anexos</strong></h6></th><th>Excluir</th></tr></thead><tbody>';
+                    echo '<table><thead><tr><th><h6><strong>Anexos</strong></h6></th><th>Excluído?</th><th>Excluir</th></tr></thead><tbody>';
 
                     foreach ($anexos as $anexo) {
                         echo '<tr>';
                         echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
-                        echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\', \'' . $idLicitacao . '\')" style="color:red; font-size:25px" title="Excluir Arquivo"><ion-icon name="trash-bin-outline"></ion-icon></a></td>';
+                        echo '<td>' . $anexo['dtExcAnexo'] . '</td>';
+
+                        if (!isset($anexo['dtExcAnexo'])) {
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo 3"><i class="bi bi-x-circle"></i></a></td>';
+                        } else {
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\', \'' . $idLicitacao . '\', \'' . $anexo['dtExcAnexo'] . '\')" title="Restaurar Arquivo"><i class="bi bi-check-lg"></i></a></td>';
+                        }
                         echo '</tr>';
                     }
 
@@ -402,7 +414,7 @@ endwhile;
 
     // Função para mostrar/ocultar campos com base no perfil do usuário
 
-    function confirmDelete(file, directory, idLicitacao) {
+    function confirmDelete(file, directory, idLicitacao, dtExcAnexo) {
         if (confirm('Tem certeza que deseja excluir o arquivo?')) {
             // Use AJAX para excluir o arquivo
             $.ajax({
@@ -411,9 +423,11 @@ endwhile;
                 data: {
                     file: file,
                     directory: directory,
-                    idLicitacao: idLicitacao
+                    idLicitacao: idLicitacao,
+                    dtExcAnexo: dtExcAnexo
                 },
                 success: function(response) {
+                    // alert(dtExcAnexo);
                     // Se a exclusão for bem-sucedida, recarregue a lista de arquivos
                     $('#filelist').load(window.location.href + ' #filelist');
                 },
