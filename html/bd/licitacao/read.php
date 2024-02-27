@@ -9,6 +9,15 @@ $tituloLicitacaoFilter = filter_input(INPUT_POST, 'tituloLicitacao', FILTER_SANI
 $statusLicitacaoFilter = filter_input(INPUT_POST, 'statusLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $dtIniLicitacaoFilter = filter_input(INPUT_POST, 'dtIniLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $dtFimLicitacaoFilter = filter_input(INPUT_POST, 'dtFimLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
+$tipoLicitacao = filter_input(INPUT_POST, 'tipoLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
+
+if (!isset($tipoLicitacao) || empty($tipoLicitacao) || $tipoLicitacao == 'vazio') {
+    $tipoLicitacao = " IS NOT NULL";
+} else {
+    $tipoLicitacao = " = " . $tipoLicitacao;
+}
+
+// var_dump($tipoLicitacao);
 
 if (!isset($statusLicitacaoFilter) || empty($statusLicitacaoFilter)) {
     $statusLicitacaoFilter = 'Em Andamento';
@@ -58,6 +67,8 @@ $querySelect2 .= " AND (D.COD_LICITACAO $tituloLicitacaoFilterSQL OR D.OBJETO_LI
 // var_dump($tituloLicitacaoFilterSQL);
 
 $querySelect2 .= " AND L.DT_LICITACAO $dtIniLicitacaoFilterSQL ";
+
+$querySelect2 .= " AND D.TIPO_LICITACAO $tipoLicitacao";
 
 $querySelect2 .= " ORDER BY L.[DT_LICITACAO] DESC";
 

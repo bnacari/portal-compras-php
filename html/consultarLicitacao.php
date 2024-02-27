@@ -12,10 +12,24 @@ include_once 'includes/menu.inc.php';
         <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar">
             <h5 class="light" style="color: #404040">Filtrar Licitações</h5>
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
                 <i class="material-icons prefix">input</i>
                 <input type="text" name="tituloLicitacao" id="tituloLicitacao" maxlength="100">
                 <label for="tituloLicitacao">Buscar por Título ou Objeto</label>
+            </div>
+
+            <div class="input-field col s3">
+                <select name="tipoLicitacao" id="tipoLicitacao">
+                    <?php
+                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] ";
+                    $querySelect = $pdoCAT->query($querySelect2); ?>
+                    <option value='vazio'>Selecione uma opção</option>
+                    <?php while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
+                    endwhile;
+                    ?>
+                </select>
+                <label>Tipo de Contratação</label>
             </div>
 
             <div class="input-field col s2">
@@ -49,7 +63,7 @@ include_once 'includes/menu.inc.php';
                 <input type="submit" value="pesquisar" class="btn blue">
                 <!-- <input type="reset" value="limpar" class="btn red"> -->
             </div>
-           
+
         </form>
     </fieldset>
 
