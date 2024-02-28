@@ -5,7 +5,7 @@ include_once '../conexao.php';
 include_once '../../redirecionar.php';
 // include('protectAdmin.php');
 
-$emailUsuario = $_POST['emailUsuarioNovo'];
+$emailUsuario = $_POST['emailEsqueciSenha'];
 
 $_SESSION['redirecionar'] = '../../envio.php?emailUsuario='.$emailUsuario;
 $login = $_SESSION['login'];

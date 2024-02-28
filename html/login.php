@@ -234,13 +234,13 @@ $_SESSION['perfil'] = 0;
         <div id="modalEsqueciSenha" class="modal">
             <div class="modal-content">
                 <h5>Esqueci a Senha</h5>
-                <form action="bd/usuario/esqueciSenha.php" method="post" onsubmit="return validarFormulario()">
+                <form action="bd/usuario/esqueciSenha.php" method="post">
                     <!-- Adicione os campos necessários (nome, e-mail, senha) aqui -->
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                         </div>
-                        <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" autofocus>
+                        <input class="form-control" placeholder="E-mail" type="email" name="emailEsqueciSenha" id="emailEsqueciSenha" maxlength="100" autofocus>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block"> Enviar </button>
@@ -303,6 +303,18 @@ $_SESSION['perfil'] = 0;
         }
     }
     document.getElementById('emailUsuarioNovo').addEventListener('input', validarRegistrarUsuario);
+
+    function validarEsqueciSenha() {
+        var emailEsqueciSenha = document.getElementById('emailEsqueciSenha').value;
+
+        var emailPattern = /@cesan\.com\.br/i; // Expressão regular para procurar '@cesan.com.br'
+
+        if (emailPattern.test(emailEsqueciSenha)) {
+            // Se o email contiver '@cesan.com.br'
+            alert('Usuários da Cesan devem usar login/senha do AD para acessar o Portal de Compras.');
+        }
+    }
+    document.getElementById('emailEsqueciSenha').addEventListener('input', validarEsqueciSenha);
 
     function validarLogin() {
         var loginInput = document.getElementById('login'); // Referência ao elemento input

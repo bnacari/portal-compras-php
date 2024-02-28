@@ -21,6 +21,8 @@ $porta = $_SERVER['SERVER_PORT'];
 
 $linkLicitacao = "$protocolo://$host/viewLicitacao.php?idLicitacao=" . $idLicitacao;
 $linkLogin = "$protocolo://$host/login.php";
+$linkEsqueciSenha = "$protocolo://$host/trocaSenhaUsuario.php";
+
 
 try {
     //Server settings
@@ -38,14 +40,26 @@ try {
     // SE FOR RECUPERAÇÃO DE SENHA =======================================================================================================================
     if (isset($emailUsuario)) {
 
+        // Gerar uma senha temporária aleatória
+        $novaSenha = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10 / strlen($x)))), 1, 10);
+
+        // Criptografar a nova senha temporária
+        $senhaHash = password_hash($novaSenha, PASSWORD_DEFAULT);
+
+        // Atualizar a senha no banco de dados
+        $queryUpdateSenha = "UPDATE USUARIO SET SENHA = :senha WHERE EMAIL_ADM = :email";
+        $stmt = $pdoCAT->prepare($queryUpdateSenha);
+        $stmt->bindParam(':senha', $senhaHash);
+        $stmt->bindParam(':email', $emailUsuario);
+        $stmt->execute();
+
         $querySelectPerfil = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$emailUsuario'";
         $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
         while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
             $nmUsuario = $registros['NM_ADM'];
             $email = $registros['EMAIL_ADM'];
-            $senha = $registros['SENHA'];
 
-            $mail->addAddress($email, 'CESAN - Portal de Compras');
+            $mail->addAddress($email, 'Portal de Compras | CESAN');
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
@@ -55,13 +69,13 @@ try {
             $mail->Body    = '<b>Solicitação de Visita cadastrada com sucesso. </b></br></br>';
             $mail->Body    .= ' Nome do Solicitante: <b>' . $nmUsuario . '</b></br>';
             $mail->Body    .= ' E-mail de Contato: <b>' . $email . '</b></br>';
-            $mail->Body    .= ' Senha: <b>' . $senha . '</b></br>';
+            $mail->Body    .= ' Senha: <b>' . $novaSenha . '</b></br>';
             $mail->Body    .= ' Link de acesso: <a href="' . $linkLogin . '">' . $linkLogin . '</a></br>';
 
             $mail->send();
         endwhile;
 
-        $_SESSION['msg'] = "Senha enviada para o e-mail cadastrado.";
+        $_SESSION['msg'] = "Senha TEMPORÁRIA enviada para o e-mail cadastrado.";
 
         echo "<script>location.href='login.php';</script>";
 

@@ -6,7 +6,7 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 
-// include('protect.php');
+include('protect.php');
 
 ?>
 
