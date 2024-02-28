@@ -8,7 +8,7 @@ include('protectAdmin.php');
 
 ?>
 
-<!-- FORMULÁRIOS DE CADASTRO -->
+<!-- FORMULÁRIOS DE CADASTRO --> 
 <div class="row container">
     <fieldset class="formulario col s12">
         <form class="col s12 formulario">
