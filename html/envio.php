@@ -66,11 +66,12 @@ try {
             $mail->CharSet = 'UTF-8';                      // Set charset to UTF-8
             $mail->Encoding = 'base64';
             $mail->Subject = 'Recuperação de Senha';
-            $mail->Body    = '<b>Solicitação de Visita cadastrada com sucesso. </b></br></br>';
+            $mail->Body    = '<b>Solicitação de Recuperação de Senha do Portal de Compras da Cesan</b></br></br>';
             $mail->Body    .= ' Nome do Solicitante: <b>' . $nmUsuario . '</b></br>';
             $mail->Body    .= ' E-mail de Contato: <b>' . $email . '</b></br>';
             $mail->Body    .= ' Senha: <b>' . $novaSenha . '</b></br>';
             $mail->Body    .= ' Link de acesso: <a href="' . $linkLogin . '">' . $linkLogin . '</a></br>';
+            $mail->Body    .= ' Após realizar o login no sistema, acesse o menu <a href="' . $linkEsqueciSenha . '">TROCAR SENHA</a> e troque sua senha.</br>';
 
             $mail->send();
         endwhile;
