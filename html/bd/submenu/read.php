@@ -50,7 +50,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     }
 
     if (isset($_SESSION['isAdmin'])) {
-        echo "<td style='text-align: center;'><a href='editarSubMenu.php?idSubMenu=$idSubMenu'><i class='material-icons'>edit</i></a></td>";
+        echo "<td style='text-align: center;'><a href='editarSubMenu.php?idSubMenu=$idSubMenu'><i class='material-icons'>tune</i></a></td>";
     }
     
 
