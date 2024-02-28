@@ -4,8 +4,6 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 
-// include('protect.php');
-
 ?>
 <div class="row container">
     <fieldset class="formulario">
@@ -53,7 +51,7 @@ include_once 'includes/menu.inc.php';
                     <option value='Em Andamento' selected>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
                     <option value='Encerrado'>Encerrada</option>
-                    <?php if (isset($_SESSION['isAdmin'])) { ?>
+                    <?php if (!empty($_SESSION['idPerfilFinal'])){ ?>
                         <option value='Rascunho'>Rascunho</option>
                     <?php } ?>
                 </select>

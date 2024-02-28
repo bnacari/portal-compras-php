@@ -7,6 +7,16 @@ include_once '../bd/conexao.php';
 
 $login = $_SESSION['login'];
 
+foreach ($_SESSION['perfil'] as $perfil) {
+    $idPerfil[] = $perfil['idPerfil'];
+
+    if ($perfil['idPerfil'] == 9) {
+        $isAdmin = 1;
+    }
+}
+
+$_SESSION['idPerfilFinal'] = implode(',', $idPerfil);
+
 // Função para obter os menus principais
 function obterMenusPrincipais($pdoCAT)
 {
@@ -177,7 +187,7 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
 
 
         <?php
-        if (!empty($_SESSION['perfil'])) { ?>
+        if (!empty($_SESSION['idPerfilFinal'])) { ?>
             <hr>
             <hr>
             <br>

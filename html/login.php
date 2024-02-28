@@ -135,9 +135,7 @@ $_SESSION['perfil'] = 0;
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 
 <div class="container">
-    <!-- <div> -->
     <br>
-    <!-- <div class="card bg-light"> -->
     <article class="card-body mx-auto">
         <div style="display: flex; align-items: center; justify-content: center;">
             <img src="imagens/logo_icon.png" class="logoLogin">
@@ -251,7 +249,6 @@ $_SESSION['perfil'] = 0;
             </div>
         </div>
     </div>
-    <!-- </div> -->
 </div>
 </body>
 
@@ -334,5 +331,4 @@ $_SESSION['perfil'] = 0;
         }
     }
     document.getElementById('login').addEventListener('input', validarLogin);
-
 </script>
