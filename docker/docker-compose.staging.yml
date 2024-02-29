@@ -2,15 +2,8 @@ version: '3.7'
 
 services:
   portal-compras-php:
-    ports:
-      - 9453:80
-    image: "${IMAGE_TAG}"
-    env_file:
-      - app-hom.env
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - uploads:/var/www/html/uploads
-    restart: always
 
 volumes:
   uploads:
@@ -18,4 +11,3 @@ volumes:
       type: "nfs"
       o: "addr=hom-nfs-docker.sistemas.cesan.com.br,nolock,soft,rw"
       device: ":/nfs/dwh2/portal-compras-php/uploads"
-

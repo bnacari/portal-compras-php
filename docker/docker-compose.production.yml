@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  portal-compras-php:
+    volumes:
+      - anexos:/var/www/html/anexos
+      - uploads:/var/www/html/uploads
+
+volumes:
+  anexos:
+      driver_opts:
+        type: "nfs"
+        o: "addr=nfs-docker.sistemas.cesan.com.br,nolock,soft,rw"
+        device: ":/nfs/dwp2/portal-de-compras/data/anexos"
+  uploads:
+    driver_opts:
+      type: "nfs"
+      o: "addr=nfs-docker.sistemas.cesan.com.br,nolock,soft,rw"
+      device: ":/nfs/dwp2/compras/uploads"

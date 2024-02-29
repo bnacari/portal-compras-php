@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  portal-compras-php:
+    image: "${DOCKER_IMAGE_TAG}"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9453:80
+    restart: always

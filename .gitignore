@@ -10,4 +10,7 @@
 *- Copy*
 *.pdf
 
-uploads/
+!**/.gitkeep
+.env*
+!.env.example
+html/uploads/*
