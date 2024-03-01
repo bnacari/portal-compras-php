@@ -464,14 +464,15 @@ endwhile;
             var formData = new FormData();
 
             for (var i = 0; i < files.length; i++) {
-                // Verifica se o arquivo é do tipo PDF
-                if (files[i].type === 'application/pdf' || files[i].type === 'application/zip') {
+                // Verifica se o arquivo é do tipo PDF ou se a extensão é ZIP
+                if (files[i].type === 'application/pdf' || files[i].name.endsWith('.zip')) {
                     formData.append('files[]', files[i]);
                 } else {
-                    alert('O arquivo "' + files[i].name + '" não é um PDF ou ZIP. Por favor, selecione apenas arquivos PDF ou ZIP.'); 
-                    return; // Encerra a função se encontrar um arquivo que não é PDF
+                    alert('O arquivo "' + files[i].name + '" não é um PDF ou ZIP. Por favor, selecione apenas arquivos PDF ou ZIP.');
+                    return; // Encerra a função se encontrar um arquivo que não é PDF ou ZIP
                 }
             }
+
 
             formData.append('idLicitacao', idLicitacao);
 

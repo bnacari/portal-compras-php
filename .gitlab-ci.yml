@@ -42,7 +42,7 @@ deploy:
     - dockerize
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
-      when: manual
+      # when: manual
     - if: $CI_COMMIT_BRANCH == "staging"
   cache: {}
   script:
