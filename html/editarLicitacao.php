@@ -473,7 +473,6 @@ endwhile;
                 }
             }
 
-
             formData.append('idLicitacao', idLicitacao);
 
             // Use AJAX para enviar os arquivos
