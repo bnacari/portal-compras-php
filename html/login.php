@@ -287,7 +287,7 @@ $_SESSION['perfil'] = 0;
         }
 
         return true;
-    }
+    } 
 
     function validarRegistrarUsuario() {
         var emailUsuarioNovo = document.getElementById('emailUsuarioNovo').value;
