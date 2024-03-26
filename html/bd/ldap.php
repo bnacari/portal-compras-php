@@ -52,14 +52,12 @@ $ldap_server = 'cesan.com.br';
 $dominio = '@cesan.com.br'; //Dominio local ou global
 $user = $login . $dominio;
 $ldap_porta = '389';
-$ldap_pass   = $senha;
+$ldap_porta = '389';
 $ldapcon = ldap_connect($ldap_server, $ldap_porta) or die('Could not connect to LDAP server.');
-
-$ldap_pass_encoded = ldap_escape($ldap_pass, '', LDAP_ESCAPE_FILTER);
 
 if ($ldapcon) {
 
-    $bind = ldap_bind($ldapcon, $user, $ldap_pass_encoded);
+    $bind = ldap_bind($ldapcon, $user, $senha); // Não escapar a senha aqui
 
     // verify binding
     if ($bind) {
