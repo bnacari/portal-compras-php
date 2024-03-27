@@ -26,12 +26,21 @@ $linkEsqueciSenha = "$protocolo://$host/trocaSenhaUsuario.php";
 
 try {
     //Server settings
-    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'app-mail.sistemas.cesan.com.br';                     //Set the SMTP server to send through
-    $mail->SMTPAuth   = false;                                   //Enable SMTP authentication
-    $mail->Username   = 'compras@cesan.com.br';                     //SMTP username
-    $mail->Port       = 25;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    // // // // // // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    // $mail->isSMTP();                                            //Send using SMTP
+    // $mail->Host       = 'app-mail.sistemas.cesan.com.br';                     //Set the SMTP server to send through
+    // $mail->SMTPAuth   = false;                                   //Enable SMTP authentication
+    // $mail->Username   = 'compras@cesan.com.br';                     //SMTP username
+    // $mail->Port       = 25;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    // $mail->SMTPAutoTLS = false;
+
+    $mail->isSMTP();
+    $mail->Host       = getenv('SMTP_HOST');
+    $mail->Port       = getenv('SMTP_PORT');
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('SMTP_USERNAME');
+    $mail->Password   = getenv('SMTP_PASSWORD');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->SMTPAutoTLS = false;
 
     //Recipients

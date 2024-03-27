@@ -3,6 +3,7 @@
 //SE TENTAR ACESSAR ALGUMA PÁGINA DIRETAMENTE, ELE DIRECIONA PARA A PÁGINA DE LOGOUT
 session_start();
 include_once '../bd/conexao.php';
+// include_once '../urlsTFM.php';
 // include('protectAdmin.php');
 
 $login = $_SESSION['login'];
