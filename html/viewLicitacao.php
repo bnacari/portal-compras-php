@@ -253,6 +253,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 $anexos[] = array(
                     'nmAnexo' => $registros['NM_ANEXO'],
                     'linkAnexo' => $registros['LINK_ANEXO'],
+                    'timestamp' => time(), // Usando o timestamp atual para os anexos do banco de dados
                 );
             }
 
@@ -268,9 +269,14 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                     $anexos[] = array(
                         'nmAnexo' => $file,
                         'linkAnexo' => $directory . '/' . $file,
+                        'timestamp' => filemtime($directory . '/' . $file), // Obtém o timestamp do arquivo
                     );
                 }
             }
+
+            usort($anexos, function($a, $b) {
+                return $b['timestamp'] - $a['timestamp'];
+            });
 
             // Exiba os anexos
             if (!empty($anexos)) {
