@@ -275,12 +275,14 @@ $_SESSION['perfil'] = 0;
 
     function validaCaptcha() {
         var response = grecaptcha.getResponse();
+        var nomeUsuarioNovo = document.getElementById('nomeUsuarioNovo').value;
 
-        if (response.length === 0) {
-            alert("Favor clicar no CAPTCHA para validar seu formulário.");
-            return false; // Impede a submissão do formulário
+        if (nomeUsuarioNovo.trim() != '') {
+            if (response.length === 0) {
+                alert("Favor clicar no CAPTCHA para validar seu formulário.");
+                return false; // Impede a submissão do formulário
+            }
         }
-
         // Se o reCAPTCHA foi preenchido, continue com a submissão do formulário
         return true;
     }
