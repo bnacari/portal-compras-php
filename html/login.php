@@ -199,32 +199,39 @@ $_SESSION['perfil'] = 0;
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-user"></i> </span>
                         </div>
-                        <input class="form-control" placeholder="Nome" type="text" name="nomeUsuarioNovo" id="nomeUsuarioNovo" maxlength="100" autofocus>
+                        <input class="form-control" placeholder="Nome" type="text" name="nomeUsuarioNovo" id="nomeUsuarioNovo" maxlength="100" required>
                     </div>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-envelope"></i></span>
                         </div>
-                        <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" autofocus>
+                        <input class="form-control" placeholder="E-mail" type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" maxlength="100" required>
                     </div>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input class="form-control" placeholder="Senha (máximo 12 caracteres)" type="password" name="senhaUsuarioNovo" id="senhaUsuarioNovo">
+                        <input class="form-control" placeholder="Senha (máximo 12 caracteres)" type="password" name="senhaUsuarioNovo" id="senhaUsuarioNovo" required>
                     </div>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input class="form-control" placeholder="Repetir Senha" type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2">
+                        <input class="form-control" placeholder="Repetir Senha" type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-block"> Criar Usuário </button>
+                    <div class="g-recaptcha" name="captcha" id="captcha" data-sitekey="6Lf2DqspAAAAAMjYJ6qErbW1qSPvTnHDvxxYvnib"></div>
+
+                    <p>&nbsp;</p>
+
+                    <button type="submit" class="btn btn-primary btn-block" onclick="validaCaptcha()"> Criar Usuário </button>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
                     </div>
+                    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+                    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+
                 </form>
             </div>
         </div>
@@ -258,6 +265,25 @@ $_SESSION['perfil'] = 0;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 <script>
+    var onRecaptchaLoad = function() {
+        // O script do reCAPTCHA foi carregado, agora você pode chamar sua função
+        validaCaptcha();
+    };
+
+    function validaCaptcha() {
+        var response = grecaptcha.getResponse();
+
+        alert('2');
+
+        if (response.length === 0) {
+            alert("Favor clicar no CAPTCHA para validar seu formulário.");
+            return false; // Impede a submissão do formulário
+        }
+
+        // Se o reCAPTCHA foi preenchido, continue com a submissão do formulário
+        return true;
+    }
+
     $(document).ready(function() {
         $('.modal').modal();
     });
@@ -287,9 +313,12 @@ $_SESSION['perfil'] = 0;
         }
 
         return true;
-    } 
+    }
 
     function validarRegistrarUsuario() {
+        if (!validaCaptcha()) {
+            return false;
+        }
         var emailUsuarioNovo = document.getElementById('emailUsuarioNovo').value;
 
         var emailPattern = /@cesan\.com\.br/i; // Expressão regular para procurar '@cesan.com.br'
