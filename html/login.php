@@ -220,17 +220,15 @@ $_SESSION['perfil'] = 0;
                         <input class="form-control" placeholder="Repetir Senha" type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2" required>
                     </div>
 
-                    <div class="g-recaptcha" name="captcha" id="captcha" data-sitekey="6Lf2DqspAAAAAMjYJ6qErbW1qSPvTnHDvxxYvnib"></div>
+                    <div class="g-recaptcha" name="captcha" id="captcha" data-sitekey="6LfMGqspAAAAAMtu9aVSVmCeIYxq_NIOv8boj6Go"></div>
 
                     <p>&nbsp;</p>
 
-                    <button type="submit" class="btn btn-primary btn-block" onclick="validaCaptcha()"> Criar Usuário </button>
+                    <button type="submit" class="btn btn-primary btn-block"> Criar Usuário </button>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
                     </div>
-                    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
-                    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
 
                 </form>
             </div>
@@ -264,6 +262,11 @@ $_SESSION['perfil'] = 0;
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+<!-- re captcha -->
+<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+
+
 <script>
     var onRecaptchaLoad = function() {
         // O script do reCAPTCHA foi carregado, agora você pode chamar sua função
@@ -273,8 +276,6 @@ $_SESSION['perfil'] = 0;
     function validaCaptcha() {
         var response = grecaptcha.getResponse();
 
-        alert('2');
-
         if (response.length === 0) {
             alert("Favor clicar no CAPTCHA para validar seu formulário.");
             return false; // Impede a submissão do formulário
@@ -283,6 +284,34 @@ $_SESSION['perfil'] = 0;
         // Se o reCAPTCHA foi preenchido, continue com a submissão do formulário
         return true;
     }
+
+    $("#criarUsuarioForm").submit(function(event) {
+        // event.preventDefault(); // Impede o envio padrão do formulário
+        var formData = new FormData(this);
+
+        if (!validaCaptcha()) {
+            return false;
+        }
+        // Realiza a requisição AJAX
+        $.ajax({
+            url: "bd/visita/create.php",
+            type: "POST",
+            data: formData,
+            contentType: false, // Necessário para enviar arquivos
+            processData: false, // Necessário para enviar arquivos
+            success: function(response) {
+                var responseData = JSON.parse(response);
+                var idVisita = responseData.idVisita;
+                var msg = responseData.msg;
+                var idCancel = 0;
+                window.location.href = 'envio.php?idVisita=' + encodeURIComponent(idVisita) + '&idCancel=' + encodeURIComponent(idCancel) + '&msg=' + encodeURIComponent(msg);
+            },
+            error: function() {
+                // alert('fracasso');
+
+            }
+        });
+    });
 
     $(document).ready(function() {
         $('.modal').modal();
@@ -312,13 +341,14 @@ $_SESSION['perfil'] = 0;
             return false; // Evita o envio do formulário se a validação falhar
         }
 
+        if (!validaCaptcha()) {
+            return false;
+        }
+
         return true;
     }
 
     function validarRegistrarUsuario() {
-        if (!validaCaptcha()) {
-            return false;
-        }
         var emailUsuarioNovo = document.getElementById('emailUsuarioNovo').value;
 
         var emailPattern = /@cesan\.com\.br/i; // Expressão regular para procurar '@cesan.com.br'
