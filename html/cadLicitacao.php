@@ -42,7 +42,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                         $querySelect = $pdoCAT->query($querySelect2);
                     }
                     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . "</option>";
+                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . " (" . $registros["SGL_TIPO"] . ")" . "</option>";
                     endwhile;
                     ?>
                 </select>
@@ -172,13 +172,9 @@ $idPerfilFinal = implode(',', $idPerfil);
 </div>
 
 <script>
-    // function exibirAlertaStatus() {
-    //     alert("Por favor, preencha o campo 'Status'");
-    // }
-    // function exibirAlertaTipoContratacao() {
-    //     alert("Por favor, preencha o campo 'Tipo Contratação'");
-    // }
-
+    $(document).ready(function() {
+        $('#codLicitacao').mask('000/0000');
+    });
 
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;

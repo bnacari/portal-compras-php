@@ -13,10 +13,14 @@ include('protectAdmin.php');
 <div class="row container">
     <fieldset class="formulario">
         <form action="bd/tipo/create.php" method="post" class="col s12 formulario" id="formFiltrar">
-            <h5 class="light" style="color: #404040">Administrar Critérios</h5>
-            <div class="input-field col s12">
-                <label>Critério</label>
+            <h5 class="light" style="color: #404040">Administrar Tipo de Licitação</h5>
+            <div class="input-field col s8">
+                <label>Nome</label>
                 <input type="text" id="nmTipo" name="nmTipo" required autofocus>
+            </div>
+            <div class="input-field col s4">
+                <label>Sigla</label>
+                <input type="text" id="sglTipo" name="sglTipo" required>
             </div>
 
             <div class="input-field col s12">

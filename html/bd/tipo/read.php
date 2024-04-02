@@ -14,6 +14,7 @@ echo "<thead>";
 echo "<tr>";
 
 echo "<th>Nome</th>";
+echo "<th>Sigla</th>";
 echo "<th>Data Desativação</th>";
 echo "<th>Login Criador</th>";
 
@@ -27,11 +28,13 @@ echo "<tbody>";
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idTipo = $registros['ID_TIPO'];
     $nmTipo = $registros['NM_TIPO'];
+    $sglTipo = $registros['SGL_TIPO'];
     $dtExcTipo = $registros['DT_EXC_TIPO'];
     $lgnCriadorTipo = $registros['LGN_CRIADOR_TIPO'];
 
     echo "<tr id='row$idTipo'>";
     echo "<td><label class='pubnmTipo'>$nmTipo</label></td>";
+    echo "<td><label class='pubsglTipo'>$sglTipo</label></td>";
     echo "<td>$dtExcTipo</td>";
     echo "<td>$lgnCriadorTipo</td>";
 
@@ -58,6 +61,8 @@ echo "</table>";
         $('.edit-button').on('click', function() {
             var rowId = $(this).data('id');
             $('#row' + rowId + ' .pubnmTipo').replaceWith(`<input class='pubnmTipo' type='text' value='${$('#row' + rowId + ' .pubnmTipo').text()}' />`);
+            $('#row' + rowId + ' .pubsglTipo').replaceWith(`<input class='pubsglTipo' type='text' value='${$('#row' + rowId + ' .pubsglTipo').text()}' />`);
+
             $('#row' + rowId + ' .save-button').prop('hidden', false);
             $('#row' + rowId + ' .edit-button').prop('hidden', true);
 
@@ -68,13 +73,15 @@ echo "</table>";
 
             var rowId = $(this).data('id');
             var nmTipo = $('#row' + rowId + ' .pubnmTipo').val();
+            var sglTipo = $('#row' + rowId + ' .pubsglTipo').val();
 
             if (nmTipo.trim() === '') {
                 alert('Os campos são obrigatórios. Por favor, preencha todos os campos.');
             } else {
-                window.location.href = `bd/tipo/update.php?idTipo=${rowId}&nmTipo=${nmTipo}`;
+                window.location.href = `bd/tipo/update.php?idTipo=${rowId}&nmTipo=${nmTipo}&sglTipo=${sglTipo}`;
 
                 $('#row' + rowId + ' .pubnmTipo').replaceWith(`<label class='pubnmTipo'>${nmTipo}</label>`);
+                $('#row' + rowId + ' .pubsglTipo').replaceWith(`<label class='pubsglTipo'>${sglTipo}</label>`);
                 $('#row' + rowId + ' .save-button').prop('hidden', true);
                 $('#row' + rowId + ' .edit-button').prop('hidden', false);
             }

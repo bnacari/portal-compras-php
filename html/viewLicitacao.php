@@ -10,10 +10,11 @@ include_once 'redirecionar.php';
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
-$querySelect2 = "SELECT L.*, DET.COD_LICITACAO AS COD_LIC, DET.*
+$querySelect2 = "SELECT TIPO.SGL_TIPO AS SGL_TIPO, L.*, DET.COD_LICITACAO AS COD_LIC, DET.*
                     FROM [PortalCompras].[dbo].[LICITACAO] L
                     LEFT JOIN DETALHE_LICITACAO DET ON DET.ID_LICITACAO = L.ID_LICITACAO
                     LEFT JOIN ANEXO A ON A.ID_LICITACAO = L.ID_LICITACAO
+                    LEFT JOIN TIPO_LICITACAO TIPO ON TIPO.ID_TIPO = DET.TIPO_LICITACAO
                     WHERE L.ID_LICITACAO = $idLicitacao
                 ";
 
@@ -22,8 +23,7 @@ $querySelect = $pdoCAT->query($querySelect2);
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
     $dtLicitacao = $registros['DT_LICITACAO'];
-    // $tituloLicitacao = $registros['TITULO'];
-    $codLicitacao = $registros['COD_LIC'];
+    $codLicitacao = $registros['SGL_TIPO'] . ' ' . $registros['COD_LIC'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $objLicitacao = $registros['OBJETO_LICITACAO'];
     $respLicitacao = $registros['PREG_RESP_LICITACAO'];

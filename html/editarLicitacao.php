@@ -18,10 +18,11 @@ $idPerfilFinal = implode(',', $idPerfil);
 
 $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT);
 
-$querySelect2 = "SELECT L.*, DET.*
+$querySelect2 = "SELECT L.*, DET.*, TIPO.SGL_TIPO
                     FROM [PortalCompras].[dbo].[LICITACAO] L
                     LEFT JOIN DETALHE_LICITACAO DET ON DET.ID_LICITACAO = L.ID_LICITACAO
                     LEFT JOIN ANEXO A ON A.ID_LICITACAO = L.ID_LICITACAO
+                    LEFT JOIN TIPO_LICITACAO TIPO ON TIPO.ID_TIPO = DET.TIPO_LICITACAO
                     WHERE L.ID_LICITACAO = $idLicitacao
                 ";
 
@@ -32,7 +33,7 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $dtLicitacao = $registros['DT_LICITACAO'];
     $tituloLicitacao = $registros['COD_LICITACAO'];
     $tipoLicitacao = $registros['TIPO_LICITACAO'];
-    $codLicitacao = $registros['COD_LICITACAO'];
+    $codLicitacao = $registros['SGL_TIPO'] . ' ' . $registros['COD_LICITACAO'];
     $statusLicitacao = $registros['STATUS_LICITACAO'];
     $objLicitacao = $registros['OBJETO_LICITACAO'];
     $respLicitacao = $registros['PREG_RESP_LICITACAO'];
@@ -400,6 +401,10 @@ endwhile;
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
 <script>
+    $(document).ready(function() {
+        $('#codLicitacao').mask('000/0000');
+    });
+
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;
 

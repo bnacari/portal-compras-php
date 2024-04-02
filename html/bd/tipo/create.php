@@ -8,10 +8,11 @@ include_once '../../redirecionar.php';
 include_once('../../protectAdmin.php');
 
 $nmTipo = filter_input(INPUT_POST, 'nmTipo', FILTER_SANITIZE_SPECIAL_CHARS);
+$sglTipo = filter_input(INPUT_POST, 'sglTipo', FILTER_SANITIZE_SPECIAL_CHARS);
 
 $login = $_SESSION['login'];
 
-$queryInsert = $pdoCAT->query("INSERT INTO [portalcompras].[dbo].[TIPO_LICITACAO] VALUES ('$nmTipo', NULL, '$login')");
+$queryInsert = $pdoCAT->query("INSERT INTO [portalcompras].[dbo].[TIPO_LICITACAO] VALUES ('$nmTipo', '$sglTipo', NULL, '$login')");
 
 $querySelectTipo = "SELECT MAX(ID_TIPO) AS ID_TIPO FROM TIPO_LICITACAO";
 $querySelectTipo2 = $pdoCAT->query($querySelectTipo);
