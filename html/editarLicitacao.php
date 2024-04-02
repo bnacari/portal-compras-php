@@ -28,7 +28,7 @@ $querySelect2 = "SELECT L.*, DET.*, TIPO.SGL_TIPO
 
 $querySelect = $pdoCAT->query($querySelect2);
 
-while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) : 
     $idLicitacao = $registros['ID_LICITACAO'];
     $dtLicitacao = $registros['DT_LICITACAO'];
     $tituloLicitacao = $registros['COD_LICITACAO'];
