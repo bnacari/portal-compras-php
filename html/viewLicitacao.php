@@ -253,7 +253,6 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 $anexos[] = array(
                     'nmAnexo' => $registros['NM_ANEXO'],
                     'linkAnexo' => $registros['LINK_ANEXO'],
-                    'timestamp' => time(), // Usando o timestamp atual para os anexos do banco de dados
                 );
             }
 
@@ -274,33 +273,47 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 }
             }
 
-            usort($anexos, function($a, $b) {
+            usort($anexos, function ($a, $b) {
                 return $b['timestamp'] - $a['timestamp'];
             });
+
+            $hasTimestamp = false; // Variável para armazenar se algum 'timestamp' está preenchido
+
+            foreach ($anexos as $anexo) {
+                if (isset($anexo['timestamp'])) { // Verifica se o 'timestamp' está definido
+                    $hasTimestamp = true;
+                    break;
+                }
+            }
 
             // Exiba os anexos
             if (!empty($anexos)) {
                 echo '<div class="grid">';
                 echo '<table>
-            <thead>
-                <tr>
-                    <th>
-                        <h6><strong>Anexos</strong></h6>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>';
+                            <thead>
+                                <tr>
+                                    <th><h6><strong>Anexos</strong></h6></th>';
+                                    if ($hasTimestamp) {
+                                        echo '<th><h6><strong>Data Inclusão</strong></h6></th>';
+                                    }
+                                    echo '</tr>
+                            </thead>
+                            <tbody>';
 
                 foreach ($anexos as $anexo) {
                     echo '<tr>';
                     echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
+                    if (isset($anexo['timestamp'])) { // Verifica se o timestamp está definido
+                        echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>'; // Exibe o timestamp no formato dd/mm/aa hora:minuto:segundo
+                    }
                     echo '</tr>';
                 }
 
                 echo '</tbody>
-            </table>';
+                </table>';
                 echo '</div>';
             }
+
             ?>
         </fieldset>
 

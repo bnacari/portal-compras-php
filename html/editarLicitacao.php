@@ -28,7 +28,7 @@ $querySelect2 = "SELECT L.*, DET.*, TIPO.SGL_TIPO
 
 $querySelect = $pdoCAT->query($querySelect2);
 
-while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) : 
+while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $idLicitacao = $registros['ID_LICITACAO'];
     $dtLicitacao = $registros['DT_LICITACAO'];
     $tituloLicitacao = $registros['COD_LICITACAO'];
@@ -307,17 +307,38 @@ endwhile;
                     // Exclua . e ..
                     $files = array_diff($files, array('.', '..'));
 
-                    if (!empty($files)) {
+                    $anexosDiretorio = array();
+                    foreach ($files as $file) {
+                        $anexosDiretorio[] = array(
+                            'nmAnexo' => $file,
+                            'linkAnexo' => $directory . '/' . $file,
+                            'timestamp' => filemtime($directory . '/' . $file), // Obtém o timestamp do arquivo
+                        );
+                    }
+
+                    usort($anexosDiretorio, function ($a, $b) {
+                        return $b['timestamp'] - $a['timestamp'];
+                    });
+
+                    if (!empty($anexosDiretorio)) {
                         echo '</br>';
                         // Crie a estrutura HTML para exibir os arquivos em uma grid
                         echo '<div class="grid">';
 
-                        echo '<table><thead><tr><th><h6><strong>Anexos</strong></h6></th><th>Excluir</th></tr></thead><tbody>';
+                        echo '<table><thead>
+                                        <tr>
+                                            <th><h6><strong>Anexos</strong></h6></th>
+                                            <th><h6><strong>Data Inclusão</strong></h6></th>
+                                            <th><h6><strong>Excluir</strong></h6></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>';
 
-                        foreach ($files as $file) {
+                        foreach ($anexosDiretorio as $anexo) {
                             echo '<tr>';
-                            echo '<td><a href="' . $directory . '/' . $file . '" target="_blank">' . $file . '</a></td>';
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $file . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo 2"><i class="bi bi-x-circle"></i></a></td>';
+                            echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
+                            echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>'; // Exibe o timestamp no formato dd/mm/aa hora:minuto:segundo
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo 2"><i class="bi bi-x-circle"></i></a></td>';
                             echo '</tr>';
                         }
 
@@ -325,6 +346,7 @@ endwhile;
                         echo '</div>';
                     }
                 }
+
 
                 // TRECHO PARA LICITAÇÕES 13.303
                 if ($idLicitacao > 2000) {
