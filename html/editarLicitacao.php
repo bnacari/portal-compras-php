@@ -341,8 +341,8 @@ endwhile;
 
                             // Exibir o nome do arquivo como um campo de entrada quando o botão de edição é clicado
                             echo '<td class="nmAnexo">';
-                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a>';
-                                echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">'; // Campo de entrada oculto
+                            echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a>';
+                            echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">'; // Campo de entrada oculto
                             echo '</td>';
 
                             echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>';
@@ -443,7 +443,7 @@ endwhile;
         $(document).on('click', '.edit-button', function() {
             var rowId = $(this).data('id');
             var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
-            var currentName = $nmAnexoCell.find('span').text(); // Obter o nome original do arquivo
+            var currentName = $nmAnexoCell.find('a').text(); // Obter o nome original do arquivo
 
             // Armazenar o nome original do arquivo como um atributo de dados (data attribute) na linha da tabela
             $('#row_' + rowId).data('currentName', currentName);
