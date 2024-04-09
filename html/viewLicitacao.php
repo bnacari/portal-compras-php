@@ -120,7 +120,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
             <?php } ?>
 
             <?php
-            echo "<script>alert($dtAberLicitacao);</script>";
+            // echo "<script>alert($dtAberLicitacao);</script>";
 
             if (isset($dtAberLicitacao) && !strpos($dtAberLicitacao, '/1969')) { ?>
                 <div class="input-field col s4">

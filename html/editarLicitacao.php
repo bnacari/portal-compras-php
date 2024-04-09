@@ -456,7 +456,6 @@ endwhile;
             $('#row_' + rowId + ' .save-button').show();
         });
 
-
         // Ao clicar no botão de salvar
         $(document).on('click', '.save-button', function() {
             var rowId = $(this).data('id');
@@ -467,8 +466,6 @@ endwhile;
             // Chamar renameFile para renomear o arquivo
             renameFile(rowId, currentName, newName, directory);
         });
-
-
     });
 
     function renameFile(rowId, currentName, newName, directory) {
