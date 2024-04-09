@@ -330,7 +330,7 @@ endwhile;
                                             <th><h6><strong>Lista de Documentos</strong></h6></th>
                                             <th><h6><strong>Data Inclusão</strong></h6></th>
                                             <th><h6><strong>Excluir</strong></h6></th>
-                                            <th><h6><strong>Editar</strong></h6></th>
+                                            <th style="text-align: center;"><h6><strong>Editar</strong></h6></th>
 
                                         </tr>
                                     </thead>
@@ -341,19 +341,21 @@ endwhile;
 
                             // Exibir o nome do arquivo como um campo de entrada quando o botão de edição é clicado
                             echo '<td class="nmAnexo">';
-                            echo '<span>' . $anexo['nmAnexo'] . '</span>';
-                            echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">'; // Campo de entrada oculto
+                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a>';
+                                echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">'; // Campo de entrada oculto
                             echo '</td>';
 
                             echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>';
                             echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo"><i class="bi bi-x-circle"></i></a></td>';
 
-                            echo '<td><a href="javascript:void(0);" class="edit-button" data-id="' . $index . '" title="Editar"><i class="material-icons">tune</i></a></td>';
-                            echo '<td><a href="javascript:void(0);" class="save-button" data-id="' . $index . '" style="color:green;" title="Salvar" hidden><i class="bi bi-check-circle"></i></a></td>';
+                            echo '<td style="text-align: center;">
+                                <a href="javascript:void(0);" class="edit-button" data-id="' . $index . '" title="Editar"><i class="material-icons">tune</i></a>
+                                <a href="javascript:void(0);" class="save-button" data-id="' . $index . '" style="color:green;" title="Salvar" hidden><i class="bi bi-check-circle"></i></a>
+                            </td>';
+
 
                             echo '</tr>';
                         }
-
 
                         echo '</tbody></table>';
                         echo '</div>';
