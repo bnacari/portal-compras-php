@@ -327,26 +327,38 @@ endwhile;
 
                         echo '<table><thead>
                                         <tr>
-                                            <th><h6><strong>Anexos</strong></h6></th>
+                                            <th><h6><strong>Lista de Documentos</strong></h6></th>
                                             <th><h6><strong>Data Inclusão</strong></h6></th>
                                             <th><h6><strong>Excluir</strong></h6></th>
+                                            <th><h6><strong>Editar</strong></h6></th>
+
                                         </tr>
                                     </thead>
                                     <tbody>';
 
-                        foreach ($anexosDiretorio as $anexo) {
-                            echo '<tr>';
-                            echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
-                            echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>'; // Exibe o timestamp no formato dd/mm/aa hora:minuto:segundo
-                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo 2"><i class="bi bi-x-circle"></i></a></td>';
+                        foreach ($anexosDiretorio as $index => $anexo) {
+                            echo '<tr id="row_' . $index . '">';
+
+                            // Exibir o nome do arquivo como um campo de entrada quando o botão de edição é clicado
+                            echo '<td class="nmAnexo">';
+                            echo '<span>' . $anexo['nmAnexo'] . '</span>';
+                            echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">'; // Campo de entrada oculto
+                            echo '</td>';
+
+                            echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>';
+                            echo '<td><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" style="color:red;" title="Excluir Arquivo"><i class="bi bi-x-circle"></i></a></td>';
+
+                            echo '<td><a href="javascript:void(0);" class="edit-button" data-id="' . $index . '" title="Editar"><i class="material-icons">tune</i></a></td>';
+                            echo '<td><a href="javascript:void(0);" class="save-button" data-id="' . $index . '" style="color:green;" title="Salvar" hidden><i class="bi bi-check-circle"></i></a></td>';
+
                             echo '</tr>';
                         }
+
 
                         echo '</tbody></table>';
                         echo '</div>';
                     }
                 }
-
 
                 // TRECHO PARA LICITAÇÕES 13.303
                 if ($idLicitacao > 2000) {
@@ -425,7 +437,56 @@ endwhile;
 <script>
     $(document).ready(function() {
         $('#codLicitacao').mask('000/0000');
+
+        $(document).on('click', '.edit-button', function() {
+            var rowId = $(this).data('id');
+            var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
+            var currentName = $nmAnexoCell.find('span').text(); // Obter o nome original do arquivo
+
+            // Armazenar o nome original do arquivo como um atributo de dados (data attribute) na linha da tabela
+            $('#row_' + rowId).data('currentName', currentName);
+
+            // Substituir o texto por um campo de entrada
+            $nmAnexoCell.html('<input type="text" class="edited-name" value="' + currentName + '">');
+
+            // Esconder o botão de editar e mostrar o botão de salvar
+            $('#row_' + rowId + ' .edit-button').hide();
+            $('#row_' + rowId + ' .save-button').show();
+        });
+
+
+        // Ao clicar no botão de salvar
+        $(document).on('click', '.save-button', function() {
+            var rowId = $(this).data('id');
+            var newName = $('#row_' + rowId + ' .edited-name').val(); // Obter o novo nome do campo de entrada
+            var directory = '<?php echo $directory; ?>'; // Obtém o diretório do PHP
+            var currentName = $('#row_' + rowId).data('currentName'); // Obter o nome original do arquivo
+
+            // Chamar renameFile para renomear o arquivo
+            renameFile(rowId, currentName, newName, directory);
+        });
+
+
     });
+
+    function renameFile(rowId, currentName, newName, directory) {
+        if (currentName === '') {
+            newName = prompt("Novo nome do arquivo:", currentName); // Prompt para o novo nome
+            if (!newName) return; // Se o usuário cancelar, saia da função
+        }
+
+        // console.log('Row ID:', rowId);
+        // console.log('CurrentName:', currentName);
+        // console.log('New Name:', newName);
+        // console.log('Directory:', directory);
+
+        // Construa a URL com os parâmetros necessários
+        var url = `renameFile.php?rowId=${rowId}&currentName=${currentName}&newName=${newName}&directory=${directory}`;
+
+        // Redirecione para a nova URL
+        window.location.href = url;
+    }
+
 
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;

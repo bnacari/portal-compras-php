@@ -292,7 +292,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 echo '<table>
                             <thead>
                                 <tr>
-                                    <th><h6><strong>Anexos</strong></h6></th>';
+                                    <th><h6><strong>Lista de Documentos</strong></h6></th>';
                                     if ($hasTimestamp) {
                                         echo '<th><h6><strong>Data Inclusão</strong></h6></th>';
                                     }
