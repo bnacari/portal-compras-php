@@ -293,9 +293,9 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                             <thead>
                                 <tr>
                                     <th><h6><strong>Lista de Documentos</strong></h6></th>';
-                                    if ($hasTimestamp) {
-                                        echo '<th><h6><strong>Data Inclusão</strong></h6></th>';
-                                    }
+                                    // if ($hasTimestamp) {
+                                    //     echo '<th><h6><strong>Data Inclusão</strong></h6></th>';
+                                    // }
                                     echo '</tr>
                             </thead>
                             <tbody>';
@@ -303,9 +303,9 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 foreach ($anexos as $anexo) {
                     echo '<tr>';
                     echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
-                    if (isset($anexo['timestamp'])) { // Verifica se o timestamp está definido
-                        echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>'; // Exibe o timestamp no formato dd/mm/aa hora:minuto:segundo
-                    }
+                    // if (isset($anexo['timestamp'])) { // Verifica se o timestamp está definido
+                    //     echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>'; // Exibe o timestamp no formato dd/mm/aa hora:minuto:segundo
+                    // }
                     echo '</tr>';
                 }
 
