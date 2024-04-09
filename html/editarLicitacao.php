@@ -350,7 +350,7 @@ endwhile;
 
                             echo '<td style="text-align: center;">
                                 <a href="javascript:void(0);" class="edit-button" data-id="' . $index . '" title="Editar"><i class="material-icons">tune</i></a>
-                                <a href="javascript:void(0);" class="save-button" data-id="' . $index . '" style="color:green;" title="Salvar" hidden><i class="bi bi-check-circle"></i></a>
+                                <a href="javascript:void(0);" class="save-button" data-id="' . $index . '" title="Salvar" hidden><i class="bi bi-check-lg"></i></a>
                             </td>';
 
 
@@ -454,6 +454,12 @@ endwhile;
             // Esconder o botão de editar e mostrar o botão de salvar
             $('#row_' + rowId + ' .edit-button').hide();
             $('#row_' + rowId + ' .save-button').show();
+
+            var $editedNameInput = $('#row_' + rowId + ' .edited-name');
+            $editedNameInput.focus();
+
+            // Selecionar o texto dentro do campo de entrada (nome do arquivo sem extensão)
+            $editedNameInput[0].setSelectionRange(0, currentName.lastIndexOf('.'));
         });
 
         // Ao clicar no botão de salvar

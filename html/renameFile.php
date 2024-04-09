@@ -18,7 +18,6 @@ if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directo
 
         // Remover caracteres não numéricos usando expressão regular
         $idLicitacao = preg_replace("/[^0-9]/", "", $numbers);
-
     } else {
         echo "A barra '/' não foi encontrada na string ou está no final da string.";
     }
@@ -31,16 +30,27 @@ if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directo
     $currentFilePath = $directory . '/' . $currentName;
     $newFilePath = $directory . '/' . $newName;
 
-    // Renomear o arquivo no servidor
-    if (rename($currentFilePath, $newFilePath)) {
-        $_SESSION['msg'] =  'Arquivo renomeado com sucesso!';
+    if ($currentFilePath != $newFilePath) {
 
-        $login = $_SESSION['login'];
-        $tela = 'Licitacao';
-        $acao = 'Anexo atualizado de ´' . $currentFileName . '´ para ´' . $newFileName . '´';
-        $idEvento = $idLicitacao;
-    } else {
-        $_SESSION['msg'] =  'Erro ao renomear o arquivo.';
+        if (file_exists($newFilePath)) {
+            // Extrair o nome do arquivo e a extensão
+            $pathInfo = pathinfo($newFilePath);
+            $filename = $pathInfo['filename'];
+            $extension = $pathInfo['extension'];
+
+            $newFilePath = $directory . '/' . $filename . '_1.' . $extension;
+        }
+
+        // Renomear o arquivo no servidor
+        if (rename($currentFilePath, $newFilePath)) {
+            $_SESSION['msg'] =  'Arquivo renomeado com sucesso!';
+            $login = $_SESSION['login'];
+            $tela = 'Licitacao';
+            $acao = 'Anexo atualizado de ´' . $currentFileName . '´ para ´' . $newFileName . '´';
+            $idEvento = $idLicitacao;
+        } else {
+            $_SESSION['msg'] =  'Erro ao renomear o arquivo.';
+        }
     }
 } else {
     $_SESSION['msg'] =  'Parâmetros ausentes na requisição.';
