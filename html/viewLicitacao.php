@@ -315,7 +315,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
             }
 
             ?>
-        </fieldset>
+        </fieldset> 
 
 
 
