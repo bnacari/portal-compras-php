@@ -1,6 +1,7 @@
 <?php
 include_once 'redirecionar.php';
 include_once 'protectAdmin.php';
+include_once 'bd/conexao.php';
 
 // Verifique se os parâmetros necessários estão presentes na URL
 if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directory'])) {
@@ -19,7 +20,7 @@ if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directo
         // Remover caracteres não numéricos usando expressão regular
         $idLicitacao = preg_replace("/[^0-9]/", "", $numbers);
     } else {
-        echo "A barra '/' não foi encontrada na string ou está no final da string.";
+        echo json_encode(array('success' => false, 'message' => "A barra '/' não foi encontrada na string ou está no final da string."));
         exit();
     }
 
@@ -33,30 +34,37 @@ if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directo
 
     if ($currentFilePath != $newFilePath) {
 
-        if (file_exists($newFilePath)) {
-            // Extrair o nome do arquivo e a extensão
-            $pathInfo = pathinfo($newFilePath);
-            $filename = $pathInfo['filename'];
-            $extension = $pathInfo['extension'];
-
-            $newFilePath = $directory . '/' . $filename . '_1.' . $extension;
+        $pathInfo = pathinfo($newFilePath);
+        $filename = $pathInfo['filename'];
+        $extension = $pathInfo['extension'];
+    
+        $i = 1;
+        while (file_exists($directory . '/' . $newFileName)) {
+            // Adicionar sufixo numerado ao nome do arquivo
+            $newFileName = $filename . '_' . $i . '.' . $extension;
+            $i++;
         }
+    
+        $newFilePath = $directory . '/' . $newFileName;
 
         // Renomear o arquivo no servidor
         if (rename($currentFilePath, $newFilePath)) {
-            $_SESSION['msg'] =  'Arquivo renomeado com sucesso!';
+            // $_SESSION['msg'] =  'Arquivo renomeado com sucesso!';
             $login = $_SESSION['login'];
             $tela = 'Licitacao';
             $acao = 'Anexo atualizado de ´' . $currentFileName . '´ para ´' . $newFileName . '´';
             $idEvento = $idLicitacao;
+
+            $queryLOG = $pdoCAT->query("INSERT INTO auditoria VALUES('$login', GETDATE(), '$tela', '$acao', $idEvento)");
+
+            echo json_encode(['success' => true, 'newFileName' => $newFileName]);
+
         } else {
-            $_SESSION['msg'] =  'Erro ao renomear o arquivo.';
+            echo json_encode(['success' => false, 'message' => 'Erro ao renomear o arquivo.']);
         }
+    } else {
+        echo json_encode(['success' => true, 'newFileName' => $newFileName]);
     }
 } else {
-    $_SESSION['msg'] =  'Parâmetros ausentes na requisição.';
+
 }
-
-$_SESSION['redirecionar'] = 'editarLicitacao.php?idLicitacao=' . $idLicitacao;
-
-redirecionar("log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
