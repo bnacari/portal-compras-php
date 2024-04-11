@@ -174,6 +174,36 @@ $idPerfilFinal = implode(',', $idPerfil);
 <script>
     $(document).ready(function() {
         $('#codLicitacao').mask('000/0000');
+
+        $('#codLicitacao').on('input', function() {
+            var codLicitacao = $(this).val();
+            var tipoLicitacao = $('#tipoLicitacao').val();
+
+            if (codLicitacao.length === 8) {
+                // Faz a requisição AJAX
+                $.ajax({
+                    url: 'verificaCodLicitacao.php',
+                    method: 'GET',
+                    data: {
+                        codLicitacao: codLicitacao,
+                        tipoLicitacao: tipoLicitacao
+                    },
+                    success: function(response) {
+                        // console.log('Resposta do servidor:', response);
+                        if (response == 1) {
+                            $('#codLicitacao').val('');
+                            alert('Código da Licitação já cadastrado.');
+                        } else {
+
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Trate os erros de requisição AJAX, se necessário
+                        console.error(error);
+                    }
+                });
+            }
+        });
     });
 
     function validarFormulario() {

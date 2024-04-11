@@ -6,6 +6,9 @@ include_once 'bd/conexao.php'; // Inclui o arquivo de conexão com o banco de da
 if (isset($_GET['codLicitacao'], $_GET['tipoLicitacao'])) {
     $codLicitacao = $_GET['codLicitacao'];
     $tipoLicitacao = $_GET['tipoLicitacao'];
+    if (isset($_GET['idLicitacao'])) {
+        $idLicitacao = $_GET['idLicitacao'];
+    }
 
     $querySelect2 = "SELECT COUNT(*) AS numRows
                     FROM DETALHE_LICITACAO
@@ -13,6 +16,10 @@ if (isset($_GET['codLicitacao'], $_GET['tipoLicitacao'])) {
                     AND TIPO_LICITACAO = $tipoLicitacao
                     AND DT_EXC_LICITACAO IS NULL";
 
+    if (isset($idLicitacao)) {
+        $querySelect2 .= " AND ID_LICITACAO <> $idLicitacao";
+    }
+    
     $querySelect = $pdoCAT->query($querySelect2);
     $result = $querySelect->fetch(PDO::FETCH_ASSOC);
 
@@ -24,4 +31,3 @@ if (isset($_GET['codLicitacao'], $_GET['tipoLicitacao'])) {
         echo json_encode(0); // Retorna a resposta como JSON
     }
 }
-?>

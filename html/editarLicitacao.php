@@ -493,6 +493,7 @@ $(document).ready(function() {
     $('#codLicitacao').on('input', function() {
         var codLicitacao = $(this).val();
         var tipoLicitacao = $('#tipoLicitacao').val();
+        var idLicitacao = $('#idLicitacao').val();
 
         if (codLicitacao.length === 8) {
             // Faz a requisição AJAX
@@ -500,6 +501,7 @@ $(document).ready(function() {
                 url: 'verificaCodLicitacao.php',
                 method: 'GET',
                 data: {
+                    idLicitacao: idLicitacao,
                     codLicitacao: codLicitacao,
                     tipoLicitacao: tipoLicitacao
                 },
@@ -522,7 +524,7 @@ $(document).ready(function() {
 });
 
 function renameFile(rowId, currentName, newName, directory) {
-    if (currentName === '') {
+    if (newName == '') {
         newName = prompt("Novo nome do arquivo:", currentName); // Prompt para o novo nome
         if (!newName) return; // Se o usuário cancelar, saia da função
     }
