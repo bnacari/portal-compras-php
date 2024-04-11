@@ -20,6 +20,7 @@ if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directo
         $idLicitacao = preg_replace("/[^0-9]/", "", $numbers);
     } else {
         echo "A barra '/' não foi encontrada na string ou está no final da string.";
+        exit();
     }
 
     // echo "<script>alert($idLicitacao);</script>";

@@ -317,8 +317,6 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
             ?>
         </fieldset> 
 
-
-
         <div class="input-field col s12">
             <button type="submit" class="btn blue">Voltar</button>
         </div>
