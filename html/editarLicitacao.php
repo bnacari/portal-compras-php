@@ -98,16 +98,14 @@ endwhile;
 <!-- FORMULÁRIOS DE CADASTRO -->
 <div class="row container">
     <!-- <form action="bd/licitacao/update.php" method="post" class="col s12 formulario"> -->
-    <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data"
-        onsubmit="return validarFormulario()">
+    <form action="bd/licitacao/update.php" method="post" class="col s12 formulario" enctype="multipart/form-data" onsubmit="return validarFormulario()">
 
         <fieldset class="formulario col s12">
             <h5 class="light" style="color: #404040">Editar Licitação <?php echo $nmTipo ?> <?php echo $codLicitacao ?>
             </h5>
         </fieldset>
 
-        <input type="text" name="idLicitacao" id="idLicitacao" value="<?php echo $idLicitacao ?>" style="display:none"
-            readonly required>
+        <input type="text" name="idLicitacao" id="idLicitacao" value="<?php echo $idLicitacao ?>" style="display:none" readonly required>
 
         <div id="idLicitacao" data-id="<?php echo $idLicitacao; ?>"></div>
 
@@ -161,14 +159,12 @@ endwhile;
             </div>
 
             <div class="input-field col s3">
-                <input type="text" name="respLicitacao" id="respLicitacao" value="<?php echo $respLicitacao ?>"
-                    required>
+                <input type="text" name="respLicitacao" id="respLicitacao" value="<?php echo $respLicitacao ?>" required>
                 <label>Responsável</label>
             </div>
 
             <div class="input-field col s12">
-                <textarea type="text" name="objLicitacao" id="objLicitacao"
-                    required><?php echo $objLicitacao ?> </textarea>
+                <textarea type="text" name="objLicitacao" id="objLicitacao" required><?php echo $objLicitacao ?> </textarea>
                 <label>Objeto</label>
             </div>
 
@@ -194,13 +190,11 @@ endwhile;
             </div>
 
             <div class="input-field col s2">
-                <input type="date" name="dtIniSessLicitacao" id="dtIniSessLicitacao"
-                    value="<?php echo $dtIniSessLicitacao ?>">
+                <input type="date" name="dtIniSessLicitacao" id="dtIniSessLicitacao" value="<?php echo $dtIniSessLicitacao ?>">
                 <label>Início da Sessão de Disputa de Preços</label>
             </div>
             <div class="input-field col s2">
-                <input type="time" name="hrIniSessLicitacao" id="hrIniSessLicitacao"
-                    value="<?php echo $hrIniSessLicitacao ?>">
+                <input type="time" name="hrIniSessLicitacao" id="hrIniSessLicitacao" value="<?php echo $hrIniSessLicitacao ?>">
                 <label>Horário</label>
             </div>
 
@@ -272,8 +266,7 @@ endwhile;
             </div>
 
             <div class="input-field col s4">
-                <input type="text" name="identificadorLicitacao" id="identificadorLicitacao"
-                    value="<?php echo $identificadorLicitacao ?>">
+                <input type="text" name="identificadorLicitacao" id="identificadorLicitacao" value="<?php echo $identificadorLicitacao ?>">
                 <label>Identificador</label>
             </div>
 
@@ -287,8 +280,7 @@ endwhile;
             </div>
 
             <div class="input-field col s12">
-                <input type="checkbox" name="permitirAtualizacao" id="permitirAtualizacao"
-                    <?php echo ($permitirAtualizacao == 1) ? 'checked' : ''; ?>>
+                <input type="checkbox" name="permitirAtualizacao" id="permitirAtualizacao" <?php echo ($permitirAtualizacao == 1) ? 'checked' : ''; ?>>
                 <label for="permitirAtualizacao">Permitir que os usuários sejam lembrados para futuras atualizações da
                     licitação?</label>
             </div>
@@ -302,8 +294,7 @@ endwhile;
         <fieldset class="formulario">
 
             <div class="input-field col s12">
-                <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)"
-                    ondragover="handleDragOver(event)">
+                <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
                     <i class="bi bi-upload"></i> <br>Arraste e solte os arquivos aqui ou clique para selecionar.
                 </div>
             </div>
@@ -453,49 +444,66 @@ endwhile;
 <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
 <script>
-$(document).ready(function() {
-    $('#codLicitacao').mask('000/0000');
+    $(document).ready(function() {
+        $('#codLicitacao').mask('000/0000');
 
-    $(document).on('click', '.edit-button', function() {
-        var rowId = $(this).data('id');
-        var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
-        var currentName = $nmAnexoCell.find('a').text(); // Obter o nome original do arquivo
+        validarCodLicitacao();
 
-        // Armazenar o nome original do arquivo como um atributo de dados (data attribute) na linha da tabela
-        $('#row_' + rowId).data('currentName', currentName);
+        $(document).on('click', '.edit-button', function() {
+            var rowId = $(this).data('id');
+            var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
+            var currentName = $nmAnexoCell.find('a').text(); // Obter o nome original do arquivo
 
-        // Substituir o texto por um campo de entrada
-        $nmAnexoCell.html('<input type="text" class="edited-name" value="' + currentName + '">');
+            // Armazenar o nome original do arquivo como um atributo de dados (data attribute) na linha da tabela
+            $('#row_' + rowId).data('currentName', currentName);
 
-        // Esconder o botão de editar e mostrar o botão de salvar
-        $('#row_' + rowId + ' .edit-button').hide();
-        $('#row_' + rowId + ' .save-button').show();
+            // Substituir o texto por um campo de entrada
+            $nmAnexoCell.html('<input type="text" class="edited-name" value="' + currentName + '">');
 
-        var $editedNameInput = $('#row_' + rowId + ' .edited-name');
-        $editedNameInput.focus();
+            // Esconder o botão de editar e mostrar o botão de salvar
+            $('#row_' + rowId + ' .edit-button').hide();
+            $('#row_' + rowId + ' .save-button').show();
 
-        // Selecionar o texto dentro do campo de entrada (nome do arquivo sem extensão)
-        $editedNameInput[0].setSelectionRange(0, currentName.lastIndexOf('.'));
+            var $editedNameInput = $('#row_' + rowId + ' .edited-name');
+            $editedNameInput.focus();
+
+            // Selecionar o texto dentro do campo de entrada (nome do arquivo sem extensão)
+            $editedNameInput[0].setSelectionRange(0, currentName.lastIndexOf('.'));
+        });
+
+        // Ao clicar no botão de salvar
+        $(document).on('click', '.save-button', function() {
+            var rowId = $(this).data('id');
+            var newName = $('#row_' + rowId + ' .edited-name')
+                .val(); // Obter o novo nome do campo de entrada
+            var directory = '<?php echo $directory; ?>'; // Obtém o diretório do PHP
+            var currentName = $('#row_' + rowId).data('currentName'); // Obter o nome original do arquivo
+
+            // Chamar renameFile para renomear o arquivo
+            renameFile(rowId, currentName, newName, directory);
+        });
+
     });
 
-    // Ao clicar no botão de salvar
-    $(document).on('click', '.save-button', function() {
-        var rowId = $(this).data('id');
-        var newName = $('#row_' + rowId + ' .edited-name')
-    .val(); // Obter o novo nome do campo de entrada
-        var directory = '<?php echo $directory; ?>'; // Obtém o diretório do PHP
-        var currentName = $('#row_' + rowId).data('currentName'); // Obter o nome original do arquivo
-
-        // Chamar renameFile para renomear o arquivo
-        renameFile(rowId, currentName, newName, directory);
-    });
-
+    // Evento 'input' no campo 'codLicitacao'
     $('#codLicitacao').on('input', function() {
-        var codLicitacao = $(this).val();
+        validarCodLicitacao();
+    });
+
+    // Evento 'change' no dropdown 'tipoLicitacao'
+    $('#tipoLicitacao').on('change', function() {
+        // Verifica se o campo 'codLicitacao' está preenchido
+        if ($('#codLicitacao').val().length === 8) {
+            validarCodLicitacao();
+        }
+    });
+
+    function validarCodLicitacao() {
+        var codLicitacao = $('#codLicitacao').val();
         var tipoLicitacao = $('#tipoLicitacao').val();
         var idLicitacao = $('#idLicitacao').val();
 
-        if (codLicitacao.length === 8) {
+        if (codLicitacao.length == 8) {
             // Faz a requisição AJAX
             $.ajax({
                 url: 'verificaCodLicitacao.php',
@@ -505,13 +513,15 @@ $(document).ready(function() {
                     codLicitacao: codLicitacao,
                     tipoLicitacao: tipoLicitacao
                 },
+                dataType: 'json',
                 success: function(response) {
                     // console.log('Resposta do servidor:', response);
                     if (response == 1) {
                         $('#codLicitacao').val('');
+                        $('#codLicitacao').focus(); // Mudar o foco para o campo codLicitacao
                         alert('Código da Licitação já cadastrado.');
                     } else {
-
+                        // Código da Licitação não cadastrado, continuar com outras ações se necessário
                     }
                 },
                 error: function(xhr, status, error) {
@@ -520,188 +530,189 @@ $(document).ready(function() {
                 }
             });
         }
-    });
-});
-
-function renameFile(rowId, currentName, newName, directory) {
-    if (newName == '') {
-        newName = prompt("Novo nome do arquivo:", currentName); // Prompt para o novo nome
-        if (!newName) return; // Se o usuário cancelar, saia da função
     }
 
-    $.ajax({
-        url: 'renameFile.php',
-        method: 'GET',
-        data: {
-            rowId: rowId,
-            currentName: currentName,
-            newName: newName,
-            directory: directory
-        },
-        dataType: 'json',
-        success: function(response) {
-            // console.log('Resposta do servidor:', response);
-            if (response.success) {
-                var newFileName = response.newFileName;
-
-                // Restaurar o conteúdo HTML da célula nmAnexo para exibir o nome do arquivo
-                var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
-                $nmAnexoCell.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' +
-                    newFileName + '</a>');
-
-                // Esconder o botão de salvar e mostrar o botão de editar
-                $('#row_' + rowId + ' .edit-button').show();
-                $('#row_' + rowId + ' .save-button').hide();
-            } else {
-                alert('Erro ao renomear arquivo: ' + response.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            // Trate os erros de requisição AJAX, se necessário
-            console.error(error);
+    function renameFile(rowId, currentName, newName, directory) {
+        if (newName == '') {
+            newName = prompt("Novo nome do arquivo:", currentName); // Prompt para o novo nome
+            if (!newName) return; // Se o usuário cancelar, saia da função
         }
-    });
-}
 
-function validarFormulario() {
-    var tipoLicitacao = document.getElementById('tipoLicitacao').value;
-
-    if (tipoLicitacao === '') {
-        alert('Por favor, selecione uma opção para o Tipo de Contratação.');
-        return false; // Evita o envio do formulário se a validação falhar
-    }
-
-    // Continue com o envio do formulário se a validação passar
-    return true;
-}
-
-// Função para mostrar/ocultar campos com base no perfil do usuário
-
-function confirmDelete(file, directory, idLicitacao, dtExcAnexo) {
-    if (confirm('Tem certeza que deseja excluir o arquivo?')) {
-        // Use AJAX para excluir o arquivo
         $.ajax({
-            url: 'excluir_arquivo.php',
-            type: 'GET',
+            url: 'renameFile.php',
+            method: 'GET',
             data: {
-                file: file,
-                directory: directory,
-                idLicitacao: idLicitacao,
-                dtExcAnexo: dtExcAnexo
+                rowId: rowId,
+                currentName: currentName,
+                newName: newName,
+                directory: directory
             },
+            dataType: 'json',
             success: function(response) {
-                // alert(dtExcAnexo);
-                // Se a exclusão for bem-sucedida, recarregue a lista de arquivos
-                $('#filelist').load(window.location.href + ' #filelist');
+                // console.log('Resposta do servidor:', response);
+                if (response.success) {
+                    var newFileName = response.newFileName;
+
+                    // Restaurar o conteúdo HTML da célula nmAnexo para exibir o nome do arquivo
+                    var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
+                    $nmAnexoCell.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' +
+                        newFileName + '</a>');
+
+                    // Esconder o botão de salvar e mostrar o botão de editar
+                    $('#row_' + rowId + ' .edit-button').show();
+                    $('#row_' + rowId + ' .save-button').hide();
+                } else {
+                    alert('Erro ao renomear arquivo: ' + response.message);
+                }
             },
-            error: function() {
-                alert('Erro ao excluir o arquivo.');
+            error: function(xhr, status, error) {
+                // Trate os erros de requisição AJAX, se necessário
+                console.error(error);
             }
         });
-    } else {
-        // O usuário cancelou a exclusão
     }
-}
 
-var idLicitacao = document.getElementById('idLicitacao').value;
+    function validarFormulario() {
+        var tipoLicitacao = document.getElementById('tipoLicitacao').value;
 
-function handleDrop(event) {
-    event.preventDefault();
+        validarCodLicitacao();
 
-    var files = event.dataTransfer.files;
-    handleFiles(files, idLicitacao);
-}
-
-function handleClick(event) {
-    var inputElement = document.createElement("input");
-    inputElement.type = "file";
-    inputElement.multiple = true;
-    inputElement.addEventListener("change", function() {
-        handleFiles(this.files, idLicitacao);
-    });
-    inputElement.click();
-}
-
-function handleFiles(files, idLicitacao) {
-    if (files.length > 0) {
-        var formData = new FormData();
-
-        for (var i = 0; i < files.length; i++) {
-            // Verifica se o arquivo é do tipo PDF ou se a extensão é ZIP
-            if (files[i].type === 'application/pdf' || files[i].name.endsWith('.zip')) {
-                formData.append('files[]', files[i]);
-            } else {
-                alert('O arquivo "' + files[i].name +
-                    '" não é um PDF ou ZIP. Por favor, selecione apenas arquivos PDF ou ZIP.');
-                return; // Encerra a função se encontrar um arquivo que não é PDF ou ZIP
-            }
+        if (tipoLicitacao === '') {
+            alert('Por favor, selecione uma opção para o Tipo de Contratação.');
+            return false; // Evita o envio do formulário se a validação falhar
         }
 
-        formData.append('idLicitacao', idLicitacao);
-
-        // Use AJAX para enviar os arquivos
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'upload.php', true);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                // Adicione aqui qualquer ação adicional após o upload bem-sucedido
-                updateFileList();
-                // Se a inclusão for bem-sucedida, recarregue a lista de arquivos
-                $('#filelist').load(window.location.href + ' #filelist');
-            } else {
-                alert('Erro ao enviar os arquivos.');
-            }
-        };
-        xhr.send(formData);
-    } else {
-        alert('Por favor, selecione um ou mais arquivos.');
+        // Continue com o envio do formulário se a validação passar
+        return true;
     }
-}
 
+    // Função para mostrar/ocultar campos com base no perfil do usuário
 
-function handleDragOver(event) {
-    event.preventDefault();
-    // Adicione a chamada para uploadFile se necessário
-    document.getElementById('drop-zone').classList.add('dragover');
-}
-
-function updateFileList() {
-    // Atualiza a lista de arquivos
-    var filelistElement = document.getElementById('filelist');
-    if (filelistElement) {
-        filelistElement.innerHTML = ''; // Limpa a lista atual
-
-        // Adicione código para obter e exibir a nova lista de arquivos
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'get_file_list.php?idLicitacao=' + idLicitacao, true);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                var files = response.files;
-
-                // Exibe a nova lista de arquivos
-                if (files.length > 0) {
-                    var fileListHTML = '<ul>';
-                    for (var i = 0; i < files.length; i++) {
-                        fileListHTML += '<li><a href="' + uploadDir + files[i] + '">' + files[i] + '</a></li>';
-                    }
-                    fileListHTML += '</ul>';
-                    filelistElement.innerHTML = fileListHTML;
-                } else {
-                    filelistElement.innerHTML = 'Nenhum arquivo disponível.';
+    function confirmDelete(file, directory, idLicitacao, dtExcAnexo) {
+        if (confirm('Tem certeza que deseja excluir o arquivo?')) {
+            // Use AJAX para excluir o arquivo
+            $.ajax({
+                url: 'excluir_arquivo.php',
+                type: 'GET',
+                data: {
+                    file: file,
+                    directory: directory,
+                    idLicitacao: idLicitacao,
+                    dtExcAnexo: dtExcAnexo
+                },
+                success: function(response) {
+                    // alert(dtExcAnexo);
+                    // Se a exclusão for bem-sucedida, recarregue a lista de arquivos
+                    $('#filelist').load(window.location.href + ' #filelist');
+                },
+                error: function() {
+                    alert('Erro ao excluir o arquivo.');
                 }
-            } else {
-                alert('Erro ao obter a lista de arquivos.');
-            }
-        };
-        xhr.send();
+            });
+        } else {
+            // O usuário cancelou a exclusão
+        }
     }
-}
+
+    var idLicitacao = document.getElementById('idLicitacao').value;
+
+    function handleDrop(event) {
+        event.preventDefault();
+
+        var files = event.dataTransfer.files;
+        handleFiles(files, idLicitacao);
+    }
+
+    function handleClick(event) {
+        var inputElement = document.createElement("input");
+        inputElement.type = "file";
+        inputElement.multiple = true;
+        inputElement.addEventListener("change", function() {
+            handleFiles(this.files, idLicitacao);
+        });
+        inputElement.click();
+    }
+
+    function handleFiles(files, idLicitacao) {
+        if (files.length > 0) {
+            var formData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                // Verifica se o arquivo é do tipo PDF ou se a extensão é ZIP
+                if (files[i].type === 'application/pdf' || files[i].name.endsWith('.zip')) {
+                    formData.append('files[]', files[i]);
+                } else {
+                    alert('O arquivo "' + files[i].name +
+                        '" não é um PDF ou ZIP. Por favor, selecione apenas arquivos PDF ou ZIP.');
+                    return; // Encerra a função se encontrar um arquivo que não é PDF ou ZIP
+                }
+            }
+
+            formData.append('idLicitacao', idLicitacao);
+
+            // Use AJAX para enviar os arquivos
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'upload.php', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Adicione aqui qualquer ação adicional após o upload bem-sucedido
+                    updateFileList();
+                    // Se a inclusão for bem-sucedida, recarregue a lista de arquivos
+                    $('#filelist').load(window.location.href + ' #filelist');
+                } else {
+                    alert('Erro ao enviar os arquivos.');
+                }
+            };
+            xhr.send(formData);
+        } else {
+            alert('Por favor, selecione um ou mais arquivos.');
+        }
+    }
 
 
-// Adicione um evento de dragleave para remover a classe 'dragover' quando o mouse sai da área de drop-zone
-document.getElementById('drop-zone').addEventListener('dragleave', function(event) {
-    event.preventDefault();
-    document.getElementById('drop-zone').classList.remove('dragover');
-});
+    function handleDragOver(event) {
+        event.preventDefault();
+        // Adicione a chamada para uploadFile se necessário
+        document.getElementById('drop-zone').classList.add('dragover');
+    }
+
+    function updateFileList() {
+        // Atualiza a lista de arquivos
+        var filelistElement = document.getElementById('filelist');
+        if (filelistElement) {
+            filelistElement.innerHTML = ''; // Limpa a lista atual
+
+            // Adicione código para obter e exibir a nova lista de arquivos
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get_file_list.php?idLicitacao=' + idLicitacao, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var files = response.files;
+
+                    // Exibe a nova lista de arquivos
+                    if (files.length > 0) {
+                        var fileListHTML = '<ul>';
+                        for (var i = 0; i < files.length; i++) {
+                            fileListHTML += '<li><a href="' + uploadDir + files[i] + '">' + files[i] + '</a></li>';
+                        }
+                        fileListHTML += '</ul>';
+                        filelistElement.innerHTML = fileListHTML;
+                    } else {
+                        filelistElement.innerHTML = 'Nenhum arquivo disponível.';
+                    }
+                } else {
+                    alert('Erro ao obter a lista de arquivos.');
+                }
+            };
+            xhr.send();
+        }
+    }
+
+
+    // Adicione um evento de dragleave para remover a classe 'dragover' quando o mouse sai da área de drop-zone
+    document.getElementById('drop-zone').addEventListener('dragleave', function(event) {
+        event.preventDefault();
+        document.getElementById('drop-zone').classList.remove('dragover');
+    });
 </script>

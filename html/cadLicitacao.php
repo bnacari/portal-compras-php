@@ -174,37 +174,52 @@ $idPerfilFinal = implode(',', $idPerfil);
 <script>
     $(document).ready(function() {
         $('#codLicitacao').mask('000/0000');
-
-        $('#codLicitacao').on('input', function() {
-            var codLicitacao = $(this).val();
-            var tipoLicitacao = $('#tipoLicitacao').val();
-
-            if (codLicitacao.length === 8) {
-                // Faz a requisição AJAX
-                $.ajax({
-                    url: 'verificaCodLicitacao.php',
-                    method: 'GET',
-                    data: {
-                        codLicitacao: codLicitacao,
-                        tipoLicitacao: tipoLicitacao
-                    },
-                    success: function(response) {
-                        // console.log('Resposta do servidor:', response);
-                        if (response == 1) {
-                            $('#codLicitacao').val('');
-                            alert('Código da Licitação já cadastrado.');
-                        } else {
-
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Trate os erros de requisição AJAX, se necessário
-                        console.error(error);
-                    }
-                });
-            }
-        });
     });
+
+    // Evento 'input' no campo 'codLicitacao'
+    $('#codLicitacao').on('input', function() {
+        validarCodLicitacao();
+    });
+
+    // Evento 'change' no dropdown 'tipoLicitacao'
+    $('#tipoLicitacao').on('change', function() {
+        // Verifica se o campo 'codLicitacao' está preenchido
+        if ($('#codLicitacao').val().length === 8) {
+            validarCodLicitacao();
+        }
+    });
+
+    function validarCodLicitacao() {
+        var codLicitacao = $('#codLicitacao').val();
+        var tipoLicitacao = $('#tipoLicitacao').val();
+
+        if (codLicitacao.length == 8) {
+            // Faz a requisição AJAX
+            $.ajax({
+                url: 'verificaCodLicitacao.php',
+                method: 'GET',
+                data: {
+                    codLicitacao: codLicitacao,
+                    tipoLicitacao: tipoLicitacao
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // console.log('Resposta do servidor:', response);
+                    if (response == 1) {
+                        $('#codLicitacao').val('');
+                        $('#codLicitacao').focus(); // Mudar o foco para o campo codLicitacao
+                        alert('Código da Licitação já cadastrado.');
+                    } else {
+                        // Código da Licitação não cadastrado, continuar com outras ações se necessário
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Trate os erros de requisição AJAX, se necessário
+                    console.error(error);
+                }
+            });
+        }
+    }
 
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;
