@@ -490,6 +490,10 @@ endwhile;
         validarCodLicitacao();
     });
 
+    $('#codLicitacao').on('blur', function() {
+        validarCodLicitacao(); // Chama a função validarCodLicitacao ao sair do campo
+    });
+
     // Evento 'change' no dropdown 'tipoLicitacao'
     $('#tipoLicitacao').on('change', function() {
         // Verifica se o campo 'codLicitacao' está preenchido
