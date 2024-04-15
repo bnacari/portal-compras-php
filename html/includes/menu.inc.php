@@ -101,7 +101,9 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
         ?>
             <a href="cadLicitacao.php" class="up_menu_btn" title="Cadastrar Licitação"><i class="bi bi-plus-circle"></i></a>
         <?php } ?>
-        <a href="consultarLicitacao.php" class="up_menu_btn" title="Pesquisar Licitações"><i class="bi bi-search"></i></a>
+        <!-- <a href="consultarLicitacao.php" class="up_menu_btn" id="search" name="search" title="Pesquisar Licitações"><i class="bi bi-search"></i></a> -->
+        <a href="" class="up_menu_btn" id="search" name="search" title="Pesquisar Licitações"><i class="bi bi-search"></i></a>
+
         <a href="#contatoModal" class="up_menu_btn" data-toggle="modal" title="Contatos"><i class="bi bi-chat-right-dots"></i></a>
 
         <?php
@@ -408,4 +410,35 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
             document.getElementById('modalCadastro').style.display = 'none';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search');
+        const currentPage = window.location.pathname; // Obtém o caminho da URL atual
+
+        // Verifica se não estamos na página 'consultarLicitacao.php' nem 'index.php'
+        if (currentPage !== '/consultarLicitacao.php' && currentPage !== '/index.php') {
+            // Atualiza o atributo href do elemento <a> para 'consultarLicitacao.php'
+            searchInput.setAttribute('href', 'consultarLicitacao.php');
+        }
+
+        // Função para alternar a visibilidade do fieldset
+        function toggleFieldsetVisibility() {
+            const searchFieldset = document.querySelector('.filtroLicitacao');
+            if (searchFieldset.style.display === 'block') {
+                event.preventDefault(); // Evita o comportamento padrão de um link (<a href="#">)
+
+                searchFieldset.style.display = 'none'; // Oculta o fieldset se estiver visível
+            } else {
+                event.preventDefault(); // Evita o comportamento padrão de um link (<a href="#">)
+
+                searchFieldset.style.display = 'block'; // Exibe o fieldset se estiver oculto
+            }
+        }
+
+        // Adiciona um evento de clique ao elemento <a> com id="search"
+        searchInput.addEventListener('click', function(event) {
+            toggleFieldsetVisibility(); // Chama a função para alternar a visibilidade do fieldset
+        });
+
+    });
 </script>

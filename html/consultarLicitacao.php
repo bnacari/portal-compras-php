@@ -6,12 +6,12 @@ include_once 'includes/menu.inc.php';
 
 ?>
 <div class="row container">
-    <fieldset class="formulario">
+    <fieldset class="filtroLicitacao">
         <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar">
             <h5 class="light" style="color: #404040">Filtrar Licitações</h5>
 
             <div class="input-field col s3">
-                <i class="material-icons prefix">input</i>
+                <!-- <i class="material-icons prefix">input</i> -->
                 <input type="text" name="tituloLicitacao" id="tituloLicitacao" maxlength="100">
                 <label for="tituloLicitacao">Buscar por Título ou Objeto</label>
             </div>
@@ -51,7 +51,7 @@ include_once 'includes/menu.inc.php';
                     <option value='Em Andamento' selected>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
                     <option value='Encerrado'>Encerrada</option>
-                    <?php if (!empty($_SESSION['idPerfilFinal'])){ ?>
+                    <?php if (!empty($_SESSION['idPerfilFinal'])) { ?>
                         <option value='Rascunho'>Rascunho</option>
                     <?php } ?>
                 </select>
@@ -75,3 +75,7 @@ include_once 'includes/menu.inc.php';
         </div>
     </fieldset>
 </div>
+
+<script>
+   
+</script>

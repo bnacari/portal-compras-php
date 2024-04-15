@@ -3573,7 +3573,16 @@ th {
   border-radius: 2px;
 }
 
+.filtroLicitacao {
+  display: block;
+}
+
+
 @media only screen and (max-width: 992px) {
+  .filtroLicitacao {
+    display: none;
+  }
+
   table.responsive-table {
     width: 100%;
     border-collapse: collapse;

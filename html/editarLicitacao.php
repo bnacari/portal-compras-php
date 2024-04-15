@@ -559,8 +559,7 @@ endwhile;
 
                     // Restaurar o conteúdo HTML da célula nmAnexo para exibir o nome do arquivo
                     var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
-                    $nmAnexoCell.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' +
-                        newFileName + '</a>');
+                    $nmAnexoCell.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' + newFileName + '</a>');
 
                     // Esconder o botão de salvar e mostrar o botão de editar
                     $('#row_' + rowId + ' .edit-button').show();
