@@ -3,6 +3,8 @@ version: '3.7'
 services:
   portal-compras-php:
     image: "${DOCKER_IMAGE_TAG}"
+    labels:
+      - "br.com.cesan.app=${$CI_PROJECT_NAME}"
     environment:
       - DB_HOST=${DB_HOST}
       - DB_NAME=${DB_NAME}
@@ -13,7 +15,13 @@ services:
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
     volumes:
+      - /nfs/swarm/portal-compras-php/anexos:/var/www/html/anexos
+      - /nfs/swarm/portal-compras-php/uploads:/var/www/html/uploads
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 9453:80
-    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4192M

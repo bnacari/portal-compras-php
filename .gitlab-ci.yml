@@ -1,20 +1,24 @@
 .docker_login_template:
   before_script:
     - >
-      echo "${DOCKER_REGISTRY_PASS}" |
-      docker login ${DOCKER_REGISTRY_HOST}
-      --username ${DOCKER_REGISTRY_USER} --password-stdin
+      echo "${REGISTRY_PASS}" |
+      docker login ${REGISTRY_HOST}
+      --username ${REGISTRY_USER} --password-stdin
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
 
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "develop"
       variables:
-        DEPLOY_ENVIRONMENT: "production"
-        DEPLOY_SERVER_NAME: "dwp2"
+        DEPLOY_ENVIRONMENT: "develop"
     - if: $CI_COMMIT_BRANCH == "staging"
       variables:
         DEPLOY_ENVIRONMENT: "staging"
-        DEPLOY_SERVER_NAME: "dwh2"
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        DEPLOY_ENVIRONMENT: "production"
 
 stages:
   - dockerize
@@ -25,15 +29,15 @@ dockerize:
   extends: .docker_login_template
   script:
     - APP_VERSION=$(cat version)
-    - DOCKER_IMAGE_TAG=registry.sistemas.cesan.com.br/adm/portal-compras-php:${APP_VERSION}
+    - DOCKER_IMAGE_TAG=registry.cesan.com.br/cesan/portal-compras-php:${APP_VERSION}
     - echo "DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> docker.env
-    - docker image build -t ${DOCKER_IMAGE_TAG} -f docker/Dockerfile --pull --no-cache .
+    - docker image build -t ${DOCKER_IMAGE_TAG} -f docker/Dockerfile .
     - docker image push ${DOCKER_IMAGE_TAG}
   artifacts:
     reports:
       dotenv: docker.env
   tags:
-    - compose
+    - swarm
 
 deploy:
   stage: deploy
@@ -41,25 +45,14 @@ deploy:
   dependencies:
     - dockerize
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-      # when: manual
+    - if: $CI_COMMIT_BRANCH == "develop"
     - if: $CI_COMMIT_BRANCH == "staging"
-  cache: {}
+    - if: $CI_COMMIT_BRANCH == "master"
+      #when: manual
   script:
     - >
-      export
-      DOCKER_TLS_VERIFY=1 
-      DOCKER_CERT_PATH=/cert/adm/${DEPLOY_SERVER_NAME}
-      DOCKER_HOST=${DEPLOY_SERVER_NAME}.sistemas.cesan.com.br:2376
-    - >
-      docker-compose
-      -f docker/docker-compose.yml
-      -f docker/docker-compose.${DEPLOY_ENVIRONMENT}.yml pull
-    - >
-      docker-compose
-      -f docker/docker-compose.yml
-      -f docker/docker-compose.${DEPLOY_ENVIRONMENT}.yml
-      --project-name portal-compras-php up -d --force-recreate
+      docker --context $DEPLOY_ENVIRONMENT stack deploy \
+        --with-registry-auth -c docker/stack.yml $CI_PROJECT_NAME
   environment: ${DEPLOY_ENVIRONMENT}
   tags:
-    - compose
+    - swarm
