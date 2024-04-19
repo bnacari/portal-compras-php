@@ -1,4 +1,4 @@
-FROM registry.sistemas.cesan.com.br/library/cesan/php:7.3-apache-pdo
+FROM registry.cesan.com.br/cesan/php:7.3-apache-pdo
 
 COPY --chown=www-data:www-data html /var/www/html
 COPY --chown=www-data:www-data vendor /var/www/vendor
