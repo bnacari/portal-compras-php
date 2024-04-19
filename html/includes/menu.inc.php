@@ -281,9 +281,9 @@ function construirMenuHTMLRecursivo($pdoCAT, $menuPrincipal, $submenus)
                 <ul class="list-group">
                     <p class="descricao2">Pregoeiros</p>
                     <li class="list-group-item"><ion-icon name="chatbox-ellipses-outline"></ion-icon> <a href="mailto:pregao@cesan.com.br">pregao@cesan.com.br</a></li>
-                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Luciana Toledo - 27 2127-5299</li>
-                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Fernando Cordeiro - 27 2127-5418</li>
-                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Mirelle Ino - 27 2127-5429</li>
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Luciana Toledo - 27 2127-5299 </li>
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Fernando Cordeiro - 27 2127-5418 </li>
+                    <li class="list-group-item"><ion-icon name="call-outline"></ion-icon> Mirelle Ino - 27 2127-5429 </li>
                 </ul>
             </div>
             <div class="modal-footer">
