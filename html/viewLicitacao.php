@@ -38,11 +38,12 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $localLicitacao = $registros['LOCAL_ABER_LICITACAO'];
     $identificadorLicitacao = $registros['IDENTIFICADOR_LICITACAO'];
     $obsLicitacao = $registros['OBS_LICITACAO'];
+    $dtExcLicitacao = $registros['DT_EXC_LICITACAO'];
 // $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 endwhile;
 
 //evito que usuários que não estejam LOGADOS no sistema acessem licitações com status "RASCUNHO" com links diretos
-if ($_SESSION['sucesso'] != 1 && $statusLicitacao == 'Rascunho')
+if (($_SESSION['sucesso'] != 1 && $statusLicitacao == 'Rascunho') || ($_SESSION['sucesso'] != 1 && $dtExcLicitacao != null) )
 {
     $_SESSION['redirecionar'] = 'index.php';
     redirecionar($_SESSION['redirecionar']);
