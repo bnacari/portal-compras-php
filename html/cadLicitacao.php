@@ -57,10 +57,10 @@ $idPerfilFinal = implode(',', $idPerfil);
 
             <div class="input-field col s3">
                 <select name="statusLicitacao" id="statusLicitacao">
-                    <option value=''>Selecione uma opção</option>
-                    <option value='Em Andamento'>Em Andamento</option>
-                    <option value='Suspenso'>Suspensa</option>
-                    <option value='Encerrado'>Encerrada</option>
+                    <!-- <option value=''>Selecione uma opção</option> -->
+                    <!-- <option value='Em Andamento'>Em Andamento</option> -->
+                    <!-- <option value='Suspenso'>Suspensa</option> -->
+                    <!-- <option value='Encerrado'>Encerrada</option> -->
                     <option value='Rascunho' selected>Rascunho</option>
                 </select>
 
