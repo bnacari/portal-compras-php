@@ -12,10 +12,6 @@ if (!isset($_SESSION)) {
 // Caso o usuário tente acessar qq trecho do sistema sem permissão, o sistema direciona para a tela de index
 if (empty($_SESSION['perfil']))
 {
-    ?>
-    <script>alert('teste');</script>
-    <?php
-    
     $_SESSION['redirecionar'] = 'index.php';
     redirecionar($_SESSION['redirecionar']);
 }
