@@ -1,6 +1,15 @@
 # portal-compras-php
 ## Build / Deploy
 
+PARA PUBLICAR EM LOCALHOST (VDESK)
+
+é necessário preencher corretamente o arquivo "docker/.env"
+```
+sudo mkdir -p /nfs/swarm/convenios-php/anexos
+source docker/.env
+docker stack deploy --with-registry-auth -c docker/stack.yml $CI_PROJECT_NAME
+```
+
 PARA PUBLICAR EM HOMOLOGAÇÃO
 
 . é necessário estar na branch STAGING

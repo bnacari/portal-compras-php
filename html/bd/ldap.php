@@ -9,10 +9,10 @@ include_once '../redirecionar.php';
 // include_once '../api.php';
 
 $login      = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
-$senha      = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS);
+$senha = filter_input(INPUT_POST, 'senha', FILTER_UNSAFE_RAW);
 $loginADM   = null;
 
-if (strpos($login, '@') !== false) {
+if (strpos($login, '@') !== false && !empty($login) && !empty($senha)) {
 
     $querySelect2 = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$login' AND STATUS LIKE 'A'";
     $querySelect = $pdoCAT->query($querySelect2);
@@ -47,7 +47,7 @@ if (strpos($login, '@') !== false) {
         exit();
     }
 }
-
+ 
 $ldap_server = 'cesan.com.br';
 $dominio = '@cesan.com.br'; //Dominio local ou global
 $user = $login . $dominio;
@@ -56,8 +56,10 @@ $ldap_porta = '389';
 $ldapcon = ldap_connect($ldap_server, $ldap_porta) or die('Could not connect to LDAP server.');
 
 if ($ldapcon) {
+    ldap_set_option($ldapcon, LDAP_OPT_PROTOCOL_VERSION, 3);
+    ldap_set_option($ldapcon, LDAP_OPT_REFERRALS, 0);
 
-    $bind = ldap_bind($ldapcon, $user, $senha); // Não escapar a senha aqui
+    $bind = @ldap_bind($ldapcon, $user, $senha);
 
     // verify binding
     if ($bind) {

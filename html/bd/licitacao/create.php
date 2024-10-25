@@ -92,7 +92,7 @@ if (!isset($localLicitacao)) { $localLicitacao = ''; }
 if (!isset($obsLicitacao)) { $obsLicitacao = ''; }
 if (!isset($permitirAtualizacao)) { $obpermitirAtualizacaojLicitacao = ''; }
 
-$query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', '$statusLicitacao', '$objLicitacao', '$respLicitacao', 
+$query = "INSERT INTO [portalcompras].[dbo].[DETALHE_LICITACAO] VALUES ($idLicitacao, '$codLicitacao', 'Rascunho', '$objLicitacao', '$respLicitacao', 
                     '$dtAberturaLicitacao', '$dtIniSessLicitacao', '$modoLicitacao', $tipoLicitacao, '$criterioLicitacao', '$regimeLicitacao', '$formaLicitacao', 
                     '$vlLicitacao', '$localLicitacao', '$identificadorLicitacao', '$obsLicitacao', NULL, $permitirAtualizacao)";
 
