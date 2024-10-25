@@ -27,3 +27,21 @@ services:
         limits:
           cpus: '2'
           memory: 4192M
+  filebrowser:
+    image: registry.cesan.com.br/cesan/filebrowser
+    environment:
+      - FILE_BROWSER_ADMIN_PASSWORD=${FILE_BROWSER_ADMIN_PASSWORD}
+      - FILE_BROWSER_BRANDING_NAME=${FILE_BROWSER_BRANDING_NAME}
+      - FILE_BROWSER_USER_COMMANDS=${FILE_BROWSER_USER_COMMANDS}
+      - FILE_BROWSER_USER_NAME=${FILE_BROWSER_USER_NAME}
+      - FILE_BROWSER_USER_PASSWORD=${FILE_BROWSER_USER_PASSWORD}
+    volumes:
+      - /nfs/swarm/portal-compras-php:/srv
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9663:80
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2048M
