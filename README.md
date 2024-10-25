@@ -8,6 +8,9 @@ PARA PUBLICAR EM LOCALHOST (VDESK)
 sudo mkdir -p /nfs/swarm/convenios-php/anexos
 source docker/.env
 docker stack deploy --with-registry-auth -c docker/stack.yml $CI_PROJECT_NAME
+
+--caso precise "publicar" as variáveis de ambiente
+source docker/.env
 ```
 
 PARA PUBLICAR EM HOMOLOGAÇÃO
