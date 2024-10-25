@@ -24,6 +24,11 @@ foreach ($_SESSION['perfil'] as $perfil) {
 }
 
 if (!isset($isAdmin)){
+    
+    ?>
+    <script>alert('teste');</script>
+    <?php
+    
     $_SESSION['redirecionar'] = 'index.php';
     redirecionar($_SESSION['redirecionar']);
     exit();

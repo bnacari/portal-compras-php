@@ -41,6 +41,13 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 // $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
 endwhile;
 
+//evito que usuários que não estejam LOGADOS no sistema acessem licitações com status "RASCUNHO" com links diretos
+if ($_SESSION['sucesso'] != 1 && $statusLicitacao == 'Rascunho')
+{
+    $_SESSION['redirecionar'] = 'index.php';
+    redirecionar($_SESSION['redirecionar']);
+}
+
 if (isset($tipoLicitacao)) {
     $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO = $tipoLicitacao";
     $querySelect = $pdoCAT->query($querySelect2);

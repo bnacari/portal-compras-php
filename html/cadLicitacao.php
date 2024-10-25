@@ -29,7 +29,7 @@ $idPerfilFinal = implode(',', $idPerfil);
         <fieldset class="formulario" style="padding:15px; border-color:#eee; border-radius:10px">
             <!-- <h6><strong>Local a Visitar</strong></h6> -->
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
                 <select name="tipoLicitacao" id="tipoLicitacao">
                     <option value='' selected>Selecione uma opção</option>
                     <?php
@@ -50,24 +50,24 @@ $idPerfilFinal = implode(',', $idPerfil);
                 <label>Tipo de Contratação *</label>
             </div>
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
                 <input type="text" id="codLicitacao" name="codLicitacao" required>
                 <label>Código *</label>
             </div>
 
-            <!-- <div class="input-field col s3">
+            <div class="input-field col s3">
                 <select name="statusLicitacao" id="statusLicitacao">
                     <option value=''>Selecione uma opção</option>
-                    <option value='Em Andamento' selected>Em Andamento</option>
+                    <option value='Em Andamento'>Em Andamento</option>
                     <option value='Suspenso'>Suspensa</option>
                     <option value='Encerrado'>Encerrada</option>
-                    <option value='Rascunho'>Rascunho</option>
+                    <option value='Rascunho' selected>Rascunho</option>
                 </select>
 
                 <label>Status *</label>
-            </div> -->
+            </div>
 
-            <div class="input-field col s4">
+            <div class="input-field col s3">
                 <input type="text" id="respLicitacao" name="respLicitacao" required>
                 <label>Responsável *</label>
             </div>
