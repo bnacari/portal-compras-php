@@ -9,7 +9,7 @@ include_once '../redirecionar.php';
 // include_once '../api.php';
 
 $login      = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
-$senha = filter_input(INPUT_POST, 'senha', FILTER_UNSAFE_RAW);
+$senha = trim($_POST['senha']); // Sem filtro especial para permitir caracteres especiais
 $loginADM   = null;
 
 if (strpos($login, '@') !== false && !empty($login) && !empty($senha)) {

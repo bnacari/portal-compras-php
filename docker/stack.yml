@@ -5,6 +5,8 @@ services:
     image: "${DOCKER_IMAGE_TAG}"
     labels:
       - "br.com.cesan.app=${CI_PROJECT_NAME}"
+      - "io.portainer.accesscontrol.teams=adm"
+
     environment:
       - DB_HOST=${DB_HOST}
       - DB_NAME=${DB_NAME}
@@ -18,7 +20,7 @@ services:
       - /nfs/swarm/portal-compras-php/anexos:/var/www/html/anexos
       - /nfs/swarm/portal-compras-php/uploads:/var/www/html/uploads
       - /etc/localtime:/etc/localtime:ro
-      # - ../html:/var/www/html
+      - ../html:/var/www/html
 
     ports:
       - 9453:80
