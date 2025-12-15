@@ -737,7 +737,10 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
             <ion-icon name="arrow-back-outline"></ion-icon>
             Voltar para Licitações
         </a>
-        <?php if (isset($_SESSION['sucesso']) && $_SESSION['sucesso'] == 1) { ?>
+        <?php
+        // Exibe o botão "Editar Licitação" apenas para administradores (idPerfil == 9)
+        if (isset($perfil['idPerfil']) && $perfil['idPerfil'] == 9) {
+        ?>
         <a href="editarLicitacao.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
             <ion-icon name="create-outline"></ion-icon>
             Editar Licitação
