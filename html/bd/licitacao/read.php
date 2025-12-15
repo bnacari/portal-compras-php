@@ -1,28 +1,36 @@
 <?php
+//read.php - Visualização de Licitações (Cards e Tabela)
 
-include_once 'bd/conexao.php';
-include_once 'redirecionar.php';
+// Iniciar sessão se não estiver iniciada (para chamadas AJAX)
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-$lgnCriador = $_SESSION['login'];
+// Incluir conexão se não estiver incluída
+if (!isset($pdoCAT)) {
+    include_once __DIR__ . '/../conexao.php';
+}
 
+$lgnCriador = $_SESSION['login'] ?? '';
+
+// Filtros recebidos
 $tituloLicitacaoFilter = filter_input(INPUT_POST, 'tituloLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $statusLicitacaoFilter = filter_input(INPUT_POST, 'statusLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $dtIniLicitacaoFilter = filter_input(INPUT_POST, 'dtIniLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $dtFimLicitacaoFilter = filter_input(INPUT_POST, 'dtFimLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $tipoLicitacao = filter_input(INPUT_POST, 'tipoLicitacao', FILTER_SANITIZE_SPECIAL_CHARS);
 
+// Processar filtro de tipo
 if (!isset($tipoLicitacao) || empty($tipoLicitacao) || $tipoLicitacao == 'vazio') {
     $tipoLicitacao = " IS NOT NULL";
 } else {
     $tipoLicitacao = " = " . $tipoLicitacao;
 }
 
-// var_dump($tipoLicitacao);
-
+// Processar filtro de status
 if (!isset($statusLicitacaoFilter) || empty($statusLicitacaoFilter)) {
     $statusLicitacaoFilter = 'Em Andamento';
 }
-// var_dump($dtIniLicitacaoFilter);
 
 if (isset($tituloLicitacaoFilter)) {
     $tituloLicitacaoFilterSQL = " like '%$tituloLicitacaoFilter%'";
@@ -32,151 +40,286 @@ if (isset($tituloLicitacaoFilter)) {
 
 if ($statusLicitacaoFilter !== 'vazio') {
     if ($statusLicitacaoFilter == 'Em Andamento') {
-        $statusLicitacaoFilter = "like 'Em Andamento'";
+        $statusLicitacaoFilterSQL = "like 'Em Andamento'";
     } else if ($statusLicitacaoFilter == 'Suspenso') {
-        $statusLicitacaoFilter = "like 'Suspenso'";
+        $statusLicitacaoFilterSQL = "like 'Suspenso'";
     } else if ($statusLicitacaoFilter == 'Encerrado') {
-        $statusLicitacaoFilter = "like 'Encerrado'";
+        $statusLicitacaoFilterSQL = "like 'Encerrado'";
     } else if ($statusLicitacaoFilter == 'Rascunho') {
-        $statusLicitacaoFilter = "like 'Rascunho'";
+        $statusLicitacaoFilterSQL = "like 'Rascunho'";
+    } else {
+        $statusLicitacaoFilterSQL = "NOT LIKE 'Rascunho'";
     }
 } else {
-    $statusLicitacaoFilter = "NOT LIKE 'Rascunho'";
+    $statusLicitacaoFilterSQL = "NOT LIKE 'Rascunho'";
 }
 
-if (isset($dtIniLicitacaoFilter)) {
+if (isset($dtIniLicitacaoFilter) && !empty($dtIniLicitacaoFilter)) {
     $dtIniLicitacaoFilterSQL = " between '$dtIniLicitacaoFilter' and '$dtFimLicitacaoFilter'";
 } else {
     $dtIniLicitacaoFilterSQL = " IS NOT NULL";
-    $dtFimLicitacaoFilter = " IS NOT NULL";
 }
 
+// Query principal
 $querySelect2 = "SELECT  
                     DISTINCT D.*, L.ID_LICITACAO, L.DT_LICITACAO, TIPO.NM_TIPO AS NM_TIPO, TIPO.SGL_TIPO
-                    FROM
+                FROM
                     LICITACAO L
                     LEFT JOIN ANEXO A ON L.ID_LICITACAO = A.ID_LICITACAO
                     LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
                     LEFT JOIN TIPO_LICITACAO TIPO ON D.TIPO_LICITACAO = TIPO.ID_TIPO
                 WHERE
-                    D.STATUS_LICITACAO $statusLicitacaoFilter
-                    AND L.DT_EXC_LICITACAO IS NULL
-                ";
+                    D.STATUS_LICITACAO $statusLicitacaoFilterSQL
+                    AND L.DT_EXC_LICITACAO IS NULL";
 
 $querySelect2 .= " AND (D.COD_LICITACAO $tituloLicitacaoFilterSQL OR D.OBJETO_LICITACAO $tituloLicitacaoFilterSQL)";
-// var_dump($tituloLicitacaoFilterSQL);
-
 $querySelect2 .= " AND L.DT_LICITACAO $dtIniLicitacaoFilterSQL ";
-
 $querySelect2 .= " AND D.TIPO_LICITACAO $tipoLicitacao";
-
 $querySelect2 .= " ORDER BY L.[DT_LICITACAO] DESC";
 
-// Executa a consulta
+// Executar consulta
 $querySelect = $pdoCAT->query($querySelect2);
+$licitacoes = $querySelect->fetchAll(PDO::FETCH_ASSOC);
+$totalLicitacoes = count($licitacoes);
 
-// var_dump($querySelect);
-// exit();
+// Email do usuário para verificar notificações
+$email = $_SESSION['email'] ?? '';
+?>
 
-echo "<table class='rTableLicitacao'>";
+<!-- Contador de Resultados -->
+<div class="results-info">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    <span class="results-count"><?php echo $totalLicitacoes; ?></span> 
+    licitaç<?php echo $totalLicitacoes == 1 ? 'ão encontrada' : 'ões encontradas'; ?>
+</div>
 
-echo "<tbody>";
+<?php if ($totalLicitacoes > 0): ?>
 
-while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-    $idLicitacao = $registros['ID_LICITACAO'];
-    $idTipoLicitacao = $registros['TIPO_LICITACAO'];
-    $tipoLicitacao = $registros['NM_TIPO'];
-    $codLicitacao = $registros['SGL_TIPO'] . ' ' . $registros['COD_LICITACAO'];
-    $statusLicitacao = $registros['STATUS_LICITACAO'];
-    $dtLicitacao = date('d/m/Y', strtotime($registros['DT_LICITACAO']));
-    $objLicitacao = $registros['OBJETO_LICITACAO'];
-    $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
-
-    if (isset($tipoLicitacao)) {
-        $tituloLicitacao = $tipoLicitacao . ' - ' . $codLicitacao;
-    } else {
-        $tituloLicitacao = $codLicitacao;
-    }
-    // VERIFICO SE O USUÁRIO JÁ ESTÁ CADASTRADO PARA RECEBER FUTURAS ATUALIZAÇÕES NA LICITAÇÃO
-    $idAtualizacao = null;
-    $email = $_SESSION['email'];
-    $queryUpdateLicitacao = "SELECT ID_ATUALIZACAO 
-                            FROM ATUALIZACAO 
-                            WHERE ID_LICITACAO = $idLicitacao 
-                            AND EMAIL_ADM LIKE '$email' 
-                            AND DT_EXC_ATUALIZACAO IS NULL";
-    $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
-    while ($registros = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC)) :
-        $idAtualizacao = $registros['ID_ATUALIZACAO'];
-    endwhile;
-
-
-    echo "<tr>";
-
-    // echo "<td>$idLicitacao</td>";
-    // echo "<td title='$objLicitacao'><strong>$tituloLicitacao</strong></td>";
-    echo "<td title='$objLicitacao'>
-            <p>
-                <a href='viewLicitacao.php?idLicitacao=$idLicitacao'>
-                    <strong><h7>$tituloLicitacao</h7></strong>
-                </a> ";
-
-    foreach ($_SESSION['perfil'] as $perfil) {
-        // Verifica se o ID do perfil é igual a 9
-        if ($perfil['idPerfil'] == 9 || $perfil['idPerfil'] == $idTipoLicitacao ) {
-            echo "<a href='editarLicitacao.php?idLicitacao=$idLicitacao' style='color:#999999;' title='Editar Licitação'><i class='material-icons'>tune</i></a>";
-
-            echo "<a href='#' onclick='confirmDelete($idLicitacao)' style='color:#999999; padding-left:5px' title='Apagar Licitação'><i class='material-icons'>delete</i></a>";
+<!-- Visualização em Cards -->
+<div class="cards-container" id="cardsContainer">
+    <?php foreach ($licitacoes as $registros):
+        $idLicitacao = $registros['ID_LICITACAO'];
+        $idTipoLicitacao = $registros['TIPO_LICITACAO'];
+        $tipoLicitacaoNome = $registros['NM_TIPO'];
+        $codLicitacao = $registros['SGL_TIPO'] . ' ' . $registros['COD_LICITACAO'];
+        $statusLicitacao = $registros['STATUS_LICITACAO'];
+        $dtLicitacao = date('d/m/Y', strtotime($registros['DT_LICITACAO']));
+        $objLicitacao = $registros['OBJETO_LICITACAO'];
+        $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
+        
+        $tituloLicitacao = $tipoLicitacaoNome ? $tipoLicitacaoNome . ' - ' . $codLicitacao : $codLicitacao;
+        
+        // Verificar se usuário está cadastrado para notificações
+        $idAtualizacao = null;
+        if (!empty($email)) {
+            $queryUpdateLicitacao = "SELECT ID_ATUALIZACAO FROM ATUALIZACAO 
+                                    WHERE ID_LICITACAO = $idLicitacao 
+                                    AND EMAIL_ADM LIKE '$email' 
+                                    AND DT_EXC_ATUALIZACAO IS NULL";
+            $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
+            $resultAtualizacao = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC);
+            if ($resultAtualizacao) {
+                $idAtualizacao = $resultAtualizacao['ID_ATUALIZACAO'];
+            }
         }
-    }
-
-    if ($permitirAtualizacao == 1 && isset($email)) {
-        if (!isset($idAtualizacao)) {
-            echo "<a href='#' onclick='enviarAtualizacao($idLicitacao)' style='color:#FF1919; padding-left:5px' title='Usuário receberá notificação em caso de atualização da licitação.'><i class='bi bi-bell'></i></a>";
-        } else {
-            echo "<a href='#' onclick='desativarAtualizacao($idAtualizacao)' style='color:#FF1919; padding-left:5px' title='Usuário deixará de receber notificação em caso de atualização da licitação.'><i class='bi bi-bell-fill'></i></a>";
+        
+        // Classe do status
+        $statusClass = '';
+        switch ($statusLicitacao) {
+            case 'Em Andamento': $statusClass = 'em-andamento'; break;
+            case 'Suspenso': $statusClass = 'suspenso'; break;
+            case 'Encerrado': $statusClass = 'encerrado'; break;
+            case 'Rascunho': $statusClass = 'rascunho'; break;
         }
-    }
+    ?>
+    <div class="licitacao-card">
+        <div class="card-header">
+            <span class="card-codigo"><?php echo htmlspecialchars($codLicitacao); ?></span>
+            <span class="card-status <?php echo $statusClass; ?>">
+                <span class="card-status-dot"></span>
+                <?php echo htmlspecialchars($statusLicitacao); ?>
+            </span>
+        </div>
+        
+        <h3 class="card-title">
+            <a href="viewLicitacao.php?idLicitacao=<?php echo $idLicitacao; ?>">
+                <?php echo htmlspecialchars($tituloLicitacao); ?>
+            </a>
+        </h3>
+        
+        <div class="card-meta">
+            <?php if ($tipoLicitacaoNome): ?>
+            <div class="card-meta-item">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                <span class="card-meta-tag"><?php echo htmlspecialchars($tipoLicitacaoNome); ?></span>
+            </div>
+            <?php endif; ?>
+        </div>
+        
+        <p class="card-objeto">
+            <?php echo htmlspecialchars($objLicitacao); ?>
+        </p>
+        
+        <div class="card-footer">
+            <div class="card-date">
+                <ion-icon name="calendar-outline"></ion-icon>
+                <?php echo $dtLicitacao; ?>
+            </div>
+            
+            <div class="card-actions">
+                <?php
+                // Botões de ação para administradores
+                if (isset($_SESSION['perfil'])) {
+                    foreach ($_SESSION['perfil'] as $perfil) {
+                        if ($perfil['idPerfil'] == 9 || $perfil['idPerfil'] == $idTipoLicitacao) {
+                            echo '<a href="editarLicitacao.php?idLicitacao=' . $idLicitacao . '" class="card-action-btn" title="Editar Licitação">';
+                            echo '<ion-icon name="create-outline"></ion-icon>';
+                            echo '</a>';
+                            
+                            echo '<button type="button" onclick="confirmDelete(' . $idLicitacao . ')" class="card-action-btn" title="Excluir Licitação">';
+                            echo '<ion-icon name="trash-outline"></ion-icon>';
+                            echo '</button>';
+                            break;
+                        }
+                    }
+                }
+                
+                // Botão de notificação
+                if ($permitirAtualizacao == 1 && !empty($email)) {
+                    if (!$idAtualizacao) {
+                        echo '<button type="button" onclick="enviarAtualizacao(' . $idLicitacao . ')" class="card-action-btn notify" title="Receber notificações desta licitação">';
+                        echo '<ion-icon name="notifications-outline"></ion-icon>';
+                        echo '</button>';
+                    } else {
+                        echo '<button type="button" onclick="desativarAtualizacao(' . $idAtualizacao . ')" class="card-action-btn notify active" title="Desativar notificações">';
+                        echo '<ion-icon name="notifications"></ion-icon>';
+                        echo '</button>';
+                    }
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
 
-    echo "</p>
-            <p style='color:#999999'>$objLicitacao</p>
-            <label class='custom-label'><strong>$dtLicitacao</strong></label>";
-    if ($statusLicitacao == 'Em Andamento') {
-        echo "<fieldset class='custom-fieldset'><label class='custom-label'>$statusLicitacao</label></fieldset>";
-    } else if ($statusLicitacao == 'Suspenso') {
-        echo "<fieldset class='custom-fieldset suspenso'><label class='custom-label'>$statusLicitacao</label></fieldset>";
-    } else if ($statusLicitacao == 'Rascunho') {
-        echo "<fieldset class='custom-fieldset rascunho'><label class='custom-label'>$statusLicitacao</label></fieldset>";
-    } else {
-        echo "<fieldset class='custom-fieldset encerrado'><label class='custom-label'>$statusLicitacao</label></fieldset>";
-    }
-    echo "</td>";
+<!-- Visualização em Tabela -->
+<div class="table-container" id="tableContainer">
+    <div class="table-scroll-wrapper">
+        <table class="licitacoes-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Objeto</th>
+                <th>Tipo</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th style="width: 120px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($licitacoes as $registros):
+                $idLicitacao = $registros['ID_LICITACAO'];
+                $idTipoLicitacao = $registros['TIPO_LICITACAO'];
+                $tipoLicitacaoNome = $registros['NM_TIPO'];
+                $codLicitacao = $registros['SGL_TIPO'] . ' ' . $registros['COD_LICITACAO'];
+                $statusLicitacao = $registros['STATUS_LICITACAO'];
+                $dtLicitacao = date('d/m/Y', strtotime($registros['DT_LICITACAO']));
+                $objLicitacao = $registros['OBJETO_LICITACAO'];
+                $permitirAtualizacao = $registros['ENVIO_ATUALIZACAO_LICITACAO'];
+                
+                // Verificar notificações
+                $idAtualizacao = null;
+                if (!empty($email)) {
+                    $queryUpdateLicitacao = "SELECT ID_ATUALIZACAO FROM ATUALIZACAO 
+                                            WHERE ID_LICITACAO = $idLicitacao 
+                                            AND EMAIL_ADM LIKE '$email' 
+                                            AND DT_EXC_ATUALIZACAO IS NULL";
+                    $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
+                    $resultAtualizacao = $queryUpdateLici2->fetch(PDO::FETCH_ASSOC);
+                    if ($resultAtualizacao) {
+                        $idAtualizacao = $resultAtualizacao['ID_ATUALIZACAO'];
+                    }
+                }
+                
+                // Classe do status
+                $statusClass = '';
+                switch ($statusLicitacao) {
+                    case 'Em Andamento': $statusClass = 'em-andamento'; break;
+                    case 'Suspenso': $statusClass = 'suspenso'; break;
+                    case 'Encerrado': $statusClass = 'encerrado'; break;
+                    case 'Rascunho': $statusClass = 'rascunho'; break;
+                }
+            ?>
+            <tr>
+                <td class="table-codigo">
+                    <a href="viewLicitacao.php?idLicitacao=<?php echo $idLicitacao; ?>">
+                        <?php echo htmlspecialchars($codLicitacao); ?>
+                    </a>
+                </td>
+                <td class="table-objeto" title="<?php echo htmlspecialchars($objLicitacao); ?>">
+                    <?php echo htmlspecialchars($objLicitacao); ?>
+                </td>
+                <td>
+                    <?php if ($tipoLicitacaoNome): ?>
+                    <span class="table-tipo"><?php echo htmlspecialchars($tipoLicitacaoNome); ?></span>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo $dtLicitacao; ?></td>
+                <td>
+                    <span class="table-status card-status <?php echo $statusClass; ?>">
+                        <span class="card-status-dot"></span>
+                        <?php echo htmlspecialchars($statusLicitacao); ?>
+                    </span>
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <?php
+                        // Botões de ação para administradores
+                        if (isset($_SESSION['perfil'])) {
+                            foreach ($_SESSION['perfil'] as $perfil) {
+                                if ($perfil['idPerfil'] == 9 || $perfil['idPerfil'] == $idTipoLicitacao) {
+                                    echo '<a href="editarLicitacao.php?idLicitacao=' . $idLicitacao . '" class="card-action-btn" title="Editar">';
+                                    echo '<ion-icon name="create-outline"></ion-icon>';
+                                    echo '</a>';
+                                    
+                                    echo '<button type="button" onclick="confirmDelete(' . $idLicitacao . ')" class="card-action-btn" title="Excluir">';
+                                    echo '<ion-icon name="trash-outline"></ion-icon>';
+                                    echo '</button>';
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // Botão de notificação
+                        if ($permitirAtualizacao == 1 && !empty($email)) {
+                            if (!$idAtualizacao) {
+                                echo '<button type="button" onclick="enviarAtualizacao(' . $idLicitacao . ')" class="card-action-btn notify" title="Receber notificações">';
+                                echo '<ion-icon name="notifications-outline"></ion-icon>';
+                                echo '</button>';
+                            } else {
+                                echo '<button type="button" onclick="desativarAtualizacao(' . $idAtualizacao . ')" class="card-action-btn notify active" title="Desativar notificações">';
+                                echo '<ion-icon name="notifications"></ion-icon>';
+                                echo '</button>';
+                            }
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    </div><!-- /.table-scroll-wrapper -->
+</div>
 
-    echo "</tr>";
-endwhile;
+<?php else: ?>
 
-echo "</tbody>";
-echo "</table>";
+<!-- Empty State -->
+<div class="empty-state">
+    <div class="empty-state-icon">📋</div>
+    <h3>Nenhuma licitação encontrada</h3>
+    <p>Tente ajustar os filtros de busca ou limpar a pesquisa.</p>
+</div>
 
-echo "
-<script>
-function confirmDelete(idLicitacao) {
-    var resposta = confirm('Tem certeza que deseja excluir a licitação?');
-
-    if (resposta) {
-        window.location.href = 'bd/licitacao/delete.php?idLicitacao=' + idLicitacao;
-    }
-}
-
-function enviarAtualizacao(idLicitacao) {
-    
-    window.location.href = 'bd/licitacao/enviarAtualizacao.php?idLicitacao=' + idLicitacao;
-    
-}
-
-function desativarAtualizacao(idAtualizacao) {
-    
-    window.location.href = 'bd/atualizacao/desativar.php?idAtualizacao=' + idAtualizacao;
-    
-}
-</script>";
+<?php endif; ?>

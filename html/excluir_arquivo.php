@@ -1,4 +1,6 @@
 <?php
+//excluir_arquivo.php
+
 session_start();
 include_once 'bd/conexao.php';
 

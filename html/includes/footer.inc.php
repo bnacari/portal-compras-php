@@ -1,5 +1,4 @@
-      <!-- botão SUBIR no RODAPÉ  -->
-      <!-- <a href="#" class="btnSubir"></a> -->
-      
-    </body>
-  </html>
+<!-- Fim do conteúdo da página -->
+
+</body>
+</html>

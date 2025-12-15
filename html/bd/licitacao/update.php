@@ -1,9 +1,11 @@
 <?php
+//update.php
+
 session_start();
 
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('../../protectPerfil.php');
+include('../../protectPerfil.php'); 
 
 $pattern = "/^\d{4}-\d{2}-\d{2}$/";
 $patternTime = "/^\d{2}:\d{2}$/";

@@ -1,5 +1,5 @@
 <?php
-
+//arquivo esqueciSenha.php
 session_start();
 include_once '../conexao.php';
 include_once '../../redirecionar.php';

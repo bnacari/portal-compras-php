@@ -1,4 +1,9 @@
 # portal-compras-php
+
+<!-- http://vserv206.cesan.com.br:9950/
+caminho para o antigo PORTAL DE COMPRAS 
+Fica desligado, solicitar à infra que ligue qdo precisar-->
+
 ## Build / Deploy
 
 PARA PUBLICAR EM LOCALHOST (VDESK)
