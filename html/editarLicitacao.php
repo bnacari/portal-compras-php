@@ -638,7 +638,7 @@ endwhile;
                             <select name="tipoLicitacao" id="tipoLicitacao" class="form-select" required>
                                 <option value='' disabled>Selecione uma opção</option>
                                 <?php
-                                if (isset($isAdmin)) {
+                                if ($isAdmin == 1) {
                                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' ORDER BY NM_TIPO";
                                     $querySelect = $pdoCAT->query($querySelect2);
                                 } else {
