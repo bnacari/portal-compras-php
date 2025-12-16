@@ -11,9 +11,9 @@ session_start();
     <link rel="icon" type="imagem/png" href="imagens/favicon.png" />
 
     <!--========== CSS ==========-->
-    <link rel="stylesheet" href="../materialize/css/styleMenu.css">
+    <!-- <link rel="stylesheet" href="../materialize/css/styleMenu.css"> -->
 
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css" media="screen,projection" />
+    <!-- <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css" media="screen,projection" /> -->
 
     <script src="https://kit.fontawesome.com/78b4ea5db7.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

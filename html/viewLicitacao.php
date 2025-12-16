@@ -145,6 +145,14 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
     margin: 0;
 }
 
+.page-hero-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
 /* Section Card */
 .section-card {
     background: #ffffff;
@@ -426,6 +434,10 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
         font-size: 24px;
     }
     
+    .page-hero-subtitle {
+        justify-content: center;
+    }
+    
     .section-header {
         padding: 16px 20px;
     }
@@ -462,7 +474,23 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
             <span class="page-hero-icon">📋</span>
             <div class="page-hero-text">
                 <h1><?php echo $tituloLicitacao; ?></h1>
-                <p>Visualização detalhada da licitação</p>
+                <div class="page-hero-subtitle">
+                    <p>Visualização detalhada da licitação</p>
+                    <?php if (isset($statusLicitacao) && $statusLicitacao !== '') { 
+                        $statusClass = '';
+                        switch ($statusLicitacao) {
+                            case 'Em Andamento': $statusClass = 'em-andamento'; break;
+                            case 'Suspenso': $statusClass = 'suspenso'; break;
+                            case 'Encerrado': $statusClass = 'encerrado'; break;
+                            case 'Rascunho': $statusClass = 'rascunho'; break;
+                        }
+                    ?>
+                    <span class="status-badge <?php echo $statusClass; ?>">
+                        <span class="status-dot"></span>
+                        <?php echo $statusLicitacao; ?>
+                    </span>
+                    <?php } ?>
+                </div>
             </div>
         </div>
     </div>
@@ -486,26 +514,6 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 <div class="info-group">
                     <label><ion-icon name="barcode-outline"></ion-icon> Código</label>
                     <div class="info-value"><?php echo $codLicitacao; ?></div>
-                </div>
-                <?php } ?>
-
-                <?php if (isset($statusLicitacao) && $statusLicitacao !== '') { 
-                    $statusClass = '';
-                    switch ($statusLicitacao) {
-                        case 'Em Andamento': $statusClass = 'em-andamento'; break;
-                        case 'Suspenso': $statusClass = 'suspenso'; break;
-                        case 'Encerrado': $statusClass = 'encerrado'; break;
-                        case 'Rascunho': $statusClass = 'rascunho'; break;
-                    }
-                ?>
-                <div class="info-group">
-                    <label><ion-icon name="flag-outline"></ion-icon> Status</label>
-                    <div class="info-value">
-                        <span class="status-badge <?php echo $statusClass; ?>">
-                            <span class="status-dot"></span>
-                            <?php echo $statusLicitacao; ?>
-                        </span>
-                    </div>
                 </div>
                 <?php } ?>
 
