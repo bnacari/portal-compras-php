@@ -11,7 +11,6 @@ $idSubMenu = filter_input(INPUT_GET, 'idSubMenu', FILTER_SANITIZE_NUMBER_INT);
 
 /////////////////////////////////////////////////////////////////////////
 
-
 $queryAdmin = "SELECT * 
                 FROM [PortalCompras].[dbo].SUBMENU SM
                 LEFT JOIN MENU M ON M.ID_MENU = SM.ID_MENU
@@ -24,80 +23,411 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $linkSubMenu = $registros['LINK_SUBMENU'];
     $idMenu = $registros['ID_MENU'];
     $nmMenu = $registros['NM_MENU'];
-
 endwhile;
-
-/////////////////////////////////////////////////////////////////////////
-
 
 /////////////////////////////////////////////////////////////////////////
 
 ?>
 
-<!-- FORMULÁRIOS DE CADASTRO -->
-<div class="row container">
-    <form action="bd/submenu/update.php" method="post" class="col s12 formulario" id="formFiltrar">
-        <fieldset class="formulario col s12">
-            <h5 class="light" style="color: #404040">Editar Submenu</h5>
-        </fieldset>
+<style>
+    .page-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 20px;
+        padding: 40px 48px;
+        margin-bottom: 32px;
+        position: relative;
+        overflow: hidden;
+    }
 
-        <input style="display:none" type="text" id="idSubMenu" name="idSubMenu" value="<?php echo $idSubMenu ?>">
-        
-        <p>&nbsp;</p>
-        <fieldset class="formulario">
-            <!-- <h6><strong>Local a Visitar</strong></h6> -->
-            <div class="input-field col s4">
-                <input type="text" id="nmSubMenu" name="nmSubMenu" value="<?php echo $nmSubMenu ?>" autofocus>
-                <label>Nome</label>
-            </div>
+    .page-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
 
-            <div class="input-field col s4">
-                <input type="text" id="linkSubMenu" name="linkSubMenu" value="<?php echo $linkSubMenu ?>">
-                <label>Link</label>
-            </div>
+    .page-hero-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: relative;
+        z-index: 1;
+    }
 
-            <div class="input-field col s4">
-                <select name="idMenu" id="idMenu" required>
-                    <option value='' disabled>Selecione uma opção</option>
-                    <?php
-                    $querySelect2 = "SELECT * FROM portalcompras.dbo.[menu] WHERE DT_EXC_MENU IS NULL";
-                    $querySelect = $pdoCAT->query($querySelect2);
+    .page-hero-icon {
+        font-size: 48px;
+    }
 
-                    echo "<option value='" . $idMenu . "' selected>" . $nmMenu . "</option>";
-                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                        // Verifica se o ID é diferente do ID já selecionado
-                        if ($registros["ID_MENU"] != $idMenu) {
-                            echo "<option value='" . $registros["ID_MENU"] . "'>" . $registros["NM_MENU"] . "</option>";
-                        }
-                    endwhile;
-                    ?>
-                </select>
-                <!-- <label>Menu</label> -->
+    .page-hero-text h1 {
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+        letter-spacing: -0.02em;
+    }
 
-            </div>
-        </fieldset>
+    .page-hero-text p {
+        color: #94a3b8;
+        font-size: 16px;
+        margin: 0;
+    }
 
-        <p>&nbsp;</p>
+    .modern-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 24px;
+    }
 
-        <div class="input-field col s12">
-            <button type="submit" class="btn blue">Salvar</button>
-        </div>
-    </form>
-</div>
+    .modern-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
 
+    .card-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        padding: 24px 32px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .card-header i {
+        font-size: 20px;
+    }
+
+    .card-body {
+        padding: 32px;
+    }
+
+    /* Form Styles */
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-col-4 {
+        grid-column: span 4;
+    }
+
+    .form-col-12 {
+        grid-column: span 12;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .form-group label i {
+        font-size: 16px;
+    }
+
+    .form-group label .required-star {
+        color: #ef4444;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        background-color: #ffffff;
+        color: #1e293b;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Select2 Customization */
+    .select2-container--default .select2-selection--single {
+        height: auto !important;
+        padding: 12px 16px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 12px !important;
+        font-size: 14px !important;
+    }
+
+    .select2-container--default .select2-selection--single:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: normal !important;
+        padding: 0 !important;
+        color: #1e293b !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 100% !important;
+        right: 8px !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .select2-results__option {
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+    }
+
+    .select2-results__option--highlighted {
+        background-color: #eff6ff !important;
+        color: #1e40af !important;
+    }
+
+    /* Form Actions */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 32px;
+    }
+
+    .btn-modern {
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-save {
+        background: #0f172a;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #1e293b;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-clear {
+        background: #ffffff;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+    }
+
+    .btn-clear:hover {
+        background: #f1f5f9;
+        color: #334155;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .modern-container {
+            padding: 24px 16px;
+        }
+
+        .page-hero {
+            padding: 28px;
+        }
+
+        .page-hero-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .page-hero-text h1 {
+            font-size: 24px;
+        }
+
+        .card-body {
+            padding: 24px 16px;
+        }
+
+        .form-row {
+            gap: 16px;
+        }
+
+        .form-col-4 {
+            grid-column: span 12;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-modern {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .modern-container {
+            padding: 16px 12px;
+        }
+
+        .page-hero {
+            padding: 24px 16px;
+        }
+
+        .page-hero-text h1 {
+            font-size: 20px;
+        }
+
+        .page-hero-text p {
+            font-size: 14px;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+        }
+
+        .card-body {
+            padding: 20px 16px;
+        }
+    }
+</style>
 
 <!-- Inclua o jQuery Mask Plugin -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
-
-<!-- JS for jQuery -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 <!-- CSS for searching -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- JS for searching -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
+<div class="modern-container">
+    <!-- Hero Section -->
+    <div class="page-hero">
+        <div class="page-hero-content">
+            <span class="page-hero-icon">✏️</span>
+            <div class="page-hero-text">
+                <h1>Editar SubMenu</h1>
+                <p><?php echo htmlspecialchars($nmSubMenu); ?></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card de Edição -->
+    <div class="modern-card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-edit"></i>
+                Dados do SubMenu
+            </h2>
+        </div>
+        <div class="card-body">
+            <form action="bd/submenu/update.php" method="post" id="formFiltrar">
+                
+                <input style="display:none" type="text" id="idSubMenu" name="idSubMenu" value="<?php echo $idSubMenu ?>">
+                
+                <div class="form-row">
+                    <div class="form-col-4">
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-tag"></i>
+                                Nome do SubMenu <span class="required-star">*</span>
+                            </label>
+                            <input type="text" id="nmSubMenu" name="nmSubMenu" value="<?php echo htmlspecialchars($nmSubMenu) ?>" class="form-control" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-col-4">
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-link"></i>
+                                Link do SubMenu
+                            </label>
+                            <input type="text" id="linkSubMenu" name="linkSubMenu" value="<?php echo htmlspecialchars($linkSubMenu) ?>" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-col-4">
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-sitemap"></i>
+                                Menu Relacionado <span class="required-star">*</span>
+                            </label>
+                            <select name="idMenu" id="idMenu" class="form-select" required>
+                                <option value='' disabled>Selecione uma opção</option>
+                                <?php
+                                $querySelect2 = "SELECT * FROM portalcompras.dbo.[menu] WHERE DT_EXC_MENU IS NULL";
+                                $querySelect = $pdoCAT->query($querySelect2);
+
+                                echo "<option value='" . $idMenu . "' selected>" . htmlspecialchars($nmMenu) . "</option>";
+                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                    if ($registros["ID_MENU"] != $idMenu) {
+                                        echo "<option value='" . $registros["ID_MENU"] . "'>" . htmlspecialchars($registros["NM_MENU"]) . "</option>";
+                                    }
+                                endwhile;
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-modern btn-clear" onclick="window.history.back()">
+                        <i class="fas fa-times"></i>
+                        <span>Cancelar</span>
+                    </button>
+                    <button type="submit" class="btn-modern btn-save">
+                        <i class="fas fa-save"></i>
+                        <span>Salvar Alterações</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
 
 <script>
     function exibirAlertaIdMenu() {
@@ -107,10 +437,8 @@ endwhile;
     $(document).ready(function() {
         $('#idMenu').select2({
             width: '100%',
-            // placeholder: 'Selecione as partes do corpo',
+            placeholder: 'Selecione um menu',
             allowClear: true
         });
-
-
     });
 </script>
