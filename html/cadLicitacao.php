@@ -8,14 +8,20 @@ include_once 'includes/menu.inc.php';
 include('protectPerfil.php');
 
 foreach ($_SESSION['perfil'] as $perfil) {
-    $idPerfil[] = $perfil['idPerfil'];
+    $idPerfil[] = (int)$perfil['idPerfil']; // Força conversão para inteiro (segurança)
 
     if ($perfil['idPerfil'] == 9) {
         $isAdmin = 1;
     }
 }
 
+// Remove duplicatas e garante que só temos números inteiros
+$idPerfil = array_unique($idPerfil);
+$idPerfil = array_map('intval', $idPerfil);
 $idPerfilFinal = implode(',', $idPerfil);
+
+// Debug - descomente para verificar perfis disponíveis
+// echo "<!-- Perfis do usuário: $idPerfilFinal | Admin: " . (isset($isAdmin) ? 'Sim' : 'Não') . " -->";
 
 ?>
 
@@ -445,16 +451,41 @@ $idPerfilFinal = implode(',', $idPerfil);
                             <select name="tipoLicitacao" id="tipoLicitacao" class="form-select" required>
                                 <option value=''>Selecione uma opção</option>
                                 <?php
-                                if (isset($isAdmin)) {
-                                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' ORDER BY NM_TIPO";
+                                // ADMINISTRADOR vê todos os tipos
+                                if ($isAdmin == 1) {
+                                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] 
+                                                    WHERE DT_EXC_TIPO IS NULL 
+                                                    AND NM_TIPO NOT LIKE 'ADMINISTRADOR' 
+                                                    ORDER BY NM_TIPO";
                                     $querySelect = $pdoCAT->query($querySelect2);
-                                } else {
-                                    $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' AND ID_TIPO IN ($idPerfilFinal) ORDER BY NM_TIPO";
-                                    $querySelect = $pdoCAT->query($querySelect2);
+                                } 
+                                // USUÁRIO COMUM vê apenas os tipos de seus perfis
+                                else {
+                                    if (!empty($idPerfilFinal)) {
+                                        $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] 
+                                                        WHERE DT_EXC_TIPO IS NULL 
+                                                        AND NM_TIPO NOT LIKE 'ADMINISTRADOR' 
+                                                        AND ID_TIPO IN ($idPerfilFinal) 
+                                                        ORDER BY NM_TIPO";
+                                        $querySelect = $pdoCAT->query($querySelect2);
+                                    } else {
+                                        // Se não tem perfis, não executa query
+                                        $querySelect = null;
+                                    }
                                 }
-                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                                    echo "<option value='" . $registros["ID_TIPO"] . "'>" . $registros["NM_TIPO"] . " (" . $registros["SGL_TIPO"] . ")" . "</option>";
-                                endwhile;
+                                
+                                // Exibe as opções
+                                if ($querySelect) {
+                                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . 
+                                             htmlspecialchars($registros["NM_TIPO"]) . " (" . 
+                                             htmlspecialchars($registros["SGL_TIPO"]) . ")" . 
+                                             "</option>";
+                                    endwhile;
+                                } else {
+                                    // Sem perfis atribuídos
+                                    echo "<option value='' disabled>Nenhum tipo disponível para seu perfil</option>";
+                                }
                                 ?>
                             </select>
                         </div>
@@ -629,7 +660,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL ORDER BY NM_CRITERIO";
                                 $querySelect = $pdoCAT->query($querySelect2);
                                 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                                    echo "<option value='" . $registros["ID_CRITERIO"] . "'>" . $registros["NM_CRITERIO"] . "</option>";
+                                    echo "<option value='" . $registros["ID_CRITERIO"] . "'>" . htmlspecialchars($registros["NM_CRITERIO"]) . "</option>";
                                 endwhile;
                                 ?>
                             </select>
@@ -648,7 +679,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL ORDER BY NM_FORMA";
                                 $querySelect = $pdoCAT->query($querySelect2);
                                 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                                    echo "<option value='" . $registros["ID_FORMA"] . "'>" . $registros["NM_FORMA"] . "</option>";
+                                    echo "<option value='" . $registros["ID_FORMA"] . "'>" . htmlspecialchars($registros["NM_FORMA"]) . "</option>";
                                 endwhile;
                                 ?>
                             </select>

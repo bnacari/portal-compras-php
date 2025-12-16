@@ -43,7 +43,8 @@ function obterItensMenu($pdoCAT, $submenuID) {
 
 // Detectar ambiente
 function getAmbiente() {
-    if (strpos($_SERVER['HTTP_HOST'], 'vdesk') !== false || strpos($_SERVER['HTTP_HOST'], 'homolog') !== false) {
+    if (strpos($_SERVER['HTTP_HOST'], 'vdesk') !== false 
+        || strpos($_SERVER['HTTP_HOST'], 'hom-') !== false) {
         return "HOMOLOGAÇÃO";
     }
     return "PRODUÇÃO";
