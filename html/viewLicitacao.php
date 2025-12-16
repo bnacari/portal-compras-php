@@ -308,6 +308,39 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.file-table th:hover {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.file-table th.sortable {
+    position: relative;
+    padding-right: 30px;
+}
+
+.file-table th.sortable::after {
+    content: '⇅';
+    position: absolute;
+    right: 10px;
+    opacity: 0.3;
+    font-size: 12px;
+}
+
+.file-table th.sortable.asc::after {
+    content: '↑';
+    opacity: 1;
+    color: #3b82f6;
+}
+
+.file-table th.sortable.desc::after {
+    content: '↓';
+    opacity: 1;
+    color: #3b82f6;
 }
 
 .file-table td {
@@ -341,6 +374,12 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 .file-table a ion-icon {
     font-size: 18px;
     color: #94a3b8;
+}
+
+.file-date {
+    color: #64748b;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 /* Empty State */
@@ -462,6 +501,33 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
     .btn {
         width: 100%;
         justify-content: center;
+    }
+    
+    /* Tabela de anexos responsiva */
+    .file-table th,
+    .file-table td {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Empilha colunas em mobile */
+    .file-table {
+        font-size: 12px;
+    }
+    
+    .file-table th,
+    .file-table td {
+        padding: 10px 12px;
+    }
+    
+    .file-table a {
+        font-size: 13px;
+    }
+    
+    .file-date {
+        font-size: 11px;
     }
 }
 </style>
@@ -691,6 +757,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 $anexos[] = array(
                     'nmAnexo' => $registros['NM_ANEXO'],
                     'linkAnexo' => $registros['LINK_ANEXO'],
+                    'timestamp' => null // Anexos do banco não têm timestamp
                 );
             }
 
@@ -707,6 +774,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 }
             }
 
+            // Ordenação padrão por timestamp (mais recente primeiro)
             usort($anexos, function ($a, $b) {
                 $aTime = isset($a['timestamp']) ? $a['timestamp'] : 0;
                 $bTime = isset($b['timestamp']) ? $b['timestamp'] : 0;
@@ -715,14 +783,36 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 
             if (!empty($anexos)) {
                 echo '<div class="file-table-wrapper">';
-                echo '<table class="file-table">';
-                echo '<thead><tr><th>Arquivo</th></tr></thead>';
+                echo '<table class="file-table" id="anexosTable">';
+                echo '<thead>';
+                echo '<tr>';
+                echo '<th class="sortable" data-column="nome" data-order="asc">Arquivo</th>';
+                echo '<th class="sortable" data-column="data" data-order="desc">Data Inclusão</th>';
+                echo '</tr>';
+                echo '</thead>';
                 echo '<tbody>';
 
                 foreach ($anexos as $anexo) {
                     if (!empty($anexo['nmAnexo'])) {
-                        echo '<tr>';
-                        echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . $anexo['nmAnexo'] . '</a></td>';
+                        echo '<tr data-timestamp="' . ($anexo['timestamp'] ?? 0) . '" data-nome="' . htmlspecialchars($anexo['nmAnexo']) . '">';
+                        
+                        // Coluna Arquivo
+                        echo '<td>';
+                        echo '<a href="' . htmlspecialchars($anexo['linkAnexo']) . '" target="_blank">';
+                        echo '<ion-icon name="document-outline"></ion-icon> ';
+                        echo htmlspecialchars($anexo['nmAnexo']);
+                        echo '</a>';
+                        echo '</td>';
+                        
+                        // Coluna Data Inclusão
+                        echo '<td class="file-date">';
+                        if ($anexo['timestamp']) {
+                            echo date("d/m/Y H:i:s", $anexo['timestamp']);
+                        } else {
+                            echo '<span style="color: #94a3b8;">Não disponível</span>';
+                        }
+                        echo '</td>';
+                        
                         echo '</tr>';
                     }
                 }
@@ -756,3 +846,72 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
         <?php } ?>
     </div>
 </div>
+
+<script>
+// Sistema de ordenação da tabela de anexos
+document.addEventListener('DOMContentLoaded', function() {
+    const table = document.getElementById('anexosTable');
+    
+    if (!table) return;
+    
+    const headers = table.querySelectorAll('th.sortable');
+    
+    headers.forEach(header => {
+        header.addEventListener('click', function() {
+            const column = this.getAttribute('data-column');
+            const currentOrder = this.getAttribute('data-order');
+            const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+            
+            // Remove classes de ordenação de todos os headers
+            headers.forEach(h => {
+                h.classList.remove('asc', 'desc');
+            });
+            
+            // Adiciona classe de ordenação ao header clicado
+            this.classList.add(newOrder);
+            this.setAttribute('data-order', newOrder);
+            
+            // Ordena a tabela
+            sortTable(column, newOrder);
+        });
+    });
+    
+    function sortTable(column, order) {
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        rows.sort((a, b) => {
+            let aValue, bValue;
+            
+            if (column === 'nome') {
+                aValue = a.getAttribute('data-nome').toLowerCase();
+                bValue = b.getAttribute('data-nome').toLowerCase();
+                
+                if (order === 'asc') {
+                    return aValue.localeCompare(bValue);
+                } else {
+                    return bValue.localeCompare(aValue);
+                }
+            } else if (column === 'data') {
+                aValue = parseInt(a.getAttribute('data-timestamp')) || 0;
+                bValue = parseInt(b.getAttribute('data-timestamp')) || 0;
+                
+                if (order === 'asc') {
+                    return aValue - bValue;
+                } else {
+                    return bValue - aValue;
+                }
+            }
+        });
+        
+        // Reordena as linhas no DOM
+        rows.forEach(row => tbody.appendChild(row));
+    }
+    
+    // Marca a coluna "Data Inclusão" como ordenada descendente por padrão
+    const dataHeader = table.querySelector('th[data-column="data"]');
+    if (dataHeader) {
+        dataHeader.classList.add('desc');
+    }
+});
+</script>
