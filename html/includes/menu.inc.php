@@ -82,7 +82,6 @@ if (isset($_SESSION['msg'])) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     
@@ -98,47 +97,47 @@ if (isset($_SESSION['msg'])) {
 
         body {
             margin: 0;
-            padding: 70px 0 0 280px !important;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            padding: 60px 0 0 220px !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
             background-color: #f8fafc !important;
             min-height: 100vh;
-            transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.sidebar-collapsed {
-            padding-left: 80px !important;
+            padding-left: 70px !important;
         }
 
         /* ============================================
-           HEADER PRINCIPAL
+           HEADER PRINCIPAL - 60px
            ============================================ */
         .modern-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 70px;
+            height: 60px;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 32px;
+            padding: 0 20px;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .modern-header-left {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .btn-toggle-menu {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
             display: flex;
             align-items: center;
@@ -153,114 +152,117 @@ if (isset($_SESSION['msg'])) {
         }
 
         .btn-toggle-menu ion-icon {
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .modern-header-left a {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
         }
 
         .modern-header-logo {
-            width: 40px;
-            height: 44px;
-            border-radius: 12px;
+            width: 32px;
+            height: 38px;
+            border-radius: 8px;
+            object-fit: contain;
         }
 
         .modern-header-title {
-            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .modern-header-title .brand-name {
+            font-size: 16px;
             font-weight: 800;
             color: #ffffff;
-            margin: 0;
+            letter-spacing: -0.02em;
+            line-height: 1;
             display: flex;
             align-items: center;
             gap: 8px;
-            letter-spacing: -0.02em;
         }
 
-        .modern-header-title .emoji {
-            font-size: 24px;
+        .modern-header-title .system-fullname {
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.02em;
+            line-height: 1;
         }
 
         .ambiente-badge {
-            font-size: 10px;
+            font-size: 8px;
             font-weight: 700;
             color: #0f172a;
             background: #fbbf24;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 100px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-left: 8px;
+            letter-spacing: 0.5px;
         }
 
         .ambiente-badge.producao {
             background: #22c55e;
-            color: #ffffff;
+            color: white;
         }
 
         .modern-header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px 16px;
+            gap: 10px;
+            padding: 6px 14px 6px 6px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 100px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .user-avatar.external {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
 
         .user-avatar.admin {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
 
         .admin-badge {
             background: rgba(251, 191, 36, 0.2);
             color: #fbbf24;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-left: 4px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 2px;
         }
 
         .btn-logout {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(239, 68, 68, 0.25);
             color: #fca5a5;
             display: flex;
             align-items: center;
@@ -272,39 +274,64 @@ if (isset($_SESSION['msg'])) {
 
         .btn-logout:hover {
             background: rgba(239, 68, 68, 0.2);
-            border-color: rgba(239, 68, 68, 0.5);
+            border-color: rgba(239, 68, 68, 0.4);
             color: #fef2f2;
-            transform: translateY(-2px);
         }
 
         .btn-logout ion-icon {
-            font-size: 22px;
+            font-size: 18px;
+        }
+
+        .btn-login {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-login:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
+            color: #bfdbfe;
+        }
+
+        .btn-login ion-icon {
+            font-size: 18px;
         }
 
         /* ============================================
-           SIDEBAR MODERNA EXPANDÍVEL
+           SIDEBAR - 220px (70px collapsed)
            ============================================ */
         .modern-sidebar {
             position: fixed;
-            top: 70px;
+            top: 60px;
             left: 0;
-            width: 280px;
-            height: calc(100vh - 70px);
+            width: 220px;
+            height: calc(100vh - 60px);
             background: #ffffff;
             border-right: 1px solid #e2e8f0;
-            padding: 24px 0;
+            padding: 16px 0;
             z-index: 999;
             overflow-y: auto;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
         }
 
         .modern-sidebar.collapsed {
-            width: 80px;
+            width: 70px;
         }
 
         .modern-sidebar::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
 
         .modern-sidebar::-webkit-scrollbar-thumb {
@@ -312,80 +339,131 @@ if (isset($_SESSION['msg'])) {
             border-radius: 4px;
         }
 
+        /* Seção do Menu */
         .sidebar-section {
-            margin-bottom: 32px;
+            margin-bottom: 8px;
         }
 
+        /* Título da Seção - Clicável */
         .sidebar-section-title {
-            padding: 0 20px;
-            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            margin: 0 12px 4px 12px;
+            font-size: 10px;
             font-weight: 700;
-            color: #94a3b8;
+            color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-            transition: opacity 0.2s ease;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            user-select: none;
         }
 
-        .modern-sidebar.collapsed .sidebar-section-title {
+        .sidebar-section-title:hover {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .sidebar-section-title .section-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-section-title .section-icon ion-icon {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .sidebar-section-title .toggle-icon {
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .sidebar-section-title.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        /* Conteúdo da Seção - Recolhível */
+        .sidebar-section-content {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+            opacity: 1;
+        }
+
+        .sidebar-section-content.collapsed {
+            max-height: 0;
             opacity: 0;
-            pointer-events: none;
         }
 
+        /* Menu colapsado */
+        .modern-sidebar.collapsed .sidebar-section-title {
+            justify-content: center;
+            padding: 8px;
+            margin: 0 8px 4px 8px;
+        }
+
+        .modern-sidebar.collapsed .sidebar-section-title span,
+        .modern-sidebar.collapsed .sidebar-section-title .toggle-icon {
+            display: none;
+        }
+
+        .modern-sidebar.collapsed .sidebar-section-title .section-icon ion-icon {
+            font-size: 18px;
+            opacity: 1;
+        }
+
+        .modern-sidebar.collapsed .sidebar-section-content {
+            max-height: 1000px !important;
+            opacity: 1 !important;
+        }
+
+        /* Nav Links */
         .sidebar-nav {
             list-style: none;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
 
         .sidebar-item {
-            position: relative;
-            padding: 0 16px;
+            padding: 0 12px;
         }
 
         .sidebar-link {
             display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 12px 16px;
-            border-radius: 12px;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
             color: #64748b;
             background: transparent;
             transition: all 0.2s ease;
             text-decoration: none;
             position: relative;
-            font-size: 14px;
-            font-weight: 600;
-            overflow: hidden;
-            min-height: 48px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
         .sidebar-link ion-icon {
-            font-size: 22px;
+            font-size: 18px;
             flex-shrink: 0;
             transition: transform 0.2s ease;
-            margin-top: 2px;
         }
 
         .sidebar-link-text {
             flex: 1;
-            white-space: normal;
-            word-wrap: break-word;
-            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             transition: opacity 0.2s ease;
-        }
-
-        .modern-sidebar.collapsed .sidebar-link-text {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .modern-sidebar.collapsed .sidebar-link {
-            justify-content: center;
-            padding: 12px;
         }
 
         .sidebar-link:hover {
@@ -400,7 +478,7 @@ if (isset($_SESSION['msg'])) {
         .sidebar-link.active {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             color: #3b82f6;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .sidebar-link.active::before {
@@ -409,47 +487,22 @@ if (isset($_SESSION['msg'])) {
             left: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 4px;
-            height: 24px;
+            width: 3px;
+            height: 18px;
             background: #3b82f6;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0 3px 3px 0;
         }
 
-        /* Tooltip para menu colapsado */
-        .sidebar-link::after {
-            content: attr(data-title);
-            position: absolute;
-            left: 80px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #0f172a;
-            color: white;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.2s ease;
-            z-index: 1000;
-        }
-
-        .modern-sidebar.collapsed .sidebar-link:hover::after {
-            opacity: 1;
-            left: 85px;
-        }
-
-        /* Badge de contador */
+        /* Badge nos links */
         .sidebar-badge {
             background: #eff6ff;
             color: #3b82f6;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 100px;
             margin-left: auto;
-            transition: opacity 0.2s ease;
+            flex-shrink: 0;
         }
 
         .sidebar-badge.external {
@@ -463,22 +516,70 @@ if (isset($_SESSION['msg'])) {
         }
 
         .modern-sidebar.collapsed .sidebar-badge {
+            display: none;
+        }
+
+        /* Arrow para submenus */
+        .sidebar-link .arrow-icon {
+            font-size: 14px;
+            transition: transform 0.2s ease;
+            margin-left: auto;
+            flex-shrink: 0;
+            opacity: 0.5;
+        }
+
+        .sidebar-item.open > .sidebar-link .arrow-icon {
+            transform: rotate(90deg);
+        }
+
+        /* Menu colapsado */
+        .modern-sidebar.collapsed .sidebar-link-text,
+        .modern-sidebar.collapsed .arrow-icon {
+            opacity: 0;
+            width: 0;
+            display: none;
+        }
+
+        .modern-sidebar.collapsed .sidebar-link {
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .modern-sidebar.collapsed .sidebar-item {
+            padding: 0 8px;
+        }
+
+        /* Tooltip para menu colapsado */
+        .sidebar-link::after {
+            content: attr(data-title);
+            position: absolute;
+            left: 65px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0f172a;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
             opacity: 0;
             pointer-events: none;
+            transition: all 0.2s ease;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Divisor */
-        .sidebar-divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #e2e8f0, transparent);
-            margin: 20px 16px;
+        .modern-sidebar.collapsed .sidebar-link:hover::after {
+            opacity: 1;
+            left: 70px;
         }
 
-        /* Submenu styles */
+        /* Submenus */
         .sidebar-submenu {
             list-style: none;
             margin: 0;
-            padding: 0;
+            padding: 4px 0 4px 12px;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
@@ -489,152 +590,136 @@ if (isset($_SESSION['msg'])) {
         }
 
         .sidebar-submenu .sidebar-item {
-            padding: 0 16px 0 32px;
+            padding: 0 12px 0 0;
         }
 
         .sidebar-submenu .sidebar-link {
-            padding: 10px 16px;
-            font-size: 13px;
-            min-height: 40px;
+            padding: 8px 10px;
+            font-size: 11px;
+            border-radius: 6px;
+            margin: 1px 0;
         }
 
         .sidebar-submenu .sidebar-link ion-icon {
-            font-size: 18px;
+            font-size: 15px;
         }
 
-        .sidebar-submenu .sidebar-link-text {
-            font-size: 13px;
-            line-height: 1.3;
+        .sidebar-submenu .sidebar-link .sidebar-badge {
+            font-size: 8px;
+            padding: 1px 5px;
         }
 
-        .sidebar-link .arrow-icon {
-            font-size: 16px;
-            transition: transform 0.2s ease;
-            margin-left: auto;
-            flex-shrink: 0;
+        /* Nested submenu (nível 2) */
+        .sidebar-submenu .sidebar-submenu {
+            margin: 0;
+            padding: 4px 0 4px 8px;
         }
 
-        .sidebar-item.open > .sidebar-link .arrow-icon {
-            transform: rotate(90deg);
-        }
-
-        /* Nested submenu */
         .sidebar-submenu .sidebar-submenu .sidebar-item {
-            padding-left: 48px;
+            padding: 0 12px 0 0;
         }
 
         .sidebar-submenu .sidebar-submenu .sidebar-link {
-            font-size: 12px;
-            padding: 8px 16px;
-            min-height: 36px;
+            font-size: 11px;
+            padding: 7px 10px;
         }
 
-        .sidebar-submenu .sidebar-submenu .sidebar-link-text {
-            font-size: 12px;
+        /* Nested submenu (nível 3) */
+        .sidebar-submenu .sidebar-submenu .sidebar-submenu {
+            padding-left: 8px;
+        }
+
+        /* Divisor */
+        .sidebar-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+            margin: 12px 16px;
         }
 
         /* ============================================
-           MODAL DE MENSAGEM MODERNO
+           TOAST NOTIFICATIONS
            ============================================ */
-        .modern-modal-message {
-            display: none;
+        .toast-container {
             position: fixed;
-            top: 90px;
-            right: 24px;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-left: 4px solid #3b82f6;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            top: 76px;
+            right: 20px;
             z-index: 10000;
-            max-width: 400px;
-            animation: slideInRight 0.3s ease;
-        }
-
-        .modern-modal-message.success {
-            border-left-color: #22c55e;
-        }
-
-        .modern-modal-message.error {
-            border-left-color: #ef4444;
-        }
-
-        .modern-modal-message.warning {
-            border-left-color: #f59e0b;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .modal-message-header {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
         }
 
-        .modal-message-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: #eff6ff;
+        .toast {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #3b82f6;
-            font-size: 18px;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            min-width: 300px;
+            max-width: 380px;
+            pointer-events: auto;
+            animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 4px solid #3b82f6;
         }
 
-        .modern-modal-message.success .modal-message-icon {
-            background: #dcfce7;
-            color: #16a34a;
-        }
+        .toast.sucesso { border-left-color: #22c55e; }
+        .toast.erro { border-left-color: #ef4444; }
+        .toast.alerta { border-left-color: #f59e0b; }
+        .toast.info { border-left-color: #3b82f6; }
 
-        .modern-modal-message.error .modal-message-icon {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .modern-modal-message.warning .modal-message-icon {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .modal-close-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
+        .toast-icon {
             width: 24px;
             height: 24px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .modal-close-btn:hover {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .modal-message-text {
+            flex-shrink: 0;
             font-size: 14px;
+        }
+
+        .toast.sucesso .toast-icon { background: #dcfce7; color: #15803d; }
+        .toast.erro .toast-icon { background: #fee2e2; color: #b91c1c; }
+        .toast.alerta .toast-icon { background: #fef3c7; color: #b45309; }
+        .toast.info .toast-icon { background: #dbeafe; color: #1d4ed8; }
+
+        .toast-content { flex: 1; }
+
+        .toast-message {
+            font-size: 13px;
             color: #475569;
-            line-height: 1.5;
             margin: 0;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 2px;
+            font-size: 16px;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .toast-close:hover { color: #475569; }
+
+        @keyframes toastSlideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.hiding {
+            animation: toastSlideOut 0.3s ease forwards;
+        }
+
+        @keyframes toastSlideOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100px); }
         }
 
         /* ============================================
@@ -655,9 +740,7 @@ if (isset($_SESSION['msg'])) {
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal-card {
             background: #ffffff;
@@ -677,7 +760,7 @@ if (isset($_SESSION['msg'])) {
 
         .modal-header {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            padding: 24px 32px;
+            padding: 20px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -685,25 +768,23 @@ if (isset($_SESSION['msg'])) {
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .modal-title ion-icon {
-            font-size: 24px;
-        }
+        .modal-title ion-icon { font-size: 20px; }
 
         .modal-close {
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #ffffff;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -711,65 +792,53 @@ if (isset($_SESSION['msg'])) {
             transition: background 0.2s ease;
         }
 
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+        .modal-close:hover { background: rgba(255, 255, 255, 0.2); }
+        .modal-close ion-icon { font-size: 18px; }
 
-        .modal-close ion-icon {
-            font-size: 20px;
-        }
+        .modal-body { padding: 24px; }
 
-        .modal-body {
-            padding: 32px;
-        }
-
-        .contact-section {
-            margin-bottom: 28px;
-        }
-
-        .contact-section:last-child {
-            margin-bottom: 0;
-        }
+        .contact-section { margin-bottom: 24px; }
+        .contact-section:last-child { margin-bottom: 0; }
 
         .contact-section-title {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: #0f172a;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .contact-section-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #3b82f6;
             margin-bottom: 4px;
         }
 
         .contact-section-address {
-            font-size: 13px;
+            font-size: 12px;
             color: #64748b;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
+            gap: 10px;
+            padding: 10px 14px;
             background: #f8fafc;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 13px;
             color: #0f172a;
         }
 
         .contact-item ion-icon {
-            font-size: 18px;
+            font-size: 16px;
             color: #3b82f6;
         }
 
@@ -778,21 +847,19 @@ if (isset($_SESSION['msg'])) {
             text-decoration: none;
         }
 
-        .contact-item a:hover {
-            text-decoration: underline;
-        }
+        .contact-item a:hover { text-decoration: underline; }
 
         .modal-footer {
-            padding: 20px 32px;
+            padding: 16px 24px;
             border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: flex-end;
         }
 
         .btn-modal {
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             border: none;
@@ -807,238 +874,152 @@ if (isset($_SESSION['msg'])) {
         }
 
         /* ============================================
-           RESPONSIVE
+           RESPONSIVIDADE
            ============================================ */
         @media (max-width: 1024px) {
-            .modern-header {
-                padding: 0 16px;
-            }
+            .modern-header { padding: 0 16px; }
+            .modern-sidebar { width: 70px; }
 
-            .modern-sidebar {
-                width: 240px;
-            }
-
-            body {
-                padding-left: 240px !important;
-            }
-
-            .user-info span {
+            .modern-sidebar .sidebar-section-title span,
+            .modern-sidebar .sidebar-section-title .toggle-icon,
+            .modern-sidebar .sidebar-link-text,
+            .modern-sidebar .sidebar-badge,
+            .modern-sidebar .arrow-icon {
                 display: none;
+                opacity: 0;
             }
 
-            .admin-badge {
-                display: none;
+            .modern-sidebar .sidebar-section-title {
+                justify-content: center;
+                padding: 8px;
+                margin: 0 8px 4px 8px;
             }
+
+            .modern-sidebar .sidebar-link {
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .modern-sidebar .sidebar-item { padding: 0 8px; }
+            .modern-sidebar .sidebar-section-content { max-height: 1000px !important; opacity: 1 !important; }
+            .modern-sidebar .sidebar-submenu { display: none; }
+
+            body { padding-left: 70px !important; }
+
+            .user-info span:not(.user-avatar) { display: none; }
+            .user-info { padding: 6px; }
+            .admin-badge { display: none; }
+            .modern-header-title .system-fullname { display: none; }
         }
 
         @media (max-width: 768px) {
-            .modern-header {
-                padding: 0 12px;
-            }
-
-            .modern-header-title {
-                font-size: 16px;
-            }
-
-            .modern-header-title .emoji {
-                display: none;
-            }
-
-            .ambiente-badge {
-                display: none;
-            }
+            .modern-header { height: 56px; padding: 0 12px; }
+            .modern-header-title .brand-name { font-size: 14px; }
+            .ambiente-badge { display: none; }
 
             .modern-sidebar {
-                transform: translateX(-100%);
-                width: 280px;
-                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+                top: 56px;
+                height: calc(100vh - 56px);
+                width: 0;
+                padding: 0;
+                border: none;
             }
 
             .modern-sidebar.mobile-open {
-                transform: translateX(0);
+                width: 260px;
+                padding: 16px 0;
+                border-right: 1px solid #e2e8f0;
             }
 
-            body {
-                padding-left: 0 !important;
+            .modern-sidebar.mobile-open .sidebar-section-title span,
+            .modern-sidebar.mobile-open .sidebar-section-title .toggle-icon,
+            .modern-sidebar.mobile-open .sidebar-link-text,
+            .modern-sidebar.mobile-open .sidebar-badge,
+            .modern-sidebar.mobile-open .arrow-icon {
+                display: flex;
+                opacity: 1;
             }
+
+            .modern-sidebar.mobile-open .sidebar-section-title {
+                justify-content: space-between;
+                padding: 10px 16px;
+                margin: 0 12px 4px 12px;
+            }
+
+            .modern-sidebar.mobile-open .sidebar-link {
+                justify-content: flex-start;
+                padding: 9px 12px;
+            }
+
+            .modern-sidebar.mobile-open .sidebar-item { padding: 0 12px; }
+            .modern-sidebar.mobile-open .sidebar-submenu { display: block; }
+
+            body { padding: 56px 0 0 0 !important; }
+            body.sidebar-collapsed { padding-left: 0 !important; }
 
             .sidebar-overlay {
                 display: none;
                 position: fixed;
-                top: 70px;
+                top: 56px;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(15, 23, 42, 0.5);
+                background: rgba(0, 0, 0, 0.5);
                 z-index: 998;
                 backdrop-filter: blur(2px);
             }
 
-            .sidebar-overlay.show {
-                display: block;
-            }
-
-            /* Botão hambúrguer visível em mobile */
-            .btn-toggle-menu {
-                display: flex;
-            }
-
-            .user-info {
-                padding: 8px;
-            }
-
-            .btn-logout {
-                width: 40px;
-                height: 40px;
-            }
+            .sidebar-overlay.active { display: block; }
         }
 
         @media (max-width: 480px) {
-            .modern-header {
-                height: 60px;
-                padding: 0 10px;
-            }
-
-            .modern-header-logo {
-                width: 32px;
-                height: 36px;
-            }
-
-            .modern-header-title {
-                font-size: 14px;
-            }
-
-            .btn-toggle-menu {
-                width: 38px;
-                height: 38px;
-            }
-
-            .user-avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 12px;
-            }
-
-            .btn-logout {
-                width: 36px;
-                height: 36px;
-            }
-
-            .btn-logout ion-icon {
-                font-size: 18px;
-            }
-
-            .modern-sidebar {
-                top: 60px;
-                height: calc(100vh - 60px);
-                width: 260px;
-            }
-
-            body {
-                padding-top: 60px !important;
-            }
-
-            .sidebar-overlay {
-                top: 60px;
-            }
-
-            .sidebar-link {
-                padding: 10px 14px;
-                font-size: 13px;
-                min-height: 44px;
-            }
-
-            .sidebar-link ion-icon {
-                font-size: 20px;
-            }
-
-            .sidebar-section-title {
-                font-size: 10px;
-                padding: 0 16px;
-            }
-
-            .sidebar-item {
-                padding: 0 12px;
-            }
-        }
-
-        /* Botão hambúrguer - hidden by default, shown on mobile */
-        .btn-toggle-menu {
-            display: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .btn-toggle-menu:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        .btn-toggle-menu ion-icon {
-            font-size: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .btn-toggle-menu {
-                display: flex;
-            }
+            .modern-header-logo { width: 28px; height: 32px; }
+            .btn-toggle-menu, .btn-logout, .btn-login { width: 34px; height: 34px; }
+            .user-avatar { width: 28px; height: 28px; font-size: 10px; }
+            .toast-container { top: 68px; right: 12px; left: 12px; }
+            .toast { min-width: auto; max-width: 100%; }
         }
 
         /* Esconder elementos antigos */
-        .header2,
-        .sidebar2,
-        .content2,
-        #check {
-            display: none !important;
-        }
+        .header2, .sidebar2, .content2, #check { display: none !important; }
     </style>
 </head>
 <body>
 
 <!-- Overlay para mobile -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
 
 <!-- Header Moderno -->
 <header class="modern-header">
     <div class="modern-header-left">
-        <button class="btn-toggle-menu" onclick="toggleSidebar()" title="Expandir/Recolher Menu">
+        <button class="btn-toggle-menu" onclick="toggleSidebar()" title="Menu">
             <ion-icon name="menu-outline"></ion-icon>
         </button>
 
         <a href="index.php">
             <img src="imagens/logo_icon.png" class="modern-header-logo" alt="Logo">
-            <h3 class="modern-header-title">
-                Portal de Compras
-                <span class="ambiente-badge <?php echo $ambiente === 'PRODUÇÃO' ? 'producao' : ''; ?>"><?php echo $ambiente; ?></span>
-            </h3>
+            <div class="modern-header-title">
+                <span class="brand-name">
+                    Portal de Compras
+                    <span class="ambiente-badge <?= $ambiente === 'PRODUÇÃO' ? 'producao' : '' ?>"><?= $ambiente ?></span>
+                </span>
+                <span class="system-fullname">Licitações e Contratos - CESAN</span>
+            </div>
         </a>
     </div>
 
     <div class="modern-header-right">
         <?php if (isset($_SESSION['login'])): ?>
             <div class="user-info">
-                <div class="user-avatar <?php echo $isAdmin ? 'admin' : ''; ?>">
-                    <?php echo $userInitials; ?>
-                </div>
-                <span><?php echo htmlspecialchars($login); ?></span>
-                <?php if ($isAdmin): ?>
-                    <span class="admin-badge">ADMIN</span>
-                <?php endif; ?>
+                <div class="user-avatar <?= $isAdmin ? 'admin' : '' ?>"><?= $userInitials ?></div>
+                <span><?= htmlspecialchars($login) ?></span>
+                <?php if ($isAdmin): ?><span class="admin-badge">ADMIN</span><?php endif; ?>
             </div>
             <a href="logout.php" class="btn-logout" title="Sair do Sistema">
                 <ion-icon name="exit-outline"></ion-icon>
             </a>
         <?php else: ?>
-            <a href="login.php" class="btn-logout" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); color: #93c5fd;" title="Acessar Sistema">
+            <a href="login.php" class="btn-login" title="Acessar Sistema">
                 <ion-icon name="log-in-outline"></ion-icon>
             </a>
         <?php endif; ?>
@@ -1047,204 +1028,242 @@ if (isset($_SESSION['msg'])) {
 
 <!-- Sidebar Moderna -->
 <aside class="modern-sidebar" id="modernSidebar">
-    
-    <!-- Seção Principal -->
+    <!-- Seção: Principal -->
     <div class="sidebar-section">
-        <div class="sidebar-section-title">Principal</div>
-        <ul class="sidebar-nav">
-            <li class="sidebar-item">
-                <a href="consultarLicitacao.php" class="sidebar-link <?php echo $paginaAtual === 'consultarLicitacao' ? 'active' : ''; ?>" data-title="Licitações">
-                    <ion-icon name="document-text-outline"></ion-icon>
-                    <span class="sidebar-link-text">Licitações</span>
-                </a>
-            </li>
-        </ul>
+        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="principal">
+            <span class="section-icon">
+                <ion-icon name="home-outline"></ion-icon>
+                <span>Principal</span>
+            </span>
+            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+        </div>
+        <div class="sidebar-section-content" id="section-principal">
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="consultarLicitacao.php" class="sidebar-link <?= $paginaAtual === 'consultarLicitacao' ? 'active' : '' ?>" data-title="Licitações">
+                        <ion-icon name="document-text-outline"></ion-icon>
+                        <span class="sidebar-link-text">Licitações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 
-    <!-- Menus Dinâmicos do Banco -->
     <?php
     $menusPrincipais = obterMenusPrincipais($pdoCAT);
     if (!empty($menusPrincipais)):
     ?>
+    <div class="sidebar-divider"></div>
     <div class="sidebar-section">
-        <div class="sidebar-section-title">Navegação</div>
-        <ul class="sidebar-nav">
-            <?php foreach ($menusPrincipais as $menu): 
-                $submenus = obterSubMenus($pdoCAT, $menu['ID_MENU']);
-                $hasSubmenus = !empty($submenus);
-            ?>
-            <li class="sidebar-item <?php echo $hasSubmenus ? 'has-submenu' : ''; ?>">
-                <?php if ($hasSubmenus): ?>
-                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="<?php echo htmlspecialchars($menu['NM_MENU']); ?>">
-                        <ion-icon name="folder-outline"></ion-icon>
-                        <span class="sidebar-link-text"><?php echo htmlspecialchars($menu['NM_MENU']); ?></span>
-                        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
-                    </a>
-                    <ul class="sidebar-submenu">
-                        <?php foreach ($submenus as $submenu): 
-                            $itens = obterItensMenu($pdoCAT, $submenu['ID_SUBMENU']);
-                            $hasItens = !empty($itens);
-                        ?>
-                        <li class="sidebar-item <?php echo $hasItens ? 'has-submenu' : ''; ?>">
-                            <?php if ($hasItens): ?>
-                                <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="<?php echo htmlspecialchars($submenu['NM_SUBMENU']); ?>">
-                                    <ion-icon name="folder-open-outline"></ion-icon>
-                                    <span class="sidebar-link-text"><?php echo htmlspecialchars($submenu['NM_SUBMENU']); ?></span>
-                                    <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
-                                </a>
-                                <ul class="sidebar-submenu">
-                                    <?php foreach ($itens as $item): ?>
-                                    <li class="sidebar-item">
-                                        <a href="<?php echo htmlspecialchars($item['LINK_ITEMMENU']); ?>" class="sidebar-link" target="_blank" data-title="<?php echo htmlspecialchars($item['NM_ITEMMENU']); ?>">
-                                            <ion-icon name="link-outline"></ion-icon>
-                                            <span class="sidebar-link-text"><?php echo htmlspecialchars($item['NM_ITEMMENU']); ?></span>
-                                            <span class="sidebar-badge external">Ext</span>
-                                        </a>
-                                    </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php else: ?>
-                                <a href="<?php echo htmlspecialchars($submenu['LINK_SUBMENU']); ?>" class="sidebar-link" target="_blank" data-title="<?php echo htmlspecialchars($submenu['NM_SUBMENU']); ?>">
-                                    <ion-icon name="link-outline"></ion-icon>
-                                    <span class="sidebar-link-text"><?php echo htmlspecialchars($submenu['NM_SUBMENU']); ?></span>
-                                    <span class="sidebar-badge external">Ext</span>
-                                </a>
-                            <?php endif; ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php else: ?>
-                    <a href="<?php echo htmlspecialchars($menu['LINK_MENU']); ?>" class="sidebar-link" target="_blank" data-title="<?php echo htmlspecialchars($menu['NM_MENU']); ?>">
-                        <ion-icon name="link-outline"></ion-icon>
-                        <span class="sidebar-link-text"><?php echo htmlspecialchars($menu['NM_MENU']); ?></span>
-                        <span class="sidebar-badge external">Ext</span>
-                    </a>
-                <?php endif; ?>
-            </li>
-            <?php endforeach; ?>
-        </ul>
+        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="navegacao">
+            <span class="section-icon">
+                <ion-icon name="compass-outline"></ion-icon>
+                <span>Navegação</span>
+            </span>
+            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+        </div>
+        <div class="sidebar-section-content" id="section-navegacao">
+            <ul class="sidebar-nav">
+                <?php foreach ($menusPrincipais as $menu): 
+                    $submenus = obterSubMenus($pdoCAT, $menu['ID_MENU']);
+                    $hasSubmenus = !empty($submenus);
+                ?>
+                <li class="sidebar-item <?= $hasSubmenus ? 'has-submenu' : '' ?>">
+                    <?php if ($hasSubmenus): ?>
+                        <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="<?= htmlspecialchars($menu['NM_MENU']) ?>" title="<?= htmlspecialchars($menu['NM_MENU']) ?>">
+                            <ion-icon name="folder-outline"></ion-icon>
+                            <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($menu['NM_MENU']) ?>"><?= htmlspecialchars($menu['NM_MENU']) ?></span>
+                            <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+                        </a>
+                        <ul class="sidebar-submenu">
+                            <?php foreach ($submenus as $submenu): 
+                                $itens = obterItensMenu($pdoCAT, $submenu['ID_SUBMENU']);
+                                $hasItens = !empty($itens);
+                            ?>
+                            <li class="sidebar-item <?= $hasItens ? 'has-submenu' : '' ?>">
+                                <?php if ($hasItens): ?>
+                                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>" title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>">
+                                        <ion-icon name="folder-open-outline"></ion-icon>
+                                        <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"><?= htmlspecialchars($submenu['NM_SUBMENU']) ?></span>
+                                        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+                                    </a>
+                                    <ul class="sidebar-submenu">
+                                        <?php foreach ($itens as $item): ?>
+                                        <li class="sidebar-item">
+                                            <a href="<?= htmlspecialchars($item['LINK_ITEMMENU']) ?>" class="sidebar-link" target="_blank" data-title="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>" title="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>">
+                                                <ion-icon name="link-outline"></ion-icon>
+                                                <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>"><?= htmlspecialchars($item['NM_ITEMMENU']) ?></span>
+                                                <span class="sidebar-badge external">Ext</span>
+                                            </a>
+                                        </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php else: ?>
+                                    <a href="<?= htmlspecialchars($submenu['LINK_SUBMENU']) ?>" class="sidebar-link" target="_blank" data-title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>" title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>">
+                                        <ion-icon name="link-outline"></ion-icon>
+                                        <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"><?= htmlspecialchars($submenu['NM_SUBMENU']) ?></span>
+                                        <span class="sidebar-badge external">Ext</span>
+                                    </a>
+                                <?php endif; ?>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <a href="<?= htmlspecialchars($menu['LINK_MENU']) ?>" class="sidebar-link" target="_blank" data-title="<?= htmlspecialchars($menu['NM_MENU']) ?>" title="<?= htmlspecialchars($menu['NM_MENU']) ?>">
+                            <ion-icon name="link-outline"></ion-icon>
+                            <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($menu['NM_MENU']) ?>"><?= htmlspecialchars($menu['NM_MENU']) ?></span>
+                            <span class="sidebar-badge external">Ext</span>
+                        </a>
+                    <?php endif; ?>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     </div>
     <?php endif; ?>
 
-    <!-- Cadastros (usuários logados) -->
     <?php if (!empty($_SESSION['idPerfilFinal'])): ?>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
-        <div class="sidebar-section-title">Cadastros</div>
-        <ul class="sidebar-nav">
-            <li class="sidebar-item">
-                <a href="cadLicitacao.php" class="sidebar-link <?php echo $paginaAtual === 'cadLicitacao' ? 'active' : ''; ?>" data-title="Criar Licitação">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                    <span class="sidebar-link-text">Criar Licitação</span>
-                </a>
-            </li>
-        </ul>
+        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="cadastros">
+            <span class="section-icon">
+                <ion-icon name="add-circle-outline"></ion-icon>
+                <span>Cadastros</span>
+            </span>
+            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+        </div>
+        <div class="sidebar-section-content" id="section-cadastros">
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="cadLicitacao.php" class="sidebar-link <?= $paginaAtual === 'cadLicitacao' ? 'active' : '' ?>" data-title="Criar Licitação">
+                        <ion-icon name="create-outline"></ion-icon>
+                        <span class="sidebar-link-text">Criar Licitação</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <?php endif; ?>
 
-    <!-- Administração -->
     <?php if ($isAdmin): ?>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
-        <div class="sidebar-section-title">Administração</div>
-        <ul class="sidebar-nav">
-            <li class="sidebar-item">
-                <a href="cadCriterio.php" class="sidebar-link <?php echo $paginaAtual === 'cadCriterio' ? 'active' : ''; ?>" data-title="Critérios">
-                    <ion-icon name="checkmark-circle-outline"></ion-icon>
-                    <span class="sidebar-link-text">Critérios</span>
-                    <span class="sidebar-badge admin">Adm</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="cadForma.php" class="sidebar-link <?php echo $paginaAtual === 'cadForma' ? 'active' : ''; ?>" data-title="Formas">
-                    <ion-icon name="git-branch-outline"></ion-icon>
-                    <span class="sidebar-link-text">Formas</span>
-                    <span class="sidebar-badge admin">Adm</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="cadTipo.php" class="sidebar-link <?php echo $paginaAtual === 'cadTipo' ? 'active' : ''; ?>" data-title="Tipos de Contratação">
-                    <ion-icon name="pricetag-outline"></ion-icon>
-                    <span class="sidebar-link-text">Tipos de Contratação</span>
-                    <span class="sidebar-badge admin">Adm</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="consultarUsuario.php" class="sidebar-link <?php echo $paginaAtual === 'consultarUsuario' ? 'active' : ''; ?>" data-title="Usuários">
-                    <ion-icon name="people-outline"></ion-icon>
-                    <span class="sidebar-link-text">Usuários</span>
-                    <span class="sidebar-badge admin">Adm</span>
-                </a>
-            </li>
-            <li class="sidebar-item has-submenu">
-                <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="Menus">
-                    <ion-icon name="menu-outline"></ion-icon>
-                    <span class="sidebar-link-text">Menus</span>
-                    <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li class="sidebar-item">
-                        <a href="cadMenu.php" class="sidebar-link <?php echo $paginaAtual === 'cadMenu' ? 'active' : ''; ?>" data-title="Menu Principal">
-                            <ion-icon name="list-outline"></ion-icon>
-                            <span class="sidebar-link-text">Menu Principal</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="cadSubMenu.php" class="sidebar-link <?php echo $paginaAtual === 'cadSubMenu' ? 'active' : ''; ?>" data-title="SubMenu">
-                            <ion-icon name="git-network-outline"></ion-icon>
-                            <span class="sidebar-link-text">SubMenu</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="cadItemMenu.php" class="sidebar-link <?php echo $paginaAtual === 'cadItemMenu' ? 'active' : ''; ?>" data-title="Item de Menu">
-                            <ion-icon name="link-outline"></ion-icon>
-                            <span class="sidebar-link-text">Item de Menu</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sidebar-item">
-                <a href="cadAnexos.php" class="sidebar-link <?php echo $paginaAtual === 'cadAnexos' ? 'active' : ''; ?>" data-title="Anexos">
-                    <ion-icon name="attach-outline"></ion-icon>
-                    <span class="sidebar-link-text">Anexos</span>
-                    <span class="sidebar-badge admin">Adm</span>
-                </a>
-            </li>
-        </ul>
+        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="admin">
+            <span class="section-icon">
+                <ion-icon name="settings-outline"></ion-icon>
+                <span>Administração</span>
+            </span>
+            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+        </div>
+        <div class="sidebar-section-content" id="section-admin">
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="cadCriterio.php" class="sidebar-link <?= $paginaAtual === 'cadCriterio' ? 'active' : '' ?>" data-title="Critérios">
+                        <ion-icon name="checkmark-circle-outline"></ion-icon>
+                        <span class="sidebar-link-text">Critérios</span>
+                        <span class="sidebar-badge admin">Adm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="cadForma.php" class="sidebar-link <?= $paginaAtual === 'cadForma' ? 'active' : '' ?>" data-title="Formas">
+                        <ion-icon name="git-branch-outline"></ion-icon>
+                        <span class="sidebar-link-text">Formas</span>
+                        <span class="sidebar-badge admin">Adm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="cadTipo.php" class="sidebar-link <?= $paginaAtual === 'cadTipo' ? 'active' : '' ?>" data-title="Tipos de Contratação">
+                        <ion-icon name="pricetag-outline"></ion-icon>
+                        <span class="sidebar-link-text">Tipos de Contratação</span>
+                        <span class="sidebar-badge admin">Adm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="consultarUsuario.php" class="sidebar-link <?= $paginaAtual === 'consultarUsuario' ? 'active' : '' ?>" data-title="Usuários">
+                        <ion-icon name="people-outline"></ion-icon>
+                        <span class="sidebar-link-text">Usuários</span>
+                        <span class="sidebar-badge admin">Adm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item has-submenu">
+                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="Menus">
+                        <ion-icon name="menu-outline"></ion-icon>
+                        <span class="sidebar-link-text">Menus</span>
+                        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li class="sidebar-item">
+                            <a href="cadMenu.php" class="sidebar-link <?= $paginaAtual === 'cadMenu' ? 'active' : '' ?>" data-title="Menu Principal">
+                                <ion-icon name="list-outline"></ion-icon>
+                                <span class="sidebar-link-text">Menu Principal</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="cadSubMenu.php" class="sidebar-link <?= $paginaAtual === 'cadSubMenu' ? 'active' : '' ?>" data-title="SubMenu">
+                                <ion-icon name="git-network-outline"></ion-icon>
+                                <span class="sidebar-link-text">SubMenu</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="cadItemMenu.php" class="sidebar-link <?= $paginaAtual === 'cadItemMenu' ? 'active' : '' ?>" data-title="Item de Menu">
+                                <ion-icon name="link-outline"></ion-icon>
+                                <span class="sidebar-link-text">Item de Menu</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="cadAnexos.php" class="sidebar-link <?= $paginaAtual === 'cadAnexos' ? 'active' : '' ?>" data-title="Anexos">
+                        <ion-icon name="attach-outline"></ion-icon>
+                        <span class="sidebar-link-text">Anexos</span>
+                        <span class="sidebar-badge admin">Adm</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <?php endif; ?>
 
-    <!-- Configurações -->
     <?php if (isset($_SESSION['login'])): ?>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
-        <div class="sidebar-section-title">Configurações</div>
-        <ul class="sidebar-nav">
-            <?php if (strpos($login, '@') !== false): ?>
-            <li class="sidebar-item">
-                <a href="trocaSenhaUsuario.php" class="sidebar-link <?php echo $paginaAtual === 'trocaSenhaUsuario' ? 'active' : ''; ?>" data-title="Trocar Senha">
-                    <ion-icon name="key-outline"></ion-icon>
-                    <span class="sidebar-link-text">Trocar Senha</span>
-                </a>
-            </li>
-            <?php endif; ?>
-            <li class="sidebar-item">
-                <a href="consultarAtualizacao.php" class="sidebar-link <?php echo $paginaAtual === 'consultarAtualizacao' ? 'active' : ''; ?>" data-title="Envio de E-mail">
-                    <ion-icon name="mail-outline"></ion-icon>
-                    <span class="sidebar-link-text">Envio de E-mail</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="javascript:void(0)" class="sidebar-link" onclick="openModalContato()" data-title="Contatos">
-                    <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                    <span class="sidebar-link-text">Contatos</span>
-                </a>
-            </li>
-        </ul>
+        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="config">
+            <span class="section-icon">
+                <ion-icon name="cog-outline"></ion-icon>
+                <span>Configurações</span>
+            </span>
+            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+        </div>
+        <div class="sidebar-section-content" id="section-config">
+            <ul class="sidebar-nav">
+                <?php if (strpos($login, '@') !== false): ?>
+                <li class="sidebar-item">
+                    <a href="trocaSenhaUsuario.php" class="sidebar-link <?= $paginaAtual === 'trocaSenhaUsuario' ? 'active' : '' ?>" data-title="Trocar Senha">
+                        <ion-icon name="key-outline"></ion-icon>
+                        <span class="sidebar-link-text">Trocar Senha</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li class="sidebar-item">
+                    <a href="consultarAtualizacao.php" class="sidebar-link <?= $paginaAtual === 'consultarAtualizacao' ? 'active' : '' ?>" data-title="Envio de E-mail">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <span class="sidebar-link-text">Envio de E-mail</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="javascript:void(0)" class="sidebar-link" onclick="openModalContato()" data-title="Contatos">
+                        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                        <span class="sidebar-link-text">Contatos</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <?php endif; ?>
-
 </aside>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
 
 <!-- Modal de Contatos -->
 <div class="modal-overlay" id="modalContato">
@@ -1274,13 +1293,11 @@ if (isset($_SESSION['msg'])) {
                     </div>
                 </div>
             </div>
-
             <div class="contact-section">
                 <p class="contact-section-title">Informações sobre pregões, dispensas eletrônicas e cadastro de fornecedores</p>
                 <p class="contact-section-subtitle">Divisão de Compras e Suprimentos (A-DCS)</p>
                 <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
-                
-                <p style="font-weight: 600; color: #0f172a; margin: 16px 0 12px 0;">Pregoeiros</p>
+                <p style="font-weight: 600; color: #0f172a; margin: 12px 0 8px 0; font-size: 13px;">Pregoeiros</p>
                 <div class="contact-list">
                     <div class="contact-item">
                         <ion-icon name="mail-outline"></ion-icon>
@@ -1307,142 +1324,112 @@ if (isset($_SESSION['msg'])) {
     </div>
 </div>
 
-<!-- Modal de Mensagem Moderno -->
-<div id="modalMensagem" class="modern-modal-message">
-    <div class="modal-message-header">
-        <div class="modal-message-icon">
-            <ion-icon name="checkmark-circle"></ion-icon>
-        </div>
-        <button class="modal-close-btn" onclick="fecharModal()">
-            <ion-icon name="close"></ion-icon>
-        </button>
-    </div>
-    <p id="textoMensagem" class="modal-message-text"></p>
-</div>
-
-<!-- Scripts -->
 <script>
-    // Toggle Sidebar (Desktop)
+    // Toggle Sidebar
     function toggleSidebar() {
         const sidebar = document.getElementById('modernSidebar');
         const body = document.body;
-
-        if (window.innerWidth <= 768) {
-            // Mobile: abrir/fechar completamente
-            sidebar.classList.toggle('mobile-open');
-            document.getElementById('sidebarOverlay').classList.toggle('show');
-            body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
-        } else {
-            // Desktop: expandir/colapsar
-            sidebar.classList.toggle('collapsed');
-            body.classList.toggle('sidebar-collapsed');
-
-            // Salvar preferência no localStorage
-            const isCollapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', isCollapsed);
-        }
-    }
-
-    // Toggle Mobile Menu
-    function toggleMobileMenu() {
-        const sidebar = document.getElementById('modernSidebar');
         const overlay = document.getElementById('sidebarOverlay');
 
-        sidebar.classList.remove('mobile-open');
-        overlay.classList.remove('show');
-        document.body.style.overflow = '';
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+            return;
+        }
+
+        sidebar.classList.toggle('collapsed');
+        body.classList.toggle('sidebar-collapsed');
+        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+    }
+
+    function closeMobileSidebar() {
+        document.getElementById('modernSidebar').classList.remove('mobile-open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
+    // Toggle Section
+    function toggleSection(element) {
+        const sidebar = document.getElementById('modernSidebar');
+        if (sidebar.classList.contains('collapsed') && window.innerWidth > 768) return;
+
+        const sectionId = element.getAttribute('data-section');
+        const content = document.getElementById('section-' + sectionId);
+
+        element.classList.toggle('collapsed');
+        content.classList.toggle('collapsed');
+
+        const states = JSON.parse(localStorage.getItem('sidebarSections') || '{}');
+        states[sectionId] = content.classList.contains('collapsed');
+        localStorage.setItem('sidebarSections', JSON.stringify(states));
     }
 
     // Toggle Submenu
     function toggleSubmenu(element) {
-        const parent = element.closest('.sidebar-item');
-        parent.classList.toggle('open');
+        element.closest('.sidebar-item').classList.toggle('open');
     }
 
-    // Restaurar estado do sidebar ao carregar
-    window.addEventListener('DOMContentLoaded', function() {
+    // Restore States
+    document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth > 768) {
-            const savedState = localStorage.getItem('sidebarCollapsed');
-            if (savedState === 'true') {
+            if (localStorage.getItem('sidebarCollapsed') === 'true') {
                 document.getElementById('modernSidebar').classList.add('collapsed');
                 document.body.classList.add('sidebar-collapsed');
             }
         }
+
+        const sectionStates = JSON.parse(localStorage.getItem('sidebarSections') || '{}');
+        for (const [section, isCollapsed] of Object.entries(sectionStates)) {
+            if (isCollapsed) {
+                const title = document.querySelector(`[data-section="${section}"]`);
+                const content = document.getElementById('section-' + section);
+                if (title && content) {
+                    title.classList.add('collapsed');
+                    content.classList.add('collapsed');
+                }
+            }
+        }
     });
 
-    // Modal de mensagem
-    function abrirModal(mensagem, tipo = 'info') {
-        const modal = document.getElementById('modalMensagem');
-        const iconEl = modal.querySelector('.modal-message-icon ion-icon');
+    // Handle Resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            document.getElementById('modernSidebar').classList.remove('mobile-open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+    });
 
-        // Remover classes anteriores
-        modal.classList.remove('success', 'error', 'warning');
-
-        // Definir tipo
-        const icons = {
-            success: 'checkmark-circle',
-            error: 'close-circle',
-            warning: 'warning',
-            info: 'information-circle'
-        };
-
-        modal.classList.add(tipo);
-        iconEl.setAttribute('name', icons[tipo] || icons.info);
-
-        document.getElementById('textoMensagem').textContent = mensagem;
-        modal.style.display = 'block';
-
-        setTimeout(() => {
-            fecharModal();
-        }, 5000);
+    // Toast System
+    function showToast(message, type = 'info', duration = 5000) {
+        const container = document.getElementById('toastContainer');
+        const icons = { sucesso: 'checkmark-circle', erro: 'close-circle', alerta: 'warning', info: 'information-circle' };
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <div class="toast-icon"><ion-icon name="${icons[type] || icons.info}"></ion-icon></div>
+            <div class="toast-content"><p class="toast-message">${message}</p></div>
+            <button class="toast-close" onclick="closeToast(this)"><ion-icon name="close"></ion-icon></button>
+        `;
+        container.appendChild(toast);
+        if (duration > 0) setTimeout(() => { if (toast.parentNode) closeToast(toast.querySelector('.toast-close')); }, duration);
     }
 
-    function fecharModal() {
-        const modal = document.getElementById('modalMensagem');
-        modal.style.display = 'none';
+    function closeToast(button) {
+        const toast = button.closest('.toast');
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
     }
 
     // Modal Contato
-    function openModalContato() {
-        document.getElementById('modalContato').classList.add('active');
-    }
+    function openModalContato() { document.getElementById('modalContato').classList.add('active'); }
+    function closeModalContato() { document.getElementById('modalContato').classList.remove('active'); }
 
-    function closeModalContato() {
-        document.getElementById('modalContato').classList.remove('active');
-    }
-
-    // Fechar modal ao clicar no overlay
-    document.getElementById('modalContato').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModalContato();
-        }
-    });
-
-    // Fechar sidebar ao clicar em link (mobile)
+    document.getElementById('modalContato').addEventListener('click', function(e) { if (e.target === this) closeModalContato(); });
     document.querySelectorAll('.sidebar-link').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768 && !link.getAttribute('onclick')) {
-                toggleMobileMenu();
-            }
-        });
+        link.addEventListener('click', () => { if (window.innerWidth <= 768 && !link.getAttribute('onclick')) closeMobileSidebar(); });
     });
-
-    // Fechar com ESC
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            fecharModal();
-            closeModalContato();
-            if (window.innerWidth <= 768) {
-                toggleMobileMenu();
-            }
-        }
-    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModalContato(); if (window.innerWidth <= 768) closeMobileSidebar(); } });
 </script>
 
 <?php if (!empty($msgSistema)): ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        abrirModal(<?php echo json_encode($msgSistema); ?>, 'info');
-    });
-</script>
+<script>document.addEventListener('DOMContentLoaded', function() { showToast(<?= json_encode($msgSistema) ?>, 'info'); });</script>
 <?php endif; ?>

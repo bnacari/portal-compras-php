@@ -40,8 +40,17 @@ include('protectAdmin.php');
         z-index: 1;
     }
 
-    .page-hero-icon {
-        font-size: 48px;
+     .page-hero-icon {
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -309,7 +318,9 @@ include('protectAdmin.php');
 <div class="modern-container">
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">👥</span>
+            <div class="page-hero-icon">
+                <ion-icon name="people-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Administrar Usuários</h1>
                 <p>Gerencie os usuários e seus perfis de acesso ao sistema</p>
@@ -333,7 +344,9 @@ include('protectAdmin.php');
                                 <i class="fas fa-user"></i>
                                 Nome ou Login do Usuário
                             </label>
-                            <input type="text" name="nome" id="nome" class="form-control" maxlength="100" style="text-transform: uppercase" autofocus placeholder="Digite o nome ou login" value="<?php echo isset($_POST['nome']) ? htmlspecialchars($_POST['nome']) : ''; ?>">
+                            <input type="text" name="nome" id="nome" class="form-control" maxlength="100"
+                                style="text-transform: uppercase" autofocus placeholder="Digite o nome ou login"
+                                value="<?php echo isset($_POST['nome']) ? htmlspecialchars($_POST['nome']) : ''; ?>">
                         </div>
                     </div>
 
@@ -348,7 +361,7 @@ include('protectAdmin.php');
                                 <?php
                                 $querySelect2 = "SELECT * FROM TIPO_LICITACAO WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO";
                                 $querySelect = $pdoCAT->query($querySelect2);
-                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)):
                                     $selected = (isset($_POST['perfilUsuario']) && $_POST['perfilUsuario'] == $registros["ID_TIPO"]) ? 'selected' : '';
                                     echo "<option value='" . $registros["ID_TIPO"] . "' $selected>" . $registros["NM_TIPO"] . "</option>";
                                 endwhile;
@@ -383,16 +396,16 @@ include('protectAdmin.php');
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Inicializar Select2
         $('#perfilUsuario').select2({
             placeholder: 'Todos os perfis',
             allowClear: true
         });
-        
+
         // Se tiver valor selecionado, trigger change para atualizar visual
         <?php if (isset($_POST['perfilUsuario']) && $_POST['perfilUsuario'] != '0'): ?>
-        $('#perfilUsuario').trigger('change');
+            $('#perfilUsuario').trigger('change');
         <?php endif; ?>
     });
 </script>

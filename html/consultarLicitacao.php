@@ -102,7 +102,16 @@ $tipoLicitacaoFilter = filter_input(INPUT_POST, 'tipoLicitacao', FILTER_SANITIZE
 }
 
 .page-hero-icon {
-    font-size: 40px;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 28px;
 }
 
 .page-hero-text h1 {
@@ -785,7 +794,9 @@ $tipoLicitacaoFilter = filter_input(INPUT_POST, 'tipoLicitacao', FILTER_SANITIZE
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">📋</span>
+            <div class="page-hero-icon">
+                <ion-icon name="document-text-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Licitações</h1>
                 <p>Consulte e gerencie todas as licitações do sistema</p>

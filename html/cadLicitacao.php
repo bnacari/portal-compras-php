@@ -8,7 +8,7 @@ include_once 'includes/menu.inc.php';
 include('protectPerfil.php');
 
 foreach ($_SESSION['perfil'] as $perfil) {
-    $idPerfil[] = (int)$perfil['idPerfil']; // Força conversão para inteiro (segurança)
+    $idPerfil[] = (int) $perfil['idPerfil']; // Força conversão para inteiro (segurança)
 
     if ($perfil['idPerfil'] == 9) {
         $isAdmin = 1;
@@ -55,7 +55,16 @@ $idPerfilFinal = implode(',', $idPerfil);
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -174,6 +183,7 @@ $idPerfilFinal = implode(',', $idPerfil);
     }
 
     @media (max-width: 1024px) {
+
         .form-col-3,
         .form-col-4 {
             grid-column: span 6;
@@ -422,7 +432,9 @@ $idPerfilFinal = implode(',', $idPerfil);
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">💼</span>
+            <div class="page-hero-icon">
+                <ion-icon name="document-text-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Nova Licitação</h1>
                 <p>Cadastre uma nova licitação no sistema de compras</p>
@@ -430,8 +442,9 @@ $idPerfilFinal = implode(',', $idPerfil);
         </div>
     </div>
 
-    <form action="bd/licitacao/create.php" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario()">
-        
+    <form action="bd/licitacao/create.php" method="post" enctype="multipart/form-data"
+        onsubmit="return validarFormulario()">
+
         <!-- Seção: Informações Básicas -->
         <div class="modern-fieldset">
             <div class="fieldset-header">
@@ -458,7 +471,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                                                     AND NM_TIPO NOT LIKE 'ADMINISTRADOR' 
                                                     ORDER BY NM_TIPO";
                                     $querySelect = $pdoCAT->query($querySelect2);
-                                } 
+                                }
                                 // USUÁRIO COMUM vê apenas os tipos de seus perfis
                                 else {
                                     if (!empty($idPerfilFinal)) {
@@ -473,14 +486,14 @@ $idPerfilFinal = implode(',', $idPerfil);
                                         $querySelect = null;
                                     }
                                 }
-                                
+
                                 // Exibe as opções
                                 if ($querySelect) {
-                                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
-                                        echo "<option value='" . $registros["ID_TIPO"] . "'>" . 
-                                             htmlspecialchars($registros["NM_TIPO"]) . " (" . 
-                                             htmlspecialchars($registros["SGL_TIPO"]) . ")" . 
-                                             "</option>";
+                                    while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)):
+                                        echo "<option value='" . $registros["ID_TIPO"] . "'>" .
+                                            htmlspecialchars($registros["NM_TIPO"]) . " (" .
+                                            htmlspecialchars($registros["SGL_TIPO"]) . ")" .
+                                            "</option>";
                                     endwhile;
                                 } else {
                                     // Sem perfis atribuídos
@@ -543,7 +556,8 @@ $idPerfilFinal = implode(',', $idPerfil);
                                 <i class="fas fa-fingerprint"></i>
                                 Identificador
                             </label>
-                            <input type="text" id="identificadorLicitacao" name="identificadorLicitacao" class="form-control">
+                            <input type="text" id="identificadorLicitacao" name="identificadorLicitacao"
+                                class="form-control">
                         </div>
                     </div>
 
@@ -659,7 +673,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                                 <?php
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL ORDER BY NM_CRITERIO";
                                 $querySelect = $pdoCAT->query($querySelect2);
-                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)):
                                     echo "<option value='" . $registros["ID_CRITERIO"] . "'>" . htmlspecialchars($registros["NM_CRITERIO"]) . "</option>";
                                 endwhile;
                                 ?>
@@ -678,7 +692,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                                 <?php
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL ORDER BY NM_FORMA";
                                 $querySelect = $pdoCAT->query($querySelect2);
-                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)):
                                     echo "<option value='" . $registros["ID_FORMA"] . "'>" . htmlspecialchars($registros["NM_FORMA"]) . "</option>";
                                 endwhile;
                                 ?>
@@ -747,20 +761,20 @@ $idPerfilFinal = implode(',', $idPerfil);
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Desabilita a inicialização automática do Materialize para selects neste formulário
         $('form select').formSelect('destroy');
-        
+
         $('#codLicitacao').mask('000/0000');
     });
 
     // Evento 'input' no campo 'codLicitacao'
-    $('#codLicitacao').on('input', function() {
+    $('#codLicitacao').on('input', function () {
         validarCodLicitacao();
     });
 
     // Evento 'change' no dropdown 'tipoLicitacao'
-    $('#tipoLicitacao').on('change', function() {
+    $('#tipoLicitacao').on('change', function () {
         // Verifica se o campo 'codLicitacao' está preenchido
         if ($('#codLicitacao').val().length === 8) {
             validarCodLicitacao();
@@ -781,7 +795,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                     tipoLicitacao: tipoLicitacao
                 },
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     // console.log('Resposta do servidor:', response);
                     if (response == 1) {
                         $('#codLicitacao').val('');
@@ -791,7 +805,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                         // Código da Licitação não cadastrado, continuar com outras ações se necessário
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     // Trate os erros de requisição AJAX, se necessário
                     console.error(error);
                 }
@@ -818,7 +832,7 @@ $idPerfilFinal = implode(',', $idPerfil);
     }
 
     // RESPONSÁVEL PELA INCLUSÃO / EXCLUSÃO DE ANEXOS
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const anexos = document.getElementById('anexos');
         if (anexos) {
             const fileTableBody = document.getElementById('tableBody');
@@ -844,7 +858,7 @@ $idPerfilFinal = implode(',', $idPerfil);
                 deleteButton.className = 'material-icons delete-icon';
                 deleteButton.textContent = 'remove';
                 deleteButton.style.cursor = 'pointer';
-                deleteButton.addEventListener('click', function() {
+                deleteButton.addEventListener('click', function () {
                     row.remove();
                 });
 

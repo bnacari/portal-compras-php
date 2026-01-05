@@ -38,7 +38,16 @@ include_once 'includes/menu.inc.php';
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -194,7 +203,9 @@ include_once 'includes/menu.inc.php';
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">🔔</span>
+            <div class="page-hero-icon">
+                <ion-icon name="mail-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Notificações de Licitações</h1>
                 <p>Gerencie as licitações que você receberá atualizações por e-mail</p>
@@ -216,8 +227,10 @@ include_once 'includes/menu.inc.php';
                 <i class="fas fa-info-circle"></i>
                 <div class="info-alert-content">
                     <p>
-                        Você receberá notificações por e-mail sempre que houver atualizações nas licitações listadas abaixo.
-                        Para cancelar o recebimento de notificações, acesse a licitação e desmarque a opção correspondente.
+                        Você receberá notificações por e-mail sempre que houver atualizações nas licitações listadas
+                        abaixo.
+                        Para cancelar o recebimento de notificações, acesse a licitação e desmarque a opção
+                        correspondente.
                     </p>
                 </div>
             </div>

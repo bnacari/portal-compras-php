@@ -40,7 +40,16 @@ include('protectAdmin.php');
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -303,7 +312,9 @@ include('protectAdmin.php');
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">📌</span>
+            <div class="page-hero-icon">
+                <ion-icon name="link-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Administrar ItensMenu</h1>
                 <p>Gerencie os itens de submenu do sistema</p>
@@ -328,7 +339,8 @@ include('protectAdmin.php');
                                 <i class="fas fa-tag"></i>
                                 Nome do ItemMenu <span class="required-star">*</span>
                             </label>
-                            <input type="text" id="nmItemMenu" name="nmItemMenu" class="form-control" required autofocus placeholder="Digite o nome do item">
+                            <input type="text" id="nmItemMenu" name="nmItemMenu" class="form-control" required autofocus
+                                placeholder="Digite o nome do item">
                         </div>
                     </div>
 
@@ -338,7 +350,8 @@ include('protectAdmin.php');
                                 <i class="fas fa-link"></i>
                                 Link do ItemMenu
                             </label>
-                            <input type="text" id="linkItemMenu" name="linkItemMenu" class="form-control" placeholder="Digite o link do item (ex: pagina.php)">
+                            <input type="text" id="linkItemMenu" name="linkItemMenu" class="form-control"
+                                placeholder="Digite o link do item (ex: pagina.php)">
                         </div>
                     </div>
                 </div>
@@ -355,7 +368,7 @@ include('protectAdmin.php');
                                 <?php
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[submenu] WHERE DT_EXC_SUBMENU IS NULL ORDER BY NM_SUBMENU";
                                 $querySelect = $pdoCAT->query($querySelect2);
-                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)):
                                     echo "<option value='" . $registros["ID_SUBMENU"] . "'>" . $registros["NM_SUBMENU"] . "</option>";
                                 endwhile;
                                 ?>
@@ -397,7 +410,7 @@ include('protectAdmin.php');
         alert("Por favor, preencha o campo 'SubMenu relacionado'");
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#idSubMenu').select2({
             width: '100%',
             placeholder: 'Selecione um submenu',

@@ -40,7 +40,16 @@ include('protectAdmin.php');
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -402,7 +411,9 @@ include('protectAdmin.php');
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">🗂️</span>
+            <div class="page-hero-icon">
+                <ion-icon name="list-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Administrar Menus</h1>
                 <p>Gerencie os itens de menu do sistema</p>
@@ -425,7 +436,8 @@ include('protectAdmin.php');
                         <i class="fas fa-tag"></i>
                         Nome do Menu *
                     </label>
-                    <input type="text" id="nmMenu" name="nmMenu" class="form-control" required autofocus placeholder="Digite o nome do menu">
+                    <input type="text" id="nmMenu" name="nmMenu" class="form-control" required autofocus
+                        placeholder="Digite o nome do menu">
                 </div>
 
                 <div class="form-group">
@@ -433,7 +445,8 @@ include('protectAdmin.php');
                         <i class="fas fa-link"></i>
                         Link do Menu
                     </label>
-                    <input type="text" id="linkMenu" name="linkMenu" class="form-control" placeholder="Digite o link do menu (ex: pagina.php)">
+                    <input type="text" id="linkMenu" name="linkMenu" class="form-control"
+                        placeholder="Digite o link do menu (ex: pagina.php)">
                 </div>
 
                 <button type="submit" class="btn-submit">

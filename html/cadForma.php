@@ -41,7 +41,16 @@ include('protectAdmin.php');
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -223,7 +232,9 @@ include('protectAdmin.php');
 <div class="modern-container">
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">📄</span>
+            <div class="page-hero-icon">
+                <ion-icon name="git-branch-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Administrar Formas de Licitação</h1>
                 <p>Gerencie as formas de contratação disponíveis no sistema</p>
@@ -245,7 +256,8 @@ include('protectAdmin.php');
                         <i class="fas fa-tag"></i>
                         Nome da Forma <span class="required-star">*</span>
                     </label>
-                    <input type="text" id="nmForma" name="nmForma" class="form-control" required autofocus placeholder="Digite o nome da forma (ex: Presencial, Eletrônica)">
+                    <input type="text" id="nmForma" name="nmForma" class="form-control" required autofocus
+                        placeholder="Digite o nome da forma (ex: Presencial, Eletrônica)">
                 </div>
 
                 <button type="submit" class="btn-submit">

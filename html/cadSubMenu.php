@@ -41,7 +41,16 @@ include('protectAdmin.php');
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -304,7 +313,9 @@ include('protectAdmin.php');
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">📑</span>
+            <div class="page-hero-icon">
+                <ion-icon name="git-network-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Administrar SubMenus</h1>
                 <p>Gerencie os subitens de menu do sistema</p>
@@ -329,7 +340,8 @@ include('protectAdmin.php');
                                 <i class="fas fa-tag"></i>
                                 Nome do SubMenu <span class="required-star">*</span>
                             </label>
-                            <input type="text" id="nmSubMenu" name="nmSubMenu" class="form-control" required autofocus placeholder="Digite o nome do submenu">
+                            <input type="text" id="nmSubMenu" name="nmSubMenu" class="form-control" required autofocus
+                                placeholder="Digite o nome do submenu">
                         </div>
                     </div>
 
@@ -339,7 +351,8 @@ include('protectAdmin.php');
                                 <i class="fas fa-link"></i>
                                 Link do SubMenu
                             </label>
-                            <input type="text" id="linkSubMenu" name="linkSubMenu" class="form-control" placeholder="Digite o link do submenu (ex: pagina.php)">
+                            <input type="text" id="linkSubMenu" name="linkSubMenu" class="form-control"
+                                placeholder="Digite o link do submenu (ex: pagina.php)">
                         </div>
                     </div>
                 </div>
@@ -351,12 +364,13 @@ include('protectAdmin.php');
                                 <i class="fas fa-sitemap"></i>
                                 Menu Relacionado <span class="required-star">*</span>
                             </label>
-                            <select name="idMenu" id="idMenu" class="form-select" required oninvalid="exibirAlertaIdMenu()">
+                            <select name="idMenu" id="idMenu" class="form-select" required
+                                oninvalid="exibirAlertaIdMenu()">
                                 <option value='' disabled selected>Selecione um menu</option>
                                 <?php
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[menu] WHERE DT_EXC_MENU IS NULL ORDER BY NM_MENU";
                                 $querySelect = $pdoCAT->query($querySelect2);
-                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
+                                while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)):
                                     echo "<option value='" . $registros["ID_MENU"] . "'>" . $registros["NM_MENU"] . "</option>";
                                 endwhile;
                                 ?>
@@ -398,7 +412,7 @@ include('protectAdmin.php');
         alert("Por favor, preencha o campo 'Menu relacionado'");
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#idMenu').select2({
             width: '100%',
             placeholder: 'Selecione um menu',

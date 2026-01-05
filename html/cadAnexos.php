@@ -38,7 +38,16 @@ include('protectAdmin.php');
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -378,7 +387,9 @@ include('protectAdmin.php');
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">📎</span>
+            <div class="page-hero-icon">
+                <ion-icon name="attach-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Administrar Anexos</h1>
                 <p>Gerencie os arquivos anexos disponíveis no sistema</p>
@@ -396,8 +407,9 @@ include('protectAdmin.php');
         </div>
         <div class="card-body">
             <input type="hidden" id="idLicitacao" value="anexos" />
-            
-            <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+
+            <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)"
+                ondragover="handleDragOver(event)">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <div class="dropzone-text">Arraste e solte os arquivos aqui ou clique para selecionar</div>
                 <div class="dropzone-hint">Todos os tipos de arquivo são aceitos</div>
@@ -419,7 +431,8 @@ include('protectAdmin.php');
                 <i class="fas fa-info-circle"></i>
                 <div class="info-alert-content">
                     <p>
-                        Clique no link do arquivo para copiar o caminho. Use esse caminho para referenciar o arquivo em outros documentos ou licitações.
+                        Clique no link do arquivo para copiar o caminho. Use esse caminho para referenciar o arquivo em
+                        outros documentos ou licitações.
                     </p>
                 </div>
             </div>
@@ -496,12 +509,12 @@ include('protectAdmin.php');
     // Inicializa a biblioteca Clipboard.js
     var clipboard = new ClipboardJS('.copy-link');
 
-    clipboard.on('success', function(e) {
+    clipboard.on('success', function (e) {
         alert('Caminho copiado!');
         e.clearSelection();
     });
 
-    clipboard.on('error', function(e) {
+    clipboard.on('error', function (e) {
         alert('Erro ao copiar o caminho do arquivo.');
     });
 
@@ -515,10 +528,10 @@ include('protectAdmin.php');
                     directory: directory,
                     idLicitacao: idLicitacao
                 },
-                success: function(response) {
+                success: function (response) {
                     $('#filelist').load(window.location.href + ' #filelist');
                 },
-                error: function() {
+                error: function () {
                     alert('Erro ao excluir o arquivo.');
                 }
             });
@@ -537,7 +550,7 @@ include('protectAdmin.php');
         var inputElement = document.createElement("input");
         inputElement.type = "file";
         inputElement.multiple = true;
-        inputElement.addEventListener("change", function() {
+        inputElement.addEventListener("change", function () {
             handleFiles(this.files, idLicitacao);
         });
         inputElement.click();
@@ -555,7 +568,7 @@ include('protectAdmin.php');
 
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'upload.php', true);
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.status === 200) {
                     updateFileList();
                     $('#filelist').load(window.location.href + ' #filelist');
@@ -581,7 +594,7 @@ include('protectAdmin.php');
 
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'get_file_list.php?idLicitacao=' + idLicitacao, true);
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
                     var files = response.files;
@@ -604,7 +617,7 @@ include('protectAdmin.php');
         }
     }
 
-    document.getElementById('drop-zone').addEventListener('dragleave', function(event) {
+    document.getElementById('drop-zone').addEventListener('dragleave', function (event) {
         event.preventDefault();
         document.getElementById('drop-zone').classList.remove('dragover');
     });
