@@ -12,11 +12,28 @@ $currentName = $_POST['currentName'] ?? $_GET['currentName'] ?? null;
 $newName = $_POST['newName'] ?? $_GET['newName'] ?? null;
 $directory = $_POST['directory'] ?? $_GET['directory'] ?? null;
 
+// Debug: Log dos parâmetros recebidos
+error_log("=== RENAME FILE DEBUG ===");
+error_log("Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("POST data: " . print_r($_POST, true));
+error_log("GET data: " . print_r($_GET, true));
+error_log("rowId: " . $rowId);
+error_log("currentName: " . $currentName);
+error_log("newName: " . $newName);
+error_log("directory: " . $directory);
+
 // Validar parâmetros
-if (!$rowId || !$currentName || !$newName || !$directory) {
+if (!$currentName || !$newName || !$directory) {
     echo json_encode([
         'success' => false, 
-        'message' => 'Parâmetros obrigatórios não fornecidos'
+        'message' => 'Parâmetros obrigatórios não fornecidos',
+        'debug' => [
+            'rowId' => $rowId,
+            'currentName' => $currentName,
+            'newName' => $newName,
+            'directory' => $directory,
+            'method' => $_SERVER['REQUEST_METHOD']
+        ]
     ]);
     exit();
 }
@@ -59,7 +76,7 @@ $newFilePath = $directory . '/' . $newFileName;
 if (!file_exists($currentFilePath)) {
     echo json_encode([
         'success' => false, 
-        'message' => 'Arquivo original não encontrado'
+        'message' => 'Arquivo original não encontrado: ' . $currentFilePath
     ]);
     exit();
 }
@@ -105,7 +122,7 @@ if (rename($currentFilePath, $newFilePath)) {
         $login = $_SESSION['login'] ?? 'Sistema';
         $tela = 'Licitacao';
         $acao = 'Anexo atualizado de "' . $currentFileName . '" para "' . $newFileName . '"';
-        $idEvento = $idLicitacao;
+        $idEvento = intval($idLicitacao);
         
         $queryLOG = $pdoCAT->prepare("INSERT INTO auditoria VALUES(?, GETDATE(), ?, ?, ?)");
         $queryLOG->execute([$login, $tela, $acao, $idEvento]);

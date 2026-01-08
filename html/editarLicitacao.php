@@ -254,78 +254,6 @@ endwhile;
         grid-column: span 12;
     }
 
-    @media (max-width: 1024px) {
-
-        .form-col-3,
-        .form-col-4 {
-            grid-column: span 6;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .modern-form-container {
-            padding: 24px 16px;
-        }
-
-        .page-hero {
-            padding: 28px;
-        }
-
-        .page-hero-content {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .page-hero-text h1 {
-            font-size: 24px;
-        }
-
-        .page-title {
-            font-size: 26px;
-        }
-
-        .fieldset-content {
-            padding: 24px 16px;
-        }
-
-        .form-row {
-            gap: 16px;
-        }
-
-        .form-col-2,
-        .form-col-3,
-        .form-col-4,
-        .form-col-6 {
-            grid-column: span 12;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .modern-form-container {
-            padding: 16px 12px;
-        }
-
-        .page-title {
-            font-size: 22px;
-        }
-
-        .page-title i {
-            font-size: 28px;
-        }
-
-        .fieldset-header {
-            padding: 20px 24px;
-        }
-
-        .fieldset-header h5 {
-            font-size: 18px;
-        }
-
-        .fieldset-content {
-            padding: 20px 16px;
-        }
-    }
-
     .form-group {
         position: relative;
         margin-bottom: 0;
@@ -489,126 +417,10 @@ endwhile;
         margin-bottom: 16px;
     }
 
-    /* Tabela de arquivos */
-    .files-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 24px;
-    }
-
-    .files-table thead {
-        background: #f8fafc;
-    }
-
-    .files-table th {
-        padding: 12px 16px;
-        text-align: left;
-        font-weight: 600;
-        color: #475569;
-        font-size: 13px;
-        text-transform: uppercase;
-        border-bottom: 2px solid #e2e8f0;
-    }
-
-    .files-table td {
-        padding: 12px 16px;
-        border-bottom: 1px solid #e2e8f0;
-        color: #1e293b;
-        font-size: 14px;
-    }
-
-    .files-table tr:hover {
-        background: #f8fafc;
-    }
-
-    .files-table a {
-        color: #3b82f6;
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-
-    .files-table a:hover {
-        color: #2563eb;
-        text-decoration: underline;
-    }
-
-    .action-icon {
-        color: #64748b;
-        font-size: 18px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .action-icon:hover {
-        color: #0f172a;
-        transform: scale(1.1);
-    }
-
-    .action-icon.delete {
-        color: #ef4444;
-    }
-
-    .action-icon.delete:hover {
-        color: #dc2626;
-    }
-
-    .action-icon.success {
-        color: #10b981;
-    }
-
-    .action-icon.success:hover {
-        color: #059669;
-    }
-
-    .edited-name {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        font-size: 14px;
-    }
-
-    /* Sobrescrevendo estilos do Materialize */
-    form select {
-        display: block !important;
-    }
-
-    form .select-wrapper input {
-        display: none !important;
-    }
-
-    form .caret {
-        display: none !important;
-    }
-
-    form .dropdown-content {
-        display: none !important;
-    }
-
-    @media (max-width: 768px) {
-        .form-actions {
-            flex-direction: column;
-        }
-
-        .btn-modern {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .files-table {
-            font-size: 12px;
-        }
-
-        .files-table th,
-        .files-table td {
-            padding: 8px;
-        }
-    }
-
     /* ============================================
        FILES MANAGEMENT - Modern Layout
        ============================================ */
-
+    
     .files-header {
         display: flex;
         justify-content: space-between;
@@ -873,7 +685,7 @@ endwhile;
         display: none;
     }
 
-    /* Updated files table styles */
+    /* Tabela de arquivos */
     .files-table {
         width: 100%;
         border-collapse: collapse;
@@ -925,7 +737,132 @@ endwhile;
         color: #2563eb;
     }
 
+    .action-icon {
+        color: #64748b;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-icon:hover {
+        color: #0f172a;
+        transform: scale(1.1);
+    }
+
+    .action-icon.delete {
+        color: #ef4444;
+    }
+
+    .action-icon.delete:hover {
+        color: #dc2626;
+    }
+
+    .action-icon.success {
+        color: #10b981;
+    }
+
+    .action-icon.success:hover {
+        color: #059669;
+    }
+
+    .edited-name {
+        width: 100%;
+        padding: 8px 12px;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #0f172a;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        display: none;
+    }
+
+    .edited-name:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Sobrescrevendo estilos do Materialize */
+    form select {
+        display: block !important;
+    }
+
+    form .select-wrapper input {
+        display: none !important;
+    }
+
+    form .caret {
+        display: none !important;
+    }
+
+    form .dropdown-content {
+        display: none !important;
+    }
+
+    @media (max-width: 1024px) {
+
+        .form-col-3,
+        .form-col-4 {
+            grid-column: span 6;
+        }
+    }
+
     @media (max-width: 768px) {
+        .modern-form-container {
+            padding: 24px 16px;
+        }
+
+        .page-hero {
+            padding: 28px;
+        }
+
+        .page-hero-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .page-hero-text h1 {
+            font-size: 24px;
+        }
+
+        .page-title {
+            font-size: 26px;
+        }
+
+        .fieldset-content {
+            padding: 24px 16px;
+        }
+
+        .form-row {
+            gap: 16px;
+        }
+
+        .form-col-2,
+        .form-col-3,
+        .form-col-4,
+        .form-col-6 {
+            grid-column: span 12;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-modern {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .files-table {
+            font-size: 12px;
+        }
+
+        .files-table th,
+        .files-table td {
+            padding: 8px;
+        }
+
         .files-grid {
             grid-template-columns: 1fr;
         }
@@ -935,36 +872,34 @@ endwhile;
         }
     }
 
-    .edited-name {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #3b82f6;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #0f172a;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
+    @media (max-width: 480px) {
+        .modern-form-container {
+            padding: 16px 12px;
+        }
 
-    .edited-name:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
+        .page-title {
+            font-size: 22px;
+        }
 
-    /* Esconde botão salvar por padrão */
-    .save-button {
-        display: none;
-    }
+        .page-title i {
+            font-size: 28px;
+        }
 
-    .save-button.show {
-        display: flex;
+        .fieldset-header {
+            padding: 20px 24px;
+        }
+
+        .fieldset-header h5 {
+            font-size: 18px;
+        }
+
+        .fieldset-content {
+            padding: 20px 16px;
+        }
     }
 </style>
 
 <div class="modern-form-container">
-    <!-- Header da Página -->
-
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
@@ -973,8 +908,7 @@ endwhile;
             </div>
             <div class="page-hero-text">
                 <h1>Editar Licitação <?php echo $tituloLicitacao; ?></h1>
-                <p> <?php echo $nmTipo . ' ' . $codLicitacao; ?>
-                </p>
+                <p><?php echo $nmTipo . ' ' . $codLicitacao; ?></p>
             </div>
         </div>
     </div>
@@ -1334,8 +1268,7 @@ endwhile;
                     $anexos = array();
 
                     // Helper function para determinar tipo de arquivo
-                    function getFileIcon($filename)
-                    {
+                    function getFileIcon($filename) {
                         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                         $icons = [
                             'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
@@ -1534,29 +1467,35 @@ endwhile;
 </div>
 
 <script>
+    // ============================================
+    // INICIALIZAÇÃO
+    // ============================================
     $(document).ready(function () {
+        // Destruir Materialize Select
         $('form select').formSelect('destroy');
 
+        // Máscara no código da licitação
         $('#codLicitacao').mask('000/0000');
         validarCodLicitacao();
 
-        // Editar arquivo funciona em ambas visualizações (grid e lista)
-        // Editar arquivo - funciona em ambas visualizações (grid e lista)
+        // ============================================
+        // EDITAR ARQUIVO - Grid e Lista
+        // ============================================
         $(document).on('click', '.edit-button', function () {
             var rowId = $(this).data('id');
-
+            
             // Selecionar elementos em ambas as views
             var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
             var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
-
+            
             // Pegar o nome do arquivo
             var currentName = '';
-            if ($rowNmAnexo.length > 0) {
+            if ($rowNmAnexo.length > 0 && $rowNmAnexo.find('a').length > 0) {
                 currentName = $rowNmAnexo.find('a').text().trim();
-            } else if ($cardNmAnexo.length > 0) {
+            } else if ($cardNmAnexo.length > 0 && $cardNmAnexo.find('a').length > 0) {
                 currentName = $cardNmAnexo.find('a').text().trim();
             }
-
+            
             if (!currentName) {
                 alert('Erro ao obter nome do arquivo');
                 return;
@@ -1564,59 +1503,80 @@ endwhile;
 
             // Salvar nome atual
             $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', currentName);
-
+            
             // Esconder link e mostrar input em AMBAS as views
             $rowNmAnexo.find('a').hide();
-            $rowNmAnexo.find('.edited-name').val(currentName).show().focus();
-
+            $rowNmAnexo.find('.edited-name').val(currentName).show();
+            
             $cardNmAnexo.find('a').hide();
             $cardNmAnexo.find('.edited-name').val(currentName).show();
-
+            
             // Esconder botão editar e mostrar botão salvar em AMBAS as views
             $('#row_' + rowId + ' .edit-button').hide();
             $('#row_' + rowId + ' .save-button').show();
-
+            
             $('#card_row_' + rowId + ' .edit-button').hide();
-            $('#card_row_' + rowId + ' .save-button').show();
+            $('#card_row_' + rowId + ' .save-button').css('display', 'flex');
 
             // Selecionar texto até a extensão
             var $editedNameInput = $rowNmAnexo.find('.edited-name');
             if ($editedNameInput.length > 0 && $editedNameInput.is(':visible')) {
+                $editedNameInput.focus();
                 var dotIndex = currentName.lastIndexOf('.');
                 if (dotIndex > 0) {
                     $editedNameInput[0].setSelectionRange(0, dotIndex);
                 }
+            } else {
+                // Se o input da lista não estiver visível, focar no do card
+                var $cardInput = $cardNmAnexo.find('.edited-name');
+                if ($cardInput.length > 0 && $cardInput.is(':visible')) {
+                    $cardInput.focus();
+                    var dotIndex = currentName.lastIndexOf('.');
+                    if (dotIndex > 0) {
+                        $cardInput[0].setSelectionRange(0, dotIndex);
+                    }
+                }
             }
         });
 
-        // Salvar arquivo - funciona em ambas visualizações
+        // ============================================
+        // SALVAR ARQUIVO - Grid e Lista
+        // ============================================
         $(document).on('click', '.save-button', function () {
             var rowId = $(this).data('id');
             var directory = '<?php echo $directory; ?>';
             var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
-
+            
             // Pegar novo nome de qualquer uma das views que estiver visível
             var newName = '';
             var $rowInput = $('#row_' + rowId + ' .edited-name');
             var $cardInput = $('#card_row_' + rowId + ' .edited-name');
-
+            
             if ($rowInput.is(':visible')) {
-                newName = $rowInput.val();
+                newName = $rowInput.val().trim();
             } else if ($cardInput.is(':visible')) {
-                newName = $cardInput.val();
+                newName = $cardInput.val().trim();
             }
-
+            
             if (!newName) {
                 alert('Nome do arquivo não pode ser vazio');
                 return;
             }
-
+            
+            console.log('Salvando arquivo:', {
+                rowId: rowId,
+                currentName: currentName,
+                newName: newName,
+                directory: directory
+            });
+            
             renameFile(rowId, currentName, newName, directory);
         });
-
-        // Cancelar edição ao pressionar ESC
-        // Cancelar edição ao pressionar ESC
-        $(document).on('keydown', '.edited-name', function (e) {
+        
+        // ============================================
+        // CANCELAR EDIÇÃO AO PRESSIONAR ESC
+        // ============================================
+        $(document).on('keydown', '.edited-name', function(e) {
             if (e.key === 'Escape') {
                 var $container = $(this).closest('[id^="row_"], [id^="card_row_"]');
                 var rowId = $container.attr('id').replace(/\D/g, '');
@@ -1628,9 +1588,11 @@ endwhile;
                 $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').first().click();
             }
         });
-
-        // Validar caracteres inválidos durante digitação
-        $(document).on('input', '.edited-name', function () {
+        
+        // ============================================
+        // VALIDAR CARACTERES INVÁLIDOS DURANTE DIGITAÇÃO
+        // ============================================
+        $(document).on('input', '.edited-name', function() {
             var value = $(this).val();
             // Remove caracteres inválidos para nomes de arquivo
             var sanitized = value.replace(/[<>:"/\\|?*]/g, '');
@@ -1642,8 +1604,17 @@ endwhile;
                 }, 500);
             }
         });
+
+        // Restaurar preferência de visualização
+        const savedView = localStorage.getItem('filesViewEdit');
+        if (savedView && (savedView === 'grid' || savedView === 'list')) {
+            toggleFilesViewEdit(savedView);
+        }
     });
 
+    // ============================================
+    // VALIDAÇÃO DO CÓDIGO DA LICITAÇÃO
+    // ============================================
     $('#codLicitacao').on('input', function () {
         validarCodLicitacao();
     });
@@ -1687,18 +1658,28 @@ endwhile;
         }
     }
 
+    // ============================================
+    // RENOMEAR ARQUIVO
+    // ============================================
     function renameFile(rowId, currentName, newName, directory) {
         // Validar nome
         if (!newName || newName.trim() === '') {
             alert('Nome do arquivo não pode ser vazio');
             return;
         }
-
+        
         // Se o nome não mudou, cancelar edição
         if (newName === currentName) {
             cancelEdit(rowId);
             return;
         }
+
+        console.log('Enviando requisição AJAX:', {
+            rowId: rowId,
+            currentName: currentName,
+            newName: newName,
+            directory: directory
+        });
 
         $.ajax({
             url: 'renameFile.php',
@@ -1711,32 +1692,35 @@ endwhile;
             },
             dataType: 'json',
             success: function (response) {
+                console.log('Resposta do servidor:', response);
+                
                 if (response.success) {
                     var newFileName = response.newFileName;
-
+                    
                     // Atualizar GRID VIEW
                     var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
                     $cardNmAnexo.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' + newFileName + '</a>');
                     $cardNmAnexo.append('<input type="text" class="edited-name" value="' + newFileName + '" style="display:none;">');
-
+                    
                     // Atualizar LIST VIEW
                     var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
                     $rowNmAnexo.html('<a href="' + directory + '/' + newFileName + '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' + newFileName + '</a>');
                     $rowNmAnexo.append('<input type="text" class="edited-name" value="' + newFileName + '" style="display:none;">');
-
+                    
                     // Mostrar botão editar e esconder botão salvar
                     $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
                     $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
-
+                    
                     // Atualizar data-currentName
                     $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', newFileName);
-
+                    
                     // Mensagem de sucesso
                     if (response.message && response.message !== 'Arquivo renomeado com sucesso') {
                         alert(response.message);
                     }
                 } else {
                     alert('Erro ao renomear arquivo: ' + (response.message || 'Erro desconhecido'));
+                    console.error('Debug info:', response.debug);
                     cancelEdit(rowId);
                 }
             },
@@ -1744,20 +1728,23 @@ endwhile;
                 console.error('Erro AJAX:', error);
                 console.error('Status:', status);
                 console.error('Response:', xhr.responseText);
-
+                
                 try {
                     var errorResponse = JSON.parse(xhr.responseText);
                     alert('Erro: ' + (errorResponse.message || 'Erro ao renomear arquivo'));
-                } catch (e) {
+                    console.error('Debug info:', errorResponse.debug);
+                } catch(e) {
                     alert('Erro ao renomear arquivo. Verifique o console para mais detalhes.');
                 }
-
+                
                 cancelEdit(rowId);
             }
         });
     }
 
-    // Função auxiliar para cancelar edição
+    // ============================================
+    // CANCELAR EDIÇÃO
+    // ============================================
     function cancelEdit(rowId) {
         var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo, #card_row_' + rowId + ' .nmAnexo');
         $nmAnexoCell.find('a').show();
@@ -1766,6 +1753,38 @@ endwhile;
         $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
     }
 
+    // ============================================
+    // TOGGLE VISUALIZAÇÃO DE ARQUIVOS
+    // ============================================
+    function toggleFilesViewEdit(view) {
+        const gridView = document.getElementById('filesGrid');
+        const listView = document.getElementById('filesList');
+        const buttons = document.querySelectorAll('.files-view-btn');
+        
+        if (!gridView || !listView) return;
+        
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.view === view) {
+                btn.classList.add('active');
+            }
+        });
+        
+        if (view === 'grid') {
+            gridView.classList.remove('hidden');
+            listView.classList.remove('active');
+        } else {
+            gridView.classList.add('hidden');
+            listView.classList.add('active');
+        }
+        
+        // Salvar preferência
+        localStorage.setItem('filesViewEdit', view);
+    }
+
+    // ============================================
+    // VALIDAR FORMULÁRIO
+    // ============================================
     function validarFormulario() {
         var tipoLicitacao = document.getElementById('tipoLicitacao').value;
         validarCodLicitacao();
@@ -1778,6 +1797,9 @@ endwhile;
         return true;
     }
 
+    // ============================================
+    // CONFIRMAR EXCLUSÃO DE ARQUIVO
+    // ============================================
     function confirmDelete(file, directory, idLicitacao, dtExcAnexo) {
         if (confirm('Tem certeza que deseja excluir o arquivo?')) {
             $.ajax({
@@ -1799,10 +1821,14 @@ endwhile;
         }
     }
 
+    // ============================================
+    // UPLOAD DE ARQUIVOS - DRAG AND DROP
+    // ============================================
     var idLicitacao = document.getElementById('idLicitacao').value;
 
     function handleDrop(event) {
         event.preventDefault();
+        document.getElementById('drop-zone').classList.remove('dragover');
         var files = event.dataTransfer.files;
         handleFiles(files, idLicitacao);
     }
@@ -1837,7 +1863,13 @@ endwhile;
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     updateFileList();
-                    $('#filelist').load(window.location.href + ' #filelist');
+                    $('#filelist').load(window.location.href + ' #filelist', function() {
+                        // Restaurar visualização após reload
+                        const savedView = localStorage.getItem('filesViewEdit');
+                        if (savedView) {
+                            toggleFilesViewEdit(savedView);
+                        }
+                    });
                 } else {
                     alert('Erro ao enviar os arquivos.');
                 }
@@ -1886,40 +1918,5 @@ endwhile;
     document.getElementById('drop-zone').addEventListener('dragleave', function (event) {
         event.preventDefault();
         document.getElementById('drop-zone').classList.remove('dragover');
-    });
-
-    // Toggle entre visualizações de arquivos
-    function toggleFilesViewEdit(view) {
-        const gridView = document.getElementById('filesGrid');
-        const listView = document.getElementById('filesList');
-        const buttons = document.querySelectorAll('.files-view-btn');
-
-        if (!gridView || !listView) return;
-
-        buttons.forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.view === view) {
-                btn.classList.add('active');
-            }
-        });
-
-        if (view === 'grid') {
-            gridView.classList.remove('hidden');
-            listView.classList.remove('active');
-        } else {
-            gridView.classList.add('hidden');
-            listView.classList.add('active');
-        }
-
-        // Salvar preferência
-        localStorage.setItem('filesViewEdit', view);
-    }
-
-    // Restaurar preferência de visualização ao carregar
-    $(document).ready(function () {
-        const savedView = localStorage.getItem('filesViewEdit');
-        if (savedView && (savedView === 'grid' || savedView === 'list')) {
-            toggleFilesViewEdit(savedView);
-        }
     });
 </script>
