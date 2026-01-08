@@ -28,7 +28,7 @@ endwhile;
 
 $_SESSION['msg'] = "Menu cadastrado com sucesso.";
 
-$_SESSION['redirecionar'] = '../../administracao.php?aba=menus';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'Menu';
 $acao = 'CRIADO';

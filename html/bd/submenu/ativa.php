@@ -15,7 +15,7 @@ $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 $_SESSION['msg'] = "Submenu ativado com sucesso.";
 // header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../administracao.php?aba=submenus';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
 $acao = 'ATIVADO';

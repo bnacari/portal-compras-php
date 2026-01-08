@@ -1,7 +1,7 @@
 <?php
 /**
  * Portal de Compras - Administração Unificada
- * Tela com abas: Tipos, Critérios, Formas, Menus, SubMenus, Itens Menu, Usuários, Perfis
+ * Tela com abas: Tipos, Critérios, Formas, Estrutura de Menus, Usuários, Perfis
  */
 
 include_once 'bd/conexao.php';
@@ -12,6 +12,74 @@ include('protectAdmin.php');
 
 // Determina aba ativa
 $abaAtiva = $_GET['aba'] ?? 'tipos';
+
+// Se for aba de estrutura, buscar dados hierárquicos
+if ($abaAtiva == 'estrutura') {
+    $queryMenus = $pdoCAT->query("
+        SELECT 
+            M.ID_MENU, M.NM_MENU, M.LINK_MENU, M.DT_EXC_MENU,
+            SM.ID_SUBMENU, SM.NM_SUBMENU, SM.LINK_SUBMENU, SM.DT_EXC_SUBMENU,
+            IM.ID_ITEMMENU, IM.NM_ITEMMENU, IM.LINK_ITEMMENU, IM.DT_EXC_ITEMMENU
+        FROM [PortalCompras].[dbo].[MENU] M
+        LEFT JOIN [PortalCompras].[dbo].[SUBMENU] SM ON SM.ID_MENU = M.ID_MENU
+        LEFT JOIN [PortalCompras].[dbo].[ITEMMENU] IM ON IM.ID_SUBMENU = SM.ID_SUBMENU
+        ORDER BY M.NM_MENU, SM.NM_SUBMENU, IM.NM_ITEMMENU
+    ");
+
+    $menus = [];
+    while ($row = $queryMenus->fetch(PDO::FETCH_ASSOC)) {
+        $menuId = $row['ID_MENU'];
+        $subMenuId = $row['ID_SUBMENU'];
+        
+        if (!isset($menus[$menuId])) {
+            $menus[$menuId] = [
+                'id' => $menuId,
+                'nome' => $row['NM_MENU'],
+                'link' => $row['LINK_MENU'],
+                'inativo' => !empty($row['DT_EXC_MENU']),
+                'submenus' => []
+            ];
+        }
+        
+        if ($subMenuId && !isset($menus[$menuId]['submenus'][$subMenuId])) {
+            $menus[$menuId]['submenus'][$subMenuId] = [
+                'id' => $subMenuId,
+                'nome' => $row['NM_SUBMENU'],
+                'link' => trim($row['LINK_SUBMENU'] ?? ''),
+                'inativo' => !empty($row['DT_EXC_SUBMENU']),
+                'itens' => []
+            ];
+        }
+        
+        if ($row['ID_ITEMMENU']) {
+            $menus[$menuId]['submenus'][$subMenuId]['itens'][] = [
+                'id' => $row['ID_ITEMMENU'],
+                'nome' => $row['NM_ITEMMENU'],
+                'link' => trim($row['LINK_ITEMMENU'] ?? ''),
+                'inativo' => !empty($row['DT_EXC_ITEMMENU'])
+            ];
+        }
+    }
+    
+    $totalMenus = 0;
+    $totalSubMenus = 0;
+    $totalItens = 0;
+    foreach ($menus as $m) {
+        if (!$m['inativo']) {
+            $totalMenus++;
+        }
+        foreach ($m['submenus'] as $s) {
+            if (!$s['inativo']) {
+                $totalSubMenus++;
+            }
+            foreach ($s['itens'] as $i) {
+                if (!$i['inativo']) {
+                    $totalItens++;
+                }
+            }
+        }
+    }
+}
 ?>
 
 <!-- Select2 CSS -->
@@ -41,6 +109,11 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
         --error-500: #ef4444;
         --error-600: #dc2626;
         --error-700: #b91c1c;
+        --purple-50: #faf5ff;
+        --purple-100: #f3e8ff;
+        --purple-500: #a855f7;
+        --purple-600: #9333ea;
+        --purple-700: #7c3aed;
         --dark-50: #f8fafc;
         --dark-100: #f1f5f9;
         --dark-200: #e2e8f0;
@@ -60,7 +133,7 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         --transition-fast: 0.15s ease;
-        --transition-normal: 0.2s ease;
+        --transition-normal: 0.25s ease;
     }
 
     /* ============================================
@@ -826,6 +899,597 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
     }
 
     /* ============================================
+       ESTRUTURA DE MENUS - Minimalista
+       ============================================ */
+    
+    /* Stats Bar */
+    .stats-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        flex: 1;
+        background: #ffffff;
+        border: 1px solid var(--dark-200);
+        border-radius: var(--radius-lg);
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        background: var(--dark-100);
+        color: var(--dark-600);
+    }
+
+    .stat-info h3 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--dark-800);
+        margin: 0;
+        line-height: 1;
+    }
+
+    .stat-info p {
+        font-size: 12px;
+        color: var(--dark-500);
+        margin: 2px 0 0 0;
+    }
+
+    /* Add Menu Button */
+    .add-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px;
+        background: #ffffff;
+        border: 1px dashed var(--dark-300);
+        border-radius: var(--radius-lg);
+        color: var(--dark-500);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        margin-bottom: 16px;
+    }
+
+    .add-menu-btn:hover {
+        background: var(--dark-50);
+        border-color: var(--dark-400);
+        color: var(--dark-700);
+    }
+
+    .add-menu-btn ion-icon {
+        font-size: 18px;
+    }
+
+    /* Menu Card (Level 1) */
+    .menu-card {
+        background: #ffffff;
+        border: 1px solid var(--dark-200);
+        border-radius: var(--radius-lg);
+        margin-bottom: 8px;
+        overflow: hidden;
+    }
+
+    .menu-card.inactive .menu-card-header {
+        background: #969EA9;
+    }
+
+    .menu-card.inactive .menu-card-header:hover {
+        background: #858d97;
+    }
+
+    .menu-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        background: var(--dark-800);
+        cursor: pointer;
+        transition: background var(--transition-fast);
+    }
+
+    .menu-card-header:hover {
+        background: var(--dark-700);
+    }
+
+    .menu-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .menu-icon {
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+
+    .menu-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .menu-info h3 {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .menu-info span {
+        color: var(--dark-400);
+        font-size: 12px;
+        display: block;
+        margin-top: 2px;
+        word-break: break-all;
+        overflow-wrap: break-word;
+    }
+
+    .menu-card-header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+        margin-left: 12px;
+    }
+
+    .menu-badge-count {
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        color: var(--dark-300);
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    /* Header Action Buttons */
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .header-actions .btn-action {
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--dark-300);
+        border: none;
+    }
+
+    .header-actions .btn-action:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        transform: none;
+    }
+
+    .header-actions .btn-action.deactivate:hover {
+        background: var(--error-500);
+        color: #ffffff;
+    }
+
+    .header-actions .btn-action.activate:hover {
+        background: var(--success-500);
+        color: #ffffff;
+    }
+
+    .header-actions .btn-action ion-icon {
+        font-size: 14px;
+    }
+
+    .expand-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-400);
+        font-size: 18px;
+        transition: transform var(--transition-fast);
+    }
+
+    .menu-card.expanded .expand-icon {
+        transform: rotate(180deg);
+    }
+
+    .menu-card-body {
+        display: none;
+        padding: 16px;
+        background: var(--dark-50);
+    }
+
+    .menu-card.expanded .menu-card-body {
+        display: block;
+    }
+
+    /* SubMenu Card (Level 2) */
+    .submenu-card {
+        background: #ffffff;
+        border: 1px solid var(--dark-200);
+        border-radius: var(--radius-md);
+        margin-bottom: 8px;
+        overflow: hidden;
+    }
+
+    .submenu-card.inactive .submenu-card-header {
+        background: #969EA9;
+    }
+
+    .submenu-card.inactive .submenu-card-header:hover {
+        background: #858d97;
+    }
+
+    .submenu-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        background: #005596;
+        cursor: pointer;
+        transition: background var(--transition-fast);
+    }
+
+    .submenu-card-header:hover {
+        background: #3a3b3b;
+    }
+
+    .submenu-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .submenu-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .submenu-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .submenu-info h4 {
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .submenu-info span {
+        color: var(--dark-300);
+        font-size: 11px;
+        display: block;
+        margin-top: 1px;
+        word-break: break-all;
+        overflow-wrap: break-word;
+    }
+
+    .submenu-card-header-right {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    .submenu-badge-count {
+        padding: 3px 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        color: var(--dark-300);
+        font-size: 10px;
+        font-weight: 500;
+    }
+
+    .submenu-expand-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-400);
+        font-size: 16px;
+        transition: transform var(--transition-fast);
+    }
+
+    .submenu-card.expanded .submenu-expand-icon {
+        transform: rotate(180deg);
+    }
+
+    .submenu-card-body {
+        display: none;
+        padding: 12px;
+        background: #ffffff;
+    }
+
+    .submenu-card.expanded .submenu-card-body {
+        display: block;
+    }
+
+    /* Item Row (Level 3) */
+    .item-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: #ffffff;
+        border: 1px solid var(--dark-200);
+        border-radius: var(--radius-sm);
+        margin-bottom: 6px;
+        transition: all var(--transition-fast);
+    }
+
+    .item-row:hover {
+        border-color: var(--dark-300);
+        background: var(--dark-50);
+    }
+
+    .item-row.inactive {
+        background: #f0f1f2;
+        border-color: #d0d3d6;
+    }
+
+    .item-row.inactive .item-icon {
+        background: #969EA9;
+        color: #ffffff;
+    }
+
+    .item-row.inactive .item-info h5,
+    .item-row.inactive .item-info span {
+        color: #969EA9;
+    }
+
+    .item-row-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .item-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--dark-100);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-500);
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .item-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .item-info h5 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--dark-800);
+        margin: 0;
+    }
+
+    .item-info span {
+        font-size: 11px;
+        color: var(--dark-500);
+        display: block;
+        margin-top: 1px;
+        word-break: break-all;
+        overflow-wrap: break-word;
+    }
+
+    .item-row-right {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    /* Smaller action buttons for items */
+    .item-row-right .btn-action {
+        width: 28px;
+        height: 28px;
+    }
+
+    .item-row-right .btn-action ion-icon {
+        font-size: 14px;
+    }
+
+    /* Add Buttons (Inside Cards) */
+    .add-submenu-btn,
+    .add-item-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        padding: 10px;
+        background: transparent;
+        border: 1px dashed var(--dark-300);
+        border-radius: var(--radius-sm);
+        color: var(--dark-500);
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        margin-top: 6px;
+    }
+
+    .add-submenu-btn:hover,
+    .add-item-btn:hover {
+        background: var(--dark-100);
+        border-color: var(--dark-400);
+        color: var(--dark-600);
+    }
+
+    .add-submenu-btn ion-icon,
+    .add-item-btn ion-icon {
+        font-size: 14px;
+    }
+
+    /* Status Inactive Badge */
+    .status-inactive-badge {
+        padding: 2px 8px;
+        background: var(--error-100);
+        color: var(--error-700);
+        border-radius: 100px;
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-left: 6px;
+    }
+
+    /* ============================================
+       Modal
+       ============================================ */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal {
+        background: #ffffff;
+        border-radius: var(--radius-2xl);
+        width: 100%;
+        max-width: 500px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, var(--dark-900) 0%, var(--dark-800) 100%);
+    }
+
+    .modal-header h3 {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .modal-header h3 ion-icon {
+        font-size: 22px;
+    }
+
+    .modal-close {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: var(--radius-md);
+        color: #ffffff;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition-fast);
+    }
+
+    .modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-body {
+        padding: 24px;
+    }
+
+    .modal-body .form-group {
+        margin-bottom: 20px;
+    }
+
+    .modal-body .form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .modal-footer {
+        display: flex;
+        gap: 12px;
+        padding: 20px 24px;
+        background: var(--dark-50);
+        border-top: 1px solid var(--dark-200);
+    }
+
+    .modal-footer .btn {
+        flex: 1;
+    }
+
+    .modal-footer .btn-secondary {
+        flex: 0 0 auto;
+    }
+
+    /* ============================================
        Responsive
        ============================================ */
     @media (max-width: 1024px) {
@@ -835,6 +1499,14 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
         
         .form-col-3, .form-col-4 {
             grid-column: span 6;
+        }
+
+        .stats-bar {
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1 1 calc(50% - 8px);
         }
     }
 
@@ -897,6 +1569,18 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
         .btn {
             width: 100%;
         }
+
+        .stats-bar {
+            flex-direction: column;
+        }
+
+        .stat-card {
+            flex: 1 1 100%;
+        }
+
+        .modal {
+            margin: 16px;
+        }
     }
 </style>
 
@@ -928,17 +1612,9 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
             <ion-icon name="git-branch-outline"></ion-icon>
             <span>Formas</span>
         </a>
-        <a href="?aba=menus" class="tab-link <?= $abaAtiva == 'menus' ? 'active' : '' ?>">
-            <ion-icon name="list-outline"></ion-icon>
-            <span>Menus</span>
-        </a>
-        <a href="?aba=submenus" class="tab-link <?= $abaAtiva == 'submenus' ? 'active' : '' ?>">
+        <a href="?aba=estrutura" class="tab-link <?= $abaAtiva == 'estrutura' ? 'active' : '' ?>">
             <ion-icon name="git-network-outline"></ion-icon>
-            <span>SubMenus</span>
-        </a>
-        <a href="?aba=itens" class="tab-link <?= $abaAtiva == 'itens' ? 'active' : '' ?>">
-            <ion-icon name="link-outline"></ion-icon>
-            <span>Itens Menu</span>
+            <span>Estrutura de Menus</span>
         </a>
         <a href="?aba=usuarios" class="tab-link <?= $abaAtiva == 'usuarios' ? 'active' : '' ?>">
             <ion-icon name="people-outline"></ion-icon>
@@ -1304,416 +1980,364 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
     <?php endif; ?>
 
     <!-- ============================================
-         ABA: MENUS
+         ABA: ESTRUTURA DE MENUS (Acordeão)
          ============================================ -->
-    <?php if ($abaAtiva == 'menus') : ?>
-    <div class="tab-pane active" id="tab-menus">
-        <!-- Cadastro -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                    <h3>Novo Menu</h3>
+    <?php if ($abaAtiva == 'estrutura') : ?>
+    <div class="tab-pane active" id="tab-estrutura">
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon menu">
+                    <ion-icon name="folder-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <h3><?= $totalMenus ?></h3>
+                    <p>Menus</p>
                 </div>
             </div>
-            <div class="section-card-body">
-                <form action="bd/menus/create.php" method="post">
-                    <div class="form-row">
-                        <div class="form-col-6">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="text-outline"></ion-icon>
-                                    Nome do Menu <span class="required">*</span>
-                                </label>
-                                <input type="text" name="nmMenu" class="form-control" placeholder="Digite o nome do menu" required autofocus>
-                            </div>
-                        </div>
-                        <div class="form-col-6">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="link-outline"></ion-icon>
-                                    Link do Menu
-                                </label>
-                                <input type="text" name="linkMenu" class="form-control" placeholder="Ex: pagina.php">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <ion-icon name="add-outline"></ion-icon>
-                                Cadastrar Menu
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <div class="stat-card">
+                <div class="stat-icon submenu">
+                    <ion-icon name="folder-open-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <h3><?= $totalSubMenus ?></h3>
+                    <p>SubMenus</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon item">
+                    <ion-icon name="document-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <h3><?= $totalItens ?></h3>
+                    <p>Itens de Menu</p>
+                </div>
             </div>
         </div>
 
-        <!-- Listagem -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="list-outline"></ion-icon>
-                    <h3>Menus Cadastrados</h3>
-                </div>
+        <!-- Add Menu Button -->
+        <button class="add-menu-btn" onclick="abrirModalMenu()">
+            <ion-icon name="add-circle-outline"></ion-icon>
+            Adicionar Novo Menu
+        </button>
+
+        <!-- Menu Cards -->
+        <?php if (empty($menus)) : ?>
+            <div class="empty-state">
+                <ion-icon name="folder-open-outline"></ion-icon>
+                <h3>Nenhum menu cadastrado</h3>
+                <p>Clique no botão acima para adicionar o primeiro menu</p>
             </div>
-            <div class="section-card-body" style="padding: 0;">
-                <div class="table-container">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Link</th>
-                                <th>Status</th>
-                                <th style="width: 140px; text-align: center;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $queryMenus = $pdoCAT->query("SELECT * FROM [portalcompras].[dbo].[menu] ORDER BY [NM_MENU]");
-                            $totalMenus = 0;
-                            while ($row = $queryMenus->fetch(PDO::FETCH_ASSOC)) : $totalMenus++;
-                            ?>
-                            <tr id="rowMenu<?= $row['ID_MENU'] ?>">
-                                <td>
-                                    <span class="cell-name nmMenu"><?= htmlspecialchars($row['NM_MENU']) ?></span>
-                                </td>
-                                <td>
-                                    <span class="cell-secondary linkMenu"><?= htmlspecialchars($row['LINK_MENU'] ?? '-') ?></span>
-                                </td>
-                                <td>
-                                    <?php if (empty($row['DT_EXC_MENU'])) : ?>
-                                        <span class="status-badge active">Ativo</span>
-                                    <?php else : ?>
-                                        <span class="status-badge inactive">Inativo</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <div class="action-buttons" style="justify-content: center;">
-                                        <?php if (empty($row['DT_EXC_MENU'])) : ?>
-                                            <a href="bd/menus/desativa.php?idMenu=<?= $row['ID_MENU'] ?>" class="btn-action deactivate" title="Desativar">
-                                                <ion-icon name="close-outline"></ion-icon>
-                                            </a>
-                                        <?php else : ?>
-                                            <a href="bd/menus/ativa.php?idMenu=<?= $row['ID_MENU'] ?>" class="btn-action activate" title="Ativar">
+        <?php else : ?>
+            <?php foreach ($menus as $menu) : ?>
+            <div class="menu-card <?= $menu['inativo'] ? 'inactive' : '' ?>" id="menu-<?= $menu['id'] ?>">
+                <!-- Menu Header -->
+                <div class="menu-card-header" onclick="toggleMenu(<?= $menu['id'] ?>)">
+                    <div class="menu-card-header-left">
+                        <div class="menu-icon">
+                            <ion-icon name="folder-outline"></ion-icon>
+                        </div>
+                        <div class="menu-info">
+                            <h3>
+                                <?= htmlspecialchars($menu['nome']) ?>
+                                <?php if ($menu['inativo']) : ?>
+                                    <span class="status-inactive-badge">Inativo</span>
+                                <?php endif; ?>
+                            </h3>
+                            <span><?= $menu['link'] ? htmlspecialchars($menu['link']) : 'Sem link direto' ?></span>
+                        </div>
+                    </div>
+                    <div class="menu-card-header-right">
+                        <?php $submenusAtivos = count(array_filter($menu['submenus'], function($s) { return !$s['inativo']; })); ?>
+                        <span class="menu-badge-count"><?= $submenusAtivos ?> submenus</span>
+                        <div class="header-actions" onclick="event.stopPropagation();">
+                            <?php if ($menu['inativo']) : ?>
+                                <a href="bd/menus/ativa.php?idMenu=<?= $menu['id'] ?>&redirect=administracao&aba=estrutura" 
+                                   class="btn-action activate" title="Ativar">
+                                    <ion-icon name="checkmark-outline"></ion-icon>
+                                </a>
+                            <?php else : ?>
+                                <a href="bd/menus/desativa.php?idMenu=<?= $menu['id'] ?>&redirect=administracao&aba=estrutura" 
+                                   class="btn-action deactivate" title="Desativar">
+                                    <ion-icon name="close-outline"></ion-icon>
+                                </a>
+                            <?php endif; ?>
+                            <button class="btn-action edit" onclick="abrirModalMenu(<?= $menu['id'] ?>, <?= htmlspecialchars(json_encode($menu['nome']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($menu['link'] ?? ''), ENT_QUOTES) ?>)" title="Editar">
+                                <ion-icon name="pencil-outline"></ion-icon>
+                            </button>
+                        </div>
+                        <div class="expand-icon">
+                            <ion-icon name="chevron-down-outline"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Body (SubMenus) -->
+                <div class="menu-card-body">
+                    <?php if (empty($menu['submenus'])) : ?>
+                        <div class="empty-state" style="padding: 32px;">
+                            <ion-icon name="folder-open-outline"></ion-icon>
+                            <h3>Nenhum submenu</h3>
+                            <p>Adicione submenus a este menu</p>
+                        </div>
+                    <?php else : ?>
+                        <?php foreach ($menu['submenus'] as $submenu) : ?>
+                        <div class="submenu-card <?= $submenu['inativo'] ? 'inactive' : '' ?>" id="submenu-<?= $submenu['id'] ?>">
+                            <!-- SubMenu Header -->
+                            <div class="submenu-card-header" onclick="toggleSubMenu(<?= $submenu['id'] ?>)">
+                                <div class="submenu-card-header-left">
+                                    <div class="submenu-icon">
+                                        <ion-icon name="folder-open-outline"></ion-icon>
+                                    </div>
+                                    <div class="submenu-info">
+                                        <h4>
+                                            <?= htmlspecialchars($submenu['nome']) ?>
+                                            <?php if ($submenu['inativo']) : ?>
+                                                <span class="status-inactive-badge">Inativo</span>
+                                            <?php endif; ?>
+                                        </h4>
+                                        <span><?= $submenu['link'] ? htmlspecialchars($submenu['link']) : 'Sem link' ?></span>
+                                    </div>
+                                </div>
+                                <div class="submenu-card-header-right">
+                                    <?php $itensAtivos = count(array_filter($submenu['itens'], function($i) { return !$i['inativo']; })); ?>
+                                    <span class="submenu-badge-count"><?= $itensAtivos ?> itens</span>
+                                    <div class="header-actions" onclick="event.stopPropagation();">
+                                        <?php if ($submenu['inativo']) : ?>
+                                            <a href="bd/submenu/ativa.php?idSubMenu=<?= $submenu['id'] ?>&redirect=administracao&aba=estrutura" 
+                                               class="btn-action activate" title="Ativar">
                                                 <ion-icon name="checkmark-outline"></ion-icon>
                                             </a>
+                                        <?php else : ?>
+                                            <a href="bd/submenu/desativa.php?idSubMenu=<?= $submenu['id'] ?>&redirect=administracao&aba=estrutura" 
+                                               class="btn-action deactivate" title="Desativar">
+                                                <ion-icon name="close-outline"></ion-icon>
+                                            </a>
                                         <?php endif; ?>
-                                        <button class="btn-action edit edit-btn-menu" data-id="<?= $row['ID_MENU'] ?>" title="Editar">
+                                        <button class="btn-action edit" onclick="abrirModalSubMenu(<?= $submenu['id'] ?>, <?= htmlspecialchars(json_encode($submenu['nome']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($submenu['link'] ?? ''), ENT_QUOTES) ?>, <?= $menu['id'] ?>)" title="Editar">
                                             <ion-icon name="pencil-outline"></ion-icon>
                                         </button>
-                                        <button class="btn-action save save-btn-menu" data-id="<?= $row['ID_MENU'] ?>" title="Salvar" style="display: none;">
-                                            <ion-icon name="checkmark-outline"></ion-icon>
-                                        </button>
-                                        <button class="btn-action cancel cancel-btn-menu" data-id="<?= $row['ID_MENU'] ?>" title="Cancelar" style="display: none;">
-                                            <ion-icon name="close-outline"></ion-icon>
-                                        </button>
                                     </div>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
-                            <?php if ($totalMenus == 0) : ?>
-                            <tr>
-                                <td colspan="4">
-                                    <div class="empty-state">
-                                        <ion-icon name="list-outline"></ion-icon>
-                                        <h3>Nenhum menu cadastrado</h3>
-                                        <p>Adicione um novo menu acima</p>
+                                    <div class="submenu-expand-icon">
+                                        <ion-icon name="chevron-down-outline"></ion-icon>
                                     </div>
-                                </td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+
+                            <!-- SubMenu Body (Items) -->
+                            <div class="submenu-card-body">
+                                <?php if (empty($submenu['itens'])) : ?>
+                                    <div class="empty-state" style="padding: 24px;">
+                                        <ion-icon name="document-outline"></ion-icon>
+                                        <h3>Nenhum item</h3>
+                                        <p>Adicione itens a este submenu</p>
+                                    </div>
+                                <?php else : ?>
+                                    <?php foreach ($submenu['itens'] as $item) : ?>
+                                    <div class="item-row <?= $item['inativo'] ? 'inactive' : '' ?>">
+                                        <div class="item-row-left">
+                                            <div class="item-icon">
+                                                <ion-icon name="document-text-outline"></ion-icon>
+                                            </div>
+                                            <div class="item-info">
+                                                <h5><?= htmlspecialchars($item['nome']) ?></h5>
+                                                <span><?= $item['link'] ? htmlspecialchars($item['link']) : 'Sem link' ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="item-row-right">
+                                            <?php if ($item['inativo']) : ?>
+                                                <a href="bd/itemmenu/ativa.php?idItemMenu=<?= $item['id'] ?>&redirect=administracao&aba=estrutura" 
+                                                   class="btn-action activate" title="Ativar">
+                                                    <ion-icon name="checkmark-outline"></ion-icon>
+                                                </a>
+                                            <?php else : ?>
+                                                <a href="bd/itemmenu/desativa.php?idItemMenu=<?= $item['id'] ?>&redirect=administracao&aba=estrutura" 
+                                                   class="btn-action deactivate" title="Desativar">
+                                                    <ion-icon name="close-outline"></ion-icon>
+                                                </a>
+                                            <?php endif; ?>
+                                            <button class="btn-action edit" onclick="abrirModalItem(<?= $item['id'] ?>, <?= htmlspecialchars(json_encode($item['nome']), ENT_QUOTES) ?>, <?= htmlspecialchars(json_encode($item['link'] ?? ''), ENT_QUOTES) ?>, <?= $submenu['id'] ?>)" title="Editar">
+                                                <ion-icon name="pencil-outline"></ion-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
+                                <!-- Add Item Button -->
+                                <button class="add-item-btn" onclick="abrirModalItem(null, '', '', <?= $submenu['id'] ?>)">
+                                    <ion-icon name="add-outline"></ion-icon>
+                                    Adicionar Item
+                                </button>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <!-- Add SubMenu Button -->
+                    <button class="add-submenu-btn" onclick="abrirModalSubMenu(null, '', '', <?= $menu['id'] ?>)">
+                        <ion-icon name="add-outline"></ion-icon>
+                        Adicionar SubMenu
+                    </button>
                 </div>
             </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+
+    <!-- Modal: Menu -->
+    <div class="modal-overlay" id="modalMenu">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <ion-icon name="folder-outline"></ion-icon>
+                    <span id="modalMenuTitle">Novo Menu</span>
+                </h3>
+                <button class="modal-close" onclick="fecharModal('modalMenu')">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+            </div>
+            <form id="formMenu" action="bd/menus/create.php" method="post">
+                <input type="hidden" name="idMenu" id="inputMenuId">
+                <input type="hidden" name="redirect" value="administracao">
+                <input type="hidden" name="aba" value="estrutura">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="text-outline"></ion-icon>
+                            Nome do Menu <span class="required">*</span>
+                        </label>
+                        <input type="text" name="nmMenu" id="inputMenuNome" class="form-control" placeholder="Ex: Cadastros" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="link-outline"></ion-icon>
+                            Link (opcional)
+                        </label>
+                        <input type="text" name="linkMenu" id="inputMenuLink" class="form-control" placeholder="Ex: pagina.php">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModal('modalMenu')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <ion-icon name="checkmark-outline"></ion-icon>
+                        Salvar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-    <?php endif; ?>
 
-    <!-- ============================================
-         ABA: SUBMENUS
-         ============================================ -->
-    <?php if ($abaAtiva == 'submenus') : ?>
-    <div class="tab-pane active" id="tab-submenus">
-        <!-- Cadastro -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                    <h3>Novo SubMenu</h3>
-                </div>
+    <!-- Modal: SubMenu -->
+    <div class="modal-overlay" id="modalSubMenu">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <ion-icon name="folder-open-outline"></ion-icon>
+                    <span id="modalSubMenuTitle">Novo SubMenu</span>
+                </h3>
+                <button class="modal-close" onclick="fecharModal('modalSubMenu')">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
             </div>
-            <div class="section-card-body">
-                <form action="bd/submenu/create.php" method="post">
-                    <div class="form-row">
-                        <div class="form-col-4">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="text-outline"></ion-icon>
-                                    Nome do SubMenu <span class="required">*</span>
-                                </label>
-                                <input type="text" name="nmSubMenu" class="form-control" placeholder="Digite o nome" required autofocus>
-                            </div>
-                        </div>
-                        <div class="form-col-4">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="link-outline"></ion-icon>
-                                    Link do SubMenu
-                                </label>
-                                <input type="text" name="linkSubMenu" class="form-control" placeholder="Ex: pagina.php">
-                            </div>
-                        </div>
-                        <div class="form-col-4">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="list-outline"></ion-icon>
-                                    Menu Relacionado <span class="required">*</span>
-                                </label>
-                                <select name="idMenu" id="selectMenuSubMenu" class="form-select" required>
-                                    <option value="" disabled selected>Selecione um menu</option>
-                                    <?php
-                                    $queryMenusSelect = $pdoCAT->query("SELECT * FROM [portalcompras].[dbo].[menu] WHERE DT_EXC_MENU IS NULL ORDER BY NM_MENU");
-                                    while ($m = $queryMenusSelect->fetch(PDO::FETCH_ASSOC)) :
-                                        echo "<option value='{$m['ID_MENU']}'>" . htmlspecialchars($m['NM_MENU']) . "</option>";
-                                    endwhile;
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
+            <form id="formSubMenu" action="bd/submenu/create.php" method="post">
+                <input type="hidden" name="idSubMenu" id="inputSubMenuId">
+                <input type="hidden" name="redirect" value="administracao">
+                <input type="hidden" name="aba" value="estrutura">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="folder-outline"></ion-icon>
+                            Menu Pai <span class="required">*</span>
+                        </label>
+                        <select name="idMenu" id="inputSubMenuPai" class="form-select" required>
+                            <option value="">Selecione o menu</option>
+                            <?php foreach ($menus as $m) : ?>
+                                <option value="<?= $m['id'] ?>"><?= htmlspecialchars($m['nome']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <ion-icon name="add-outline"></ion-icon>
-                                Cadastrar SubMenu
-                            </button>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="text-outline"></ion-icon>
+                            Nome do SubMenu <span class="required">*</span>
+                        </label>
+                        <input type="text" name="nmSubMenu" id="inputSubMenuNome" class="form-control" placeholder="Ex: Fornecedores" required>
                     </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Listagem -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="list-outline"></ion-icon>
-                    <h3>SubMenus Cadastrados</h3>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="link-outline"></ion-icon>
+                            Link (opcional)
+                        </label>
+                        <input type="text" name="linkSubMenu" id="inputSubMenuLink" class="form-control" placeholder="Ex: fornecedores.php">
+                    </div>
                 </div>
-            </div>
-            <div class="section-card-body" style="padding: 0;">
-                <div class="table-container">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Menu</th>
-                                <th>Link</th>
-                                <th>Status</th>
-                                <th style="width: 140px; text-align: center;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $querySubMenus = $pdoCAT->query("SELECT SM.*, M.NM_MENU FROM [PortalCompras].[dbo].SUBMENU SM LEFT JOIN MENU M ON M.ID_MENU = SM.ID_MENU ORDER BY M.NM_MENU, SM.NM_SUBMENU");
-                            $totalSubMenus = 0;
-                            while ($row = $querySubMenus->fetch(PDO::FETCH_ASSOC)) : $totalSubMenus++;
-                            ?>
-                            <tr id="rowSubMenu<?= $row['ID_SUBMENU'] ?>">
-                                <td>
-                                    <span class="cell-name"><?= htmlspecialchars($row['NM_SUBMENU']) ?></span>
-                                </td>
-                                <td>
-                                    <span class="menu-badge"><?= htmlspecialchars($row['NM_MENU'] ?? '-') ?></span>
-                                </td>
-                                <td class="cell-secondary"><?= htmlspecialchars($row['LINK_SUBMENU'] ?? '-') ?></td>
-                                <td>
-                                    <?php if (empty($row['DT_EXC_SUBMENU'])) : ?>
-                                        <span class="status-badge active">Ativo</span>
-                                    <?php else : ?>
-                                        <span class="status-badge inactive">Inativo</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <div class="action-buttons" style="justify-content: center;">
-                                        <?php if (empty($row['DT_EXC_SUBMENU'])) : ?>
-                                            <a href="bd/submenu/desativa.php?idSubMenu=<?= $row['ID_SUBMENU'] ?>" class="btn-action deactivate" title="Desativar">
-                                                <ion-icon name="close-outline"></ion-icon>
-                                            </a>
-                                        <?php else : ?>
-                                            <a href="bd/submenu/ativa.php?idSubMenu=<?= $row['ID_SUBMENU'] ?>" class="btn-action activate" title="Ativar">
-                                                <ion-icon name="checkmark-outline"></ion-icon>
-                                            </a>
-                                        <?php endif; ?>
-                                        <a href="editarSubMenu.php?idSubMenu=<?= $row['ID_SUBMENU'] ?>" class="btn-action edit" title="Editar">
-                                            <ion-icon name="pencil-outline"></ion-icon>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
-                            <?php if ($totalSubMenus == 0) : ?>
-                            <tr>
-                                <td colspan="5">
-                                    <div class="empty-state">
-                                        <ion-icon name="git-network-outline"></ion-icon>
-                                        <h3>Nenhum submenu cadastrado</h3>
-                                        <p>Adicione um novo submenu acima</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModal('modalSubMenu')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <ion-icon name="checkmark-outline"></ion-icon>
+                        Salvar
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-    <?php endif; ?>
 
-    <!-- ============================================
-         ABA: ITENS MENU
-         ============================================ -->
-    <?php if ($abaAtiva == 'itens') : ?>
-    <div class="tab-pane active" id="tab-itens">
-        <!-- Cadastro -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                    <h3>Novo Item de Menu</h3>
-                </div>
+    <!-- Modal: Item Menu -->
+    <div class="modal-overlay" id="modalItem">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>
+                    <ion-icon name="document-text-outline"></ion-icon>
+                    <span id="modalItemTitle">Novo Item</span>
+                </h3>
+                <button class="modal-close" onclick="fecharModal('modalItem')">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
             </div>
-            <div class="section-card-body">
-                <form action="bd/itemmenu/create.php" method="post">
-                    <div class="form-row">
-                        <div class="form-col-4">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="text-outline"></ion-icon>
-                                    Nome do Item <span class="required">*</span>
-                                </label>
-                                <input type="text" name="nmItemMenu" class="form-control" placeholder="Digite o nome" required autofocus>
-                            </div>
-                        </div>
-                        <div class="form-col-4">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="link-outline"></ion-icon>
-                                    Link do Item
-                                </label>
-                                <input type="text" name="linkItemMenu" class="form-control" placeholder="Ex: pagina.php">
-                            </div>
-                        </div>
-                        <div class="form-col-4">
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <ion-icon name="git-network-outline"></ion-icon>
-                                    SubMenu Relacionado <span class="required">*</span>
-                                </label>
-                                <select name="idSubMenu" id="selectSubMenuItemMenu" class="form-select" required>
-                                    <option value="" disabled selected>Selecione um submenu</option>
-                                    <?php
-                                    $querySubMenusSelect = $pdoCAT->query("SELECT * FROM [portalcompras].[dbo].[submenu] WHERE DT_EXC_SUBMENU IS NULL ORDER BY NM_SUBMENU");
-                                    while ($sm = $querySubMenusSelect->fetch(PDO::FETCH_ASSOC)) :
-                                        echo "<option value='{$sm['ID_SUBMENU']}'>" . htmlspecialchars($sm['NM_SUBMENU']) . "</option>";
-                                    endwhile;
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
+            <form id="formItem" action="bd/itemmenu/create.php" method="post">
+                <input type="hidden" name="idItemMenu" id="inputItemId">
+                <input type="hidden" name="redirect" value="administracao">
+                <input type="hidden" name="aba" value="estrutura">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="folder-open-outline"></ion-icon>
+                            SubMenu Pai <span class="required">*</span>
+                        </label>
+                        <select name="idSubMenu" id="inputItemPai" class="form-select" required>
+                            <option value="">Selecione o submenu</option>
+                            <?php foreach ($menus as $m) : ?>
+                                <?php foreach ($m['submenus'] as $s) : ?>
+                                    <option value="<?= $s['id'] ?>"><?= htmlspecialchars($m['nome']) ?> → <?= htmlspecialchars($s['nome']) ?></option>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-col-12">
-                            <button type="submit" class="btn btn-primary">
-                                <ion-icon name="add-outline"></ion-icon>
-                                Cadastrar Item
-                            </button>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="text-outline"></ion-icon>
+                            Nome do Item <span class="required">*</span>
+                        </label>
+                        <input type="text" name="nmItemMenu" id="inputItemNome" class="form-control" placeholder="Ex: Novo Fornecedor" required>
                     </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Listagem -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="list-outline"></ion-icon>
-                    <h3>Itens de Menu Cadastrados</h3>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <ion-icon name="link-outline"></ion-icon>
+                            Link (opcional)
+                        </label>
+                        <input type="text" name="linkItemMenu" id="inputItemLink" class="form-control" placeholder="Ex: novoFornecedor.php">
+                    </div>
                 </div>
-            </div>
-            <div class="section-card-body" style="padding: 0;">
-                <div class="table-container">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Menu</th>
-                                <th>SubMenu</th>
-                                <th>Link</th>
-                                <th>Status</th>
-                                <th style="width: 140px; text-align: center;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $queryItens = $pdoCAT->query("SELECT IM.*, SM.NM_SUBMENU, M.NM_MENU FROM [PortalCompras].[dbo].ItemMENU IM LEFT JOIN SUBMENU SM ON SM.ID_SUBMENU = IM.ID_SUBMENU LEFT JOIN MENU M ON M.ID_MENU = SM.ID_MENU ORDER BY M.NM_MENU, SM.NM_SUBMENU, IM.NM_ITEMMENU");
-                            $totalItens = 0;
-                            while ($row = $queryItens->fetch(PDO::FETCH_ASSOC)) : $totalItens++;
-                            ?>
-                            <tr>
-                                <td>
-                                    <span class="cell-name"><?= htmlspecialchars($row['NM_ITEMMENU']) ?></span>
-                                </td>
-                                <td>
-                                    <span class="menu-badge"><?= htmlspecialchars($row['NM_MENU'] ?? '-') ?></span>
-                                </td>
-                                <td class="cell-secondary"><?= htmlspecialchars($row['NM_SUBMENU'] ?? '-') ?></td>
-                                <td class="cell-secondary"><?= htmlspecialchars($row['LINK_ITEMMENU'] ?? '-') ?></td>
-                                <td>
-                                    <?php if (empty($row['DT_EXC_ITEMMENU'])) : ?>
-                                        <span class="status-badge active">Ativo</span>
-                                    <?php else : ?>
-                                        <span class="status-badge inactive">Inativo</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <div class="action-buttons" style="justify-content: center;">
-                                        <?php if (empty($row['DT_EXC_ITEMMENU'])) : ?>
-                                            <a href="bd/itemmenu/desativa.php?idItemMenu=<?= $row['ID_ITEMMENU'] ?>" class="btn-action deactivate" title="Desativar">
-                                                <ion-icon name="close-outline"></ion-icon>
-                                            </a>
-                                        <?php else : ?>
-                                            <a href="bd/itemmenu/ativa.php?idItemMenu=<?= $row['ID_ITEMMENU'] ?>" class="btn-action activate" title="Ativar">
-                                                <ion-icon name="checkmark-outline"></ion-icon>
-                                            </a>
-                                        <?php endif; ?>
-                                        <a href="editarItemMenu.php?idItemMenu=<?= $row['ID_ITEMMENU'] ?>" class="btn-action edit" title="Editar">
-                                            <ion-icon name="pencil-outline"></ion-icon>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
-                            <?php if ($totalItens == 0) : ?>
-                            <tr>
-                                <td colspan="6">
-                                    <div class="empty-state">
-                                        <ion-icon name="link-outline"></ion-icon>
-                                        <h3>Nenhum item cadastrado</h3>
-                                        <p>Adicione um novo item acima</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModal('modalItem')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <ion-icon name="checkmark-outline"></ion-icon>
+                        Salvar
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <?php endif; ?>
@@ -1936,37 +2560,6 @@ $abaAtiva = $_GET['aba'] ?? 'tipos';
 
 <script>
 $(document).ready(function() {
-    
-    // ============================================
-    // Inicializar Select2 nos dropdowns
-    // ============================================
-    $('#selectMenuSubMenu').select2({
-        placeholder: 'Pesquisar menu...',
-        allowClear: true,
-        width: '100%',
-        language: {
-            noResults: function() {
-                return "Nenhum resultado encontrado";
-            },
-            searching: function() {
-                return "Pesquisando...";
-            }
-        }
-    });
-
-    $('#selectSubMenuItemMenu').select2({
-        placeholder: 'Pesquisar submenu...',
-        allowClear: true,
-        width: '100%',
-        language: {
-            noResults: function() {
-                return "Nenhum resultado encontrado";
-            },
-            searching: function() {
-                return "Pesquisando...";
-            }
-        }
-    });
 
     // ============================================
     // Busca AJAX de Usuários
@@ -2232,42 +2825,6 @@ $(document).ready(function() {
     });
 
     // ============================================
-    // Edição Inline - MENUS
-    // ============================================
-    $('.edit-btn-menu').on('click', function() {
-        var id = $(this).data('id');
-        var row = $('#rowMenu' + id);
-        var nmMenu = row.find('.nmMenu').text();
-        var linkMenu = row.find('.linkMenu').text();
-        if (linkMenu === '-') linkMenu = '';
-        
-        row.find('.nmMenu').replaceWith(`<input type="text" class="inline-edit-input nmMenu" value="${nmMenu}" />`);
-        row.find('.linkMenu').replaceWith(`<input type="text" class="inline-edit-input linkMenu" value="${linkMenu}" />`);
-        
-        row.find('.edit-btn-menu').hide();
-        row.find('.save-btn-menu, .cancel-btn-menu').show();
-        row.find('.deactivate, .activate').hide();
-    });
-
-    $('.save-btn-menu').on('click', function() {
-        var id = $(this).data('id');
-        var row = $('#rowMenu' + id);
-        var nmMenu = row.find('input.nmMenu').val().trim();
-        var linkMenu = row.find('input.linkMenu').val().trim();
-        
-        if (nmMenu === '') {
-            alert('O nome é obrigatório');
-            return;
-        }
-        
-        window.location.href = `bd/menus/update.php?idMenu=${id}&nmMenu=${encodeURIComponent(nmMenu)}&linkMenu=${encodeURIComponent(linkMenu)}`;
-    });
-
-    $('.cancel-btn-menu').on('click', function() {
-        location.reload();
-    });
-
-    // ============================================
     // Edição Inline - PERFIS
     // ============================================
     $('.edit-btn-perfil').on('click', function() {
@@ -2298,6 +2855,94 @@ $(document).ready(function() {
     $('.cancel-btn-perfil').on('click', function() {
         location.reload();
     });
+});
+
+// ============================================
+// Estrutura de Menus - Acordeão
+// ============================================
+function toggleMenu(id) {
+    const card = document.getElementById('menu-' + id);
+    card.classList.toggle('expanded');
+}
+
+function toggleSubMenu(id) {
+    event.stopPropagation();
+    const card = document.getElementById('submenu-' + id);
+    card.classList.toggle('expanded');
+}
+
+// ============================================
+// Modal Functions
+// ============================================
+function fecharModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+function abrirModalMenu(id = null, nome = '', link = '') {
+    const modal = document.getElementById('modalMenu');
+    const form = document.getElementById('formMenu');
+    
+    document.getElementById('modalMenuTitle').textContent = id ? 'Editar Menu' : 'Novo Menu';
+    document.getElementById('inputMenuId').value = id || '';
+    document.getElementById('inputMenuNome').value = nome;
+    document.getElementById('inputMenuLink').value = link;
+    
+    form.action = id ? 'bd/menus/update.php' : 'bd/menus/create.php';
+    
+    modal.classList.add('active');
+    document.getElementById('inputMenuNome').focus();
+}
+
+function abrirModalSubMenu(id = null, nome = '', link = '', menuPai = null) {
+    event.stopPropagation();
+    const modal = document.getElementById('modalSubMenu');
+    const form = document.getElementById('formSubMenu');
+    
+    document.getElementById('modalSubMenuTitle').textContent = id ? 'Editar SubMenu' : 'Novo SubMenu';
+    document.getElementById('inputSubMenuId').value = id || '';
+    document.getElementById('inputSubMenuNome').value = nome;
+    document.getElementById('inputSubMenuLink').value = link;
+    document.getElementById('inputSubMenuPai').value = menuPai || '';
+    
+    form.action = id ? 'bd/submenu/update.php' : 'bd/submenu/create.php';
+    
+    modal.classList.add('active');
+    document.getElementById('inputSubMenuNome').focus();
+}
+
+function abrirModalItem(id = null, nome = '', link = '', subMenuPai = null) {
+    event.stopPropagation();
+    const modal = document.getElementById('modalItem');
+    const form = document.getElementById('formItem');
+    
+    document.getElementById('modalItemTitle').textContent = id ? 'Editar Item' : 'Novo Item';
+    document.getElementById('inputItemId').value = id || '';
+    document.getElementById('inputItemNome').value = nome;
+    document.getElementById('inputItemLink').value = link;
+    document.getElementById('inputItemPai').value = subMenuPai || '';
+    
+    form.action = id ? 'bd/itemmenu/update.php' : 'bd/itemmenu/create.php';
+    
+    modal.classList.add('active');
+    document.getElementById('inputItemNome').focus();
+}
+
+// Fechar modal ao clicar fora
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
+    });
+});
+
+// Fechar modal com ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
 });
 </script>
 

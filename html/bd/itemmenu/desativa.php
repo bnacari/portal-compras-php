@@ -19,7 +19,7 @@ $_SESSION['msg'] = "ItemMenu desativado com sucesso.";
 
 // header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../administracao.php?aba=itens';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'ItemMenu';
 $acao = 'DESATIVADO';

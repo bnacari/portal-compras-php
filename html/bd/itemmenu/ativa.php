@@ -16,7 +16,7 @@ $_SESSION['msg'] = "ItemMenu ativado com sucesso.";
 
 // header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../administracao.php?aba=itens';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'ItemMenu';
 $acao = 'ATIVADO';

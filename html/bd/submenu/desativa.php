@@ -19,7 +19,7 @@ $_SESSION['msg'] = "Submenu desativado com sucesso.";
 
 // header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../administracao.php?aba=submenus';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
 $acao = 'DESATIVADO';

@@ -29,7 +29,7 @@ endwhile;
 
 $_SESSION['msg'] = "Submenu cadastrado com sucesso.";
 
-$_SESSION['redirecionar'] = '../../administracao.php?aba=submenus';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
 $acao = 'CRIADO';
