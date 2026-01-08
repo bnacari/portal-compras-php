@@ -934,6 +934,32 @@ endwhile;
             flex-direction: column;
         }
     }
+
+    .edited-name {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #3b82f6;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #0f172a;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .edited-name:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Esconde botão salvar por padrão */
+    .save-button {
+        display: none;
+    }
+
+    .save-button.show {
+        display: flex;
+    }
 </style>
 
 <div class="modern-form-container">
@@ -1515,29 +1541,106 @@ endwhile;
         validarCodLicitacao();
 
         // Editar arquivo funciona em ambas visualizações (grid e lista)
+        // Editar arquivo - funciona em ambas visualizações (grid e lista)
         $(document).on('click', '.edit-button', function () {
             var rowId = $(this).data('id');
-            var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo, #card_row_' + rowId + ' .nmAnexo');
-            var currentName = $nmAnexoCell.find('a').text();
 
+            // Selecionar elementos em ambas as views
+            var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
+            var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
+
+            // Pegar o nome do arquivo
+            var currentName = '';
+            if ($rowNmAnexo.length > 0) {
+                currentName = $rowNmAnexo.find('a').text().trim();
+            } else if ($cardNmAnexo.length > 0) {
+                currentName = $cardNmAnexo.find('a').text().trim();
+            }
+
+            if (!currentName) {
+                alert('Erro ao obter nome do arquivo');
+                return;
+            }
+
+            // Salvar nome atual
             $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', currentName);
-            $nmAnexoCell.find('a').hide();
-            $nmAnexoCell.find('.edited-name').show().focus();
 
-            $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').hide();
-            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').show();
+            // Esconder link e mostrar input em AMBAS as views
+            $rowNmAnexo.find('a').hide();
+            $rowNmAnexo.find('.edited-name').val(currentName).show().focus();
 
-            var $editedNameInput = $nmAnexoCell.find('.edited-name');
-            $editedNameInput[0].setSelectionRange(0, currentName.lastIndexOf('.'));
+            $cardNmAnexo.find('a').hide();
+            $cardNmAnexo.find('.edited-name').val(currentName).show();
+
+            // Esconder botão editar e mostrar botão salvar em AMBAS as views
+            $('#row_' + rowId + ' .edit-button').hide();
+            $('#row_' + rowId + ' .save-button').show();
+
+            $('#card_row_' + rowId + ' .edit-button').hide();
+            $('#card_row_' + rowId + ' .save-button').show();
+
+            // Selecionar texto até a extensão
+            var $editedNameInput = $rowNmAnexo.find('.edited-name');
+            if ($editedNameInput.length > 0 && $editedNameInput.is(':visible')) {
+                var dotIndex = currentName.lastIndexOf('.');
+                if (dotIndex > 0) {
+                    $editedNameInput[0].setSelectionRange(0, dotIndex);
+                }
+            }
         });
 
-        // Salvar funciona em ambas visualizações
+        // Salvar arquivo - funciona em ambas visualizações
         $(document).on('click', '.save-button', function () {
             var rowId = $(this).data('id');
-            var newName = $('#row_' + rowId + ' .edited-name, #card_row_' + rowId + ' .edited-name').val();
             var directory = '<?php echo $directory; ?>';
             var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
+
+            // Pegar novo nome de qualquer uma das views que estiver visível
+            var newName = '';
+            var $rowInput = $('#row_' + rowId + ' .edited-name');
+            var $cardInput = $('#card_row_' + rowId + ' .edited-name');
+
+            if ($rowInput.is(':visible')) {
+                newName = $rowInput.val();
+            } else if ($cardInput.is(':visible')) {
+                newName = $cardInput.val();
+            }
+
+            if (!newName) {
+                alert('Nome do arquivo não pode ser vazio');
+                return;
+            }
+
             renameFile(rowId, currentName, newName, directory);
+        });
+
+        // Cancelar edição ao pressionar ESC
+        // Cancelar edição ao pressionar ESC
+        $(document).on('keydown', '.edited-name', function (e) {
+            if (e.key === 'Escape') {
+                var $container = $(this).closest('[id^="row_"], [id^="card_row_"]');
+                var rowId = $container.attr('id').replace(/\D/g, '');
+                cancelEdit(rowId);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                var $container = $(this).closest('[id^="row_"], [id^="card_row_"]');
+                var rowId = $container.attr('id').replace(/\D/g, '');
+                $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').first().click();
+            }
+        });
+
+        // Validar caracteres inválidos durante digitação
+        $(document).on('input', '.edited-name', function () {
+            var value = $(this).val();
+            // Remove caracteres inválidos para nomes de arquivo
+            var sanitized = value.replace(/[<>:"/\\|?*]/g, '');
+            if (value !== sanitized) {
+                $(this).val(sanitized);
+                $(this).css('border-color', '#ef4444');
+                setTimeout(() => {
+                    $(this).css('border-color', '');
+                }, 500);
+            }
         });
     });
 
@@ -1585,14 +1688,21 @@ endwhile;
     }
 
     function renameFile(rowId, currentName, newName, directory) {
-        if (newName == '') {
-            newName = prompt("Novo nome do arquivo:", currentName);
-            if (!newName) return;
+        // Validar nome
+        if (!newName || newName.trim() === '') {
+            alert('Nome do arquivo não pode ser vazio');
+            return;
+        }
+
+        // Se o nome não mudou, cancelar edição
+        if (newName === currentName) {
+            cancelEdit(rowId);
+            return;
         }
 
         $.ajax({
             url: 'renameFile.php',
-            method: 'GET',
+            method: 'POST',
             data: {
                 rowId: rowId,
                 currentName: currentName,
@@ -1603,18 +1713,57 @@ endwhile;
             success: function (response) {
                 if (response.success) {
                     var newFileName = response.newFileName;
-                    var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
-                    $nmAnexoCell.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' + newFileName + '</a>');
-                    $('#row_' + rowId + ' .edit-button').show();
-                    $('#row_' + rowId + ' .save-button').hide();
+
+                    // Atualizar GRID VIEW
+                    var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
+                    $cardNmAnexo.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' + newFileName + '</a>');
+                    $cardNmAnexo.append('<input type="text" class="edited-name" value="' + newFileName + '" style="display:none;">');
+
+                    // Atualizar LIST VIEW
+                    var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
+                    $rowNmAnexo.html('<a href="' + directory + '/' + newFileName + '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' + newFileName + '</a>');
+                    $rowNmAnexo.append('<input type="text" class="edited-name" value="' + newFileName + '" style="display:none;">');
+
+                    // Mostrar botão editar e esconder botão salvar
+                    $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
+                    $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
+
+                    // Atualizar data-currentName
+                    $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', newFileName);
+
+                    // Mensagem de sucesso
+                    if (response.message && response.message !== 'Arquivo renomeado com sucesso') {
+                        alert(response.message);
+                    }
                 } else {
-                    alert('Erro ao renomear arquivo: ' + response.message);
+                    alert('Erro ao renomear arquivo: ' + (response.message || 'Erro desconhecido'));
+                    cancelEdit(rowId);
                 }
             },
             error: function (xhr, status, error) {
-                console.error(error);
+                console.error('Erro AJAX:', error);
+                console.error('Status:', status);
+                console.error('Response:', xhr.responseText);
+
+                try {
+                    var errorResponse = JSON.parse(xhr.responseText);
+                    alert('Erro: ' + (errorResponse.message || 'Erro ao renomear arquivo'));
+                } catch (e) {
+                    alert('Erro ao renomear arquivo. Verifique o console para mais detalhes.');
+                }
+
+                cancelEdit(rowId);
             }
         });
+    }
+
+    // Função auxiliar para cancelar edição
+    function cancelEdit(rowId) {
+        var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo, #card_row_' + rowId + ' .nmAnexo');
+        $nmAnexoCell.find('a').show();
+        $nmAnexoCell.find('.edited-name').hide();
+        $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
+        $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
     }
 
     function validarFormulario() {

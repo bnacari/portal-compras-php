@@ -1,70 +1,132 @@
 <?php
+//renameFile.php
+header('Content-Type: application/json');
+
 include_once 'redirecionar.php';
 include_once 'protectAdmin.php';
 include_once 'bd/conexao.php';
 
-// Verifique se os parâmetros necessários estão presentes na URL
-if (isset($_GET['rowId'], $_GET['currentName'], $_GET['newName'], $_GET['directory'])) {
-    $rowId = $_GET['rowId'];
-    $currentName = $_GET['currentName'];
-    $newName = $_GET['newName'];
-    $directory = $_GET['directory']; // Obter o diretório enviado pela URL
+// Aceitar tanto POST quanto GET
+$rowId = $_POST['rowId'] ?? $_GET['rowId'] ?? null;
+$currentName = $_POST['currentName'] ?? $_GET['currentName'] ?? null;
+$newName = $_POST['newName'] ?? $_GET['newName'] ?? null;
+$directory = $_POST['directory'] ?? $_GET['directory'] ?? null;
 
-    $lastSlashPos = strrpos($directory, '/');
-
-    // Verificar se a barra foi encontrada e não está no final da string
-    if ($lastSlashPos !== false && $lastSlashPos < strlen($directory) - 1) {
-        // Obter os caracteres à direita da barra '/'
-        $numbers = substr($directory, $lastSlashPos + 1);
-
-        // Remover caracteres não numéricos usando expressão regular
-        $idLicitacao = preg_replace("/[^0-9]/", "", $numbers);
-    } else {
-        echo json_encode(array('success' => false, 'message' => "A barra '/' não foi encontrada na string ou está no final da string."));
-        exit();
-    }
-
-    // echo "<script>alert($idLicitacao);</script>";
-    $currentFileName = basename($currentName);
-    $newFileName = basename($newName);
-
-    // Caminho completo do arquivo atual e do novo arquivo
-    $currentFilePath = $directory . '/' . $currentName;
-    $newFilePath = $directory . '/' . $newName;
-
-    if ($currentFilePath != $newFilePath) {
-
-        $pathInfo = pathinfo($newFilePath);
-        $filename = $pathInfo['filename'];
-        $extension = $pathInfo['extension'];
-    
-        $i = 1;
-        while (file_exists($directory . '/' . $newFileName)) {
-            // Adicionar sufixo numerado ao nome do arquivo
-            $newFileName = $filename . '_' . $i . '.' . $extension;
-            $i++;
-        }
-    
-        $newFilePath = $directory . '/' . $newFileName;
-
-        // Renomear o arquivo no servidor
-        if (rename($currentFilePath, $newFilePath)) {
-            // $_SESSION['msg'] =  'Arquivo renomeado com sucesso!';
-            $login = $_SESSION['login'];
-            $tela = 'Licitacao';
-            $acao = 'Anexo atualizado de ´' . $currentFileName . '´ para ´' . $newFileName . '´';
-            $idEvento = $idLicitacao;
-
-            $queryLOG = $pdoCAT->query("INSERT INTO auditoria VALUES('$login', GETDATE(), '$tela', '$acao', $idEvento)");
-
-            echo json_encode(['success' => true, 'newFileName' => $newFileName]);
-
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Erro ao renomear o arquivo.']);
-        }
-    } else {
-        echo json_encode(['success' => true, 'newFileName' => $newFileName]);
-    }
-} else {
-
+// Validar parâmetros
+if (!$rowId || !$currentName || !$newName || !$directory) {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Parâmetros obrigatórios não fornecidos'
+    ]);
+    exit();
 }
+
+// Extrair ID da licitação do diretório
+$lastSlashPos = strrpos($directory, '/');
+
+if ($lastSlashPos !== false && $lastSlashPos < strlen($directory) - 1) {
+    $numbers = substr($directory, $lastSlashPos + 1);
+    $idLicitacao = preg_replace("/[^0-9]/", "", $numbers);
+} else {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Diretório inválido'
+    ]);
+    exit();
+}
+
+// Sanitizar nomes de arquivos
+$currentFileName = basename($currentName);
+$newFileName = basename($newName);
+
+// Validar extensões (manter a mesma extensão)
+$currentExt = strtolower(pathinfo($currentFileName, PATHINFO_EXTENSION));
+$newExt = strtolower(pathinfo($newFileName, PATHINFO_EXTENSION));
+
+if ($currentExt !== $newExt) {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Não é permitido alterar a extensão do arquivo'
+    ]);
+    exit();
+}
+
+// Caminhos completos
+$currentFilePath = $directory . '/' . $currentFileName;
+$newFilePath = $directory . '/' . $newFileName;
+
+// Verificar se arquivo original existe
+if (!file_exists($currentFilePath)) {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Arquivo original não encontrado'
+    ]);
+    exit();
+}
+
+// Verificar se diretório é gravável
+if (!is_writable($directory)) {
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Sem permissão para gravar no diretório'
+    ]);
+    exit();
+}
+
+// Se o nome é o mesmo, não precisa renomear
+if ($currentFilePath === $newFilePath) {
+    echo json_encode([
+        'success' => true, 
+        'newFileName' => $newFileName,
+        'message' => 'Nome não foi alterado'
+    ]);
+    exit();
+}
+
+// Verificar se novo nome já existe e adicionar sufixo se necessário
+if (file_exists($newFilePath)) {
+    $pathInfo = pathinfo($newFilePath);
+    $filename = $pathInfo['filename'];
+    $extension = $pathInfo['extension'];
+    
+    $i = 1;
+    while (file_exists($directory . '/' . $newFileName)) {
+        $newFileName = $filename . '_' . $i . '.' . $extension;
+        $i++;
+    }
+    
+    $newFilePath = $directory . '/' . $newFileName;
+}
+
+// Tentar renomear o arquivo
+if (rename($currentFilePath, $newFilePath)) {
+    // Registrar na auditoria
+    try {
+        $login = $_SESSION['login'] ?? 'Sistema';
+        $tela = 'Licitacao';
+        $acao = 'Anexo atualizado de "' . $currentFileName . '" para "' . $newFileName . '"';
+        $idEvento = $idLicitacao;
+        
+        $queryLOG = $pdoCAT->prepare("INSERT INTO auditoria VALUES(?, GETDATE(), ?, ?, ?)");
+        $queryLOG->execute([$login, $tela, $acao, $idEvento]);
+    } catch (Exception $e) {
+        // Log falhou mas arquivo foi renomeado
+        error_log("Erro ao registrar auditoria: " . $e->getMessage());
+    }
+    
+    echo json_encode([
+        'success' => true, 
+        'newFileName' => $newFileName,
+        'message' => 'Arquivo renomeado com sucesso'
+    ]);
+    
+} else {
+    // Pegar erro específico do sistema
+    $error = error_get_last();
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Erro ao renomear arquivo. Verifique as permissões do diretório.',
+        'debug' => $error['message'] ?? 'Erro desconhecido'
+    ]);
+}
+?>
