@@ -1019,7 +1019,7 @@ endwhile;
                 </div>
 
                 <div class="form-row">
-                    <div class="form-col-4">
+                    <div class="form-col-6">
                         <div class="form-group">
                             <label>
                                 <i class="fas fa-fingerprint"></i>
@@ -1030,7 +1030,7 @@ endwhile;
                         </div>
                     </div>
 
-                    <div class="form-col-4">
+                    <div class="form-col-6">
                         <div class="form-group">
                             <label>
                                 <i class="fas fa-dollar-sign"></i>
@@ -1040,8 +1040,10 @@ endwhile;
                                 class="form-control">
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-col-4">
+                <div class="form-row">
+                    <div class="form-col-12">
                         <div class="form-group">
                             <label>
                                 <i class="fas fa-map-marker-alt"></i>
@@ -1445,15 +1447,36 @@ endwhile;
                         echo '<thead><tr><th>Anexos do Banco</th><th>Excluído?</th><th style="text-align: center;">Ação</th></tr></thead><tbody>';
 
                         foreach ($anexos as $anexo) {
-                            echo '<tr>';
-                            echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . $anexo['nmAnexo'] . '</a></td>';
-                            echo '<td>' . $anexo['dtExcAnexo'] . '</td>';
+                            $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
+                            $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
+                            $isExcluido = !empty($anexo['dtExcAnexo']);
 
-                            if (!isset($anexo['dtExcAnexo'])) {
-                                echo '<td style="text-align: center;"><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\', \'' . $idLicitacao . '\')" title="Excluir Arquivo"><i class="fas fa-times-circle action-icon delete"></i></a></td>';
+                            echo '<tr>';
+                            echo '<td><a href="' . $linkArquivo . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . $nomeArquivo . '</a></td>';
+
+                            // Coluna Excluído
+                            if ($isExcluido) {
+                                echo '<td><span style="color: #ef4444; font-weight: 600;">' . $anexo['dtExcAnexo'] . '</span></td>';
                             } else {
-                                echo '<td style="text-align: center;"><a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $anexo['linkAnexo'] . '\', \'' . $idLicitacao . '\', \'' . $anexo['dtExcAnexo'] . '\')" title="Restaurar Arquivo"><i class="fas fa-check-circle action-icon success"></i></a></td>';
+                                echo '<td><span style="color: #10b981; font-weight: 600;">Ativo</span></td>';
                             }
+
+                            // Coluna Ação
+                            echo '<td style="text-align: center;">';
+                            if (!$isExcluido) {
+                                // Botão Excluir (Desativar)
+                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . addslashes($nomeArquivo) . '\', \'' . $linkArquivo . '\', \'' . $idLicitacao . '\')" title="Desativar Arquivo" style="color: #ef4444; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid #fca5a5; border-radius: 6px; background: #fef2f2; font-size: 13px; font-weight: 500;">';
+                                echo '<i class="fas fa-times-circle"></i>';
+                                echo '<span>Desativar</span>';
+                                echo '</a>';
+                            } else {
+                                // Botão Restaurar (Ativar)
+                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . addslashes($nomeArquivo) . '\', \'' . $linkArquivo . '\', \'' . $idLicitacao . '\', \'' . addslashes($anexo['dtExcAnexo']) . '\')" title="Restaurar Arquivo" style="color: #10b981; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid #86efac; border-radius: 6px; background: #f0fdf4; font-size: 13px; font-weight: 500;">';
+                                echo '<i class="fas fa-check-circle"></i>';
+                                echo '<span>Restaurar</span>';
+                                echo '</a>';
+                            }
+                            echo '</td>';
                             echo '</tr>';
                         }
 
@@ -1811,10 +1834,18 @@ endwhile;
     }
 
     // ============================================
-    // CONFIRMAR EXCLUSÃO DE ARQUIVO
+    // CONFIRMAR EXCLUSÃO OU RESTAURAÇÃO DE ARQUIVO
     // ============================================
     function confirmDelete(file, directory, idLicitacao, dtExcAnexo) {
-        if (confirm('Tem certeza que deseja excluir o arquivo?')) {
+        // Determinar se é exclusão ou restauração
+        var isRestore = (typeof dtExcAnexo !== 'undefined' && dtExcAnexo !== null && dtExcAnexo !== '');
+
+        // Mensagem apropriada
+        var confirmMessage = isRestore
+            ? 'Tem certeza que deseja restaurar o arquivo "' + file + '"?'
+            : 'Tem certeza que deseja ocultar o arquivo "' + file + '"?';
+
+        if (confirm(confirmMessage)) {
             $.ajax({
                 url: 'excluir_arquivo.php',
                 type: 'GET',
@@ -1825,10 +1856,28 @@ endwhile;
                     dtExcAnexo: dtExcAnexo
                 },
                 success: function (response) {
-                    $('#filelist').load(window.location.href + ' #filelist');
+                    // Mensagem de sucesso
+                    var successMessage = isRestore
+                        ? 'Arquivo restaurado com sucesso!'
+                        : 'Arquivo ocultado com sucesso!';
+
+                    // Recarregar lista de arquivos
+                    $('#filelist').load(window.location.href + ' #filelist', function () {
+                        // Restaurar visualização após reload
+                        const savedView = localStorage.getItem('filesViewEdit');
+                        if (savedView) {
+                            toggleFilesViewEdit(savedView);
+                        }
+
+                        // Mostrar mensagem de sucesso
+                        alert(successMessage);
+                    });
                 },
                 error: function () {
-                    alert('Erro ao excluir o arquivo.');
+                    var errorMessage = isRestore
+                        ? 'Erro ao restaurar o arquivo.'
+                        : 'Erro ao excluir o arquivo.';
+                    alert(errorMessage);
                 }
             });
         }

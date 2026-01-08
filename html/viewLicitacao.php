@@ -907,7 +907,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                     <?php } ?>
 
                     <?php if (isset($localLicitacao) && $localLicitacao !== '') { ?>
-                        <div class="info-group col-2">
+                        <div class="info-group col-3">
                             <label><ion-icon name="location-outline"></ion-icon> Local de Abertura</label>
                             <div class="info-value">
                                 <a href="<?php echo $localLicitacao; ?>" target="_blank"><?php echo $localLicitacao; ?></a>
