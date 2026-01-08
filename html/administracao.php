@@ -61,6 +61,30 @@ if ($abaAtiva == 'estrutura') {
         }
     }
     
+    // Função de ordenação: ativos primeiro, depois alfabético
+    $ordenar = function($a, $b) {
+        // Ativos (inativo = false) vêm primeiro
+        if ($a['inativo'] !== $b['inativo']) {
+            return $a['inativo'] ? 1 : -1;
+        }
+        // Dentro do mesmo status, ordenar alfabeticamente
+        return strcasecmp($a['nome'], $b['nome']);
+    };
+    
+    // Ordenar menus
+    usort($menus, $ordenar);
+    
+    // Ordenar submenus e itens dentro de cada menu
+    foreach ($menus as &$menu) {
+        $menu['submenus'] = array_values($menu['submenus']);
+        usort($menu['submenus'], $ordenar);
+        
+        foreach ($menu['submenus'] as &$submenu) {
+            usort($submenu['itens'], $ordenar);
+        }
+    }
+    unset($menu, $submenu); // Limpar referências
+    
     $totalMenus = 0;
     $totalSubMenus = 0;
     $totalItens = 0;
@@ -1147,7 +1171,7 @@ if ($abaAtiva == 'estrutura') {
         align-items: center;
         justify-content: space-between;
         padding: 10px 14px;
-        background: #005596;
+        background: #2E2F2F;
         cursor: pointer;
         transition: background var(--transition-fast);
     }
