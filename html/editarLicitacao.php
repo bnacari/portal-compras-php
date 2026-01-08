@@ -420,7 +420,7 @@ endwhile;
     /* ============================================
        FILES MANAGEMENT - Modern Layout
        ============================================ */
-    
+
     .files-header {
         display: flex;
         justify-content: space-between;
@@ -897,6 +897,15 @@ endwhile;
             padding: 20px 16px;
         }
     }
+
+    /* Esconde botão salvar por padrão */
+    .save-button {
+        display: none !important;
+    }
+
+    .save-button.show {
+        display: flex !important;
+    }
 </style>
 
 <div class="modern-form-container">
@@ -1268,7 +1277,8 @@ endwhile;
                     $anexos = array();
 
                     // Helper function para determinar tipo de arquivo
-                    function getFileIcon($filename) {
+                    function getFileIcon($filename)
+                    {
                         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                         $icons = [
                             'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
@@ -1321,6 +1331,7 @@ endwhile;
                             echo '</div>';
 
                             // GRID VIEW
+                            // GRID VIEW
                             echo '<div class="files-grid" id="filesGrid">';
                             foreach ($anexosDiretorio as $index => $anexo) {
                                 $fileInfo = getFileIcon($anexo['nmAnexo']);
@@ -1332,7 +1343,7 @@ endwhile;
                                 echo '<div class="file-card-info">';
                                 echo '<div class="file-card-name nmAnexo">';
                                 echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a>';
-                                echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">';
+                                echo '<input type="text" class="edited-name" value="' . htmlspecialchars($anexo['nmAnexo']) . '">';
                                 echo '</div>';
                                 echo '<div class="file-card-date">';
                                 echo '<ion-icon name="calendar-outline"></ion-icon>';
@@ -1345,11 +1356,12 @@ endwhile;
                                 echo '<ion-icon name="create-outline"></ion-icon>';
                                 echo '<span>Editar</span>';
                                 echo '</a>';
-                                echo '<a href="javascript:void(0);" class="file-action-btn save save-button" data-id="' . $index . '" style="display:none;">';
+                                // BOTÃO SALVAR ESCONDIDO POR PADRÃO
+                                echo '<a href="javascript:void(0);" class="file-action-btn save save-button" data-id="' . $index . '" style="display:none !important;">';
                                 echo '<ion-icon name="checkmark-outline"></ion-icon>';
                                 echo '<span>Salvar</span>';
                                 echo '</a>';
-                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" class="file-action-btn delete">';
+                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . htmlspecialchars($anexo['nmAnexo']) . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" class="file-action-btn delete">';
                                 echo '<ion-icon name="trash-outline"></ion-icon>';
                                 echo '<span>Excluir</span>';
                                 echo '</a>';
@@ -1374,17 +1386,18 @@ endwhile;
                             foreach ($anexosDiretorio as $index => $anexo) {
                                 echo '<tr id="row_' . $index . '">';
                                 echo '<td class="nmAnexo">';
-                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . $anexo['nmAnexo'] . '</a>';
-                                echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">';
+                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . htmlspecialchars($anexo['nmAnexo']) . '</a>';
+                                echo '<input type="text" class="edited-name" value="' . htmlspecialchars($anexo['nmAnexo']) . '">';
                                 echo '</td>';
                                 echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>';
                                 echo '<td style="text-align: center;">';
-                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" title="Excluir Arquivo">';
+                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . htmlspecialchars($anexo['nmAnexo']) . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" title="Excluir Arquivo">';
                                 echo '<i class="fas fa-times-circle action-icon delete"></i>';
                                 echo '</a></td>';
                                 echo '<td style="text-align: center;">';
                                 echo '<a href="javascript:void(0);" class="edit-button" data-id="' . $index . '" title="Editar"><i class="fas fa-edit action-icon"></i></a>';
-                                echo '<a href="javascript:void(0);" class="save-button" data-id="' . $index . '" title="Salvar" hidden><i class="fas fa-check action-icon success"></i></a>';
+                                // BOTÃO SALVAR ESCONDIDO POR PADRÃO
+                                echo '<a href="javascript:void(0);" class="save-button" data-id="' . $index . '" title="Salvar" style="display:none;"><i class="fas fa-check action-icon success"></i></a>';
                                 echo '</td>';
                                 echo '</tr>';
                             }
@@ -1483,11 +1496,11 @@ endwhile;
         // ============================================
         $(document).on('click', '.edit-button', function () {
             var rowId = $(this).data('id');
-            
+
             // Selecionar elementos em ambas as views
             var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
             var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
-            
+
             // Pegar o nome do arquivo
             var currentName = '';
             if ($rowNmAnexo.length > 0 && $rowNmAnexo.find('a').length > 0) {
@@ -1495,7 +1508,7 @@ endwhile;
             } else if ($cardNmAnexo.length > 0 && $cardNmAnexo.find('a').length > 0) {
                 currentName = $cardNmAnexo.find('a').text().trim();
             }
-            
+
             if (!currentName) {
                 alert('Erro ao obter nome do arquivo');
                 return;
@@ -1503,21 +1516,21 @@ endwhile;
 
             // Salvar nome atual
             $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', currentName);
-            
+
             // Esconder link e mostrar input em AMBAS as views
             $rowNmAnexo.find('a').hide();
             $rowNmAnexo.find('.edited-name').val(currentName).show();
-            
+
             $cardNmAnexo.find('a').hide();
             $cardNmAnexo.find('.edited-name').val(currentName).show();
-            
+
             // Esconder botão editar e mostrar botão salvar em AMBAS as views
             $('#row_' + rowId + ' .edit-button').hide();
             $('#row_' + rowId + ' .save-button').show();
-            
-            $('#card_row_' + rowId + ' .edit-button').hide();
-            $('#card_row_' + rowId + ' .save-button').css('display', 'flex');
 
+            $('#card_row_' + rowId + ' .edit-button').hide();
+            // Quando editar, mostrar botão salvar assim:
+            $('#card_row_' + rowId + ' .save-button').css('display', 'flex').show();
             // Selecionar texto até a extensão
             var $editedNameInput = $rowNmAnexo.find('.edited-name');
             if ($editedNameInput.length > 0 && $editedNameInput.is(':visible')) {
@@ -1546,37 +1559,37 @@ endwhile;
             var rowId = $(this).data('id');
             var directory = '<?php echo $directory; ?>';
             var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
-            
+
             // Pegar novo nome de qualquer uma das views que estiver visível
             var newName = '';
             var $rowInput = $('#row_' + rowId + ' .edited-name');
             var $cardInput = $('#card_row_' + rowId + ' .edited-name');
-            
+
             if ($rowInput.is(':visible')) {
                 newName = $rowInput.val().trim();
             } else if ($cardInput.is(':visible')) {
                 newName = $cardInput.val().trim();
             }
-            
+
             if (!newName) {
                 alert('Nome do arquivo não pode ser vazio');
                 return;
             }
-            
+
             console.log('Salvando arquivo:', {
                 rowId: rowId,
                 currentName: currentName,
                 newName: newName,
                 directory: directory
             });
-            
+
             renameFile(rowId, currentName, newName, directory);
         });
-        
+
         // ============================================
         // CANCELAR EDIÇÃO AO PRESSIONAR ESC
         // ============================================
-        $(document).on('keydown', '.edited-name', function(e) {
+        $(document).on('keydown', '.edited-name', function (e) {
             if (e.key === 'Escape') {
                 var $container = $(this).closest('[id^="row_"], [id^="card_row_"]');
                 var rowId = $container.attr('id').replace(/\D/g, '');
@@ -1588,11 +1601,11 @@ endwhile;
                 $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').first().click();
             }
         });
-        
+
         // ============================================
         // VALIDAR CARACTERES INVÁLIDOS DURANTE DIGITAÇÃO
         // ============================================
-        $(document).on('input', '.edited-name', function() {
+        $(document).on('input', '.edited-name', function () {
             var value = $(this).val();
             // Remove caracteres inválidos para nomes de arquivo
             var sanitized = value.replace(/[<>:"/\\|?*]/g, '');
@@ -1667,7 +1680,7 @@ endwhile;
             alert('Nome do arquivo não pode ser vazio');
             return;
         }
-        
+
         // Se o nome não mudou, cancelar edição
         if (newName === currentName) {
             cancelEdit(rowId);
@@ -1693,27 +1706,27 @@ endwhile;
             dataType: 'json',
             success: function (response) {
                 console.log('Resposta do servidor:', response);
-                
+
                 if (response.success) {
                     var newFileName = response.newFileName;
-                    
+
                     // Atualizar GRID VIEW
                     var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
                     $cardNmAnexo.html('<a href="' + directory + '/' + newFileName + '" target="_blank">' + newFileName + '</a>');
                     $cardNmAnexo.append('<input type="text" class="edited-name" value="' + newFileName + '" style="display:none;">');
-                    
+
                     // Atualizar LIST VIEW
                     var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
                     $rowNmAnexo.html('<a href="' + directory + '/' + newFileName + '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' + newFileName + '</a>');
                     $rowNmAnexo.append('<input type="text" class="edited-name" value="' + newFileName + '" style="display:none;">');
-                    
+
                     // Mostrar botão editar e esconder botão salvar
                     $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
                     $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
-                    
+
                     // Atualizar data-currentName
                     $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', newFileName);
-                    
+
                     // Mensagem de sucesso
                     if (response.message && response.message !== 'Arquivo renomeado com sucesso') {
                         alert(response.message);
@@ -1728,15 +1741,15 @@ endwhile;
                 console.error('Erro AJAX:', error);
                 console.error('Status:', status);
                 console.error('Response:', xhr.responseText);
-                
+
                 try {
                     var errorResponse = JSON.parse(xhr.responseText);
                     alert('Erro: ' + (errorResponse.message || 'Erro ao renomear arquivo'));
                     console.error('Debug info:', errorResponse.debug);
-                } catch(e) {
+                } catch (e) {
                     alert('Erro ao renomear arquivo. Verifique o console para mais detalhes.');
                 }
-                
+
                 cancelEdit(rowId);
             }
         });
@@ -1760,16 +1773,16 @@ endwhile;
         const gridView = document.getElementById('filesGrid');
         const listView = document.getElementById('filesList');
         const buttons = document.querySelectorAll('.files-view-btn');
-        
+
         if (!gridView || !listView) return;
-        
+
         buttons.forEach(btn => {
             btn.classList.remove('active');
             if (btn.dataset.view === view) {
                 btn.classList.add('active');
             }
         });
-        
+
         if (view === 'grid') {
             gridView.classList.remove('hidden');
             listView.classList.remove('active');
@@ -1777,7 +1790,7 @@ endwhile;
             gridView.classList.add('hidden');
             listView.classList.add('active');
         }
-        
+
         // Salvar preferência
         localStorage.setItem('filesViewEdit', view);
     }
@@ -1863,7 +1876,7 @@ endwhile;
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     updateFileList();
-                    $('#filelist').load(window.location.href + ' #filelist', function() {
+                    $('#filelist').load(window.location.href + ' #filelist', function () {
                         // Restaurar visualização após reload
                         const savedView = localStorage.getItem('filesViewEdit');
                         if (savedView) {
