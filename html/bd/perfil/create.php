@@ -21,7 +21,7 @@ endwhile;
 
 $_SESSION['msg'] = "Perfil cadastrado com sucesso.";
 
-$_SESSION['redirecionar'] = '../cadPerfil.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=perfis';
 $login = $_SESSION['login'];
 $tela = 'Perfil';
 $acao = 'CRIADO';

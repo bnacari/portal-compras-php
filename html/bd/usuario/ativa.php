@@ -21,7 +21,7 @@ if (isset($existeUsuario)) {
 
     $_SESSION['msg'] = "Usuário ativado com sucesso.";
 
-    $_SESSION['redirecionar'] = '../../consultarUsuario.php';
+    $_SESSION['redirecionar'] = '../../administracao.php?aba=usuarios';
     $login = $_SESSION['login'];
     $tela = 'Usuario';
     $acao = 'Ativado: '.$email;
@@ -31,5 +31,5 @@ if (isset($existeUsuario)) {
 } else {
 
     $_SESSION['msg'] = "Usuário <strong>não</strong> é Administrador.";
-    header("Location: ../../consultarUsuario.php");
+    header("Location: ../../administracao.php?aba=usuarios");
 }

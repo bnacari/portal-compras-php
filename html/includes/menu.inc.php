@@ -21,20 +21,23 @@ if (!empty($_SESSION['perfil'])) {
 }
 
 // Funções para obter menus do banco
-function obterMenusPrincipais($pdoCAT) {
+function obterMenusPrincipais($pdoCAT)
+{
     $query = "SELECT * FROM MENU WHERE DT_EXC_MENU IS NULL ORDER BY NM_MENU";
     $stmt = $pdoCAT->query($query);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function obterSubMenus($pdoCAT, $menuID) {
+function obterSubMenus($pdoCAT, $menuID)
+{
     $query = "SELECT * FROM SUBMENU WHERE ID_MENU = ? AND DT_EXC_SUBMENU IS NULL ORDER BY NM_SUBMENU";
     $stmt = $pdoCAT->prepare($query);
     $stmt->execute([$menuID]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function obterItensMenu($pdoCAT, $submenuID) {
+function obterItensMenu($pdoCAT, $submenuID)
+{
     $query = "SELECT * FROM ITEMMENU WHERE ID_SUBMENU = ? AND DT_EXC_ITEMMENU IS NULL ORDER BY NM_ITEMMENU";
     $stmt = $pdoCAT->prepare($query);
     $stmt->execute([$submenuID]);
@@ -42,16 +45,20 @@ function obterItensMenu($pdoCAT, $submenuID) {
 }
 
 // Detectar ambiente
-function getAmbiente() {
-    if (strpos($_SERVER['HTTP_HOST'], 'vdesk') !== false 
-        || strpos($_SERVER['HTTP_HOST'], 'hom-') !== false) {
+function getAmbiente()
+{
+    if (
+        strpos($_SERVER['HTTP_HOST'], 'vdesk') !== false
+        || strpos($_SERVER['HTTP_HOST'], 'hom-') !== false
+    ) {
         return "HOMOLOGAÇÃO";
     }
     return "PRODUÇÃO";
 }
 
 // Obter inicial do usuário para avatar
-function getInitials($name) {
+function getInitials($name)
+{
     $parts = explode(' ', trim($name));
     if (count($parts) >= 2) {
         return strtoupper(substr($parts[0], 0, 1) . substr(end($parts), 0, 1));
@@ -73,18 +80,20 @@ if (isset($_SESSION['msg'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Compras - CESAN</title>
-    
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Icons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    
+
     <style>
         /* ============================================
            RESET & BASE
@@ -528,7 +537,7 @@ if (isset($_SESSION['msg'])) {
             opacity: 0.5;
         }
 
-        .sidebar-item.open > .sidebar-link .arrow-icon {
+        .sidebar-item.open>.sidebar-link .arrow-icon {
             transform: rotate(90deg);
         }
 
@@ -585,7 +594,7 @@ if (isset($_SESSION['msg'])) {
             transition: max-height 0.3s ease;
         }
 
-        .sidebar-item.open > .sidebar-submenu {
+        .sidebar-item.open>.sidebar-submenu {
             max-height: 1000px;
         }
 
@@ -665,10 +674,21 @@ if (isset($_SESSION['msg'])) {
             border-left: 4px solid #3b82f6;
         }
 
-        .toast.sucesso { border-left-color: #22c55e; }
-        .toast.erro { border-left-color: #ef4444; }
-        .toast.alerta { border-left-color: #f59e0b; }
-        .toast.info { border-left-color: #3b82f6; }
+        .toast.sucesso {
+            border-left-color: #22c55e;
+        }
+
+        .toast.erro {
+            border-left-color: #ef4444;
+        }
+
+        .toast.alerta {
+            border-left-color: #f59e0b;
+        }
+
+        .toast.info {
+            border-left-color: #3b82f6;
+        }
 
         .toast-icon {
             width: 24px;
@@ -681,12 +701,29 @@ if (isset($_SESSION['msg'])) {
             font-size: 14px;
         }
 
-        .toast.sucesso .toast-icon { background: #dcfce7; color: #15803d; }
-        .toast.erro .toast-icon { background: #fee2e2; color: #b91c1c; }
-        .toast.alerta .toast-icon { background: #fef3c7; color: #b45309; }
-        .toast.info .toast-icon { background: #dbeafe; color: #1d4ed8; }
+        .toast.sucesso .toast-icon {
+            background: #dcfce7;
+            color: #15803d;
+        }
 
-        .toast-content { flex: 1; }
+        .toast.erro .toast-icon {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .toast.alerta .toast-icon {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .toast.info .toast-icon {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
 
         .toast-message {
             font-size: 13px;
@@ -706,11 +743,20 @@ if (isset($_SESSION['msg'])) {
             transition: color 0.2s ease;
         }
 
-        .toast-close:hover { color: #475569; }
+        .toast-close:hover {
+            color: #475569;
+        }
 
         @keyframes toastSlideIn {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .toast.hiding {
@@ -718,8 +764,15 @@ if (isset($_SESSION['msg'])) {
         }
 
         @keyframes toastSlideOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(100px); }
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
         }
 
         /* ============================================
@@ -740,7 +793,9 @@ if (isset($_SESSION['msg'])) {
             padding: 20px;
         }
 
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active {
+            display: flex;
+        }
 
         .modal-card {
             background: #ffffff;
@@ -754,8 +809,15 @@ if (isset($_SESSION['msg'])) {
         }
 
         @keyframes modalAppear {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-header {
@@ -776,7 +838,9 @@ if (isset($_SESSION['msg'])) {
             gap: 10px;
         }
 
-        .modal-title ion-icon { font-size: 20px; }
+        .modal-title ion-icon {
+            font-size: 20px;
+        }
 
         .modal-close {
             background: rgba(255, 255, 255, 0.1);
@@ -792,13 +856,25 @@ if (isset($_SESSION['msg'])) {
             transition: background 0.2s ease;
         }
 
-        .modal-close:hover { background: rgba(255, 255, 255, 0.2); }
-        .modal-close ion-icon { font-size: 18px; }
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-        .modal-body { padding: 24px; }
+        .modal-close ion-icon {
+            font-size: 18px;
+        }
 
-        .contact-section { margin-bottom: 24px; }
-        .contact-section:last-child { margin-bottom: 0; }
+        .modal-body {
+            padding: 24px;
+        }
+
+        .contact-section {
+            margin-bottom: 24px;
+        }
+
+        .contact-section:last-child {
+            margin-bottom: 0;
+        }
 
         .contact-section-title {
             font-size: 14px;
@@ -847,7 +923,9 @@ if (isset($_SESSION['msg'])) {
             text-decoration: none;
         }
 
-        .contact-item a:hover { text-decoration: underline; }
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
 
         .modal-footer {
             padding: 16px 24px;
@@ -877,8 +955,13 @@ if (isset($_SESSION['msg'])) {
            RESPONSIVIDADE
            ============================================ */
         @media (max-width: 1024px) {
-            .modern-header { padding: 0 16px; }
-            .modern-sidebar { width: 70px; }
+            .modern-header {
+                padding: 0 16px;
+            }
+
+            .modern-sidebar {
+                width: 70px;
+            }
 
             .modern-sidebar .sidebar-section-title span,
             .modern-sidebar .sidebar-section-title .toggle-icon,
@@ -900,22 +983,53 @@ if (isset($_SESSION['msg'])) {
                 padding: 10px;
             }
 
-            .modern-sidebar .sidebar-item { padding: 0 8px; }
-            .modern-sidebar .sidebar-section-content { max-height: 1000px !important; opacity: 1 !important; }
-            .modern-sidebar .sidebar-submenu { display: none; }
+            .modern-sidebar .sidebar-item {
+                padding: 0 8px;
+            }
 
-            body { padding-left: 70px !important; }
+            .modern-sidebar .sidebar-section-content {
+                max-height: 1000px !important;
+                opacity: 1 !important;
+            }
 
-            .user-info span:not(.user-avatar) { display: none; }
-            .user-info { padding: 6px; }
-            .admin-badge { display: none; }
-            .modern-header-title .system-fullname { display: none; }
+            .modern-sidebar .sidebar-submenu {
+                display: none;
+            }
+
+            body {
+                padding-left: 70px !important;
+            }
+
+            .user-info span:not(.user-avatar) {
+                display: none;
+            }
+
+            .user-info {
+                padding: 6px;
+            }
+
+            .admin-badge {
+                display: none;
+            }
+
+            .modern-header-title .system-fullname {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
-            .modern-header { height: 56px; padding: 0 12px; }
-            .modern-header-title .brand-name { font-size: 14px; }
-            .ambiente-badge { display: none; }
+            .modern-header {
+                height: 56px;
+                padding: 0 12px;
+            }
+
+            .modern-header-title .brand-name {
+                font-size: 14px;
+            }
+
+            .ambiente-badge {
+                display: none;
+            }
 
             .modern-sidebar {
                 top: 56px;
@@ -951,11 +1065,21 @@ if (isset($_SESSION['msg'])) {
                 padding: 9px 12px;
             }
 
-            .modern-sidebar.mobile-open .sidebar-item { padding: 0 12px; }
-            .modern-sidebar.mobile-open .sidebar-submenu { display: block; }
+            .modern-sidebar.mobile-open .sidebar-item {
+                padding: 0 12px;
+            }
 
-            body { padding: 56px 0 0 0 !important; }
-            body.sidebar-collapsed { padding-left: 0 !important; }
+            .modern-sidebar.mobile-open .sidebar-submenu {
+                display: block;
+            }
+
+            body {
+                padding: 56px 0 0 0 !important;
+            }
+
+            body.sidebar-collapsed {
+                padding-left: 0 !important;
+            }
 
             .sidebar-overlay {
                 display: none;
@@ -969,467 +1093,474 @@ if (isset($_SESSION['msg'])) {
                 backdrop-filter: blur(2px);
             }
 
-            .sidebar-overlay.active { display: block; }
+            .sidebar-overlay.active {
+                display: block;
+            }
         }
 
         @media (max-width: 480px) {
-            .modern-header-logo { width: 28px; height: 32px; }
-            .btn-toggle-menu, .btn-logout, .btn-login { width: 34px; height: 34px; }
-            .user-avatar { width: 28px; height: 28px; font-size: 10px; }
-            .toast-container { top: 68px; right: 12px; left: 12px; }
-            .toast { min-width: auto; max-width: 100%; }
+            .modern-header-logo {
+                width: 28px;
+                height: 32px;
+            }
+
+            .btn-toggle-menu,
+            .btn-logout,
+            .btn-login {
+                width: 34px;
+                height: 34px;
+            }
+
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+
+            .toast-container {
+                top: 68px;
+                right: 12px;
+                left: 12px;
+            }
+
+            .toast {
+                min-width: auto;
+                max-width: 100%;
+            }
         }
 
         /* Esconder elementos antigos */
-        .header2, .sidebar2, .content2, #check { display: none !important; }
+        .header2,
+        .sidebar2,
+        .content2,
+        #check {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
 
-<!-- Overlay para mobile -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+    <!-- Overlay para mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
 
-<!-- Header Moderno -->
-<header class="modern-header">
-    <div class="modern-header-left">
-        <button class="btn-toggle-menu" onclick="toggleSidebar()" title="Menu">
-            <ion-icon name="menu-outline"></ion-icon>
-        </button>
+    <!-- Header Moderno -->
+    <header class="modern-header">
+        <div class="modern-header-left">
+            <button class="btn-toggle-menu" onclick="toggleSidebar()" title="Menu">
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
 
-        <a href="index.php">
-            <img src="imagens/logo_icon.png" class="modern-header-logo" alt="Logo">
-            <div class="modern-header-title">
-                <span class="brand-name">
-                    Portal de Compras
-                    <span class="ambiente-badge <?= $ambiente === 'PRODUÇÃO' ? 'producao' : '' ?>"><?= $ambiente ?></span>
+            <a href="index.php">
+                <img src="imagens/logo_icon.png" class="modern-header-logo" alt="Logo">
+                <div class="modern-header-title">
+                    <span class="brand-name">
+                        Portal de Compras
+                        <span
+                            class="ambiente-badge <?= $ambiente === 'PRODUÇÃO' ? 'producao' : '' ?>"><?= $ambiente ?></span>
+                    </span>
+                    <span class="system-fullname">Licitações e Contratos - CESAN</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="modern-header-right">
+            <?php if (isset($_SESSION['login'])): ?>
+                <div class="user-info">
+                    <div class="user-avatar <?= $isAdmin ? 'admin' : '' ?>"><?= $userInitials ?></div>
+                    <span><?= htmlspecialchars($login) ?></span>
+                    <?php if ($isAdmin): ?><span class="admin-badge">ADMIN</span><?php endif; ?>
+                </div>
+                <a href="logout.php" class="btn-logout" title="Sair do Sistema">
+                    <ion-icon name="exit-outline"></ion-icon>
+                </a>
+            <?php else: ?>
+                <a href="login.php" class="btn-login" title="Acessar Sistema">
+                    <ion-icon name="log-in-outline"></ion-icon>
+                </a>
+            <?php endif; ?>
+        </div>
+    </header>
+
+    <!-- Sidebar Moderna -->
+    <aside class="modern-sidebar" id="modernSidebar">
+        <!-- Seção: Principal -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="principal">
+                <span class="section-icon">
+                    <ion-icon name="home-outline"></ion-icon>
+                    <span>Principal</span>
                 </span>
-                <span class="system-fullname">Licitações e Contratos - CESAN</span>
+                <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
             </div>
-        </a>
-    </div>
-
-    <div class="modern-header-right">
-        <?php if (isset($_SESSION['login'])): ?>
-            <div class="user-info">
-                <div class="user-avatar <?= $isAdmin ? 'admin' : '' ?>"><?= $userInitials ?></div>
-                <span><?= htmlspecialchars($login) ?></span>
-                <?php if ($isAdmin): ?><span class="admin-badge">ADMIN</span><?php endif; ?>
-            </div>
-            <a href="logout.php" class="btn-logout" title="Sair do Sistema">
-                <ion-icon name="exit-outline"></ion-icon>
-            </a>
-        <?php else: ?>
-            <a href="login.php" class="btn-login" title="Acessar Sistema">
-                <ion-icon name="log-in-outline"></ion-icon>
-            </a>
-        <?php endif; ?>
-    </div>
-</header>
-
-<!-- Sidebar Moderna -->
-<aside class="modern-sidebar" id="modernSidebar">
-    <!-- Seção: Principal -->
-    <div class="sidebar-section">
-        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="principal">
-            <span class="section-icon">
-                <ion-icon name="home-outline"></ion-icon>
-                <span>Principal</span>
-            </span>
-            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
-        </div>
-        <div class="sidebar-section-content" id="section-principal">
-            <ul class="sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="consultarLicitacao.php" class="sidebar-link <?= $paginaAtual === 'consultarLicitacao' ? 'active' : '' ?>" data-title="Licitações">
-                        <ion-icon name="document-text-outline"></ion-icon>
-                        <span class="sidebar-link-text">Licitações</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <?php
-    $menusPrincipais = obterMenusPrincipais($pdoCAT);
-    if (!empty($menusPrincipais)):
-    ?>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section">
-        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="navegacao">
-            <span class="section-icon">
-                <ion-icon name="compass-outline"></ion-icon>
-                <span>Navegação</span>
-            </span>
-            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
-        </div>
-        <div class="sidebar-section-content" id="section-navegacao">
-            <ul class="sidebar-nav">
-                <?php foreach ($menusPrincipais as $menu): 
-                    $submenus = obterSubMenus($pdoCAT, $menu['ID_MENU']);
-                    $hasSubmenus = !empty($submenus);
-                ?>
-                <li class="sidebar-item <?= $hasSubmenus ? 'has-submenu' : '' ?>">
-                    <?php if ($hasSubmenus): ?>
-                        <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="<?= htmlspecialchars($menu['NM_MENU']) ?>" title="<?= htmlspecialchars($menu['NM_MENU']) ?>">
-                            <ion-icon name="folder-outline"></ion-icon>
-                            <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($menu['NM_MENU']) ?>"><?= htmlspecialchars($menu['NM_MENU']) ?></span>
-                            <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+            <div class="sidebar-section-content" id="section-principal">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-item">
+                        <a href="consultarLicitacao.php"
+                            class="sidebar-link <?= $paginaAtual === 'consultarLicitacao' ? 'active' : '' ?>"
+                            data-title="Licitações">
+                            <ion-icon name="document-text-outline"></ion-icon>
+                            <span class="sidebar-link-text">Licitações</span>
                         </a>
-                        <ul class="sidebar-submenu">
-                            <?php foreach ($submenus as $submenu): 
-                                $itens = obterItensMenu($pdoCAT, $submenu['ID_SUBMENU']);
-                                $hasItens = !empty($itens);
+                    </li>
+
+                    <?php if (!empty($_SESSION['idPerfilFinal'])): ?>
+                        <div class="sidebar-section-content" id="section-cadastros">
+                            <li class="sidebar-item">
+                                <a href="cadLicitacao.php"
+                                    class="sidebar-link <?= $paginaAtual === 'cadLicitacao' ? 'active' : '' ?>"
+                                    data-title="Criar Licitação">
+                                    <ion-icon name="create-outline"></ion-icon>
+                                    <span class="sidebar-link-text">Criar Licitação</span>
+                                </a>
+                            </li>
+                        </div>
+                    <?php endif; ?>
+
+
+                </ul>
+            </div>
+        </div>
+
+        <?php
+        $menusPrincipais = obterMenusPrincipais($pdoCAT);
+        if (!empty($menusPrincipais)):
+            ?>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="navegacao">
+                    <span class="section-icon">
+                        <ion-icon name="compass-outline"></ion-icon>
+                        <span>Navegação</span>
+                    </span>
+                    <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+                </div>
+                <div class="sidebar-section-content" id="section-navegacao">
+                    <ul class="sidebar-nav">
+                        <?php foreach ($menusPrincipais as $menu):
+                            $submenus = obterSubMenus($pdoCAT, $menu['ID_MENU']);
+                            $hasSubmenus = !empty($submenus);
                             ?>
-                            <li class="sidebar-item <?= $hasItens ? 'has-submenu' : '' ?>">
-                                <?php if ($hasItens): ?>
-                                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>" title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>">
-                                        <ion-icon name="folder-open-outline"></ion-icon>
-                                        <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"><?= htmlspecialchars($submenu['NM_SUBMENU']) ?></span>
+                            <li class="sidebar-item <?= $hasSubmenus ? 'has-submenu' : '' ?>">
+                                <?php if ($hasSubmenus): ?>
+                                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)"
+                                        data-title="<?= htmlspecialchars($menu['NM_MENU']) ?>"
+                                        title="<?= htmlspecialchars($menu['NM_MENU']) ?>">
+                                        <ion-icon name="folder-outline"></ion-icon>
+                                        <span class="sidebar-link-text"
+                                            data-fullname="<?= htmlspecialchars($menu['NM_MENU']) ?>"><?= htmlspecialchars($menu['NM_MENU']) ?></span>
                                         <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
                                     </a>
                                     <ul class="sidebar-submenu">
-                                        <?php foreach ($itens as $item): ?>
-                                        <li class="sidebar-item">
-                                            <a href="<?= htmlspecialchars($item['LINK_ITEMMENU']) ?>" class="sidebar-link" target="_blank" data-title="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>" title="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>">
-                                                <ion-icon name="link-outline"></ion-icon>
-                                                <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>"><?= htmlspecialchars($item['NM_ITEMMENU']) ?></span>
-                                                <span class="sidebar-badge external">Ext</span>
-                                            </a>
-                                        </li>
+                                        <?php foreach ($submenus as $submenu):
+                                            $itens = obterItensMenu($pdoCAT, $submenu['ID_SUBMENU']);
+                                            $hasItens = !empty($itens);
+                                            ?>
+                                            <li class="sidebar-item <?= $hasItens ? 'has-submenu' : '' ?>">
+                                                <?php if ($hasItens): ?>
+                                                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)"
+                                                        data-title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"
+                                                        title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>">
+                                                        <ion-icon name="folder-open-outline"></ion-icon>
+                                                        <span class="sidebar-link-text"
+                                                            data-fullname="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"><?= htmlspecialchars($submenu['NM_SUBMENU']) ?></span>
+                                                        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
+                                                    </a>
+                                                    <ul class="sidebar-submenu">
+                                                        <?php foreach ($itens as $item): ?>
+                                                            <li class="sidebar-item">
+                                                                <a href="<?= htmlspecialchars($item['LINK_ITEMMENU']) ?>" class="sidebar-link"
+                                                                    target="_blank" data-title="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>"
+                                                                    title="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>">
+                                                                    <ion-icon name="link-outline"></ion-icon>
+                                                                    <span class="sidebar-link-text"
+                                                                        data-fullname="<?= htmlspecialchars($item['NM_ITEMMENU']) ?>"><?= htmlspecialchars($item['NM_ITEMMENU']) ?></span>
+                                                                    <span class="sidebar-badge external">Ext</span>
+                                                                </a>
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                <?php else: ?>
+                                                    <a href="<?= htmlspecialchars($submenu['LINK_SUBMENU']) ?>" class="sidebar-link"
+                                                        target="_blank" data-title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"
+                                                        title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>">
+                                                        <ion-icon name="link-outline"></ion-icon>
+                                                        <span class="sidebar-link-text"
+                                                            data-fullname="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"><?= htmlspecialchars($submenu['NM_SUBMENU']) ?></span>
+                                                        <span class="sidebar-badge external">Ext</span>
+                                                    </a>
+                                                <?php endif; ?>
+                                            </li>
                                         <?php endforeach; ?>
                                     </ul>
                                 <?php else: ?>
-                                    <a href="<?= htmlspecialchars($submenu['LINK_SUBMENU']) ?>" class="sidebar-link" target="_blank" data-title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>" title="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>">
+                                    <a href="<?= htmlspecialchars($menu['LINK_MENU']) ?>" class="sidebar-link" target="_blank"
+                                        data-title="<?= htmlspecialchars($menu['NM_MENU']) ?>"
+                                        title="<?= htmlspecialchars($menu['NM_MENU']) ?>">
                                         <ion-icon name="link-outline"></ion-icon>
-                                        <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($submenu['NM_SUBMENU']) ?>"><?= htmlspecialchars($submenu['NM_SUBMENU']) ?></span>
+                                        <span class="sidebar-link-text"
+                                            data-fullname="<?= htmlspecialchars($menu['NM_MENU']) ?>"><?= htmlspecialchars($menu['NM_MENU']) ?></span>
                                         <span class="sidebar-badge external">Ext</span>
                                     </a>
                                 <?php endif; ?>
                             </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php else: ?>
-                        <a href="<?= htmlspecialchars($menu['LINK_MENU']) ?>" class="sidebar-link" target="_blank" data-title="<?= htmlspecialchars($menu['NM_MENU']) ?>" title="<?= htmlspecialchars($menu['NM_MENU']) ?>">
-                            <ion-icon name="link-outline"></ion-icon>
-                            <span class="sidebar-link-text" data-fullname="<?= htmlspecialchars($menu['NM_MENU']) ?>"><?= htmlspecialchars($menu['NM_MENU']) ?></span>
-                            <span class="sidebar-badge external">Ext</span>
-                        </a>
-                    <?php endif; ?>
-                </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
-    <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        <?php endif; ?>
 
-    <?php if (!empty($_SESSION['idPerfilFinal'])): ?>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section">
-        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="cadastros">
-            <span class="section-icon">
-                <ion-icon name="add-circle-outline"></ion-icon>
-                <span>Cadastros</span>
-            </span>
-            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
-        </div>
-        <div class="sidebar-section-content" id="section-cadastros">
-            <ul class="sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="cadLicitacao.php" class="sidebar-link <?= $paginaAtual === 'cadLicitacao' ? 'active' : '' ?>" data-title="Criar Licitação">
-                        <ion-icon name="create-outline"></ion-icon>
-                        <span class="sidebar-link-text">Criar Licitação</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <?php endif; ?>
 
-    <?php if ($isAdmin): ?>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section">
-        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="admin">
-            <span class="section-icon">
-                <ion-icon name="settings-outline"></ion-icon>
-                <span>Administração</span>
-            </span>
-            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
-        </div>
-        <div class="sidebar-section-content" id="section-admin">
-            <ul class="sidebar-nav">
-                <li class="sidebar-item">
-                    <a href="cadCriterio.php" class="sidebar-link <?= $paginaAtual === 'cadCriterio' ? 'active' : '' ?>" data-title="Critérios">
-                        <ion-icon name="checkmark-circle-outline"></ion-icon>
-                        <span class="sidebar-link-text">Critérios</span>
-                        <span class="sidebar-badge admin">Adm</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="cadForma.php" class="sidebar-link <?= $paginaAtual === 'cadForma' ? 'active' : '' ?>" data-title="Formas">
-                        <ion-icon name="git-branch-outline"></ion-icon>
-                        <span class="sidebar-link-text">Formas</span>
-                        <span class="sidebar-badge admin">Adm</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="cadTipo.php" class="sidebar-link <?= $paginaAtual === 'cadTipo' ? 'active' : '' ?>" data-title="Tipos de Contratação">
-                        <ion-icon name="pricetag-outline"></ion-icon>
-                        <span class="sidebar-link-text">Tipos de Contratação</span>
-                        <span class="sidebar-badge admin">Adm</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="consultarUsuario.php" class="sidebar-link <?= $paginaAtual === 'consultarUsuario' ? 'active' : '' ?>" data-title="Usuários">
-                        <ion-icon name="people-outline"></ion-icon>
-                        <span class="sidebar-link-text">Usuários</span>
-                        <span class="sidebar-badge admin">Adm</span>
-                    </a>
-                </li>
-                <li class="sidebar-item has-submenu">
-                    <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)" data-title="Menus">
-                        <ion-icon name="menu-outline"></ion-icon>
-                        <span class="sidebar-link-text">Menus</span>
-                        <ion-icon name="chevron-forward-outline" class="arrow-icon"></ion-icon>
-                    </a>
-                    <ul class="sidebar-submenu">
+
+        <?php if (isset($_SESSION['login'])): ?>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="config">
+                    <span class="section-icon">
+                        <ion-icon name="cog-outline"></ion-icon>
+                        <span>Configurações</span>
+                    </span>
+                    <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+                </div>
+                <div class="sidebar-section-content" id="section-config">
+                    <ul class="sidebar-nav">
+                        <?php if (strpos($login, '@') !== false): ?>
+                            <li class="sidebar-item">
+                                <a href="trocaSenhaUsuario.php"
+                                    class="sidebar-link <?= $paginaAtual === 'trocaSenhaUsuario' ? 'active' : '' ?>"
+                                    data-title="Trocar Senha">
+                                    <ion-icon name="key-outline"></ion-icon>
+                                    <span class="sidebar-link-text">Trocar Senha</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <li class="sidebar-item">
-                            <a href="cadMenu.php" class="sidebar-link <?= $paginaAtual === 'cadMenu' ? 'active' : '' ?>" data-title="Menu Principal">
-                                <ion-icon name="list-outline"></ion-icon>
-                                <span class="sidebar-link-text">Menu Principal</span>
+                            <a href="consultarAtualizacao.php"
+                                class="sidebar-link <?= $paginaAtual === 'consultarAtualizacao' ? 'active' : '' ?>"
+                                data-title="Envio de E-mail">
+                                <ion-icon name="mail-outline"></ion-icon>
+                                <span class="sidebar-link-text">Envio de E-mail</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="cadSubMenu.php" class="sidebar-link <?= $paginaAtual === 'cadSubMenu' ? 'active' : '' ?>" data-title="SubMenu">
-                                <ion-icon name="git-network-outline"></ion-icon>
-                                <span class="sidebar-link-text">SubMenu</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="cadItemMenu.php" class="sidebar-link <?= $paginaAtual === 'cadItemMenu' ? 'active' : '' ?>" data-title="Item de Menu">
-                                <ion-icon name="link-outline"></ion-icon>
-                                <span class="sidebar-link-text">Item de Menu</span>
+                            <a href="javascript:void(0)" class="sidebar-link" onclick="openModalContato()"
+                                data-title="Contatos">
+                                <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                                <span class="sidebar-link-text">Contatos</span>
                             </a>
                         </li>
                     </ul>
-                </li>
-                <li class="sidebar-item">
-                    <a href="cadAnexos.php" class="sidebar-link <?= $paginaAtual === 'cadAnexos' ? 'active' : '' ?>" data-title="Anexos">
-                        <ion-icon name="attach-outline"></ion-icon>
-                        <span class="sidebar-link-text">Anexos</span>
-                        <span class="sidebar-badge admin">Adm</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
 
-    <?php if (isset($_SESSION['login'])): ?>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section">
-        <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="config">
-            <span class="section-icon">
-                <ion-icon name="cog-outline"></ion-icon>
-                <span>Configurações</span>
-            </span>
-            <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
-        </div>
-        <div class="sidebar-section-content" id="section-config">
-            <ul class="sidebar-nav">
-                <?php if (strpos($login, '@') !== false): ?>
-                <li class="sidebar-item">
-                    <a href="trocaSenhaUsuario.php" class="sidebar-link <?= $paginaAtual === 'trocaSenhaUsuario' ? 'active' : '' ?>" data-title="Trocar Senha">
-                        <ion-icon name="key-outline"></ion-icon>
-                        <span class="sidebar-link-text">Trocar Senha</span>
-                    </a>
-                </li>
-                <?php endif; ?>
-                <li class="sidebar-item">
-                    <a href="consultarAtualizacao.php" class="sidebar-link <?= $paginaAtual === 'consultarAtualizacao' ? 'active' : '' ?>" data-title="Envio de E-mail">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <span class="sidebar-link-text">Envio de E-mail</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="javascript:void(0)" class="sidebar-link" onclick="openModalContato()" data-title="Contatos">
-                        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                        <span class="sidebar-link-text">Contatos</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <?php endif; ?>
-</aside>
+        <?php if ($isAdmin): ?>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="admin">
+                    <span class="section-icon">
+                        <ion-icon name="settings-outline"></ion-icon>
+                        <span>Administração</span>
+                    </span>
+                    <ion-icon name="chevron-down-outline" class="toggle-icon"></ion-icon>
+                </div>
+                <div class="sidebar-section-content" id="section-admin">
+                    <ul class="sidebar-nav">
+                        <li class="sidebar-item">
+                            <a href="administracao.php"
+                                class="sidebar-link <?= $paginaAtual === 'administracao' ? 'active' : '' ?>"
+                                data-title="Cadastros">
+                                <ion-icon name="settings-outline"></ion-icon>
+                                <span class="sidebar-link-text">Cadastros</span>
+                                <span class="sidebar-badge admin">Adm</span>
+                            </a>
+                        </li>
 
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
+                        <li class="sidebar-item">
+                            <a href="cadAnexos.php" class="sidebar-link <?= $paginaAtual === 'cadAnexos' ? 'active' : '' ?>"
+                                data-title="Anexos">
+                                <ion-icon name="attach-outline"></ion-icon>
+                                <span class="sidebar-link-text">Anexos</span>
+                                <span class="sidebar-badge admin">Adm</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        <?php endif; ?>
+    </aside>
 
-<!-- Modal de Contatos -->
-<div class="modal-overlay" id="modalContato">
-    <div class="modal-card">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <ion-icon name="chatbubbles-outline"></ion-icon>
-                Contatos
-            </h3>
-            <button class="modal-close" onclick="closeModalContato()">
-                <ion-icon name="close-outline"></ion-icon>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="contact-section">
-                <p class="contact-section-title">Informações, dúvidas e esclarecimentos sobre licitação CESAN</p>
-                <p class="contact-section-subtitle">Comissão Permanente de Licitações (CPL)</p>
-                <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
-                <div class="contact-list">
-                    <div class="contact-item">
-                        <ion-icon name="call-outline"></ion-icon>
-                        <span>(27) 2127-5119</span>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal de Contatos -->
+    <div class="modal-overlay" id="modalContato">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                    Contatos
+                </h3>
+                <button class="modal-close" onclick="closeModalContato()">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="contact-section">
+                    <p class="contact-section-title">Informações, dúvidas e esclarecimentos sobre licitação CESAN</p>
+                    <p class="contact-section-subtitle">Comissão Permanente de Licitações (CPL)</p>
+                    <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP:
+                        29164-018</p>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <span>(27) 2127-5119</span>
+                        </div>
+                        <div class="contact-item">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <a href="mailto:licitacoes@cesan.com.br">licitacoes@cesan.com.br</a>
+                        </div>
                     </div>
-                    <div class="contact-item">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <a href="mailto:licitacoes@cesan.com.br">licitacoes@cesan.com.br</a>
+                </div>
+                <div class="contact-section">
+                    <p class="contact-section-title">Informações sobre pregões, dispensas eletrônicas e cadastro de
+                        fornecedores</p>
+                    <p class="contact-section-subtitle">Divisão de Compras e Suprimentos (A-DCS)</p>
+                    <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP:
+                        29164-018</p>
+                    <p style="font-weight: 600; color: #0f172a; margin: 12px 0 8px 0; font-size: 13px;">Pregoeiros</p>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <a href="mailto:pregao@cesan.com.br">pregao@cesan.com.br</a>
+                        </div>
+                        <div class="contact-item">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <span>Luciana Toledo - (27) 2127-5299</span>
+                        </div>
+                        <div class="contact-item">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <span>Fernando Cordeiro - (27) 2127-5418</span>
+                        </div>
+                        <div class="contact-item">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <span>Mirelle Ino - (27) 2127-5429</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="contact-section">
-                <p class="contact-section-title">Informações sobre pregões, dispensas eletrônicas e cadastro de fornecedores</p>
-                <p class="contact-section-subtitle">Divisão de Compras e Suprimentos (A-DCS)</p>
-                <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
-                <p style="font-weight: 600; color: #0f172a; margin: 12px 0 8px 0; font-size: 13px;">Pregoeiros</p>
-                <div class="contact-list">
-                    <div class="contact-item">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <a href="mailto:pregao@cesan.com.br">pregao@cesan.com.br</a>
-                    </div>
-                    <div class="contact-item">
-                        <ion-icon name="call-outline"></ion-icon>
-                        <span>Luciana Toledo - (27) 2127-5299</span>
-                    </div>
-                    <div class="contact-item">
-                        <ion-icon name="call-outline"></ion-icon>
-                        <span>Fernando Cordeiro - (27) 2127-5418</span>
-                    </div>
-                    <div class="contact-item">
-                        <ion-icon name="call-outline"></ion-icon>
-                        <span>Mirelle Ino - (27) 2127-5429</span>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <button class="btn-modal" onclick="closeModalContato()">Fechar</button>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn-modal" onclick="closeModalContato()">Fechar</button>
-        </div>
     </div>
-</div>
 
-<script>
-    // Toggle Sidebar
-    function toggleSidebar() {
-        const sidebar = document.getElementById('modernSidebar');
-        const body = document.body;
-        const overlay = document.getElementById('sidebarOverlay');
+    <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('modernSidebar');
+            const body = document.body;
+            const overlay = document.getElementById('sidebarOverlay');
 
-        if (window.innerWidth <= 768) {
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
-            return;
-        }
-
-        sidebar.classList.toggle('collapsed');
-        body.classList.toggle('sidebar-collapsed');
-        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-    }
-
-    function closeMobileSidebar() {
-        document.getElementById('modernSidebar').classList.remove('mobile-open');
-        document.getElementById('sidebarOverlay').classList.remove('active');
-    }
-
-    // Toggle Section
-    function toggleSection(element) {
-        const sidebar = document.getElementById('modernSidebar');
-        if (sidebar.classList.contains('collapsed') && window.innerWidth > 768) return;
-
-        const sectionId = element.getAttribute('data-section');
-        const content = document.getElementById('section-' + sectionId);
-
-        element.classList.toggle('collapsed');
-        content.classList.toggle('collapsed');
-
-        const states = JSON.parse(localStorage.getItem('sidebarSections') || '{}');
-        states[sectionId] = content.classList.contains('collapsed');
-        localStorage.setItem('sidebarSections', JSON.stringify(states));
-    }
-
-    // Toggle Submenu
-    function toggleSubmenu(element) {
-        element.closest('.sidebar-item').classList.toggle('open');
-    }
-
-    // Restore States
-    document.addEventListener('DOMContentLoaded', function() {
-        if (window.innerWidth > 768) {
-            if (localStorage.getItem('sidebarCollapsed') === 'true') {
-                document.getElementById('modernSidebar').classList.add('collapsed');
-                document.body.classList.add('sidebar-collapsed');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('mobile-open');
+                overlay.classList.toggle('active');
+                return;
             }
+
+            sidebar.classList.toggle('collapsed');
+            body.classList.toggle('sidebar-collapsed');
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
         }
 
-        const sectionStates = JSON.parse(localStorage.getItem('sidebarSections') || '{}');
-        for (const [section, isCollapsed] of Object.entries(sectionStates)) {
-            if (isCollapsed) {
-                const title = document.querySelector(`[data-section="${section}"]`);
-                const content = document.getElementById('section-' + section);
-                if (title && content) {
-                    title.classList.add('collapsed');
-                    content.classList.add('collapsed');
-                }
-            }
-        }
-    });
-
-    // Handle Resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
+        function closeMobileSidebar() {
             document.getElementById('modernSidebar').classList.remove('mobile-open');
             document.getElementById('sidebarOverlay').classList.remove('active');
         }
-    });
 
-    // Toast System
-    function showToast(message, type = 'info', duration = 5000) {
-        const container = document.getElementById('toastContainer');
-        const icons = { sucesso: 'checkmark-circle', erro: 'close-circle', alerta: 'warning', info: 'information-circle' };
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `
+        // Toggle Section
+        function toggleSection(element) {
+            const sidebar = document.getElementById('modernSidebar');
+            if (sidebar.classList.contains('collapsed') && window.innerWidth > 768) return;
+
+            const sectionId = element.getAttribute('data-section');
+            const content = document.getElementById('section-' + sectionId);
+
+            element.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+
+            const states = JSON.parse(localStorage.getItem('sidebarSections') || '{}');
+            states[sectionId] = content.classList.contains('collapsed');
+            localStorage.setItem('sidebarSections', JSON.stringify(states));
+        }
+
+        // Toggle Submenu
+        function toggleSubmenu(element) {
+            element.closest('.sidebar-item').classList.toggle('open');
+        }
+
+        // Restore States
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.innerWidth > 768) {
+                if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                    document.getElementById('modernSidebar').classList.add('collapsed');
+                    document.body.classList.add('sidebar-collapsed');
+                }
+            }
+
+            const sectionStates = JSON.parse(localStorage.getItem('sidebarSections') || '{}');
+            for (const [section, isCollapsed] of Object.entries(sectionStates)) {
+                if (isCollapsed) {
+                    const title = document.querySelector(`[data-section="${section}"]`);
+                    const content = document.getElementById('section-' + section);
+                    if (title && content) {
+                        title.classList.add('collapsed');
+                        content.classList.add('collapsed');
+                    }
+                }
+            }
+        });
+
+        // Handle Resize
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                document.getElementById('modernSidebar').classList.remove('mobile-open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        });
+
+        // Toast System
+        function showToast(message, type = 'info', duration = 5000) {
+            const container = document.getElementById('toastContainer');
+            const icons = { sucesso: 'checkmark-circle', erro: 'close-circle', alerta: 'warning', info: 'information-circle' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
             <div class="toast-icon"><ion-icon name="${icons[type] || icons.info}"></ion-icon></div>
             <div class="toast-content"><p class="toast-message">${message}</p></div>
             <button class="toast-close" onclick="closeToast(this)"><ion-icon name="close"></ion-icon></button>
         `;
-        container.appendChild(toast);
-        if (duration > 0) setTimeout(() => { if (toast.parentNode) closeToast(toast.querySelector('.toast-close')); }, duration);
-    }
+            container.appendChild(toast);
+            if (duration > 0) setTimeout(() => { if (toast.parentNode) closeToast(toast.querySelector('.toast-close')); }, duration);
+        }
 
-    function closeToast(button) {
-        const toast = button.closest('.toast');
-        toast.classList.add('hiding');
-        setTimeout(() => toast.remove(), 300);
-    }
+        function closeToast(button) {
+            const toast = button.closest('.toast');
+            toast.classList.add('hiding');
+            setTimeout(() => toast.remove(), 300);
+        }
 
-    // Modal Contato
-    function openModalContato() { document.getElementById('modalContato').classList.add('active'); }
-    function closeModalContato() { document.getElementById('modalContato').classList.remove('active'); }
+        // Modal Contato
+        function openModalContato() { document.getElementById('modalContato').classList.add('active'); }
+        function closeModalContato() { document.getElementById('modalContato').classList.remove('active'); }
 
-    document.getElementById('modalContato').addEventListener('click', function(e) { if (e.target === this) closeModalContato(); });
-    document.querySelectorAll('.sidebar-link').forEach(link => {
-        link.addEventListener('click', () => { if (window.innerWidth <= 768 && !link.getAttribute('onclick')) closeMobileSidebar(); });
-    });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModalContato(); if (window.innerWidth <= 768) closeMobileSidebar(); } });
-</script>
+        document.getElementById('modalContato').addEventListener('click', function (e) { if (e.target === this) closeModalContato(); });
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => { if (window.innerWidth <= 768 && !link.getAttribute('onclick')) closeMobileSidebar(); });
+        });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModalContato(); if (window.innerWidth <= 768) closeMobileSidebar(); } });
+    </script>
 
-<?php if (!empty($msgSistema)): ?>
-<script>document.addEventListener('DOMContentLoaded', function() { showToast(<?= json_encode($msgSistema) ?>, 'info'); });</script>
-<?php endif; ?>
+    <?php if (!empty($msgSistema)): ?>
+        <script>document.addEventListener('DOMContentLoaded', function () { showToast(<?= json_encode($msgSistema) ?>, 'info'); });</script>
+    <?php endif; ?>

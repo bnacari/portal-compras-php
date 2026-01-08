@@ -25,7 +25,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 $_SESSION['msg'] = "Tipo atualizado com sucesso.";
 
-$_SESSION['redirecionar'] = '../cadTipo.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=tipos';
 $login = $_SESSION['login'];
 $tela = 'Tipo';
 $acao = 'ATUALIZADO';

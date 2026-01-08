@@ -18,9 +18,9 @@ $queryUpdateCriterio2 = $pdoCAT->query($queryUpdateCriterio);
 
 $_SESSION['msg'] = "Criterio ativado com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../cadCriterio.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=criterios';
 $login = $_SESSION['login'];
 $tela = 'Criterio';
 $acao = 'ATIVADO';

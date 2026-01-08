@@ -1,5 +1,5 @@
 <?php
-//cadForma.php
+//administracao.php?aba=formas
 
 // session_start();
 include_once 'bd/conexao.php';

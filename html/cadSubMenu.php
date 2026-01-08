@@ -1,5 +1,5 @@
 <?php
-//cadSubMenu.php
+//administracao.php?aba=submenus
 
 // session_start();
 include_once 'bd/conexao.php';

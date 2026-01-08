@@ -24,7 +24,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 $_SESSION['msg'] = "Criterio atualizado com sucesso.";
 
-$_SESSION['redirecionar'] = '../cadCriterio.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=criterios';
 $login = $_SESSION['login'];
 $tela = 'Criterio';
 $acao = 'ATUALIZADO';

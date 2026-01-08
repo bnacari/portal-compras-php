@@ -1,5 +1,5 @@
 <?php
-//cadMenu.php
+//administracao.php?aba=menus
 // session_start();
 include_once 'bd/conexao.php';
 include_once 'includes/header.inc.php';

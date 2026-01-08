@@ -483,7 +483,7 @@ if (isset($existeUsuario)) {
             </form>
             
             <!-- Form oculto para voltar com os parâmetros de busca -->
-            <form id="formVoltar" action="consultarUsuario.php" method="post" style="display: none;">
+            <form id="formVoltar" action="administracao.php?aba=usuarios" method="post" style="display: none;">
                 <input type="hidden" name="nome" value="<?php echo htmlspecialchars($nomeBusca ?? ''); ?>">
                 <input type="hidden" name="perfilUsuario" value="<?php echo htmlspecialchars($perfilBusca ?? '0'); ?>">
             </form>

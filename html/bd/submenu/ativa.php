@@ -13,9 +13,9 @@ $queryUpdateLINK = "UPDATE [portalcompras].[dbo].[submenu] SET DT_EXC_SUBMENU = 
 $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
 $_SESSION['msg'] = "Submenu ativado com sucesso.";
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../cadSubMenu.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=submenus';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
 $acao = 'ATIVADO';

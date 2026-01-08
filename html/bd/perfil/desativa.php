@@ -17,9 +17,9 @@ $queryUpdatePerfil = "UPDATE [portalcompras].[dbo].[PERFIL] SET DT_EXC_PERFIL = 
 $queryUpdatePerfil2 = $pdoCAT->query($queryUpdatePerfil);
 
 $_SESSION['msg'] = "Perfil desativado com sucesso.";
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../cadPerfil.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=perfis';
 $login = $_SESSION['login'];
 $tela = 'Perfil';
 $acao = 'DESATIVADO';

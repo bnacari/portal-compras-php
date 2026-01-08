@@ -18,7 +18,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 $_SESSION['msg'] = "Forma atualizada com sucesso.";
 
-$_SESSION['redirecionar'] = '../../cadForma.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=formas';
 $login = $_SESSION['login'];
 $tela = 'Forma';
 $acao = 'ATUALIZADA';

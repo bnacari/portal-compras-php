@@ -24,7 +24,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 $_SESSION['msg'] = "Perfil atualizado com sucesso.";
 
-$_SESSION['redirecionar'] = '../cadPerfil.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=perfis';
 $login = $_SESSION['login'];
 $tela = 'Perfil';
 $acao = 'ATUALIZADO';

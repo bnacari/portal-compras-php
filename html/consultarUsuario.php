@@ -1,5 +1,5 @@
 <?php
-//consultarUsuario.php
+//administracao.php?aba=usuarios
 
 // // session_start();
 include_once 'bd/conexao.php';
@@ -336,7 +336,7 @@ include('protectAdmin.php');
             </h2>
         </div>
         <div class="card-body">
-            <form action="consultarUsuario.php" method="post" id="formFiltrar">
+            <form action="administracao.php?aba=usuarios" method="post" id="formFiltrar">
                 <div class="form-row">
                     <div class="form-col-6">
                         <div class="form-group">
