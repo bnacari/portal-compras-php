@@ -127,7 +127,16 @@ endwhile;
     }
 
     .page-hero-icon {
-        font-size: 48px;
+        width: 56px;
+        height: 56px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 28px;
     }
 
     .page-hero-text h1 {
@@ -595,6 +604,336 @@ endwhile;
             padding: 8px;
         }
     }
+
+    /* ============================================
+       FILES MANAGEMENT - Modern Layout
+       ============================================ */
+
+    .files-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .files-count {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .files-count ion-icon {
+        font-size: 18px;
+    }
+
+    .files-count strong {
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+    .files-view-toggle {
+        display: flex;
+        gap: 4px;
+        background: #f1f5f9;
+        padding: 4px;
+        border-radius: 8px;
+    }
+
+    .files-view-btn {
+        padding: 8px 12px;
+        border: none;
+        background: transparent;
+        color: #64748b;
+        cursor: pointer;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .files-view-btn:hover {
+        color: #334155;
+    }
+
+    .files-view-btn.active {
+        background: #ffffff;
+        color: #0f172a;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .files-view-btn ion-icon {
+        font-size: 16px;
+    }
+
+    /* Grid View - Cards */
+    .files-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .file-card-edit {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .file-card-edit::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .file-card-edit:hover {
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .file-card-edit:hover::before {
+        transform: scaleX(1);
+    }
+
+    .file-card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .file-card-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+    }
+
+    .file-card-icon.pdf {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .file-card-icon.doc {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .file-card-icon.xls {
+        background: #d1fae5;
+        color: #059669;
+    }
+
+    .file-card-icon.img {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .file-card-icon.zip {
+        background: #e0e7ff;
+        color: #6366f1;
+    }
+
+    .file-card-icon.default {
+        background: #f1f5f9;
+        color: #64748b;
+    }
+
+    .file-card-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .file-card-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #0f172a;
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+    .file-card-name a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .file-card-name a:hover {
+        color: #3b82f6;
+    }
+
+    .file-card-date {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #64748b;
+    }
+
+    .file-card-date ion-icon {
+        font-size: 14px;
+    }
+
+    .file-card-actions {
+        display: flex;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .file-action-btn {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .file-action-btn:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #334155;
+    }
+
+    .file-action-btn.delete {
+        color: #ef4444;
+    }
+
+    .file-action-btn.delete:hover {
+        background: #fef2f2;
+        border-color: #fca5a5;
+    }
+
+    .file-action-btn.edit {
+        color: #3b82f6;
+    }
+
+    .file-action-btn.edit:hover {
+        background: #eff6ff;
+        border-color: #93c5fd;
+    }
+
+    .file-action-btn.save {
+        color: #10b981;
+    }
+
+    .file-action-btn.save:hover {
+        background: #f0fdf4;
+        border-color: #86efac;
+    }
+
+    .file-action-btn ion-icon {
+        font-size: 16px;
+    }
+
+    /* List View */
+    .files-list {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .files-list.active {
+        display: block;
+    }
+
+    .files-grid.hidden {
+        display: none;
+    }
+
+    /* Updated files table styles */
+    .files-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .files-table thead {
+        background: #f8fafc;
+    }
+
+    .files-table th {
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #64748b;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .files-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+        font-size: 14px;
+    }
+
+    .files-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .files-table tr:hover {
+        background: #f8fafc;
+    }
+
+    .files-table a {
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .files-table a:hover {
+        color: #2563eb;
+    }
+
+    @media (max-width: 768px) {
+        .files-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .file-card-actions {
+            flex-direction: column;
+        }
+    }
 </style>
 
 <div class="modern-form-container">
@@ -603,7 +942,9 @@ endwhile;
     <!-- Hero Section -->
     <div class="page-hero">
         <div class="page-hero-content">
-            <span class="page-hero-icon">📋</span>
+            <div class="page-hero-icon">
+                <ion-icon name="document-text-outline"></ion-icon>
+            </div>
             <div class="page-hero-text">
                 <h1>Editar Licitação <?php echo $tituloLicitacao; ?></h1>
                 <p> <?php echo $nmTipo . ' ' . $codLicitacao; ?>
@@ -966,6 +1307,25 @@ endwhile;
                     $directory = "uploads" . '/' . $idLicitacao;
                     $anexos = array();
 
+                    // Helper function para determinar tipo de arquivo
+                    function getFileIcon($filename)
+                    {
+                        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                        $icons = [
+                            'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
+                            'doc' => ['icon' => 'document', 'class' => 'doc'],
+                            'docx' => ['icon' => 'document', 'class' => 'doc'],
+                            'xls' => ['icon' => 'grid', 'class' => 'xls'],
+                            'xlsx' => ['icon' => 'grid', 'class' => 'xls'],
+                            'zip' => ['icon' => 'archive', 'class' => 'zip'],
+                            'rar' => ['icon' => 'archive', 'class' => 'zip'],
+                            'jpg' => ['icon' => 'image', 'class' => 'img'],
+                            'jpeg' => ['icon' => 'image', 'class' => 'img'],
+                            'png' => ['icon' => 'image', 'class' => 'img'],
+                        ];
+                        return $icons[$ext] ?? ['icon' => 'document', 'class' => 'default'];
+                    }
+
                     if (is_dir($directory)) {
                         $files = scandir($directory);
                         $files = array_diff($files, array('.', '..'));
@@ -984,21 +1344,78 @@ endwhile;
                         });
 
                         if (!empty($anexosDiretorio)) {
+                            echo '<div class="files-header">';
+                            echo '<div class="files-count">';
+                            echo '<ion-icon name="folder-open-outline"></ion-icon>';
+                            echo '<span><strong>' . count($anexosDiretorio) . '</strong> arquivo' . (count($anexosDiretorio) > 1 ? 's' : '') . '</span>';
+                            echo '</div>';
+                            echo '<div class="files-view-toggle">';
+                            echo '<button type="button" class="files-view-btn active" data-view="grid" onclick="toggleFilesViewEdit(\'grid\')">';
+                            echo '<ion-icon name="grid-outline"></ion-icon>';
+                            echo '<span>Cards</span>';
+                            echo '</button>';
+                            echo '<button type="button" class="files-view-btn" data-view="list" onclick="toggleFilesViewEdit(\'list\')">';
+                            echo '<ion-icon name="list-outline"></ion-icon>';
+                            echo '<span>Lista</span>';
+                            echo '</button>';
+                            echo '</div>';
+                            echo '</div>';
+
+                            // GRID VIEW
+                            echo '<div class="files-grid" id="filesGrid">';
+                            foreach ($anexosDiretorio as $index => $anexo) {
+                                $fileInfo = getFileIcon($anexo['nmAnexo']);
+                                echo '<div class="file-card-edit" id="card_row_' . $index . '">';
+                                echo '<div class="file-card-header">';
+                                echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
+                                echo '<ion-icon name="' . $fileInfo['icon'] . '-outline"></ion-icon>';
+                                echo '</div>';
+                                echo '<div class="file-card-info">';
+                                echo '<div class="file-card-name nmAnexo">';
+                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a>';
+                                echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">';
+                                echo '</div>';
+                                echo '<div class="file-card-date">';
+                                echo '<ion-icon name="calendar-outline"></ion-icon>';
+                                echo date("d/m/y H:i", $anexo['timestamp']);
+                                echo '</div>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '<div class="file-card-actions">';
+                                echo '<a href="javascript:void(0);" class="file-action-btn edit edit-button" data-id="' . $index . '">';
+                                echo '<ion-icon name="create-outline"></ion-icon>';
+                                echo '<span>Editar</span>';
+                                echo '</a>';
+                                echo '<a href="javascript:void(0);" class="file-action-btn save save-button" data-id="' . $index . '" style="display:none;">';
+                                echo '<ion-icon name="checkmark-outline"></ion-icon>';
+                                echo '<span>Salvar</span>';
+                                echo '</a>';
+                                echo '<a href="javascript:void(0);" onclick="confirmDelete(\'' . $anexo['nmAnexo'] . '\', \'' . $directory . '\', \'' . $idLicitacao . '\')" class="file-action-btn delete">';
+                                echo '<ion-icon name="trash-outline"></ion-icon>';
+                                echo '<span>Excluir</span>';
+                                echo '</a>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                            echo '</div>';
+
+                            // LIST VIEW
+                            echo '<div class="files-list" id="filesList">';
                             echo '<table class="files-table">';
-                            echo '<thead>
-                                    <tr>
-                                        <th>Lista de Documentos</th>
-                                        <th>Data Inclusão</th>
-                                        <th style="text-align: center;">Excluir</th>
-                                        <th style="text-align: center;">Editar</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>';
+                            echo '<thead>';
+                            echo '<tr>';
+                            echo '<th>Lista de Documentos</th>';
+                            echo '<th>Data Inclusão</th>';
+                            echo '<th style="text-align: center;">Excluir</th>';
+                            echo '<th style="text-align: center;">Editar</th>';
+                            echo '</tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
 
                             foreach ($anexosDiretorio as $index => $anexo) {
                                 echo '<tr id="row_' . $index . '">';
                                 echo '<td class="nmAnexo">';
-                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a>';
+                                echo '<a href="' . $directory . '/' . $anexo['nmAnexo'] . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . $anexo['nmAnexo'] . '</a>';
                                 echo '<input type="text" class="edited-name" value="' . $anexo['nmAnexo'] . '" style="display:none;">';
                                 echo '</td>';
                                 echo '<td>' . date("d/m/y H:i:s", $anexo['timestamp']) . '</td>';
@@ -1014,9 +1431,11 @@ endwhile;
                             }
 
                             echo '</tbody></table>';
+                            echo '</div>';
                         }
                     }
 
+                    // Anexos do banco de dados
                     if ($idLicitacao > 2000) {
                         $queryAnexo = "WITH RankedAnexos AS (
                             SELECT
@@ -1051,11 +1470,11 @@ endwhile;
 
                     if (!empty($anexos)) {
                         echo '<table class="files-table" style="margin-top: 24px;">';
-                        echo '<thead><tr><th>Anexos</th><th>Excluído?</th><th style="text-align: center;">Ação</th></tr></thead><tbody>';
+                        echo '<thead><tr><th>Anexos do Banco</th><th>Excluído?</th><th style="text-align: center;">Ação</th></tr></thead><tbody>';
 
                         foreach ($anexos as $anexo) {
                             echo '<tr>';
-                            echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank">' . $anexo['nmAnexo'] . '</a></td>';
+                            echo '<td><a href="' . $anexo['linkAnexo'] . '" target="_blank"><ion-icon name="document-outline"></ion-icon> ' . $anexo['nmAnexo'] . '</a></td>';
                             echo '<td>' . $anexo['dtExcAnexo'] . '</td>';
 
                             if (!isset($anexo['dtExcAnexo'])) {
@@ -1095,26 +1514,29 @@ endwhile;
         $('#codLicitacao').mask('000/0000');
         validarCodLicitacao();
 
+        // Editar arquivo funciona em ambas visualizações (grid e lista)
         $(document).on('click', '.edit-button', function () {
             var rowId = $(this).data('id');
-            var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo');
+            var $nmAnexoCell = $('#row_' + rowId + ' .nmAnexo, #card_row_' + rowId + ' .nmAnexo');
             var currentName = $nmAnexoCell.find('a').text();
 
-            $('#row_' + rowId).data('currentName', currentName);
-            $nmAnexoCell.html('<input type="text" class="edited-name" value="' + currentName + '">');
-            $('#row_' + rowId + ' .edit-button').hide();
-            $('#row_' + rowId + ' .save-button').show();
+            $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', currentName);
+            $nmAnexoCell.find('a').hide();
+            $nmAnexoCell.find('.edited-name').show().focus();
 
-            var $editedNameInput = $('#row_' + rowId + ' .edited-name');
-            $editedNameInput.focus();
+            $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').hide();
+            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').show();
+
+            var $editedNameInput = $nmAnexoCell.find('.edited-name');
             $editedNameInput[0].setSelectionRange(0, currentName.lastIndexOf('.'));
         });
 
+        // Salvar funciona em ambas visualizações
         $(document).on('click', '.save-button', function () {
             var rowId = $(this).data('id');
-            var newName = $('#row_' + rowId + ' .edited-name').val();
+            var newName = $('#row_' + rowId + ' .edited-name, #card_row_' + rowId + ' .edited-name').val();
             var directory = '<?php echo $directory; ?>';
-            var currentName = $('#row_' + rowId).data('currentName');
+            var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
             renameFile(rowId, currentName, newName, directory);
         });
     });
@@ -1315,5 +1737,40 @@ endwhile;
     document.getElementById('drop-zone').addEventListener('dragleave', function (event) {
         event.preventDefault();
         document.getElementById('drop-zone').classList.remove('dragover');
+    });
+
+    // Toggle entre visualizações de arquivos
+    function toggleFilesViewEdit(view) {
+        const gridView = document.getElementById('filesGrid');
+        const listView = document.getElementById('filesList');
+        const buttons = document.querySelectorAll('.files-view-btn');
+
+        if (!gridView || !listView) return;
+
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.view === view) {
+                btn.classList.add('active');
+            }
+        });
+
+        if (view === 'grid') {
+            gridView.classList.remove('hidden');
+            listView.classList.remove('active');
+        } else {
+            gridView.classList.add('hidden');
+            listView.classList.add('active');
+        }
+
+        // Salvar preferência
+        localStorage.setItem('filesViewEdit', view);
+    }
+
+    // Restaurar preferência de visualização ao carregar
+    $(document).ready(function () {
+        const savedView = localStorage.getItem('filesViewEdit');
+        if (savedView && (savedView === 'grid' || savedView === 'list')) {
+            toggleFilesViewEdit(savedView);
+        }
     });
 </script>
