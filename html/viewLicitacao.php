@@ -575,6 +575,13 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
         font-weight: 600;
     }
 
+    .files-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
     .files-view-toggle {
         display: flex;
         gap: 4px;
@@ -610,6 +617,37 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 
     .files-view-btn ion-icon {
         font-size: 16px;
+    }
+
+    /* Download All Button */
+    .btn-download-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .btn-download-all:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-download-all:active {
+        transform: translateY(0);
+    }
+
+    .btn-download-all ion-icon {
+        font-size: 18px;
     }
 
     /* Grid View */
@@ -738,6 +776,24 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 
     .files-grid.hidden {
         display: none;
+    }
+
+    /* Responsive adjustments for files actions */
+    @media (max-width: 600px) {
+        .files-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .files-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .btn-download-all {
+            flex: 1;
+            justify-content: center;
+        }
     }
 </style>
 
@@ -937,7 +993,6 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
     <?php } ?>
 
     <!-- Anexos -->
-    <!-- Anexos -->
     <div class="section-card">
         <div class="section-header">
             <ion-icon name="attach-outline"></ion-icon>
@@ -1027,6 +1082,13 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 echo '<ion-icon name="folder-open-outline"></ion-icon>';
                 echo '<span><strong>' . count($anexos) . '</strong> arquivo' . (count($anexos) > 1 ? 's' : '') . '</span>';
                 echo '</div>';
+                echo '<div class="files-actions">';
+                // Botão Download Todos
+                echo '<a href="downloadAnexos.php?idLicitacao=' . $idLicitacao . '" class="btn-download-all" title="Baixar todos os anexos em um arquivo ZIP">';
+                echo '<ion-icon name="download-outline"></ion-icon>';
+                echo '<span>Baixar Todos</span>';
+                echo '</a>';
+                // Toggle de visualização
                 echo '<div class="files-view-toggle">';
                 echo '<button class="files-view-btn active" data-view="grid" onclick="toggleFilesView(\'grid\')">';
                 echo '<ion-icon name="grid-outline"></ion-icon>';
@@ -1037,6 +1099,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
                 echo '<span>Lista</span>';
                 echo '</button>';
                 echo '</div>';
+                echo '</div>'; // .files-actions
                 echo '</div>';
 
                 // GRID VIEW
