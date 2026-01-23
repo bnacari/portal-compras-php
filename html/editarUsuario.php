@@ -17,9 +17,11 @@ $perfilBusca = filter_input(INPUT_GET, 'perfil', FILTER_SANITIZE_NUMBER_INT);
 $queryAdmin = "SELECT * FROM USUARIO WHERE EMAIL_ADM like '$email'";
 $querySelect = $pdoCAT->query($queryAdmin);
 
+$isExterno = false;
 while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
     $existeUsuario = $registros['EMAIL_ADM'];
     $idUsuario = $registros['ID_ADM'];
+    $isExterno = (strtolower(trim($registros['LGN_CRIADOR'] ?? '')) === 'externo');
 endwhile;
 
 if (isset($existeUsuario)) {
@@ -388,6 +390,22 @@ if (isset($existeUsuario)) {
     .select2-results__option {
         padding: 10px 16px !important;
     }
+
+    /* Select2 desabilitado */
+    .select2-container--default.select2-container--disabled .select2-selection--multiple {
+        background-color: #f8fafc !important;
+        cursor: not-allowed !important;
+    }
+
+    .select2-container--default.select2-container--disabled .select2-selection--multiple .select2-selection__choice {
+        background-color: #e2e8f0 !important;
+        border-color: #cbd5e1 !important;
+        color: #64748b !important;
+    }
+
+    .select2-container--default.select2-container--disabled .select2-selection--multiple .select2-selection__choice__remove {
+        display: none !important;
+    }
 </style>
 
 <div class="modern-container">
@@ -440,7 +458,8 @@ if (isset($existeUsuario)) {
                                 <i class="fas fa-id-badge"></i>
                                 Perfis de Acesso
                             </label>
-                            <select name="perfilUsuario[]" id="perfilUsuario" multiple>
+                            <div <?php echo $isExterno ? 'title="Usuários externos não podem ter perfis de acesso alterados"' : ''; ?>>
+                                <select name="perfilUsuario[]" id="perfilUsuario" multiple <?php echo $isExterno ? 'disabled' : ''; ?>>
                                 <?php
                                 $querySelect2 = "SELECT * FROM TIPO_LICITACAO WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO";
                                 $querySelect = $pdoCAT->query($querySelect2);
@@ -465,6 +484,7 @@ if (isset($existeUsuario)) {
                                 endwhile;
                                 ?>
                             </select>
+                            </div>
                         </div>
                     </div>
                 </div>
