@@ -106,7 +106,7 @@ if (isset($_SESSION['msg'])) {
 
         body {
             margin: 0;
-            padding: 60px 0 0 260px !important;
+            padding: 60px 0 0 220px !important;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
             background-color: #f8fafc !important;
             min-height: 100vh;
@@ -317,13 +317,13 @@ if (isset($_SESSION['msg'])) {
         }
 
         /* ============================================
-           SIDEBAR - 260px (70px collapsed)
+           SIDEBAR - 220px (70px collapsed)
            ============================================ */
         .modern-sidebar {
             position: fixed;
             top: 60px;
             left: 0;
-            width: 260px;
+            width: 220px;
             height: calc(100vh - 60px);
             background: #ffffff;
             border-right: 1px solid #e2e8f0;
@@ -360,7 +360,7 @@ if (isset($_SESSION['msg'])) {
             justify-content: space-between;
             padding: 10px 16px;
             margin: 0 12px 4px 12px;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 700;
             color: #64748b;
             text-transform: uppercase;
@@ -383,12 +383,12 @@ if (isset($_SESSION['msg'])) {
         }
 
         .sidebar-section-title .section-icon ion-icon {
-            font-size: 13px;
+            font-size: 14px;
             opacity: 0.7;
         }
 
         .sidebar-section-title .toggle-icon {
-            font-size: 13px;
+            font-size: 14px;
             transition: transform 0.3s ease;
             opacity: 0.5;
         }
@@ -423,7 +423,7 @@ if (isset($_SESSION['msg'])) {
         }
 
         .modern-sidebar.collapsed .sidebar-section-title .section-icon ion-icon {
-            font-size: 16px;
+            font-size: 18px;
             opacity: 1;
         }
 
@@ -448,24 +448,23 @@ if (isset($_SESSION['msg'])) {
 
         .sidebar-link {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 10px;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: 8px;
             color: #64748b;
             background: transparent;
             transition: all 0.2s ease;
             text-decoration: none;
             position: relative;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 500;
         }
 
         .sidebar-link ion-icon {
-            font-size: 16px;
+            font-size: 18px;
             flex-shrink: 0;
             transition: transform 0.2s ease;
-            margin-top: 1px;
         }
 
         .sidebar-link-text {
@@ -507,14 +506,12 @@ if (isset($_SESSION['msg'])) {
         .sidebar-badge {
             background: #eff6ff;
             color: #3b82f6;
-            font-size: 8px;
+            font-size: 9px;
             font-weight: 700;
             padding: 2px 6px;
             border-radius: 100px;
             margin-left: auto;
             flex-shrink: 0;
-            align-self: flex-start;
-            margin-top: 2px;
         }
 
         .sidebar-badge.external {
@@ -533,12 +530,11 @@ if (isset($_SESSION['msg'])) {
 
         /* Arrow para submenus */
         .sidebar-link .arrow-icon {
-            font-size: 13px;
+            font-size: 14px;
             transition: transform 0.2s ease;
             margin-left: auto;
             flex-shrink: 0;
             opacity: 0.5;
-            margin-top: 1px;
         }
 
         .sidebar-item.open>.sidebar-link .arrow-icon {
@@ -573,7 +569,7 @@ if (isset($_SESSION['msg'])) {
             color: white;
             padding: 6px 12px;
             border-radius: 6px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 500;
             white-space: nowrap;
             opacity: 0;
@@ -607,20 +603,18 @@ if (isset($_SESSION['msg'])) {
         }
 
         .sidebar-submenu .sidebar-link {
-            padding: 7px 10px;
-            font-size: 10px;
+            padding: 8px 10px;
+            font-size: 11px;
             border-radius: 6px;
             margin: 1px 0;
-            align-items: flex-start;
         }
 
         .sidebar-submenu .sidebar-link ion-icon {
-            font-size: 14px;
-            margin-top: 1px;
+            font-size: 15px;
         }
 
         .sidebar-submenu .sidebar-link .sidebar-badge {
-            font-size: 7px;
+            font-size: 8px;
             padding: 1px 5px;
         }
 
@@ -635,8 +629,8 @@ if (isset($_SESSION['msg'])) {
         }
 
         .sidebar-submenu .sidebar-submenu .sidebar-link {
-            font-size: 10px;
-            padding: 6px 10px;
+            font-size: 11px;
+            padding: 7px 10px;
         }
 
         /* Nested submenu (nível 3) */
@@ -1046,7 +1040,7 @@ if (isset($_SESSION['msg'])) {
             }
 
             .modern-sidebar.mobile-open {
-                width: 280px;
+                width: 260px;
                 padding: 16px 0;
                 border-right: 1px solid #e2e8f0;
             }
@@ -1068,7 +1062,7 @@ if (isset($_SESSION['msg'])) {
 
             .modern-sidebar.mobile-open .sidebar-link {
                 justify-content: flex-start;
-                padding: 8px 12px;
+                padding: 9px 12px;
             }
 
             .modern-sidebar.mobile-open .sidebar-item {
@@ -1165,7 +1159,7 @@ if (isset($_SESSION['msg'])) {
                         <span
                             class="ambiente-badge <?= $ambiente === 'PRODUÇÃO' ? 'producao' : '' ?>"><?= $ambiente ?></span>
                     </span>
-                    <span class="system-fullname">Licitações e Contratos - CESAN aaaa</span>
+                    <span class="system-fullname">Licitações e Contratos - CESAN</span>
                 </div>
             </a>
         </div>
