@@ -80,7 +80,7 @@ if ($podeEditar) {
                     </button>
                 </div>
                 <?php if ($podeEditar): ?>
-                    <a href="cadLicitacao.php" class="btn-novo">
+                    <a href="licitacaoForm.php" class="btn-novo">
                         <ion-icon name="add-outline"></ion-icon>
                         Nova Licitação
                     </a>
@@ -490,7 +490,7 @@ if ($podeEditar) {
                                 <ion-icon name="eye-outline"></ion-icon>
                             </a>
                             ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ? `
-                            <a href="editarLicitacao.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
+                            <a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
                                 <ion-icon name="create-outline"></ion-icon>
                             </a>
                             ` : ''}
@@ -548,7 +548,7 @@ if ($podeEditar) {
                                 <ion-icon name="eye-outline"></ion-icon>
                             </a>
                             ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ? `
-                            <a href="editarLicitacao.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
+                            <a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
                                 <ion-icon name="create-outline"></ion-icon>
                             </a>
                             ` : ''}

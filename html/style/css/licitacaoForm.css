@@ -1,5 +1,6 @@
 /* ============================================
-   EDITAR LICITAÇÃO - Estilo Refatorado
+   FORM LICITAÇÃO - Estilo Unificado
+   Cadastro e Edição em uma única tela
    Baseado no layout de consultarLicitacao.php
    ============================================ */
 
@@ -13,7 +14,7 @@
 }
 
 /* ============================================
-   Page Header - Estilo consultarLicitacao
+   Page Header
    ============================================ */
 .page-header {
     background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
@@ -78,7 +79,7 @@
 }
 
 /* ============================================
-   Section Card (Fieldsets)
+   Section Card
    ============================================ */
 .section-card {
     background: #ffffff;
@@ -207,6 +208,10 @@
     color: #94a3b8;
 }
 
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
 .form-textarea {
     min-height: 100px;
     resize: vertical;
@@ -252,6 +257,31 @@
 }
 
 /* ============================================
+   Info Notice (para modo cadastro)
+   ============================================ */
+.info-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #93c5fd;
+    border-radius: 10px;
+    color: #1e40af;
+}
+
+.info-notice ion-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.info-notice p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ============================================
    Dropzone (Upload)
    ============================================ */
 .dropzone {
@@ -292,7 +322,7 @@
 }
 
 /* ============================================
-   Files Table
+   Files Section
    ============================================ */
 .files-section-header {
     display: flex;
@@ -350,72 +380,9 @@
     color: #334155;
 }
 
-/* Table View */
-.files-table-wrapper {
-    overflow-x: auto;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-}
-
-.files-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.files-table thead {
-    background: #f8fafc;
-}
-
-.files-table th {
-    padding: 14px 16px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #e2e8f0;
-}
-
-.files-table td {
-    padding: 14px 16px;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 14px;
-    color: #334155;
-    vertical-align: middle;
-}
-
-.files-table tbody tr:hover {
-    background: #f8fafc;
-}
-
-.files-table a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.files-table a:hover {
-    text-decoration: underline;
-}
-
-.files-table .nmAnexo {
-    position: relative;
-}
-
-.files-table .edited-name {
-    display: none;
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #3b82f6;
-    border-radius: 6px;
-    font-size: 13px;
-}
-
-/* Grid View */
+/* ============================================
+   Files Grid (Cards)
+   ============================================ */
 .files-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -525,7 +492,72 @@
     margin-top: 8px;
 }
 
-/* Action Buttons */
+/* ============================================
+   Files Table (Lista)
+   ============================================ */
+.files-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.files-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.files-table thead {
+    background: #f8fafc;
+}
+
+.files-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.files-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.files-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.files-table a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.files-table a:hover {
+    text-decoration: underline;
+}
+
+.files-table .nmAnexo .edited-name {
+    display: none;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* ============================================
+   Action Buttons
+   ============================================ */
 .action-btn {
     display: inline-flex;
     align-items: center;
@@ -615,14 +647,40 @@
     background: #e2e8f0;
 }
 
-.btn-danger {
-    background: #fee2e2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
+.btn-outline {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
 }
 
-.btn-danger:hover {
-    background: #fecaca;
+.btn-outline:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #334155;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.empty-state ion-icon {
+    font-size: 48px;
+    color: #cbd5e1;
+    margin-bottom: 16px;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 14px;
+    margin: 0;
 }
 
 /* ============================================
@@ -675,30 +733,6 @@
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #eff6ff !important;
     color: #3b82f6 !important;
-}
-
-/* ============================================
-   Empty State
-   ============================================ */
-.empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 24px;
-    text-align: center;
-}
-
-.empty-state ion-icon {
-    font-size: 48px;
-    color: #cbd5e1;
-    margin-bottom: 16px;
-}
-
-.empty-state p {
-    color: #64748b;
-    font-size: 14px;
-    margin: 0;
 }
 
 /* ============================================
@@ -821,5 +855,10 @@ form .dropdown-content {
 
     .dropzone ion-icon {
         font-size: 36px;
+    }
+
+    .info-notice {
+        flex-direction: column;
+        text-align: center;
     }
 }

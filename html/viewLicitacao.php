@@ -507,7 +507,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
         // Botão de edição apenas para administradores (idPerfil == 9)
         if (isset($perfil['idPerfil']) && $perfil['idPerfil'] == 9) {
         ?>
-            <a href="editarLicitacao.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
+            <a href="licitacaoForm.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
                 <ion-icon name="create-outline"></ion-icon>
                 Editar Licitação
             </a>

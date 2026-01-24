@@ -1207,8 +1207,8 @@ if (isset($_SESSION['msg'])) {
                     <?php if (!empty($_SESSION['idPerfilFinal'])): ?>
                         <div class="sidebar-section-content" id="section-cadastros">
                             <li class="sidebar-item">
-                                <a href="cadLicitacao.php"
-                                    class="sidebar-link <?= $paginaAtual === 'cadLicitacao' ? 'active' : '' ?>"
+                                <a href="licitacaoForm.php"
+                                    class="sidebar-link <?= $paginaAtual === 'licitacaoForm' ? 'active' : '' ?>"
                                     data-title="Criar Licitação">
                                     <ion-icon name="create-outline"></ion-icon>
                                     <span class="sidebar-link-text">Criar Licitação</span>

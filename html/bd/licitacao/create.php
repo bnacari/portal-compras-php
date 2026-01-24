@@ -105,7 +105,7 @@ $queryInsertDetalheLicitacao = $pdoCAT->query($query);
 
 $_SESSION['msg'] = "Licitação de código ' $idLicitacao ' cadastrada com sucesso.";
 
-$_SESSION['redirecionar'] = '../../editarLicitacao.php?idLicitacao=' . $idLicitacao;
+$_SESSION['redirecionar'] = '../../licitacaoForm.php?idLicitacao=' . $idLicitacao;
 $login = $_SESSION['login'];
 $tela = 'Licitacao';
 $acao = 'CRIADA';
