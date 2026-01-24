@@ -290,7 +290,7 @@ if ($count === 0) {
         echo '<div class="item-content">';
         
         // Código da Licitação
-        echo '<a href="viewLicitacao.php?idLicitacao=' . $idLicitacao . '" class="item-code">';
+        echo '<a href="licitacaoView.php?idLicitacao=' . $idLicitacao . '" class="item-code">';
         echo htmlspecialchars($codLicitacao);
         echo '</a>';
         

@@ -53,4 +53,4 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 
 endwhile;
 
-redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
+redirecionar("licitacaoView.php?idLicitacao=$idLicitacao");

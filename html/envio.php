@@ -67,7 +67,7 @@ $idLicitacao = filter_input(INPUT_GET, 'idLicitacao', FILTER_SANITIZE_NUMBER_INT
 $protocolo = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
 
-$linkLicitacao = "$protocolo://$host/viewLicitacao.php?idLicitacao=" . $idLicitacao;
+$linkLicitacao = "$protocolo://$host/licitacaoView.php?idLicitacao=" . $idLicitacao;
 $linkLogin = "$protocolo://$host/login.php";
 $linkTrocaSenha = "$protocolo://$host/trocaSenhaUsuario.php";
 

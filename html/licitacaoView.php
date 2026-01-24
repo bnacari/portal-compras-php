@@ -89,7 +89,7 @@ if (isset($formaLicitacao) && $formaLicitacao != 0) {
 }
 
 // Registra auditoria
-$_SESSION['redirecionar'] = 'viewLicitacao.php?idLicitacao=' . $idLicitacao;
+$_SESSION['redirecionar'] = 'licitacaoView.php?idLicitacao=' . $idLicitacao;
 $login = $_SESSION['login'];
 $tela = 'Licitação';
 $acao = 'Visualizada';
@@ -98,7 +98,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
 ?>
 
 <!-- CSS da página -->
-<link rel="stylesheet" href="style/css/viewLicitacao.css" />
+<link rel="stylesheet" href="style/css/licitacaoView.css" />
 
 <div class="page-container">
 

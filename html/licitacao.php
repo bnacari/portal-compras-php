@@ -501,7 +501,7 @@ if ($podeEditar) {
                     <div class="card-footer">
                         <span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span>
                         <div class="card-footer-actions">
-                            <a href="viewLicitacao.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
+                            <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
                                 <ion-icon name="eye-outline"></ion-icon>
                             </a>
                             ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ? `
@@ -559,7 +559,7 @@ if ($podeEditar) {
                     <td>${item.PREG_RESP_LICITACAO || '-'}</td>
                     <td>
                         <div class="acoes-cell">
-                            <a href="viewLicitacao.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
+                            <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
                                 <ion-icon name="eye-outline"></ion-icon>
                             </a>
                             ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ? `
