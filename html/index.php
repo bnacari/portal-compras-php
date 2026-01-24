@@ -5,7 +5,7 @@ include_once 'includes/header.inc.php';
 include_once 'includes/footer.inc.php';
 include_once 'includes/menu.inc.php';
 // echo phpinfo();
-include_once 'consultarLicitacao.php';
+include_once 'licitacao.php';
 ?>
 
 

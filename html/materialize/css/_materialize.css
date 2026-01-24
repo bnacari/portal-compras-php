@@ -3472,7 +3472,7 @@ a {
 
   /*RESPONSÁVEL PELA RESPONSIVIDADE DOS INPUTS DAS TELAS. 
   O <form> precisa estar dentro do <fieldset> e o <form> passado conforme abaixo
-  <form action="consultarLicitacao.php" method="post" class="col s12 formulario" id="formFiltrar"> */
+  <form action="licitacao.php" method="post" class="col s12 formulario" id="formFiltrar"> */
   #formFiltrar .hide-on-small-only,
   #formFiltrar .hide-on-small-and-down {
     display: none !important;

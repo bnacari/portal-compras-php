@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // $_SESSION['msg'] = "Licitação atualizada com sucesso!";
 
 $_SESSION['redirecionar'] = '../../envio.php?idLicitacao=' . $idLicitacao;
-// $_SESSION['redirecionar'] = '../../consultarLicitacao.php';
+// $_SESSION['redirecionar'] = '../../licitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitacao';
 $acao = 'Licitacao ' . $idLicitacao . ' ATUALIZADA';

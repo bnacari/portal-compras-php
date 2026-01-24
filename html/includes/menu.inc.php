@@ -1196,7 +1196,7 @@ if (isset($_SESSION['msg'])) {
             <div class="sidebar-section-content" id="section-principal">
                 <ul class="sidebar-nav">
                     <li class="sidebar-item">
-                        <a href="consultarLicitacao.php"
+                        <a href="licitacao.php"
                             class="sidebar-link <?= $paginaAtual === 'consultarLicitacao' ? 'active' : '' ?>"
                             data-title="Licitações">
                             <ion-icon name="document-text-outline"></ion-icon>

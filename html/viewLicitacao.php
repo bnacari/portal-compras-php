@@ -4,7 +4,7 @@
  * Portal de Compras - CESAN
  * Tela de Visualização de Licitação
  * 
- * Layout refatorado baseado em consultarLicitacao.php
+ * Layout refatorado baseado em licitacao.php
  * ============================================
  */
 
@@ -499,7 +499,7 @@ $queryLOG = $pdoCAT->query("INSERT INTO AUDITORIA VALUES('$login', GETDATE(), '$
          Ações da Página
          ============================================ -->
     <div class="page-actions">
-        <a href="consultarLicitacao.php" class="btn btn-primary">
+        <a href="licitacao.php" class="btn btn-primary">
             <ion-icon name="arrow-back-outline"></ion-icon>
             Voltar para Licitações
         </a>

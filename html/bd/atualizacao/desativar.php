@@ -11,7 +11,7 @@ $queryUpdate = $pdoCAT->query("UPDATE ATUALIZACAO SET DT_EXC_ATUALIZACAO = getda
 
 $_SESSION['msg'] = "Você não receberá mais atualizações sobre a licitação.";
 
-$_SESSION['redirecionar'] = '../consultarLicitacao.php';
+$_SESSION['redirecionar'] = '../licitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Atualizacao';
 $acao = 'Desativado';

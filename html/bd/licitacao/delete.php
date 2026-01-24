@@ -36,7 +36,7 @@ $_SESSION['msg'] = "Licitação excluída com sucesso.";
 
 // header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../consultarLicitacao.php';
+$_SESSION['redirecionar'] = '../licitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitação';
 $acao = 'Excluída';

@@ -7,7 +7,7 @@ if (isset($_GET['path'])) {
     $path = $_GET['path'];
 
 } else {
-    redirecionar("consultarLicitacao.php");
+    redirecionar("licitacao.php");
 }
 
 // $path = 'licitacao-cesan-no-039-2023/';

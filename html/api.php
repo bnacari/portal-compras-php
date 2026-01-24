@@ -106,7 +106,7 @@ if ($response === false) {
 
     }
     
-    $_SESSION['redirecionar'] = '../consultarLicitacao.php';
+    $_SESSION['redirecionar'] = '../licitacao.php';
 
     $tela = 'login';
     $acao = 'Sucesso';
