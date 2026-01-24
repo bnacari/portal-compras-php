@@ -168,10 +168,6 @@ $btnSubmitText = $modoEdicao ? 'Salvar Alterações' : 'Cadastrar Licitação';
 $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 ?>
 
-<!-- jQuery e Plugins -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
 <!-- Select2 -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -256,7 +252,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                             </label>
                             <input type="text" id="codLicitacao" name="codLicitacao" 
                                 value="<?php echo htmlspecialchars($tituloLicitacao) ?>" 
-                                class="form-control" placeholder="000/0000" required>
+                                class="form-control" placeholder="000/0000" 
+                                maxlength="8" autocomplete="off" required>
                         </div>
                     </div>
 
@@ -724,7 +721,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                 <ion-icon name="<?php echo $btnSubmitIcon; ?>"></ion-icon>
                 <?php echo $btnSubmitText; ?>
             </button>
-            <a href="licitacao.php" class="btn btn-secondary">
+            <a href="consultarLicitacao.php" class="btn btn-secondary">
                 <ion-icon name="close-outline"></ion-icon>
                 Cancelar
             </a>
@@ -766,11 +763,11 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             width: '100%'
         });
 
-        // Máscara no código da licitação
-        $('#codLicitacao').mask('000/0000');
+        // Aplica máscara no código (JavaScript puro)
+        aplicarMascaraCodigo();
 
-        // Validação de código apenas se já tiver valor
-        if ($('#codLicitacao').val().length > 0) {
+        // Validação de código apenas se já tiver valor completo
+        if ($('#codLicitacao').val().length === 8) {
             validarCodLicitacao();
         }
 
@@ -782,6 +779,76 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             }
         }
     });
+
+    // ============================================
+    // Máscara do Código (000/0000) - JavaScript Puro
+    // ============================================
+    function aplicarMascaraCodigo() {
+        const input = document.getElementById('codLicitacao');
+        if (!input) return;
+
+        // Formata valor inicial se existir
+        if (input.value) {
+            input.value = formatarCodigo(input.value);
+        }
+
+        // Evento de input
+        input.addEventListener('input', function(e) {
+            let valor = e.target.value;
+            
+            // Remove tudo que não for número
+            valor = valor.replace(/\D/g, '');
+            
+            // Limita a 7 dígitos
+            valor = valor.substring(0, 7);
+            
+            // Aplica a máscara 000/0000
+            if (valor.length > 3) {
+                valor = valor.substring(0, 3) + '/' + valor.substring(3);
+            }
+            
+            e.target.value = valor;
+        });
+
+        // Evento de keydown para impedir caracteres inválidos
+        input.addEventListener('keydown', function(e) {
+            // Permite: backspace, delete, tab, escape, enter, setas
+            if ([8, 9, 27, 13, 46, 37, 38, 39, 40].includes(e.keyCode)) {
+                return;
+            }
+            // Permite Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+            if ((e.ctrlKey || e.metaKey) && [65, 67, 86, 88].includes(e.keyCode)) {
+                return;
+            }
+            // Bloqueia se não for número
+            if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        // Evento de paste
+        input.addEventListener('paste', function(e) {
+            e.preventDefault();
+            let texto = (e.clipboardData || window.clipboardData).getData('text');
+            texto = texto.replace(/\D/g, '').substring(0, 7);
+            if (texto.length > 3) {
+                texto = texto.substring(0, 3) + '/' + texto.substring(3);
+            }
+            e.target.value = texto;
+        });
+    }
+
+    function formatarCodigo(valor) {
+        // Remove tudo que não for número
+        valor = valor.replace(/\D/g, '');
+        // Limita a 7 dígitos
+        valor = valor.substring(0, 7);
+        // Aplica a máscara
+        if (valor.length > 3) {
+            valor = valor.substring(0, 3) + '/' + valor.substring(3);
+        }
+        return valor;
+    }
 
     // ============================================
     // Toggle de Visualização (Grid/Lista) - Apenas edição

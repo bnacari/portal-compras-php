@@ -1,7 +1,7 @@
 <?php
 /**
  * readAjax.php - API AJAX para listagem de licitações
- * VERSÃO DEBUG - Para identificar erros
+ * VERSÃO ATUALIZADA - Com suporte a notificações
  */
 
 // Capturar todos os erros e convertê-los para JSON
@@ -34,6 +34,7 @@ try {
 
     // Variáveis de sessão
     $emailUsuario = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+    $idUsuarioLogado = isset($_SESSION['idUsuario']) ? intval($_SESSION['idUsuario']) : 0;
 
     // Filtros recebidos
     $tituloLicitacaoFilter = isset($_POST['tituloLicitacao']) ? trim($_POST['tituloLicitacao']) : '';
@@ -94,14 +95,18 @@ try {
     $resultCount = $stmtCount->fetch(PDO::FETCH_ASSOC);
     $totalRegistros = $resultCount ? intval($resultCount['total']) : 0;
 
-    // Query principal
+    // Query principal - ATUALIZADA com campos de notificação
     $querySelect = "SELECT  
                         D.*, 
                         L.ID_LICITACAO, 
                         L.DT_LICITACAO, 
                         TIPO.NM_TIPO, 
                         TIPO.SGL_TIPO,
-                        D.ENVIO_ATUALIZACAO_LICITACAO
+                        D.ENVIO_ATUALIZACAO_LICITACAO,
+                        (SELECT COUNT(*) FROM ATUALIZACAO A 
+                         WHERE A.ID_LICITACAO = L.ID_LICITACAO 
+                         AND A.ID_ADM = $idUsuarioLogado 
+                         AND A.DT_EXC_ATUALIZACAO IS NULL) AS USUARIO_INSCRITO
                     FROM LICITACAO L
                     LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
                     LEFT JOIN TIPO_LICITACAO TIPO ON D.TIPO_LICITACAO = TIPO.ID_TIPO

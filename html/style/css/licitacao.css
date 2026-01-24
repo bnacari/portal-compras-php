@@ -369,14 +369,14 @@
    Radio Group para Filtros de Status
    ============================================ */
 .radio-group {
-    display: flex;
-    gap: 4px;
+    display: inline-flex;
+    gap: 2px;
     background: #f1f5f9;
     padding: 4px;
     border-radius: 10px;
-    height: 44px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    /* Impede quebra de linha */
 }
 
 .radio-item {
@@ -384,6 +384,8 @@
     align-items: center;
     cursor: pointer;
     margin: 0;
+    flex-shrink: 0;
+    /* Impede encolhimento */
 }
 
 .radio-item input[type="radio"] {
@@ -391,16 +393,17 @@
 }
 
 .radio-item .radio-label {
-    padding: 8px 12px;
+    padding: 8px 10px;
+    /* Padding menor para caber */
     font-size: 12px;
     font-weight: 500;
     color: #64748b;
-    border-radius: 8px;
+    border-radius: 6px;
     transition: all 0.2s ease;
     white-space: nowrap;
 }
 
-.radio-item input[type="radio"]:checked + .radio-label {
+.radio-item input[type="radio"]:checked+.radio-label {
     background: white;
     color: #1e293b;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -408,6 +411,20 @@
 
 .radio-item:hover .radio-label {
     color: #1e293b;
+}
+
+/* Responsive - Em telas menores, permite scroll horizontal */
+@media (max-width: 768px) {
+    .radio-group {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+
+    .radio-item .radio-label {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
 }
 
 /* ============================================
@@ -1130,5 +1147,164 @@
 
     .cards-container {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   Notification Indicator - Ícone de Notificação
+   Adicionar no licitacao.css
+   ============================================ */
+
+/* Indicador de notificação */
+.notification-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-left: 8px;
+    cursor: help;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Usuário inscrito - sino preenchido azul */
+.notification-indicator.subscribed {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.notification-indicator.subscribed:hover {
+    background: #bfdbfe;
+    transform: scale(1.1);
+}
+
+/* Disponível mas não inscrito - sino outline cinza */
+.notification-indicator.available {
+    background: #f1f5f9;
+    color: #94a3b8;
+}
+
+.notification-indicator.available:hover {
+    background: #e2e8f0;
+    color: #64748b;
+}
+
+/* Para o card - título com ícone */
+.card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Para a tabela - código com ícone */
+.codigo-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Animação de sino para inscrito */
+@keyframes bellRing {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50% { transform: rotate(-10deg); }
+    20%, 40% { transform: rotate(10deg); }
+    60% { transform: rotate(0); }
+}
+
+.notification-indicator.subscribed:hover ion-icon {
+    animation: bellRing 0.6s ease;
+}
+
+/* Tooltip customizado (opcional) */
+.notification-indicator[title] {
+    position: relative;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .notification-indicator {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        margin-left: 6px;
+    }
+}
+
+/* ============================================
+   Notification Button - Botão de Notificação
+   Adicionar no licitacao.css
+   ============================================ */
+
+/* Botão de notificação nas ações */
+.btn-acao.notificacao {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+/* Usuário inscrito - sino preenchido azul */
+.btn-acao.notificacao.subscribed {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.btn-acao.notificacao.subscribed:hover {
+    background: #bfdbfe;
+    transform: scale(1.1);
+}
+
+/* Disponível mas não inscrito - sino outline cinza */
+.btn-acao.notificacao.available {
+    background: #f1f5f9;
+    color: #94a3b8;
+}
+
+.btn-acao.notificacao.available:hover {
+    background: #e2e8f0;
+    color: #64748b;
+}
+
+/* Ícone dentro do botão */
+.btn-acao.notificacao ion-icon {
+    font-size: 18px;
+}
+
+/* Animação de sino para inscrito */
+@keyframes bellRing {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50% { transform: rotate(-10deg); }
+    20%, 40% { transform: rotate(10deg); }
+    60% { transform: rotate(0); }
+}
+
+.btn-acao.notificacao.subscribed:hover ion-icon {
+    animation: bellRing 0.6s ease;
+}
+
+/* Estado disabled durante requisição */
+.btn-acao.notificacao:disabled {
+    cursor: wait;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .btn-acao.notificacao {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .btn-acao.notificacao ion-icon {
+        font-size: 16px;
     }
 }
