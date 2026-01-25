@@ -464,7 +464,7 @@ function getFileIcon($filename) {
             Voltar para Licitações
         </a>
         <?php if ($podeEditar): ?>
-        <a href="formLicitacao.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
+        <a href="licitacaoForm.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
             <ion-icon name="create-outline"></ion-icon>
             Editar Licitação
         </a>

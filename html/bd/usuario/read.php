@@ -423,7 +423,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $urlParams .= '&perfil=' . urlencode($_POST['perfilUsuario']);
                     }
                     
-                    echo '<a href="editarUsuario.php?email=' . urlencode($usuario['email']) . $urlParams . '" class="btn-action-card btn-edit">';
+                    echo '<a href="usuarioForm.php?email=' . urlencode($usuario['email']) . $urlParams . '" class="btn-action-card btn-edit">';
                     echo '<i class="fas fa-edit"></i>';
                     echo '<span>Editar</span>';
                     echo '</a>';

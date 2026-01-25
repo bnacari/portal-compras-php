@@ -1335,7 +1335,7 @@ if (isset($_SESSION['msg'])) {
                             </li>
                         <?php endif; ?>
                         <li class="sidebar-item">
-                            <a href="consultarAtualizacao.php"
+                            <a href="atualizacao.php"
                                 class="sidebar-link <?= $paginaAtual === 'consultarAtualizacao' ? 'active' : '' ?>"
                                 data-title="Envio de E-mail">
                                 <ion-icon name="mail-outline"></ion-icon>
@@ -1377,7 +1377,7 @@ if (isset($_SESSION['msg'])) {
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="cadAnexos.php" class="sidebar-link <?= $paginaAtual === 'cadAnexos' ? 'active' : '' ?>"
+                            <a href="anexos.php" class="sidebar-link <?= $paginaAtual === 'cadAnexos' ? 'active' : '' ?>"
                                 data-title="Anexos">
                                 <ion-icon name="attach-outline"></ion-icon>
                                 <span class="sidebar-link-text">Anexos</span>

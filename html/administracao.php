@@ -192,7 +192,7 @@ if ($abaAtiva == 'estrutura') {
     <nav class="tabs-nav">
         <a href="?aba=tipos" class="tab-link <?= $abaAtiva == 'tipos' ? 'active' : '' ?>">
             <ion-icon name="pricetag-outline"></ion-icon>
-            <span>Tipos</span>
+            <span>Tipo Contratação</span>
         </a>
         <a href="?aba=criterios" class="tab-link <?= $abaAtiva == 'criterios' ? 'active' : '' ?>">
             <ion-icon name="checkmark-circle-outline"></ion-icon>
@@ -210,10 +210,7 @@ if ($abaAtiva == 'estrutura') {
             <ion-icon name="people-outline"></ion-icon>
             <span>Usuários</span>
         </a>
-        <a href="?aba=perfis" class="tab-link <?= $abaAtiva == 'perfis' ? 'active' : '' ?>">
-            <ion-icon name="shield-checkmark-outline"></ion-icon>
-            <span>Perfis</span>
-        </a>
+        
     </nav>
 
     <!-- ============================================
@@ -948,119 +945,7 @@ if ($abaAtiva == 'estrutura') {
     </div>
     <?php endif; ?>
 
-    <!-- ============================================
-         ABA: PERFIS (de sistema)
-         Tabela: PERFIL
-         ============================================ -->
-    <?php if ($abaAtiva == 'perfis') : ?>
-    <div class="tab-pane active" id="tab-perfis">
-        <!-- Cadastro -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                    <h3>Novo Perfil</h3>
-                </div>
-            </div>
-            <div class="section-card-body">
-                <form action="bd/perfil/create.php" method="post" class="inline-form">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <ion-icon name="shield-checkmark-outline"></ion-icon>
-                            Nome do Perfil <span class="required">*</span>
-                        </label>
-                        <input type="text" name="nmPerfil" class="form-control" placeholder="Digite o nome do perfil" required autofocus>
-                    </div>
-                    <div class="form-group auto-width">
-                        <button type="submit" class="btn btn-primary">
-                            <ion-icon name="add-outline"></ion-icon>
-                            Cadastrar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Listagem -->
-        <div class="section-card">
-            <div class="section-card-header">
-                <div class="section-card-header-left">
-                    <ion-icon name="list-outline"></ion-icon>
-                    <h3>Perfis Cadastrados</h3>
-                </div>
-            </div>
-            <div class="section-card-body" style="padding: 0;">
-                <div class="table-container">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>Nome do Perfil</th>
-                                <th style="width: 100px;">Status</th>
-                                <th style="width: 140px; text-align: center;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $queryPerfisLista = $pdoCAT->query("
-                                SELECT * FROM [PortalCompras].[dbo].[PERFIL] 
-                                ORDER BY CASE WHEN DT_EXC_PERFIL IS NULL THEN 0 ELSE 1 END, NM_PERFIL
-                            ");
-                            $totalPerfis = 0;
-                            while ($row = $queryPerfisLista->fetch(PDO::FETCH_ASSOC)) :
-                                $totalPerfis++;
-                                $inativo = !empty($row['DT_EXC_PERFIL']);
-                            ?>
-                            <tr id="rowPerfil<?= $row['ID_PERFIL'] ?>" class="<?= $inativo ? 'inactive' : '' ?>">
-                                <td><span class="pubnmPerfil"><?= htmlspecialchars($row['NM_PERFIL']) ?></span></td>
-                                <td>
-                                    <?php if ($inativo) : ?>
-                                        <span class="badge badge-inactive">Inativo</span>
-                                    <?php else : ?>
-                                        <span class="badge badge-active">Ativo</span>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <?php if ($inativo) : ?>
-                                            <a href="bd/perfil/ativa.php?idPerfil=<?= $row['ID_PERFIL'] ?>" class="btn-action activate" title="Ativar">
-                                                <ion-icon name="checkmark-outline"></ion-icon>
-                                            </a>
-                                        <?php else : ?>
-                                            <a href="bd/perfil/desativa.php?idPerfil=<?= $row['ID_PERFIL'] ?>" class="btn-action deactivate" title="Desativar">
-                                                <ion-icon name="close-outline"></ion-icon>
-                                            </a>
-                                        <?php endif; ?>
-                                        <button class="btn-action edit edit-btn-perfil" data-id="<?= $row['ID_PERFIL'] ?>" title="Editar">
-                                            <ion-icon name="pencil-outline"></ion-icon>
-                                        </button>
-                                        <button class="btn-action save save-btn-perfil" data-id="<?= $row['ID_PERFIL'] ?>" title="Salvar" style="display: none;">
-                                            <ion-icon name="checkmark-outline"></ion-icon>
-                                        </button>
-                                        <button class="btn-action cancel cancel-btn-perfil" data-id="<?= $row['ID_PERFIL'] ?>" title="Cancelar" style="display: none;">
-                                            <ion-icon name="close-outline"></ion-icon>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endwhile; ?>
-                            <?php if ($totalPerfis == 0) : ?>
-                            <tr>
-                                <td colspan="3">
-                                    <div class="empty-state">
-                                        <ion-icon name="shield-checkmark-outline"></ion-icon>
-                                        <h3>Nenhum perfil cadastrado</h3>
-                                        <p>Adicione um novo perfil acima</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
+    
 
 </div>
 
@@ -1182,7 +1067,7 @@ $(document).ready(function() {
                     acoes += `<a href="bd/usuario/ativa.php?email=${encodeURIComponent(u.email)}" class="btn-action activate" title="Ativar"><ion-icon name="checkmark-outline"></ion-icon></a>`;
                 }
             }
-            acoes += `<a href="editarUsuario.php?email=${encodeURIComponent(u.email)}&login=${encodeURIComponent(u.login)}" class="btn-action edit" title="Editar Perfil"><ion-icon name="pencil-outline"></ion-icon></a>`;
+            acoes += `<a href="usuarioForm.php?email=${encodeURIComponent(u.email)}&login=${encodeURIComponent(u.login)}" class="btn-action edit" title="Editar Perfil"><ion-icon name="pencil-outline"></ion-icon></a>`;
             
             html += `
                 <tr>
@@ -1296,31 +1181,7 @@ $(document).ready(function() {
 
     $('.cancel-btn-forma').on('click', function() { location.reload(); });
 
-    // ============================================
-    // Edição Inline - PERFIS
-    // ============================================
-    $('.edit-btn-perfil').on('click', function() {
-        var id = $(this).data('id');
-        var row = $('#rowPerfil' + id);
-        var currentName = row.find('.pubnmPerfil').text();
-        
-        row.find('.pubnmPerfil').replaceWith(`<input type="text" class="inline-edit-input pubnmPerfil" value="${currentName}" />`);
-        
-        row.find('.edit-btn-perfil').hide();
-        row.find('.save-btn-perfil, .cancel-btn-perfil').show();
-        row.find('.deactivate, .activate').hide();
-    });
-
-    $('.save-btn-perfil').on('click', function() {
-        var id = $(this).data('id');
-        var row = $('#rowPerfil' + id);
-        var nmPerfil = row.find('input.pubnmPerfil').val().trim();
-        
-        if (nmPerfil === '') { alert('O nome é obrigatório'); return; }
-        window.location.href = `bd/perfil/update.php?idPerfil=${id}&nmPerfil=${encodeURIComponent(nmPerfil)}`;
-    });
-
-    $('.cancel-btn-perfil').on('click', function() { location.reload(); });
+    
 });
 
 // ============================================
