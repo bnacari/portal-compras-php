@@ -1136,6 +1136,259 @@ if (isset($_SESSION['msg'])) {
         #check {
             display: none !important;
         }
+
+        /* ============================================
+       MODAL CONTATO - PADRÃO SISTEMA
+       ============================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* Estrutura do Modal - Padrão do Sistema */
+        .modal-contato {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Header do Modal - Gradiente Padrão Sistema */
+        .modal-contato .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            color: white;
+        }
+
+        .modal-contato .modal-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+
+        .modal-contato .modal-header h3 ion-icon {
+            font-size: 20px;
+        }
+
+        .modal-contato .modal-close {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .modal-contato .modal-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .modal-contato .modal-close ion-icon {
+            font-size: 18px;
+        }
+
+        /* Body do Modal */
+        .modal-contato .modal-body {
+            padding: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* Seções de Contato */
+        .contact-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .contact-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .contact-section-header {
+            margin-bottom: 16px;
+        }
+
+        .contact-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            margin: 0 0 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-section-title ion-icon {
+            font-size: 18px;
+            color: #3b82f6;
+        }
+
+        .contact-section-subtitle {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3b82f6;
+            margin: 0 0 4px 0;
+        }
+
+        .contact-section-address {
+            font-size: 12px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Lista de Contatos */
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #0f172a;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .contact-item:hover {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+
+        .contact-item ion-icon {
+            font-size: 18px;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .contact-item a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        .contact-item-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: auto;
+        }
+
+        /* Footer do Modal */
+        .modal-contato .modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            justify-content: flex-end;
+        }
+
+        .modal-contato .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-contato .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .modal-contato .btn-secondary:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        /* Responsividade */
+        @media (max-width: 640px) {
+            .modal-contato {
+                margin: 10px;
+                max-height: calc(100vh - 40px);
+            }
+
+            .modal-contato .modal-header {
+                padding: 16px 20px;
+            }
+
+            .modal-contato .modal-body {
+                padding: 20px;
+            }
+
+            .modal-contato .modal-footer {
+                padding: 16px 20px;
+            }
+
+            .contact-item {
+                padding: 10px 14px;
+            }
+        }
     </style>
 </head>
 
@@ -1225,7 +1478,7 @@ if (isset($_SESSION['msg'])) {
         <?php
         $menusPrincipais = obterMenusPrincipais($pdoCAT);
         if (!empty($menusPrincipais)):
-            ?>
+        ?>
             <div class="sidebar-divider"></div>
             <div class="sidebar-section">
                 <div class="sidebar-section-title" onclick="toggleSection(this)" data-section="navegacao">
@@ -1240,7 +1493,7 @@ if (isset($_SESSION['msg'])) {
                         <?php foreach ($menusPrincipais as $menu):
                             $submenus = obterSubMenus($pdoCAT, $menu['ID_MENU']);
                             $hasSubmenus = !empty($submenus);
-                            ?>
+                        ?>
                             <li class="sidebar-item <?= $hasSubmenus ? 'has-submenu' : '' ?>">
                                 <?php if ($hasSubmenus): ?>
                                     <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)"
@@ -1255,7 +1508,7 @@ if (isset($_SESSION['msg'])) {
                                         <?php foreach ($submenus as $submenu):
                                             $itens = obterItensMenu($pdoCAT, $submenu['ID_SUBMENU']);
                                             $hasItens = !empty($itens);
-                                            ?>
+                                        ?>
                                             <li class="sidebar-item <?= $hasItens ? 'has-submenu' : '' ?>">
                                                 <?php if ($hasItens): ?>
                                                     <a href="javascript:void(0)" class="sidebar-link" onclick="toggleSubmenu(this)"
@@ -1393,11 +1646,12 @@ if (isset($_SESSION['msg'])) {
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Modal de Contatos -->
+
+    <!-- HTML do Modal de Contatos -->
     <div class="modal-overlay" id="modalContato">
-        <div class="modal-card">
+        <div class="modal-contato">
             <div class="modal-header">
-                <h3 class="modal-title">
+                <h3>
                     <ion-icon name="chatbubbles-outline"></ion-icon>
                     Contatos
                 </h3>
@@ -1405,12 +1659,13 @@ if (isset($_SESSION['msg'])) {
                     <ion-icon name="close-outline"></ion-icon>
                 </button>
             </div>
+
             <div class="modal-body">
+                <!-- Seção: Comissão Permanente de Licitações (CPL) -->
                 <div class="contact-section">
                     <p class="contact-section-title">Informações, dúvidas e esclarecimentos sobre licitação CESAN</p>
                     <p class="contact-section-subtitle">Comissão Permanente de Licitações (CPL)</p>
-                    <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP:
-                        29164-018</p>
+                    <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
                     <div class="contact-list">
                         <div class="contact-item">
                             <ion-icon name="call-outline"></ion-icon>
@@ -1422,13 +1677,15 @@ if (isset($_SESSION['msg'])) {
                         </div>
                     </div>
                 </div>
+
+                <!-- Seção: Divisão de Compras e Suprimentos (A-DCS) -->
                 <div class="contact-section">
-                    <p class="contact-section-title">Informações sobre pregões, dispensas eletrônicas e cadastro de
-                        fornecedores</p>
+                    <p class="contact-section-title">Informações sobre pregões, dispensas eletrônicas e cadastro de fornecedores</p>
                     <p class="contact-section-subtitle">Divisão de Compras e Suprimentos (A-DCS)</p>
-                    <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP:
-                        29164-018</p>
-                    <p style="font-weight: 600; color: #0f172a; margin: 12px 0 8px 0; font-size: 13px;">Pregoeiros</p>
+                    <p class="contact-section-address">Rua Nelcy Lopes Vieira, S/N, Jardim Limoeiro, Serra, ES, CEP: 29164-018</p>
+
+                    <!-- Pregoeiros -->
+                    <p class="contact-group-title">Pregoeiros</p>
                     <div class="contact-list">
                         <div class="contact-item">
                             <ion-icon name="mail-outline"></ion-icon>
@@ -1449,11 +1706,16 @@ if (isset($_SESSION['msg'])) {
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
-                <button class="btn-modal" onclick="closeModalContato()">Fechar</button>
+                <button class="btn btn-secondary" onclick="closeModalContato()">
+                    <ion-icon name="close-outline"></ion-icon>
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
+
 
     <script>
         // Toggle Sidebar
@@ -1500,7 +1762,7 @@ if (isset($_SESSION['msg'])) {
         }
 
         // Restore States
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             if (window.innerWidth > 768) {
                 if (localStorage.getItem('sidebarCollapsed') === 'true') {
                     document.getElementById('modernSidebar').classList.add('collapsed');
@@ -1522,7 +1784,7 @@ if (isset($_SESSION['msg'])) {
         });
 
         // Handle Resize
-        window.addEventListener('resize', function () {
+        window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 document.getElementById('modernSidebar').classList.remove('mobile-open');
                 document.getElementById('sidebarOverlay').classList.remove('active');
@@ -1532,7 +1794,12 @@ if (isset($_SESSION['msg'])) {
         // Toast System
         function showToast(message, type = 'info', duration = 5000) {
             const container = document.getElementById('toastContainer');
-            const icons = { sucesso: 'checkmark-circle', erro: 'close-circle', alerta: 'warning', info: 'information-circle' };
+            const icons = {
+                sucesso: 'checkmark-circle',
+                erro: 'close-circle',
+                alerta: 'warning',
+                info: 'information-circle'
+            };
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.innerHTML = `
@@ -1541,7 +1808,9 @@ if (isset($_SESSION['msg'])) {
             <button class="toast-close" onclick="closeToast(this)"><ion-icon name="close"></ion-icon></button>
         `;
             container.appendChild(toast);
-            if (duration > 0) setTimeout(() => { if (toast.parentNode) closeToast(toast.querySelector('.toast-close')); }, duration);
+            if (duration > 0) setTimeout(() => {
+                if (toast.parentNode) closeToast(toast.querySelector('.toast-close'));
+            }, duration);
         }
 
         function closeToast(button) {
@@ -1550,17 +1819,41 @@ if (isset($_SESSION['msg'])) {
             setTimeout(() => toast.remove(), 300);
         }
 
-        // Modal Contato
-        function openModalContato() { document.getElementById('modalContato').classList.add('active'); }
-        function closeModalContato() { document.getElementById('modalContato').classList.remove('active'); }
+        // / Abrir modal de contato
 
-        document.getElementById('modalContato').addEventListener('click', function (e) { if (e.target === this) closeModalContato(); });
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', () => { if (window.innerWidth <= 768 && !link.getAttribute('onclick')) closeMobileSidebar(); });
+        function openModalContato() {
+            document.getElementById('modalContato').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fechar modal de contato
+        function closeModalContato() {
+            document.getElementById('modalContato').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Fechar modal ao clicar no overlay
+        document.getElementById('modalContato').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModalContato();
+            }
         });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModalContato(); if (window.innerWidth <= 768) closeMobileSidebar(); } });
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('modalContato');
+                if (modal.classList.contains('active')) {
+                    closeModalContato();
+                }
+            }
+        });
     </script>
 
     <?php if (!empty($msgSistema)): ?>
-        <script>document.addEventListener('DOMContentLoaded', function () { showToast(<?= json_encode($msgSistema) ?>, 'info'); });</script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast(<?= json_encode($msgSistema) ?>, 'info');
+            });
+        </script>
     <?php endif; ?>
