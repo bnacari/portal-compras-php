@@ -184,13 +184,33 @@
     margin-bottom: 0;
 }
 
-.form-col-2 { grid-column: span 2; }
-.form-col-3 { grid-column: span 3; }
-.form-col-4 { grid-column: span 4; }
-.form-col-5 { grid-column: span 5; }
-.form-col-6 { grid-column: span 6; }
-.form-col-8 { grid-column: span 8; }
-.form-col-12 { grid-column: span 12; }
+.form-col-2 {
+    grid-column: span 2;
+}
+
+.form-col-3 {
+    grid-column: span 3;
+}
+
+.form-col-4 {
+    grid-column: span 4;
+}
+
+.form-col-5 {
+    grid-column: span 5;
+}
+
+.form-col-6 {
+    grid-column: span 6;
+}
+
+.form-col-8 {
+    grid-column: span 8;
+}
+
+.form-col-12 {
+    grid-column: span 12;
+}
 
 .form-group {
     display: flex;
@@ -882,7 +902,7 @@ textarea.form-control {
     white-space: nowrap;
 }
 
-.radio-item input[type="radio"]:checked + .radio-label {
+.radio-item input[type="radio"]:checked+.radio-label {
     background: white;
     color: #1e293b;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -1120,8 +1140,9 @@ textarea.form-control {
     .filter-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    .form-col-3, .form-col-4 {
+
+    .form-col-3,
+    .form-col-4 {
         grid-column: span 6;
     }
 
@@ -1178,7 +1199,12 @@ textarea.form-control {
         gap: 12px;
     }
 
-    .form-col-2, .form-col-3, .form-col-4, .form-col-5, .form-col-6, .form-col-8 {
+    .form-col-2,
+    .form-col-3,
+    .form-col-4,
+    .form-col-5,
+    .form-col-6,
+    .form-col-8 {
         grid-column: span 12;
     }
 
@@ -1226,3 +1252,378 @@ textarea.form-control {
         justify-content: space-between;
     }
 }
+
+/* ============================================
+   HEADER PROFISSIONAL - TEMA CLARO + ABAS
+   ============================================
+   Adicionar ao administracao.css
+   Substitui os estilos antigos de:
+     .page-header e .tabs-nav
+   ============================================ */
+
+/* ============================================
+   Header Principal
+   ============================================ */
+.page-header-pro {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 0;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.04),
+        0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.page-header-pro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+            #1e3a5f 0%,
+            #3b82f6 40%,
+            #60a5fa 60%,
+            #2d5a87 100%);
+    z-index: 2;
+}
+
+/* Decorações */
+.header-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.decoration-circle-1 {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: -140px;
+    right: -40px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.decoration-circle-2 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    left: 5%;
+    background: radial-gradient(circle, rgba(30, 58, 95, 0.03) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+/* ============================================
+   Top Row - Breadcrumb + Data
+   ============================================ */
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px 0 32px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.header-breadcrumb a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.header-breadcrumb a:hover {
+    color: #3b82f6;
+}
+
+.header-breadcrumb a ion-icon {
+    font-size: 14px;
+}
+
+.breadcrumb-sep {
+    font-size: 10px;
+    color: #cbd5e1;
+}
+
+.header-breadcrumb>span {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.header-date {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+/* ============================================
+   Main Row - Ícone + Título
+   ============================================ */
+.header-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 32px 24px 32px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.header-icon-box {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #2563eb;
+    flex-shrink: 0;
+}
+
+.icon-box-pulse {
+    position: absolute;
+    inset: -3px;
+    border-radius: 16px;
+    border: 2px solid rgba(59, 130, 246, 0.15);
+    animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.header-title-group h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.header-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #94a3b8;
+    margin: 0;
+    font-weight: 400;
+}
+
+.header-subtitle ion-icon {
+    font-size: 14px;
+    color: #60a5fa;
+}
+
+/* ============================================
+   Tabs Bar (dentro do header)
+   ============================================ */
+.header-tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 28px;
+    margin: 0;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 1;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.header-tabs-bar::-webkit-scrollbar {
+    height: 3px;
+}
+
+.header-tabs-bar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.header-tabs-bar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.header-tab-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    position: relative;
+}
+
+.header-tab-link ion-icon {
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.header-tab-link:hover {
+    color: #334155;
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+.header-tab-link.active {
+    color: #1e3a5f;
+    background: #ffffff;
+    border-color: #e2e8f0;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Indicador azul abaixo da aba ativa */
+.header-tab-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    border-radius: 3px 3px 0 0;
+}
+
+.header-tab-link.active ion-icon {
+    color: #3b82f6;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .page-header-pro {
+        border-radius: 14px;
+    }
+
+    .header-top-row {
+        padding: 12px 20px 0 20px;
+    }
+
+    .header-date {
+        display: none;
+    }
+
+    .header-main-row {
+        padding: 16px 20px 20px 20px;
+    }
+
+    .header-icon-box {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+        border-radius: 12px;
+    }
+
+    .header-title-group h1 {
+        font-size: 20px;
+    }
+
+    .header-tabs-bar {
+        padding: 6px 16px;
+        gap: 3px;
+    }
+
+    .header-tab-link {
+        padding: 8px 14px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    /* No mobile, esconder texto e mostrar só ícone */
+    .header-tab-link span {
+        display: none;
+    }
+
+    .header-tab-link ion-icon {
+        font-size: 18px;
+    }
+
+    .header-tab-link.active::after {
+        bottom: -7px;
+        width: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-top-row {
+        padding: 10px 16px 0 16px;
+    }
+
+    .header-main-row {
+        padding: 14px 16px 16px 16px;
+    }
+
+    .header-left {
+        gap: 14px;
+    }
+
+    .header-title-group h1 {
+        font-size: 18px;
+    }
+
+    .header-subtitle {
+        font-size: 12px;
+    }
+
+    .header-tabs-bar {
+        padding: 6px 12px;
+    }
+
+    .header-tab-link {
+        padding: 8px 12px;
+    }
+}
+
+
+
+

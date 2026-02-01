@@ -25,7 +25,7 @@ $podeEditar = !empty($_SESSION['idPerfilFinal']);
 
 // Buscar tipos de licitação para o filtro
 try {
-    $sqlTipos = $pdoCAT->query("SELECT ID_TIPO, NM_TIPO, SGL_TIPO FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL ORDER BY NM_TIPO");
+    $sqlTipos = $pdoCAT->query("SELECT ID_TIPO, NM_TIPO, SGL_TIPO FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' ORDER BY NM_TIPO");
     $tipos = $sqlTipos->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $tipos = [];
@@ -56,20 +56,49 @@ if ($podeEditar) {
 <!-- CSS da página -->
 <link rel="stylesheet" href="style/css/licitacao.css" />
 
+<!-- ============================================
+     HEADER PROFISSIONAL - Consulta de Licitações
+     Substituir o bloco do page-header atual em licitacao.php
+     ============================================ -->
+
 <div class="page-container">
-    <!-- Header da Página -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-info">
-                <div class="page-header-icon">
+    <!-- Header da Página - Layout Profissional -->
+    <div class="page-header-pro">
+        <!-- Elementos decorativos -->
+        <div class="header-decoration">
+            <div class="decoration-circle decoration-circle-1"></div>
+            <div class="decoration-circle decoration-circle-2"></div>
+            <div class="decoration-line"></div>
+        </div>
+
+        <!-- Conteúdo principal do header -->
+        <div class="header-top-row">
+            <!-- Breadcrumb -->
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span>Licitações</span>
+            </div>
+            <!-- Data/hora -->
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
                     <ion-icon name="document-text-outline"></ion-icon>
+                    <div class="icon-box-pulse"></div>
                 </div>
-                <div>
+                <div class="header-title-group">
                     <h1>Consulta de Licitações</h1>
-                    <p class="page-header-subtitle">Pesquise e gerencie os processos licitatórios</p>
+                    <p class="header-subtitle">
+                        <ion-icon name="business-outline"></ion-icon>
+                        Portal de Compras — CESAN
+                    </p>
                 </div>
             </div>
-            <div class="page-header-actions">
+
+            <div class="header-right">
                 <!-- Toggle de Visualização -->
                 <div class="view-toggle">
                     <button type="button" onclick="toggleView('cards')" id="btnViewCards" class="active" title="Visualização em Cards">
@@ -80,11 +109,54 @@ if ($podeEditar) {
                     </button>
                 </div>
                 <?php if ($podeEditar): ?>
-                    <a href="licitacaoForm.php" class="btn-novo">
-                        <ion-icon name="add-outline"></ion-icon>
-                        Nova Licitação
+                    <a href="licitacaoForm.php" class="btn-novo-pro">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        <span>Nova Licitação</span>
                     </a>
                 <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Barra de Estatísticas -->
+        <div class="header-stats-bar">
+            <div class="stat-item" id="statTotal">
+                <div class="stat-icon stat-icon-total">
+                    <ion-icon name="albums-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statTotalNum">—</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item" id="statAndamento">
+                <div class="stat-icon stat-icon-andamento">
+                    <ion-icon name="play-circle-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statAndamentoNum">—</span>
+                    <span class="stat-label">Em Andamento</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item" id="statEncerrado">
+                <div class="stat-icon stat-icon-encerrado">
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statEncerradoNum">—</span>
+                    <span class="stat-label">Encerrados</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item" id="statSuspenso">
+                <div class="stat-icon stat-icon-suspenso">
+                    <ion-icon name="pause-circle-outline"></ion-icon>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number" id="statSuspensoNum">—</span>
+                    <span class="stat-label">Suspensos</span>
+                </div>
             </div>
         </div>
     </div>
@@ -437,6 +509,16 @@ if ($podeEditar) {
                     renderizarTabela(data.data);
                     atualizarPaginacao();
                     document.getElementById('totalRegistros').textContent = totalRegistros;
+
+                    // Atualizar estatísticas do header profissional
+                    if (data.stats) {
+                        atualizarEstatisticasHeaderDireto(
+                            data.stats.total_geral,
+                            data.stats.total_andamento,
+                            data.stats.total_encerrado,
+                            data.stats.total_suspenso
+                        );
+                    }
                 } else {
                     showToast('Erro ao carregar dados: ' + data.message, 'erro');
                 }
@@ -1170,6 +1252,76 @@ if ($podeEditar) {
         });
 
         tbody.innerHTML = html;
+    }
+
+    /* ============================================
+     HEADER PROFISSIONAL - JavaScript
+     ============================================
+     Adicionar ao final do <script> em licitacao.php
+     ============================================ */
+
+    // ============================================
+    // Exibir data no header
+    // ============================================
+    function atualizarDataHeader() {
+        const el = document.getElementById('headerDate');
+        if (!el) return;
+
+        const agora = new Date();
+        const opcoes = {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        };
+        const dataFormatada = agora.toLocaleDateString('pt-BR', opcoes);
+        el.textContent = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+    }
+
+    // Chamar ao carregar
+    document.addEventListener('DOMContentLoaded', atualizarDataHeader);
+
+    // ============================================
+    // Atualizar estatísticas do header
+    // Recebe os valores diretamente do backend
+    // ============================================
+    function atualizarEstatisticasHeaderDireto(total, andamento, encerrado, suspenso) {
+        animarNumero('statTotalNum', total || 0);
+        animarNumero('statAndamentoNum', andamento || 0);
+        animarNumero('statEncerradoNum', encerrado || 0);
+        animarNumero('statSuspensoNum', suspenso || 0);
+    }
+
+    function animarNumero(elementId, valorFinal) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        const textoAtual = el.textContent.replace(/\D/g, '');
+        const valorInicial = parseInt(textoAtual) || 0;
+        const diferenca = valorFinal - valorInicial;
+        const duracao = 400;
+        const inicio = performance.now();
+
+        el.classList.remove('loaded');
+        void el.offsetWidth;
+        el.classList.add('loaded');
+
+        function atualizar(timestamp) {
+            const progresso = Math.min((timestamp - inicio) / duracao, 1);
+            const eased = 1 - Math.pow(1 - progresso, 3);
+            const valorAtual = Math.round(valorInicial + diferenca * eased);
+            el.textContent = valorAtual.toLocaleString('pt-BR');
+
+            if (progresso < 1) {
+                requestAnimationFrame(atualizar);
+            }
+        }
+
+        if (diferenca !== 0) {
+            requestAnimationFrame(atualizar);
+        } else {
+            el.textContent = valorFinal.toLocaleString('pt-BR');
+        }
     }
 </script>
 

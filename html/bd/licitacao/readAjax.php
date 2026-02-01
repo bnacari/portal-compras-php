@@ -1,11 +1,12 @@
 <?php
+
 /**
  * readAjax.php - API AJAX para listagem de licitações
  * VERSÃO ATUALIZADA - Com suporte a notificações
  */
 
 // Capturar todos os erros e convertê-los para JSON
-set_error_handler(function($errno, $errstr, $errfile, $errline) {
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 });
 
@@ -26,7 +27,7 @@ try {
 
     // Incluir conexão
     include_once $conexaoPath;
-    
+
     // Verificar conexão
     if (!isset($pdoCAT)) {
         throw new Exception('Variável $pdoCAT não definida após incluir conexao.php');
@@ -91,9 +92,46 @@ try {
     if (!$stmtCount) {
         throw new Exception('Erro na query de contagem');
     }
-    
+
     $resultCount = $stmtCount->fetch(PDO::FETCH_ASSOC);
     $totalRegistros = $resultCount ? intval($resultCount['total']) : 0;
+
+    // ---- Contagem por status para o header ----
+    $whereBase = array();
+    $whereBase[] = "L.DT_EXC_LICITACAO IS NULL";
+    $whereBase[] = "D.STATUS_LICITACAO <> 'Rascunho'";
+
+    if (!empty($tipoLicitacao) && $tipoLicitacao !== 'vazio') {
+        $whereBase[] = "D.TIPO_LICITACAO = " . intval($tipoLicitacao);
+    }
+    if (!empty($tituloLicitacaoFilter)) {
+        $tituloEscaped2 = str_replace("'", "''", $tituloLicitacaoFilter);
+        $whereBase[] = "(D.COD_LICITACAO LIKE '%" . $tituloEscaped2 . "%' OR D.OBJETO_LICITACAO LIKE '%" . $tituloEscaped2 . "%')";
+    }
+    if (!empty($dtIniLicitacaoFilter) && !empty($dtFimLicitacaoFilter)) {
+        $whereBase[] = "L.DT_LICITACAO BETWEEN '" . $dtIniLicitacaoFilter . "' AND '" . $dtFimLicitacaoFilter . " 23:59:59'";
+    }
+
+    $whereBaseClause = implode(" AND ", $whereBase);
+
+    $queryStats = "SELECT 
+                   COUNT(DISTINCT L.ID_LICITACAO) as total_geral,
+                   COUNT(DISTINCT CASE WHEN D.STATUS_LICITACAO = 'Em Andamento' THEN L.ID_LICITACAO END) as total_andamento,
+                   COUNT(DISTINCT CASE WHEN D.STATUS_LICITACAO = 'Encerrado' THEN L.ID_LICITACAO END) as total_encerrado,
+                   COUNT(DISTINCT CASE WHEN D.STATUS_LICITACAO = 'Suspenso' THEN L.ID_LICITACAO END) as total_suspenso
+               FROM LICITACAO L
+               LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
+               WHERE " . $whereBaseClause;
+
+    $stmtStats = $pdoCAT->query($queryStats);
+    $statsResult = $stmtStats ? $stmtStats->fetch(PDO::FETCH_ASSOC) : null;
+
+    $stats = array(
+        'total_geral'     => $statsResult ? intval($statsResult['total_geral']) : 0,
+        'total_andamento' => $statsResult ? intval($statsResult['total_andamento']) : 0,
+        'total_encerrado' => $statsResult ? intval($statsResult['total_encerrado']) : 0,
+        'total_suspenso'  => $statsResult ? intval($statsResult['total_suspenso']) : 0
+    );
 
     // Query principal - ATUALIZADA com campos de notificação
     $querySelect = "SELECT  
@@ -118,7 +156,7 @@ try {
     if (!$stmt) {
         throw new Exception('Erro na query principal');
     }
-    
+
     $licitacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Retornar sucesso
@@ -127,9 +165,9 @@ try {
         'data' => $licitacoes,
         'total' => $totalRegistros,
         'pagina' => $pagina,
-        'limite' => $limite
+        'limite' => $limite,
+        'stats' => $stats
     ));
-
 } catch (Exception $e) {
     // Retornar erro detalhado
     echo json_encode(array(

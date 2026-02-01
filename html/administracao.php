@@ -175,43 +175,72 @@ if ($abaAtiva == 'estrutura') {
 </style>
 
 <div class="admin-container">
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-icon">
-                <ion-icon name="settings-outline"></ion-icon>
+   <!-- ============================================
+     NOVO HEADER - administracao.php
+     ============================================
+     Substituir o bloco antigo:
+       <div class="page-header">...</div>
+       <nav class="tabs-nav">...</nav>
+     
+     Por este bloco abaixo:
+     ============================================ -->
+
+    <!-- Header Profissional com Abas -->
+    <div class="page-header-pro">
+        <div class="header-decoration">
+            <div class="decoration-circle-1"></div>
+            <div class="decoration-circle-2"></div>
+        </div>
+
+        <div class="header-top-row">
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span>Administração</span>
             </div>
-            <div>
-                <h1>Administração do Sistema</h1>
-                <p class="page-header-subtitle">Gerencie cadastros, menus, usuários e configurações</p>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
+                    <ion-icon name="settings-outline"></ion-icon>
+                    <div class="icon-box-pulse"></div>
+                </div>
+                <div class="header-title-group">
+                    <h1>Administração do Sistema</h1>
+                    <p class="header-subtitle">
+                        <ion-icon name="business-outline"></ion-icon>
+                        Gerencie cadastros, menus, usuários e configurações
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Tabs Navigation -->
-    <nav class="tabs-nav">
-        <a href="?aba=tipos" class="tab-link <?= $abaAtiva == 'tipos' ? 'active' : '' ?>">
-            <ion-icon name="pricetag-outline"></ion-icon>
-            <span>Tipo Contratação</span>
-        </a>
-        <a href="?aba=criterios" class="tab-link <?= $abaAtiva == 'criterios' ? 'active' : '' ?>">
-            <ion-icon name="checkmark-circle-outline"></ion-icon>
-            <span>Critérios</span>
-        </a>
-        <a href="?aba=formas" class="tab-link <?= $abaAtiva == 'formas' ? 'active' : '' ?>">
-            <ion-icon name="git-branch-outline"></ion-icon>
-            <span>Formas</span>
-        </a>
-        <a href="?aba=estrutura" class="tab-link <?= $abaAtiva == 'estrutura' ? 'active' : '' ?>">
-            <ion-icon name="git-network-outline"></ion-icon>
-            <span>Estrutura de Menus</span>
-        </a>
-        <a href="?aba=usuarios" class="tab-link <?= $abaAtiva == 'usuarios' ? 'active' : '' ?>">
-            <ion-icon name="people-outline"></ion-icon>
-            <span>Usuários</span>
-        </a>
-        
-    </nav>
+        <!-- Abas integradas -->
+        <nav class="header-tabs-bar">
+            <a href="?aba=tipos" class="header-tab-link <?= $abaAtiva == 'tipos' ? 'active' : '' ?>">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                <span>Tipo Contratação</span>
+            </a>
+            <a href="?aba=criterios" class="header-tab-link <?= $abaAtiva == 'criterios' ? 'active' : '' ?>">
+                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                <span>Critérios</span>
+            </a>
+            <a href="?aba=formas" class="header-tab-link <?= $abaAtiva == 'formas' ? 'active' : '' ?>">
+                <ion-icon name="git-branch-outline"></ion-icon>
+                <span>Formas</span>
+            </a>
+            <a href="?aba=estrutura" class="header-tab-link <?= $abaAtiva == 'estrutura' ? 'active' : '' ?>">
+                <ion-icon name="git-network-outline"></ion-icon>
+                <span>Estrutura de Menus</span>
+            </a>
+            <a href="?aba=usuarios" class="header-tab-link <?= $abaAtiva == 'usuarios' ? 'active' : '' ?>">
+                <ion-icon name="people-outline"></ion-icon>
+                <span>Usuários</span>
+            </a>
+        </nav>
+    </div>
 
     <!-- ============================================
          ABA: TIPOS DE LICITAÇÃO
