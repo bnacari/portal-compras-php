@@ -4,7 +4,7 @@
  * Portal de Compras - CESAN
  * Tela de Consulta de Licitações
  * 
- * Layout refatorado no estilo calculoKPC
+ * Layout refatorado - Header + Filtros integrados
  */
 
 $paginaAtual = 'licitacao';
@@ -56,14 +56,13 @@ if ($podeEditar) {
 <!-- CSS da página -->
 <link rel="stylesheet" href="style/css/licitacao.css" />
 
-<!-- ============================================
-     HEADER PROFISSIONAL - Consulta de Licitações
-     Substituir o bloco do page-header atual em licitacao.php
-     ============================================ -->
-
 <div class="page-container">
-    <!-- Header da Página - Layout Profissional -->
-    <div class="page-header-pro">
+
+    <!-- ============================================
+         BLOCO UNIFICADO: Header + Stats + Filtros
+         ============================================ -->
+    <div class="page-header-unified">
+
         <!-- Elementos decorativos -->
         <div class="header-decoration">
             <div class="decoration-circle decoration-circle-1"></div>
@@ -71,18 +70,17 @@ if ($podeEditar) {
             <div class="decoration-line"></div>
         </div>
 
-        <!-- Conteúdo principal do header -->
+        <!-- Breadcrumb + Data -->
         <div class="header-top-row">
-            <!-- Breadcrumb -->
             <div class="header-breadcrumb">
                 <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
                 <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
                 <span>Licitações</span>
             </div>
-            <!-- Data/hora -->
             <div class="header-date" id="headerDate"></div>
         </div>
 
+        <!-- Título + Ações -->
         <div class="header-main-row">
             <div class="header-left">
                 <div class="header-icon-box">
@@ -159,92 +157,108 @@ if ($podeEditar) {
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Filtros -->
-    <div class="filters-card">
-        <div class="filters-header">
-            <div class="filters-title">
-                <ion-icon name="filter-outline"></ion-icon>
-                Filtros de Pesquisa
+        <!-- ============================================
+             Filtros integrados (colapsável)
+             ============================================ -->
+        <div class="filters-section" id="filtersSection">
+            <div class="filters-section-header">
+                <div class="filters-title">
+                    <ion-icon name="filter-outline"></ion-icon>
+                    Filtros de Pesquisa
+                </div>
+                <div class="filters-actions">
+                    <button type="button" class="btn-clear-filters" onclick="limparFiltros()">
+                        <ion-icon name="refresh-outline"></ion-icon>
+                        Limpar Filtros
+                    </button>
+                    <button type="button" class="btn-toggle-filters" id="btnToggleFilters" onclick="toggleFilters()" title="Recolher filtros">
+                        <ion-icon name="chevron-up-outline" id="iconToggleFilters"></ion-icon>
+                    </button>
+                </div>
             </div>
-            <button type="button" class="btn-clear-filters" onclick="limparFiltros()">
-                <ion-icon name="refresh-outline"></ion-icon>
-                Limpar Filtros
-            </button>
+
+            <div class="filters-body" id="filtersBody">
+                <form id="formFiltros">
+                    <div class="filters-grid">
+                        <!-- Busca por Código/Objeto -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="search-outline"></ion-icon>
+                                Buscar por Código ou Objeto
+                            </label>
+                            <input type="text" class="form-control" id="tituloLicitacao" name="tituloLicitacao"
+                                placeholder="Digite o código ou objeto da licitação..."
+                                value="<?php echo htmlspecialchars($tituloLicitacaoFilter); ?>">
+                        </div>
+
+                        <!-- Tipo de Licitação (Select2) -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="pricetag-outline"></ion-icon>
+                                Tipo
+                            </label>
+                            <select id="tipoLicitacao" name="tipoLicitacao" class="select2-tipo" style="width: 100%;">
+                                <option value="">Todos os Tipos</option>
+                                <?php foreach ($tipos as $tipo): ?>
+                                    <option value="<?= $tipo['ID_TIPO'] ?>" <?= $tipoLicitacaoFilter == $tipo['ID_TIPO'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($tipo['NM_TIPO']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <!-- Situação (Radio Button) -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                                Situação
+                            </label>
+                            <div class="radio-group">
+                                <?php foreach ($situacoes as $value => $label): ?>
+                                    <label class="radio-item">
+                                        <input type="radio" name="statusLicitacao" value="<?= $value ?>"
+                                            <?= $statusLicitacaoFilter == $value ? 'checked' : '' ?>>
+                                        <span class="radio-label"><?= $label ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Segunda linha: Datas -->
+                    <div class="filters-grid-row2">
+                        <!-- Data Inicial -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="calendar-outline"></ion-icon>
+                                Data Inicial
+                            </label>
+                            <input type="date" class="form-control" id="dtIniLicitacao" name="dtIniLicitacao"
+                                value="<?php echo htmlspecialchars($dtIniLicitacaoFilter); ?>">
+                        </div>
+
+                        <!-- Data Final -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <ion-icon name="calendar-outline"></ion-icon>
+                                Data Final
+                            </label>
+                            <input type="date" class="form-control" id="dtFimLicitacao" name="dtFimLicitacao"
+                                value="<?php echo htmlspecialchars($dtFimLicitacaoFilter); ?>">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Resumo dos filtros ativos (visível quando recolhido) -->
+            <div class="filters-summary" id="filtersSummary">
+                <span class="filters-summary-text" id="filtersSummaryText"></span>
+            </div>
         </div>
 
-        <form id="formFiltros">
-            <div class="filters-grid">
-                <!-- Busca por Código/Objeto -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <ion-icon name="search-outline"></ion-icon>
-                        Buscar por Código ou Objeto
-                    </label>
-                    <input type="text" class="form-control" id="tituloLicitacao" name="tituloLicitacao"
-                        placeholder="Digite o código ou objeto da licitação..."
-                        value="<?php echo htmlspecialchars($tituloLicitacaoFilter); ?>">
-                </div>
-
-                <!-- Tipo de Licitação (Select2) -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <ion-icon name="pricetag-outline"></ion-icon>
-                        Tipo
-                    </label>
-                    <select id="tipoLicitacao" name="tipoLicitacao" class="select2-tipo" style="width: 100%;">
-                        <option value="">Todos os Tipos</option>
-                        <?php foreach ($tipos as $tipo): ?>
-                            <option value="<?= $tipo['ID_TIPO'] ?>" <?= $tipoLicitacaoFilter == $tipo['ID_TIPO'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($tipo['NM_TIPO']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <!-- Situação (Radio Button) -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <ion-icon name="checkmark-circle-outline"></ion-icon>
-                        Situação
-                    </label>
-                    <div class="radio-group">
-                        <?php foreach ($situacoes as $value => $label): ?>
-                            <label class="radio-item">
-                                <input type="radio" name="statusLicitacao" value="<?= $value ?>"
-                                    <?= $statusLicitacaoFilter == $value ? 'checked' : '' ?>>
-                                <span class="radio-label"><?= $label ?></span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Segunda linha: Datas -->
-            <div class="filters-grid-row2">
-                <!-- Data Inicial -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <ion-icon name="calendar-outline"></ion-icon>
-                        Data Inicial
-                    </label>
-                    <input type="date" class="form-control" id="dtIniLicitacao" name="dtIniLicitacao"
-                        value="<?php echo htmlspecialchars($dtIniLicitacaoFilter); ?>">
-                </div>
-
-                <!-- Data Final -->
-                <div class="form-group">
-                    <label class="form-label">
-                        <ion-icon name="calendar-outline"></ion-icon>
-                        Data Final
-                    </label>
-                    <input type="date" class="form-control" id="dtFimLicitacao" name="dtFimLicitacao"
-                        value="<?php echo htmlspecialchars($dtFimLicitacaoFilter); ?>">
-                </div>
-            </div>
-        </form>
     </div>
+    <!-- FIM do bloco unificado -->
 
     <!-- Container de Resultados -->
     <div class="table-card">
@@ -307,88 +321,159 @@ if ($podeEditar) {
     // Variáveis Globais
     // ============================================
     let paginaAtualLic = 1;
-    const registrosPorPagina = 20;
     let totalRegistros = 0;
-    let searchTimeout;
-    const podeEditar = <?= $podeEditar ? 'true' : 'false' ?>;
-    const idUsuario = <?= $_SESSION['idUsuario'] ?? 0 ?>;
-    const emailUsuario = '<?= $_SESSION['email'] ?? '' ?>';
-
-    // Chave para localStorage
-    const STORAGE_KEY_VIEW = 'consultarLicitacao_view';
-    const STORAGE_KEY_FILTROS = 'consultarLicitacao_filtros';
+    let registrosPorPagina = 20;
+    const podeEditar = <?php echo $podeEditar ? 'true' : 'false'; ?>;
+    const STORAGE_KEY_VIEW = 'licitacao_view_preference';
+    const STORAGE_KEY_FILTERS = 'licitacao_filters';
+    const STORAGE_KEY_FILTERS_COLLAPSED = 'licitacao_filters_collapsed';
 
     // ============================================
     // Inicialização
     // ============================================
-    $(document).ready(function() {
-        // Inicializar Select2 para Tipo de Licitação
-        $('#tipoLicitacao').select2({
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar Select2
+        $('.select2-tipo').select2({
             placeholder: 'Selecione o tipo...',
             allowClear: true,
-            width: '100%',
-            language: {
-                noResults: function() {
-                    return "Nenhum tipo encontrado";
-                },
-                searching: function() {
-                    return "Buscando...";
-                }
-            }
+            width: '100%'
         });
 
-        // Verificar se é mobile e forçar cards
-        if (isMobile()) {
-            toggleView('cards');
-        } else {
-            // Restaurar preferência de visualização apenas no desktop
-            const savedView = localStorage.getItem(STORAGE_KEY_VIEW);
-            if (savedView) {
-                toggleView(savedView);
-            }
-        }
-
-        // Restaurar filtros salvos
-        restaurarFiltros();
-
-        // ============================================
-        // Eventos de Filtro Automático
-        // ============================================
-
-        // Tipo - filtra ao mudar
-        $('#tipoLicitacao').on('change', function() {
+        // Listeners para auto-pesquisa
+        document.getElementById('tituloLicitacao').addEventListener('input', debounce(function() {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
-        });
+        }, 400));
 
-        // Radio buttons - Status
         $('input[name="statusLicitacao"]').on('change', function() {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
         });
 
-        // Campos de texto com debounce
-        $('#tituloLicitacao').on('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(function() {
-                paginaAtualLic = 1;
-                salvarFiltros();
-                pesquisar();
-            }, 500);
-        });
-
-        // Campos de data
-        $('#dtIniLicitacao, #dtFimLicitacao').on('change', function() {
+        $('#tipoLicitacao').on('change', function() {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
         });
 
-        // Carrega dados iniciais
+        document.getElementById('dtIniLicitacao').addEventListener('change', function() {
+            paginaAtualLic = 1;
+            salvarFiltros();
+            pesquisar();
+        });
+
+        document.getElementById('dtFimLicitacao').addEventListener('change', function() {
+            paginaAtualLic = 1;
+            salvarFiltros();
+            pesquisar();
+        });
+
+        // Restaurar filtros e estado dos filtros
+        restaurarFiltros();
+        restaurarEstadoFiltros();
+
+        // Restaurar preferência de view
+        const savedView = localStorage.getItem(STORAGE_KEY_VIEW);
+        if (savedView && !isMobile()) {
+            toggleView(savedView);
+        }
+
+        // Atualizar data no header
+        atualizarDataHeader();
+
+        // Pesquisar
         pesquisar();
     });
+
+    // ============================================
+    // Toggle Filtros (Minimizar/Expandir)
+    // ============================================
+    function toggleFilters() {
+        const section = document.getElementById('filtersSection');
+        const body = document.getElementById('filtersBody');
+        const summary = document.getElementById('filtersSummary');
+        const icon = document.getElementById('iconToggleFilters');
+        const btn = document.getElementById('btnToggleFilters');
+
+        const isCollapsed = section.classList.toggle('collapsed');
+
+        if (isCollapsed) {
+            icon.setAttribute('name', 'chevron-down-outline');
+            btn.title = 'Expandir filtros';
+            atualizarResumoFiltros();
+        } else {
+            icon.setAttribute('name', 'chevron-up-outline');
+            btn.title = 'Recolher filtros';
+        }
+
+        // Salvar estado
+        localStorage.setItem(STORAGE_KEY_FILTERS_COLLAPSED, isCollapsed ? '1' : '0');
+    }
+
+    function restaurarEstadoFiltros() {
+        const collapsed = localStorage.getItem(STORAGE_KEY_FILTERS_COLLAPSED);
+        if (collapsed === '1') {
+            const section = document.getElementById('filtersSection');
+            const icon = document.getElementById('iconToggleFilters');
+            const btn = document.getElementById('btnToggleFilters');
+
+            section.classList.add('collapsed');
+            icon.setAttribute('name', 'chevron-down-outline');
+            btn.title = 'Expandir filtros';
+            atualizarResumoFiltros();
+        }
+    }
+
+    function atualizarResumoFiltros() {
+        const filtrosAtivos = [];
+        
+        const titulo = document.getElementById('tituloLicitacao').value.trim();
+        if (titulo) filtrosAtivos.push('Busca: "' + titulo + '"');
+
+        const tipoText = $('#tipoLicitacao option:selected').text();
+        const tipoVal = $('#tipoLicitacao').val();
+        if (tipoVal) filtrosAtivos.push('Tipo: ' + tipoText);
+
+        const status = $('input[name="statusLicitacao"]:checked').val();
+        if (status) filtrosAtivos.push('Situação: ' + status);
+        else filtrosAtivos.push('Situação: Todos');
+
+        const dtIni = document.getElementById('dtIniLicitacao').value;
+        if (dtIni) filtrosAtivos.push('De: ' + formatarDataSimples(dtIni));
+
+        const dtFim = document.getElementById('dtFimLicitacao').value;
+        if (dtFim) filtrosAtivos.push('Até: ' + formatarDataSimples(dtFim));
+
+        const summaryText = document.getElementById('filtersSummaryText');
+        if (filtrosAtivos.length > 0) {
+            summaryText.innerHTML = '<ion-icon name="funnel-outline"></ion-icon> ' + filtrosAtivos.join(' <span class="summary-separator">•</span> ');
+        } else {
+            summaryText.innerHTML = '<ion-icon name="funnel-outline"></ion-icon> Nenhum filtro ativo';
+        }
+    }
+
+    function formatarDataSimples(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        return parts[2] + '/' + parts[1] + '/' + parts[0];
+    }
+
+    // ============================================
+    // Debounce
+    // ============================================
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
 
     // ============================================
     // Detectar Mobile
@@ -398,27 +483,61 @@ if ($podeEditar) {
     }
 
     // ============================================
-    // Persistência de Filtros
+    // Toast Notifications
+    // ============================================
+    function showToast(mensagem, tipo = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast ' + tipo;
+
+        const icons = {
+            sucesso: 'checkmark-circle',
+            erro: 'close-circle',
+            alerta: 'alert-circle',
+            info: 'information-circle'
+        };
+
+        toast.innerHTML = `
+            <div class="toast-icon"><ion-icon name="${icons[tipo] || icons.info}"></ion-icon></div>
+            <div class="toast-content"><p class="toast-message">${mensagem}</p></div>
+            <button class="toast-close" onclick="this.parentElement.remove()"><ion-icon name="close-outline"></ion-icon></button>
+        `;
+
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    // ============================================
+    // Salvar / Restaurar Filtros
     // ============================================
     function salvarFiltros() {
         const state = {
-            titulo: document.getElementById('tituloLicitacao').value || '',
-            tipo: $('#tipoLicitacao').val() || '',
-            status: $('input[name="statusLicitacao"]:checked').val() || '',
-            dataInicial: document.getElementById('dtIniLicitacao').value || '',
-            dataFinal: document.getElementById('dtFimLicitacao').value || '',
+            titulo: document.getElementById('tituloLicitacao').value,
+            tipo: $('#tipoLicitacao').val(),
+            status: $('input[name="statusLicitacao"]:checked').val(),
+            dataInicial: document.getElementById('dtIniLicitacao').value,
+            dataFinal: document.getElementById('dtFimLicitacao').value,
             pagina: paginaAtualLic
         };
-        localStorage.setItem(STORAGE_KEY_FILTROS, JSON.stringify(state));
+        try {
+            localStorage.setItem(STORAGE_KEY_FILTERS, JSON.stringify(state));
+        } catch (e) {}
+
+        // Atualizar resumo se filtros estão recolhidos
+        if (document.getElementById('filtersSection').classList.contains('collapsed')) {
+            atualizarResumoFiltros();
+        }
     }
 
     function restaurarFiltros() {
         try {
-            const saved = localStorage.getItem(STORAGE_KEY_FILTROS);
+            const saved = localStorage.getItem(STORAGE_KEY_FILTERS);
             if (!saved) return;
-
             const state = JSON.parse(saved);
-
             if (state.titulo) document.getElementById('tituloLicitacao').value = state.titulo;
             if (state.tipo) {
                 $('#tipoLicitacao').val(state.tipo).trigger('change');
@@ -435,13 +554,29 @@ if ($podeEditar) {
     }
 
     // ============================================
+    // Limpar Filtros
+    // ============================================
+    function limparFiltros() {
+        document.getElementById('tituloLicitacao').value = '';
+        $('#tipoLicitacao').val('').trigger('change');
+        $('input[name="statusLicitacao"][value="Em Andamento"]').prop('checked', true);
+        document.getElementById('dtIniLicitacao').value = '';
+        document.getElementById('dtFimLicitacao').value = '';
+        paginaAtualLic = 1;
+        localStorage.removeItem(STORAGE_KEY_FILTERS);
+        pesquisar();
+
+        // Atualizar resumo
+        if (document.getElementById('filtersSection').classList.contains('collapsed')) {
+            atualizarResumoFiltros();
+        }
+    }
+
+    // ============================================
     // Toggle View (Cards/Tabela)
     // ============================================
     function toggleView(view) {
-        // No mobile, sempre força cards
-        if (isMobile()) {
-            view = 'cards';
-        }
+        if (isMobile()) view = 'cards';
 
         const cardsView = document.getElementById('viewCards');
         const tableView = document.getElementById('viewTable');
@@ -460,29 +595,13 @@ if ($podeEditar) {
             btnTable.classList.add('active');
         }
 
-        // Só salva preferência no desktop
         if (!isMobile()) {
             localStorage.setItem(STORAGE_KEY_VIEW, view);
         }
     }
 
     // ============================================
-    // Função Limpar Filtros
-    // ============================================
-    function limparFiltros() {
-        document.getElementById('tituloLicitacao').value = '';
-        $('#tipoLicitacao').val('').trigger('change');
-        $('input[name="statusLicitacao"][value="Em Andamento"]').prop('checked', true);
-        document.getElementById('dtIniLicitacao').value = '';
-        document.getElementById('dtFimLicitacao').value = '';
-
-        paginaAtualLic = 1;
-        localStorage.removeItem(STORAGE_KEY_FILTROS);
-        pesquisar();
-    }
-
-    // ============================================
-    // Função Principal de Pesquisa (AJAX)
+    // Pesquisar (AJAX)
     // ============================================
     function pesquisar() {
         mostrarLoading(true);
@@ -490,19 +609,20 @@ if ($podeEditar) {
         const formData = new FormData();
         formData.append('tituloLicitacao', document.getElementById('tituloLicitacao').value);
         formData.append('tipoLicitacao', $('#tipoLicitacao').val() || 'vazio');
-        formData.append('statusLicitacao', $('input[name="statusLicitacao"]:checked').val() || 'Em Andamento');
+        formData.append('statusLicitacao', $('input[name="statusLicitacao"]:checked').val() || 'vazio');
         formData.append('dtIniLicitacao', document.getElementById('dtIniLicitacao').value);
         formData.append('dtFimLicitacao', document.getElementById('dtFimLicitacao').value);
         formData.append('pagina', paginaAtualLic);
         formData.append('limite', registrosPorPagina);
 
         fetch('bd/licitacao/readAjax.php', {
-                method: 'POST',
-                body: formData
-            })
+            method: 'POST',
+            body: formData
+        })
             .then(response => response.json())
             .then(data => {
                 mostrarLoading(false);
+
                 if (data.success) {
                     totalRegistros = data.total;
                     renderizarCards(data.data);
@@ -510,7 +630,7 @@ if ($podeEditar) {
                     atualizarPaginacao();
                     document.getElementById('totalRegistros').textContent = totalRegistros;
 
-                    // Atualizar estatísticas do header profissional
+                    // Atualizar estatísticas do header
                     if (data.stats) {
                         atualizarEstatisticasHeaderDireto(
                             data.stats.total_geral,
@@ -531,6 +651,118 @@ if ($podeEditar) {
     }
 
     // ============================================
+    // Função auxiliar para truncar texto
+    // ============================================
+    function truncarTexto(texto, limite) {
+        if (!texto) return '-';
+        return texto.length > limite ? texto.substring(0, limite) + '...' : texto;
+    }
+
+    // ============================================
+    // Função auxiliar para gerar o ícone de notificação
+    // ============================================
+    function getNotificationIcon(item) {
+        if (!item.ENVIO_ATUALIZACAO_LICITACAO || item.ENVIO_ATUALIZACAO_LICITACAO == 0) {
+            return '';
+        }
+
+        if (item.USUARIO_INSCRITO && item.USUARIO_INSCRITO > 0) {
+            return `
+            <span class="notification-indicator subscribed" title="Você receberá notificações desta licitação">
+                <ion-icon name="notifications"></ion-icon>
+            </span>
+        `;
+        }
+
+        return `
+        <span class="notification-indicator available" title="Notificações disponíveis">
+            <ion-icon name="notifications-outline"></ion-icon>
+        </span>
+    `;
+    }
+
+    // ============================================
+    // Função auxiliar para gerar o botão de notificação
+    // ============================================
+    function getNotificationButton(item) {
+        if (!item.ENVIO_ATUALIZACAO_LICITACAO || item.ENVIO_ATUALIZACAO_LICITACAO == 0) {
+            return '';
+        }
+
+        if (item.USUARIO_INSCRITO && item.USUARIO_INSCRITO > 0) {
+            return `
+            <button type="button" 
+                    class="btn-acao notificacao subscribed" 
+                    title="Você está recebendo notificações - Clique para cancelar"
+                    onclick="toggleNotificacao(${item.ID_LICITACAO}, 'cancelar', this)">
+                <ion-icon name="notifications"></ion-icon>
+            </button>
+        `;
+        }
+
+        return `
+        <button type="button" 
+                class="btn-acao notificacao available" 
+                title="Clique para receber notificações"
+                onclick="toggleNotificacao(${item.ID_LICITACAO}, 'inscrever', this)">
+            <ion-icon name="notifications-outline"></ion-icon>
+        </button>
+    `;
+    }
+
+    // ============================================
+    // Função para toggle de notificação via AJAX
+    // ============================================
+    function toggleNotificacao(idLicitacao, acao, button) {
+        button.disabled = true;
+        button.style.opacity = '0.5';
+
+        const formData = new FormData();
+        formData.append('idLicitacao', idLicitacao);
+        formData.append('acao', acao);
+
+        fetch('bd/licitacao/toggleNotificacao.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                button.disabled = false;
+                button.style.opacity = '1';
+
+                if (data.success) {
+                    if (data.inscrito) {
+                        button.classList.remove('available');
+                        button.classList.add('subscribed');
+                        button.title = 'Você está recebendo notificações - Clique para cancelar';
+                        button.onclick = function() {
+                            toggleNotificacao(idLicitacao, 'cancelar', this);
+                        };
+                        button.innerHTML = '<ion-icon name="notifications"></ion-icon>';
+                    } else {
+                        button.classList.remove('subscribed');
+                        button.classList.add('available');
+                        button.title = 'Clique para receber notificações';
+                        button.onclick = function() {
+                            toggleNotificacao(idLicitacao, 'inscrever', this);
+                        };
+                        button.innerHTML = '<ion-icon name="notifications-outline"></ion-icon>';
+                    }
+
+                    showToast(data.message, 'sucesso');
+                } else {
+                    showToast(data.message || 'Erro ao processar solicitação', 'erro');
+                }
+            })
+            .catch(error => {
+                button.disabled = false;
+                button.style.opacity = '1';
+                console.error('Erro:', error);
+                showToast('Erro ao processar solicitação', 'erro');
+            });
+    }
+
+    // ============================================
     // Renderização de Cards
     // ============================================
     function renderizarCards(dados) {
@@ -538,12 +770,12 @@ if ($podeEditar) {
 
         if (!dados || dados.length === 0) {
             container.innerHTML = `
-                <div class="empty-state" style="grid-column: 1 / -1;">
-                    <ion-icon name="document-outline"></ion-icon>
-                    <h3>Nenhuma licitação encontrada</h3>
-                    <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
-                </div>
-            `;
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <ion-icon name="document-outline"></ion-icon>
+                <h3>Nenhuma licitação encontrada</h3>
+                <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
+            </div>
+        `;
             return;
         }
 
@@ -555,51 +787,52 @@ if ($podeEditar) {
             const dataAbertura = item.DT_ABER_LICITACAO ? formatarDataHora(item.DT_ABER_LICITACAO) : '-';
             const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
             const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 100) : '-';
+            const notificationButton = getNotificationButton(item);
 
             html += `
-                <div class="licitacao-card">
-                    <div class="card-header">
-                        <div class="card-header-left">
-                            <div class="card-icon">
-                                <ion-icon name="document-text-outline"></ion-icon>
-                            </div>
-                            <div class="card-title-group">
-                                <h3 class="card-title">${codigo}</h3>
-                            </div>
+            <div class="licitacao-card">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <div class="card-icon">
+                            <ion-icon name="document-text-outline"></ion-icon>
                         </div>
-                        <span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-info-row">
-                            <ion-icon name="document-outline"></ion-icon>
-                            <span>${objeto}</span>
-                        </div>
-                        <div class="card-info-row">
-                            <ion-icon name="calendar-outline"></ion-icon>
-                            <span class="card-info-label">Abertura:</span>
-                            <span>${dataAbertura}</span>
-                        </div>
-                        <div class="card-info-row">
-                            <ion-icon name="person-outline"></ion-icon>
-                            <span class="card-info-label">Responsável:</span>
-                            <span>${item.PREG_RESP_LICITACAO || '-'}</span>
+                        <div class="card-title-group">
+                            <h3 class="card-title">${codigo}</h3>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span>
-                        <div class="card-footer-actions">
-                            <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
-                                <ion-icon name="eye-outline"></ion-icon>
-                            </a>
-                            ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ? `
-                            <a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
-                                <ion-icon name="create-outline"></ion-icon>
-                            </a>
-                            ` : ''}
-                        </div>
+                    <span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-info-row">
+                        <ion-icon name="document-outline"></ion-icon>
+                        <span>${objeto}</span>
+                    </div>
+                    <div class="card-info-row">
+                        <ion-icon name="calendar-outline"></ion-icon>
+                        <span class="card-info-label">Abertura:</span>
+                        <span>${dataAbertura}</span>
+                    </div>
+                    <div class="card-info-row">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <span class="card-info-label">Responsável:</span>
+                        <span>${item.PREG_RESP_LICITACAO || '-'}</span>
                     </div>
                 </div>
-            `;
+                <div class="card-footer">
+                    <span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span>
+                    <div class="card-footer-actions">
+                        ${notificationButton}
+                        <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </a>
+                        ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
+                            `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
+                                <ion-icon name="create-outline"></ion-icon>
+                            </a>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
         });
 
         container.innerHTML = html;
@@ -613,16 +846,16 @@ if ($podeEditar) {
 
         if (!dados || dados.length === 0) {
             tbody.innerHTML = `
-                <tr>
-                    <td colspan="7">
-                        <div class="empty-state">
-                            <ion-icon name="document-outline"></ion-icon>
-                            <h3>Nenhuma licitação encontrada</h3>
-                            <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
-                        </div>
-                    </td>
-                </tr>
-            `;
+            <tr>
+                <td colspan="7">
+                    <div class="empty-state">
+                        <ion-icon name="document-outline"></ion-icon>
+                        <h3>Nenhuma licitação encontrada</h3>
+                        <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
+                    </div>
+                </td>
+            </tr>
+        `;
             return;
         }
 
@@ -635,29 +868,30 @@ if ($podeEditar) {
             const dataAbertura = item.DT_ABER_LICITACAO ? formatarDataHora(item.DT_ABER_LICITACAO) : '-';
             const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
             const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 80) : '-';
+            const notificationButton = getNotificationButton(item);
 
             html += `
-                <tr class="${rowClass}">
-                    <td><strong>${codigo}</strong></td>
-                    <td><span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span></td>
-                    <td title="${item.OBJETO_LICITACAO || ''}">${objeto}</td>
-                    <td><span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span></td>
-                    <td>${dataAbertura}</td>
-                    <td>${item.PREG_RESP_LICITACAO || '-'}</td>
-                    <td>
-                        <div class="acoes-cell">
-                            <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
-                                <ion-icon name="eye-outline"></ion-icon>
-                            </a>
-                            ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ? `
-                            <a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
+            <tr class="${rowClass}">
+                <td><strong>${codigo}</strong></td>
+                <td><span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span></td>
+                <td title="${item.OBJETO_LICITACAO || ''}">${objeto}</td>
+                <td><span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span></td>
+                <td>${dataAbertura}</td>
+                <td>${item.PREG_RESP_LICITACAO || '-'}</td>
+                <td>
+                    <div class="acoes-cell">
+                        ${notificationButton}
+                        <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
+                            <ion-icon name="eye-outline"></ion-icon>
+                        </a>
+                        ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
+                            `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
                                 <ion-icon name="create-outline"></ion-icon>
-                            </a>
-                            ` : ''}
-                        </div>
-                    </td>
-                </tr>
-            `;
+                            </a>` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
         });
 
         tbody.innerHTML = html;
@@ -727,564 +961,70 @@ if ($podeEditar) {
 
     function getStatusClass(status) {
         switch (status) {
-            case 'Em Andamento':
-                return 'badge-andamento';
-            case 'Encerrado':
-                return 'badge-encerrado';
-            case 'Suspenso':
-                return 'badge-suspenso';
-            case 'Rascunho':
-                return 'badge-rascunho';
-            default:
-                return 'badge-andamento';
+            case 'Em Andamento': return 'badge-andamento';
+            case 'Encerrado': return 'badge-encerrado';
+            case 'Suspenso': return 'badge-suspenso';
+            case 'Rascunho': return 'badge-rascunho';
+            default: return 'badge-andamento';
         }
     }
 
     function getRowClass(status) {
         switch (status) {
-            case 'Encerrado':
-                return 'encerrado';
-            case 'Suspenso':
-                return 'suspenso';
-            default:
-                return '';
+            case 'Encerrado': return 'encerrado';
+            case 'Suspenso': return 'suspenso';
+            default: return '';
         }
     }
 
     function getTipoClass(tipo) {
         if (!tipo) return 'default';
         const tipoLower = tipo.toLowerCase();
-
         if (tipoLower.includes('pregão') || tipoLower.includes('pregao')) return 'pregao';
         if (tipoLower.includes('licitação') || tipoLower.includes('licitacao')) return 'licitacao';
         if (tipoLower.includes('dispensa')) return 'dispensa';
         if (tipoLower.includes('concorrência') || tipoLower.includes('concorrencia')) return 'concorrencia';
         if (tipoLower.includes('credenciamento')) return 'credenciamento';
         if (tipoLower.includes('leilão') || tipoLower.includes('leilao')) return 'leilao';
-
         return 'default';
     }
 
     function getTipoAbreviado(tipo) {
         if (!tipo) return '-';
         const tipoLower = tipo.toLowerCase();
-
         if (tipoLower.includes('pregão eletrônico') || tipoLower.includes('pregao eletronico')) return 'PREGÃO ELETR.';
         if (tipoLower.includes('licitação cesan')) return 'LICIT. CESAN';
         if (tipoLower.includes('licitação internacional')) return 'LICIT. INTERN.';
         if (tipoLower.includes('dispensa eletrônica')) return 'DISPENSA ELETR.';
-        if (tipoLower.includes('concorrência internacional')) return 'CONCOR. INTERN.';
-        if (tipoLower.includes('procedimento de manifestação')) return 'PROC. MANIF.';
-        if (tipoLower.includes('request of proposal')) return 'RFP';
+        if (tipoLower.includes('dispensa')) return 'DISPENSA';
+        if (tipoLower.includes('concorrência')) return 'CONCORRÊNCIA';
+        if (tipoLower.includes('credenciamento')) return 'CREDENC.';
+        if (tipoLower.includes('leilão')) return 'LEILÃO';
+        return tipo.length > 18 ? tipo.substring(0, 18) + '.' : tipo;
+    }
 
-        // Retorna abreviado se for muito longo
-        if (tipo.length > 18) {
-            return tipo.substring(0, 15) + '...';
+    function formatarDataHora(data) {
+        if (!data) return '-';
+        try {
+            const d = new Date(data);
+            return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        } catch (e) {
+            return data;
         }
-        return tipo;
-    }
-
-    function formatarDataHora(dataStr) {
-        if (!dataStr) return '-';
-        const data = new Date(dataStr);
-        return data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    function truncarTexto(texto, maxLength) {
-        if (texto.length <= maxLength) return texto;
-        return texto.substring(0, maxLength) + '...';
     }
 
     // ============================================
-    // Toast System
-    // ============================================
-    function showToast(message, type, duration) {
-        type = type || 'info';
-        duration = duration || 5000;
-
-        let container = document.getElementById('toastContainer');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'toastContainer';
-            container.className = 'toast-container';
-            document.body.appendChild(container);
-        }
-
-        const icons = {
-            sucesso: 'checkmark-circle',
-            erro: 'close-circle',
-            alerta: 'alert-circle',
-            info: 'information-circle'
-        };
-
-        const toast = document.createElement('div');
-        toast.className = 'toast ' + type;
-        toast.innerHTML = `
-            <div class="toast-icon">
-                <ion-icon name="${icons[type] || icons.info}"></ion-icon>
-            </div>
-            <div class="toast-content">
-                <p class="toast-message">${message}</p>
-            </div>
-            <button class="toast-close" onclick="this.parentElement.remove()">
-                <ion-icon name="close"></ion-icon>
-            </button>
-        `;
-
-        container.appendChild(toast);
-        setTimeout(function() {
-            toast.classList.add('show');
-        }, 10);
-        setTimeout(function() {
-            toast.classList.remove('show');
-            setTimeout(function() {
-                toast.remove();
-            }, 300);
-        }, duration);
-    }
-
-    /**
-     * ============================================
-     * JAVASCRIPT ATUALIZADO - licitacao.php
-     * 
-     * Funções de renderização com ícone de notificação
-     * Substituir as funções existentes no licitacao.php
-     * ============================================
-     */
-
-    // ============================================
-    // Função auxiliar para gerar o ícone de notificação
-    // ============================================
-    function getNotificationIcon(item) {
-        // Se não permite notificações ou não está logado, não mostra nada
-        if (!item.ENVIO_ATUALIZACAO_LICITACAO || item.ENVIO_ATUALIZACAO_LICITACAO == 0) {
-            return '';
-        }
-
-        // Se usuário está inscrito
-        if (item.USUARIO_INSCRITO && item.USUARIO_INSCRITO > 0) {
-            return `
-            <span class="notification-indicator subscribed" title="Você receberá notificações desta licitação">
-                <ion-icon name="notifications"></ion-icon>
-            </span>
-        `;
-        }
-
-        // Se permite mas usuário não está inscrito
-        return `
-        <span class="notification-indicator available" title="Notificações disponíveis">
-            <ion-icon name="notifications-outline"></ion-icon>
-        </span>
-    `;
-    }
-
-    // ============================================
-    // Renderização de Cards - ATUALIZADO
-    // ============================================
-    function renderizarCards(dados) {
-        const container = document.getElementById('cardsContainer');
-
-        if (!dados || dados.length === 0) {
-            container.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <ion-icon name="document-outline"></ion-icon>
-                <h3>Nenhuma licitação encontrada</h3>
-                <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
-            </div>
-        `;
-            return;
-        }
-
-        let html = '';
-        dados.forEach(function(item) {
-            const statusClass = getStatusClass(item.STATUS_LICITACAO);
-            const tipoClass = getTipoClass(item.NM_TIPO);
-            const tipoAbrev = getTipoAbreviado(item.NM_TIPO);
-            const dataAbertura = item.DT_ABER_LICITACAO ? formatarDataHora(item.DT_ABER_LICITACAO) : '-';
-            const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
-            const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 100) : '-';
-            const notificationIcon = getNotificationIcon(item);
-
-            html += `
-            <div class="licitacao-card">
-                <div class="card-header">
-                    <div class="card-header-left">
-                        <div class="card-icon">
-                            <ion-icon name="document-text-outline"></ion-icon>
-                        </div>
-                        <div class="card-title-group">
-                            <h3 class="card-title">${codigo}</h3>
-                            ${notificationIcon}
-                        </div>
-                    </div>
-                    <span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-info-row">
-                        <ion-icon name="document-outline"></ion-icon>
-                        <span>${objeto}</span>
-                    </div>
-                    <div class="card-info-row">
-                        <ion-icon name="calendar-outline"></ion-icon>
-                        <span class="card-info-label">Abertura:</span>
-                        <span>${dataAbertura}</span>
-                    </div>
-                    <div class="card-info-row">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <span class="card-info-label">Responsável:</span>
-                        <span>${item.PREG_RESP_LICITACAO || '-'}</span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span>
-                    <div class="card-footer-actions">
-                        <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </a>
-                        ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
-                        `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
-                            <ion-icon name="create-outline"></ion-icon>
-                        </a>` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-        });
-
-        container.innerHTML = html;
-    }
-
-    // ============================================
-    // Renderização da Tabela - ATUALIZADO
-    // ============================================
-    function renderizarTabela(dados) {
-        const tbody = document.getElementById('tabelaBody');
-
-        if (!dados || dados.length === 0) {
-            tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    <div class="empty-state">
-                        <ion-icon name="document-outline"></ion-icon>
-                        <h3>Nenhuma licitação encontrada</h3>
-                        <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
-                    </div>
-                </td>
-            </tr>
-        `;
-            return;
-        }
-
-        let html = '';
-        dados.forEach(function(item) {
-            const statusClass = getStatusClass(item.STATUS_LICITACAO);
-            const rowClass = getRowClass(item.STATUS_LICITACAO);
-            const tipoClass = getTipoClass(item.NM_TIPO);
-            const tipoAbrev = getTipoAbreviado(item.NM_TIPO);
-            const dataAbertura = item.DT_ABER_LICITACAO ? formatarDataHora(item.DT_ABER_LICITACAO) : '-';
-            const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
-            const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 80) : '-';
-            const notificationIcon = getNotificationIcon(item);
-
-            html += `
-            <tr class="${rowClass}">
-                <td>
-                    <div class="codigo-cell">
-                        <strong>${codigo}</strong>
-                        ${notificationIcon}
-                    </div>
-                </td>
-                <td><span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span></td>
-                <td title="${item.OBJETO_LICITACAO || ''}">${objeto}</td>
-                <td><span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span></td>
-                <td>${dataAbertura}</td>
-                <td>${item.PREG_RESP_LICITACAO || '-'}</td>
-                <td>
-                    <div class="acoes-cell">
-                        <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </a>
-                        ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
-                        `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
-                            <ion-icon name="create-outline"></ion-icon>
-                        </a>` : ''}
-                    </div>
-                </td>
-            </tr>
-        `;
-        });
-
-        tbody.innerHTML = html;
-    }
-
-    /**
-     * ============================================
-     * JAVASCRIPT ATUALIZADO - licitacao.php
-     * 
-     * Funções de renderização com ícone de notificação
-     * clicável no rodapé/ações
-     * 
-     * Substituir as funções existentes no licitacao.php
-     * ============================================
-     */
-
-    // ============================================
-    // Função auxiliar para gerar o botão de notificação
-    // ============================================
-    function getNotificationButton(item) {
-        // Se não permite notificações, não mostra nada
-        if (!item.ENVIO_ATUALIZACAO_LICITACAO || item.ENVIO_ATUALIZACAO_LICITACAO == 0) {
-            return '';
-        }
-
-        // Se usuário está inscrito
-        if (item.USUARIO_INSCRITO && item.USUARIO_INSCRITO > 0) {
-            return `
-            <button type="button" 
-                    class="btn-acao notificacao subscribed" 
-                    title="Você está recebendo notificações - Clique para cancelar"
-                    onclick="toggleNotificacao(${item.ID_LICITACAO}, 'cancelar', this)">
-                <ion-icon name="notifications"></ion-icon>
-            </button>
-        `;
-        }
-
-        // Se permite mas usuário não está inscrito
-        return `
-        <button type="button" 
-                class="btn-acao notificacao available" 
-                title="Clique para receber notificações"
-                onclick="toggleNotificacao(${item.ID_LICITACAO}, 'inscrever', this)">
-            <ion-icon name="notifications-outline"></ion-icon>
-        </button>
-    `;
-    }
-
-    // ============================================
-    // Função para toggle de notificação via AJAX
-    // ============================================
-    function toggleNotificacao(idLicitacao, acao, button) {
-        // Desabilitar botão temporariamente
-        button.disabled = true;
-        button.style.opacity = '0.5';
-
-        // Criar FormData
-        const formData = new FormData();
-        formData.append('idLicitacao', idLicitacao);
-        formData.append('acao', acao);
-
-        fetch('bd/licitacao/toggleNotificacao.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                button.disabled = false;
-                button.style.opacity = '1';
-
-                if (data.success) {
-                    // Atualizar visual do botão
-                    if (data.inscrito) {
-                        button.classList.remove('available');
-                        button.classList.add('subscribed');
-                        button.title = 'Você está recebendo notificações - Clique para cancelar';
-                        button.onclick = function() {
-                            toggleNotificacao(idLicitacao, 'cancelar', this);
-                        };
-                        button.innerHTML = '<ion-icon name="notifications"></ion-icon>';
-                    } else {
-                        button.classList.remove('subscribed');
-                        button.classList.add('available');
-                        button.title = 'Clique para receber notificações';
-                        button.onclick = function() {
-                            toggleNotificacao(idLicitacao, 'inscrever', this);
-                        };
-                        button.innerHTML = '<ion-icon name="notifications-outline"></ion-icon>';
-                    }
-
-                    // Mostrar mensagem de sucesso
-                    showToast(data.message, 'sucesso');
-                } else {
-                    showToast(data.message || 'Erro ao processar solicitação', 'erro');
-                }
-            })
-            .catch(error => {
-                button.disabled = false;
-                button.style.opacity = '1';
-                console.error('Erro:', error);
-                showToast('Erro ao processar solicitação', 'erro');
-            });
-    }
-
-    // ============================================
-    // Renderização de Cards - ATUALIZADO
-    // ============================================
-    function renderizarCards(dados) {
-        const container = document.getElementById('cardsContainer');
-
-        if (!dados || dados.length === 0) {
-            container.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <ion-icon name="document-outline"></ion-icon>
-                <h3>Nenhuma licitação encontrada</h3>
-                <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
-            </div>
-        `;
-            return;
-        }
-
-        let html = '';
-        dados.forEach(function(item) {
-            const statusClass = getStatusClass(item.STATUS_LICITACAO);
-            const tipoClass = getTipoClass(item.NM_TIPO);
-            const tipoAbrev = getTipoAbreviado(item.NM_TIPO);
-            const dataAbertura = item.DT_ABER_LICITACAO ? formatarDataHora(item.DT_ABER_LICITACAO) : '-';
-            const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
-            const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 100) : '-';
-            const notificationButton = getNotificationButton(item);
-
-            html += `
-            <div class="licitacao-card">
-                <div class="card-header">
-                    <div class="card-header-left">
-                        <div class="card-icon">
-                            <ion-icon name="document-text-outline"></ion-icon>
-                        </div>
-                        <div class="card-title-group">
-                            <h3 class="card-title">${codigo}</h3>
-                        </div>
-                    </div>
-                    <span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-info-row">
-                        <ion-icon name="document-outline"></ion-icon>
-                        <span>${objeto}</span>
-                    </div>
-                    <div class="card-info-row">
-                        <ion-icon name="calendar-outline"></ion-icon>
-                        <span class="card-info-label">Abertura:</span>
-                        <span>${dataAbertura}</span>
-                    </div>
-                    <div class="card-info-row">
-                        <ion-icon name="person-outline"></ion-icon>
-                        <span class="card-info-label">Responsável:</span>
-                        <span>${item.PREG_RESP_LICITACAO || '-'}</span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span>
-                    <div class="card-footer-actions">
-                        ${notificationButton}
-                        <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </a>
-                        ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
-                        `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
-                            <ion-icon name="create-outline"></ion-icon>
-                        </a>` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-        });
-
-        container.innerHTML = html;
-    }
-
-    // ============================================
-    // Renderização da Tabela - ATUALIZADO
-    // ============================================
-    function renderizarTabela(dados) {
-        const tbody = document.getElementById('tabelaBody');
-
-        if (!dados || dados.length === 0) {
-            tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    <div class="empty-state">
-                        <ion-icon name="document-outline"></ion-icon>
-                        <h3>Nenhuma licitação encontrada</h3>
-                        <p>Ajuste os filtros ou cadastre uma nova licitação.</p>
-                    </div>
-                </td>
-            </tr>
-        `;
-            return;
-        }
-
-        let html = '';
-        dados.forEach(function(item) {
-            const statusClass = getStatusClass(item.STATUS_LICITACAO);
-            const rowClass = getRowClass(item.STATUS_LICITACAO);
-            const tipoClass = getTipoClass(item.NM_TIPO);
-            const tipoAbrev = getTipoAbreviado(item.NM_TIPO);
-            const dataAbertura = item.DT_ABER_LICITACAO ? formatarDataHora(item.DT_ABER_LICITACAO) : '-';
-            const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
-            const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 80) : '-';
-            const notificationButton = getNotificationButton(item);
-
-            html += `
-            <tr class="${rowClass}">
-                <td><strong>${codigo}</strong></td>
-                <td><span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span></td>
-                <td title="${item.OBJETO_LICITACAO || ''}">${objeto}</td>
-                <td><span class="badge ${statusClass}">${item.STATUS_LICITACAO || '-'}</span></td>
-                <td>${dataAbertura}</td>
-                <td>${item.PREG_RESP_LICITACAO || '-'}</td>
-                <td>
-                    <div class="acoes-cell">
-                        ${notificationButton}
-                        <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </a>
-                        ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
-                        `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
-                            <ion-icon name="create-outline"></ion-icon>
-                        </a>` : ''}
-                    </div>
-                </td>
-            </tr>
-        `;
-        });
-
-        tbody.innerHTML = html;
-    }
-
-    /* ============================================
-     HEADER PROFISSIONAL - JavaScript
-     ============================================
-     Adicionar ao final do <script> em licitacao.php
-     ============================================ */
-
-    // ============================================
-    // Exibir data no header
+    // Header: Data e Estatísticas
     // ============================================
     function atualizarDataHeader() {
         const el = document.getElementById('headerDate');
         if (!el) return;
-
         const agora = new Date();
-        const opcoes = {
-            weekday: 'long',
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        };
+        const opcoes = { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' };
         const dataFormatada = agora.toLocaleDateString('pt-BR', opcoes);
         el.textContent = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
     }
 
-    // Chamar ao carregar
-    document.addEventListener('DOMContentLoaded', atualizarDataHeader);
-
-    // ============================================
-    // Atualizar estatísticas do header
-    // Recebe os valores diretamente do backend
-    // ============================================
     function atualizarEstatisticasHeaderDireto(total, andamento, encerrado, suspenso) {
         animarNumero('statTotalNum', total || 0);
         animarNumero('statAndamentoNum', andamento || 0);
@@ -1296,32 +1036,28 @@ if ($podeEditar) {
         const el = document.getElementById(elementId);
         if (!el) return;
 
-        const textoAtual = el.textContent.replace(/\D/g, '');
-        const valorInicial = parseInt(textoAtual) || 0;
-        const diferenca = valorFinal - valorInicial;
-        const duracao = 400;
+        const textoAtual = el.textContent;
+        const valorAtual = parseInt(textoAtual.replace(/\D/g, '')) || 0;
+
+        if (valorAtual === valorFinal) return;
+
+        const duracao = 600;
         const inicio = performance.now();
 
-        el.classList.remove('loaded');
-        void el.offsetWidth;
-        el.classList.add('loaded');
-
-        function atualizar(timestamp) {
+        function animar(timestamp) {
             const progresso = Math.min((timestamp - inicio) / duracao, 1);
             const eased = 1 - Math.pow(1 - progresso, 3);
-            const valorAtual = Math.round(valorInicial + diferenca * eased);
-            el.textContent = valorAtual.toLocaleString('pt-BR');
+            const valor = Math.round(valorAtual + (valorFinal - valorAtual) * eased);
+            el.textContent = valor.toLocaleString('pt-BR');
 
             if (progresso < 1) {
-                requestAnimationFrame(atualizar);
+                requestAnimationFrame(animar);
+            } else {
+                el.classList.add('loaded');
             }
         }
 
-        if (diferenca !== 0) {
-            requestAnimationFrame(atualizar);
-        } else {
-            el.textContent = valorFinal.toLocaleString('pt-BR');
-        }
+        requestAnimationFrame(animar);
     }
 </script>
 

@@ -1885,14 +1885,14 @@
 }
 
 /* ============================================
-   HEADER PROFISSIONAL - TEMA CLARO
+   BLOCO UNIFICADO: Header + Stats + Filtros
    Substituir/adicionar ao licitacao.css
    ============================================ */
 
 /* ============================================
-   Header Principal
+   Container Unificado
    ============================================ */
-.page-header-pro {
+.page-header-unified {
     background: #ffffff;
     border-radius: 20px;
     padding: 0;
@@ -1906,7 +1906,7 @@
 }
 
 /* Linha de acento superior */
-.page-header-pro::before {
+.page-header-unified::before {
     content: '';
     position: absolute;
     top: 0;
@@ -1921,17 +1921,30 @@
     z-index: 2;
 }
 
+/* Padrão sutil de grid no fundo */
+.page-header-unified::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    pointer-events: none;
+}
+
 /* ============================================
    Decorações
    ============================================ */
-.header-decoration {
+.page-header-unified .header-decoration {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 0;
 }
 
-.decoration-circle-1 {
+.page-header-unified .decoration-circle-1 {
     position: absolute;
     width: 300px;
     height: 300px;
@@ -1941,7 +1954,7 @@
     border-radius: 50%;
 }
 
-.decoration-circle-2 {
+.page-header-unified .decoration-circle-2 {
     position: absolute;
     width: 200px;
     height: 200px;
@@ -1951,10 +1964,14 @@
     border-radius: 50%;
 }
 
+.page-header-unified .decoration-line {
+    display: none; /* Já temos o ::before do container */
+}
+
 /* ============================================
    Top Row - Breadcrumb + Data
    ============================================ */
-.header-top-row {
+.page-header-unified .header-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1963,7 +1980,7 @@
     z-index: 1;
 }
 
-.header-breadcrumb {
+.page-header-unified .header-breadcrumb {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -1971,7 +1988,7 @@
     color: #94a3b8;
 }
 
-.header-breadcrumb a {
+.page-header-unified .header-breadcrumb a {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -1980,25 +1997,25 @@
     transition: color 0.2s ease;
 }
 
-.header-breadcrumb a:hover {
+.page-header-unified .header-breadcrumb a:hover {
     color: #3b82f6;
 }
 
-.header-breadcrumb a ion-icon {
+.page-header-unified .header-breadcrumb a ion-icon {
     font-size: 14px;
 }
 
-.breadcrumb-sep {
+.page-header-unified .breadcrumb-sep {
     font-size: 10px;
     color: #cbd5e1;
 }
 
-.header-breadcrumb>span {
+.page-header-unified .header-breadcrumb > span {
     color: #64748b;
     font-weight: 500;
 }
 
-.header-date {
+.page-header-unified .header-date {
     font-size: 12px;
     color: #94a3b8;
     font-weight: 400;
@@ -2008,7 +2025,7 @@
 /* ============================================
    Main Row - Ícone + Título + Ações
    ============================================ */
-.header-main-row {
+.page-header-unified .header-main-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2019,14 +2036,13 @@
     z-index: 1;
 }
 
-.header-left {
+.page-header-unified .header-left {
     display: flex;
     align-items: center;
     gap: 18px;
 }
 
-/* Ícone */
-.header-icon-box {
+.page-header-unified .header-icon-box {
     position: relative;
     width: 56px;
     height: 56px;
@@ -2041,7 +2057,7 @@
     flex-shrink: 0;
 }
 
-.icon-box-pulse {
+.page-header-unified .icon-box-pulse {
     position: absolute;
     inset: -3px;
     border-radius: 16px;
@@ -2050,21 +2066,11 @@
 }
 
 @keyframes iconPulse {
-
-    0%,
-    100% {
-        opacity: 0;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.05);
-    }
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
 }
 
-/* Título */
-.header-title-group h1 {
+.page-header-unified .header-title-group h1 {
     font-size: 24px;
     font-weight: 700;
     margin: 0 0 4px 0;
@@ -2073,7 +2079,7 @@
     line-height: 1.2;
 }
 
-.header-subtitle {
+.page-header-unified .header-subtitle {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -2083,22 +2089,20 @@
     font-weight: 400;
 }
 
-.header-subtitle ion-icon {
+.page-header-unified .header-subtitle ion-icon {
     font-size: 14px;
     color: #60a5fa;
 }
 
-/* ============================================
-   Ações à direita
-   ============================================ */
-.header-right {
+/* Ações à direita */
+.page-header-unified .header-right {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
 /* View Toggle */
-.page-header-pro .view-toggle {
+.page-header-unified .view-toggle {
     display: flex;
     gap: 4px;
     background: #f1f5f9;
@@ -2107,7 +2111,7 @@
     border: 1px solid #e2e8f0;
 }
 
-.page-header-pro .view-toggle button {
+.page-header-unified .view-toggle button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2121,23 +2125,23 @@
     transition: all 0.25s ease;
 }
 
-.page-header-pro .view-toggle button.active {
+.page-header-unified .view-toggle button.active {
     background: #ffffff;
     color: #1e3a5f;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.page-header-pro .view-toggle button:hover:not(.active) {
-    color: #64748b;
-    background: rgba(0, 0, 0, 0.03);
+.page-header-unified .view-toggle button:hover:not(.active) {
+    color: #334155;
+    background: #e2e8f0;
 }
 
-.page-header-pro .view-toggle button ion-icon {
+.page-header-unified .view-toggle button ion-icon {
     font-size: 18px;
 }
 
 /* Botão Nova Licitação */
-.btn-novo-pro {
+.page-header-unified .btn-novo-pro {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -2155,23 +2159,22 @@
     letter-spacing: 0.01em;
 }
 
-.btn-novo-pro:hover {
+.page-header-unified .btn-novo-pro:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(30, 58, 95, 0.3);
+    background: linear-gradient(135deg, #162d4a 0%, #244a73 100%);
+    color: #ffffff;
 }
 
-.btn-novo-pro:active {
-    transform: translateY(0);
-}
-
-.btn-novo-pro ion-icon {
+.page-header-unified .btn-novo-pro ion-icon {
     font-size: 18px;
+    color: #93c5fd;
 }
 
 /* ============================================
    Barra de Estatísticas
    ============================================ */
-.header-stats-bar {
+.page-header-unified .header-stats-bar {
     display: flex;
     align-items: center;
     gap: 0;
@@ -2183,7 +2186,7 @@
     z-index: 1;
 }
 
-.stat-item {
+.page-header-unified .stat-item {
     flex: 1;
     display: flex;
     align-items: center;
@@ -2193,18 +2196,18 @@
     cursor: default;
 }
 
-.stat-item:hover {
+.page-header-unified .stat-item:hover {
     background: rgba(59, 130, 246, 0.03);
 }
 
-.stat-divider {
+.page-header-unified .stat-divider {
     width: 1px;
     height: 32px;
     background: #e2e8f0;
     flex-shrink: 0;
 }
 
-.stat-icon {
+.page-header-unified .stat-icon {
     width: 38px;
     height: 38px;
     border-radius: 10px;
@@ -2215,37 +2218,37 @@
     flex-shrink: 0;
 }
 
-.stat-icon-total {
+.page-header-unified .stat-icon-total {
     background: #eff6ff;
     color: #3b82f6;
     border: 1px solid #dbeafe;
 }
 
-.stat-icon-andamento {
+.page-header-unified .stat-icon-andamento {
     background: #f0fdf4;
     color: #16a34a;
     border: 1px solid #bbf7d0;
 }
 
-.stat-icon-encerrado {
+.page-header-unified .stat-icon-encerrado {
     background: #f1f5f9;
     color: #64748b;
     border: 1px solid #e2e8f0;
 }
 
-.stat-icon-suspenso {
+.page-header-unified .stat-icon-suspenso {
     background: #fffbeb;
     color: #d97706;
     border: 1px solid #fde68a;
 }
 
-.stat-info {
+.page-header-unified .stat-info {
     display: flex;
     flex-direction: column;
     gap: 1px;
 }
 
-.stat-number {
+.page-header-unified .stat-number {
     font-size: 20px;
     font-weight: 700;
     color: #1e293b;
@@ -2253,7 +2256,7 @@
     letter-spacing: -0.02em;
 }
 
-.stat-label {
+.page-header-unified .stat-label {
     font-size: 11px;
     color: #94a3b8;
     font-weight: 500;
@@ -2262,125 +2265,343 @@
 }
 
 @keyframes countUp {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.stat-number.loaded {
+.page-header-unified .stat-number.loaded {
     animation: countUp 0.4s ease-out;
 }
 
 /* ============================================
-   Responsivo
+   FILTROS INTEGRADOS (Seção colapsável)
    ============================================ */
+.filters-section {
+    border-top: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 1;
+}
+
+.filters-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    cursor: default;
+}
+
+.filters-section .filters-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.filters-section .filters-title ion-icon {
+    font-size: 18px;
+    color: #3b82f6;
+}
+
+.filters-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filters-section .btn-clear-filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filters-section .btn-clear-filters:hover {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+/* Botão Toggle Filtros */
+.btn-toggle-filters {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-toggle-filters:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.btn-toggle-filters ion-icon {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+/* ============================================
+   Corpo dos Filtros (animação de colapso)
+   ============================================ */
+.filters-body {
+    padding: 0 32px 24px 32px;
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+    opacity: 1;
+}
+
+/* Estado colapsado */
+.filters-section.collapsed .filters-body {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+}
+
+.filters-section.collapsed .btn-clear-filters {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ============================================
+   Resumo dos Filtros (quando recolhido)
+   ============================================ */
+.filters-summary {
+    display: none;
+    padding: 0 32px 16px 32px;
+}
+
+.filters-section.collapsed .filters-summary {
+    display: block;
+    animation: fadeIn 0.3s ease 0.15s both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.filters-summary-text {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+    color: #64748b;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 16px;
+    line-height: 1.6;
+}
+
+.filters-summary-text ion-icon {
+    font-size: 14px;
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.summary-separator {
+    color: #cbd5e1;
+    margin: 0 2px;
+}
+
+/* ============================================
+   Grids de Filtros (dentro do body)
+   ============================================ */
+.filters-section .filters-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    align-items: end;
+}
+
+.filters-section .filters-grid-row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: end;
+    margin-top: 16px;
+    max-width: 500px;
+}
+
+/* ============================================
+   Responsivo - Bloco Unificado
+   ============================================ */
+@media (max-width: 1024px) {
+    .page-header-unified .header-stats-bar {
+        flex-wrap: wrap;
+    }
+
+    .page-header-unified .stat-item {
+        flex: 1 1 calc(50% - 1px);
+        min-width: 0;
+    }
+
+    .page-header-unified .stat-divider:nth-child(4) {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
-    .page-header-pro {
+    .page-header-unified {
         border-radius: 14px;
     }
 
-    .header-top-row {
+    .page-header-unified .header-top-row {
         padding: 12px 20px 0 20px;
     }
 
-    .header-date {
+    .page-header-unified .header-date {
         display: none;
     }
 
-    .header-main-row {
+    .page-header-unified .header-main-row {
         padding: 16px 20px 20px 20px;
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
 
-    .header-icon-box {
+    .page-header-unified .header-icon-box {
         width: 48px;
         height: 48px;
         font-size: 22px;
         border-radius: 12px;
     }
 
-    .header-title-group h1 {
+    .page-header-unified .header-title-group h1 {
         font-size: 20px;
     }
 
-    .header-right {
+    .page-header-unified .header-right {
         width: 100%;
         justify-content: space-between;
     }
 
-    .page-header-pro .view-toggle {
-        display: none;
+    .page-header-unified .view-toggle {
+        display: none !important;
     }
 
-    .btn-novo-pro {
+    .page-header-unified .btn-novo-pro {
         width: 100%;
         justify-content: center;
     }
 
-    .header-stats-bar {
+    .page-header-unified .header-stats-bar {
         padding: 0 16px;
         flex-wrap: wrap;
     }
 
-    .stat-item {
+    .page-header-unified .stat-item {
         flex: 1 1 calc(50% - 1px);
         padding: 12px 14px;
+        gap: 10px;
     }
 
-    .stat-divider:nth-child(4) {
-        display: none;
+    .page-header-unified .stat-divider {
+        height: 28px;
     }
 
-    .stat-number {
+    .page-header-unified .stat-number {
         font-size: 18px;
     }
 
-    .stat-icon {
-        width: 34px;
-        height: 34px;
+    .page-header-unified .stat-icon {
+        width: 32px;
+        height: 32px;
         font-size: 16px;
         border-radius: 8px;
+    }
+
+    .filters-section-header {
+        padding: 14px 20px;
+    }
+
+    .filters-body {
+        padding: 0 20px 20px 20px;
+    }
+
+    .filters-summary {
+        padding: 0 20px 14px 20px;
+    }
+
+    .filters-section .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-section .filters-grid-row2 {
+        grid-template-columns: 1fr 1fr;
+        max-width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    .header-top-row {
+    .page-header-unified .header-top-row {
         padding: 10px 16px 0 16px;
     }
 
-    .header-main-row {
+    .page-header-unified .header-main-row {
         padding: 14px 16px 16px 16px;
     }
 
-    .header-left {
+    .page-header-unified .header-left {
         gap: 14px;
     }
 
-    .header-title-group h1 {
+    .page-header-unified .header-title-group h1 {
         font-size: 18px;
     }
 
-    .header-subtitle {
+    .page-header-unified .header-subtitle {
         font-size: 12px;
     }
 
-    .stat-item {
+    .page-header-unified .stat-item {
         padding: 10px 12px;
     }
 
-    .stat-number {
+    .page-header-unified .stat-number {
         font-size: 16px;
     }
 
-    .stat-label {
+    .page-header-unified .stat-label {
         font-size: 10px;
+    }
+
+    .filters-section-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filters-body {
+        padding: 0 16px 16px 16px;
+    }
+
+    .filters-summary {
+        padding: 0 16px 12px 16px;
+    }
+
+    .filters-section .filters-grid-row2 {
+        grid-template-columns: 1fr;
     }
 }
