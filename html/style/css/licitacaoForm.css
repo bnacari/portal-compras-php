@@ -750,6 +750,7 @@ form .dropdown-content {
    Responsive
    ============================================ */
 @media (max-width: 1024px) {
+
     .form-col-3,
     .form-col-4 {
         grid-column: span 6;
@@ -861,4 +862,93 @@ form .dropdown-content {
         flex-direction: column;
         text-align: center;
     }
+}
+
+/* ============================================
+   Drag & Drop - Reordenação de Anexos
+   ============================================ */
+.drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    color: #94a3b8;
+    font-size: 20px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.drag-handle:hover {
+    color: #3b82f6;
+    background: #eff6ff;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Drag handle nos Cards (aparece ao hover) */
+.files-grid .file-card {
+    position: relative;
+}
+
+.files-grid .drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.2s ease;
+}
+
+.files-grid .file-card:hover .drag-handle {
+    opacity: 1;
+}
+
+/* Drag handle na Tabela */
+td.drag-handle {
+    width: 40px;
+    text-align: center;
+    padding: 0 !important;
+    vertical-align: middle;
+}
+
+td.drag-handle ion-icon {
+    font-size: 18px;
+}
+
+/* Estados do SortableJS */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+}
+
+.sortable-chosen {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15) !important;
+    z-index: 10;
+}
+
+.sortable-drag {
+    opacity: 0.9;
+    transform: scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Estados na tabela */
+.files-table tbody tr.sortable-ghost {
+    background: #eff6ff !important;
+}
+
+.files-table tbody tr.sortable-ghost td {
+    border-color: #93c5fd;
+}
+
+.files-table tbody tr.sortable-chosen {
+    background: #f8fafc;
 }

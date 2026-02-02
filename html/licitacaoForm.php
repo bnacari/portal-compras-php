@@ -578,7 +578,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                     // Arquivos do diretório físico
                     if (is_dir($directory)) {
                         $files = scandir($directory);
-                        $files = array_diff($files, array('.', '..'));
+                        $files = array_diff($files, array('.', '..', '_order.json'));
 
                         foreach ($files as $file) {
                             $anexos[] = array(
@@ -589,11 +589,34 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                         }
                     }
 
-                    // Ordena por timestamp (mais recentes primeiro)
-                    usort($anexos, function ($a, $b) {
-                        return $b['timestamp'] - $a['timestamp'];
-                    });
-
+                   // Verifica se existe ordem personalizada salva
+$orderFile = $directory . '/_order.json';
+if (file_exists($orderFile)) {
+    $savedOrder = json_decode(file_get_contents($orderFile), true);
+    if (is_array($savedOrder)) {
+        $anexosByName = [];
+        foreach ($anexos as $anexo) {
+            $anexosByName[$anexo['nmAnexo']] = $anexo;
+        }
+        $orderedAnexos = [];
+        foreach ($savedOrder as $filename) {
+            if (isset($anexosByName[$filename])) {
+                $orderedAnexos[] = $anexosByName[$filename];
+                unset($anexosByName[$filename]);
+            }
+        }
+        // Arquivos novos (não presentes na ordem salva) vão ao final
+        foreach ($anexosByName as $anexo) {
+            $orderedAnexos[] = $anexo;
+        }
+        $anexos = $orderedAnexos;
+    }
+} else {
+    // Sem ordem personalizada: ordena por timestamp (mais recentes primeiro)
+    usort($anexos, function ($a, $b) {
+        return $b['timestamp'] - $a['timestamp'];
+    });
+}
                     if (!empty($anexos)) {
                         // Header com toggle de visualização
                         echo '<div class="files-section-header">';
@@ -621,8 +644,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                             $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
                             $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
 
-                            echo '<div class="file-card" id="card_row_' . $index . '">';
-                            echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
+                            echo '<div class="file-card" id="card_row_' . $index . '" data-filename="' . $nomeArquivo . '">';
+echo '<div class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></div>';
+echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
                             echo '<ion-icon name="' . $fileInfo['icon'] . '-outline"></ion-icon>';
                             echo '</div>';
                             echo '<div class="file-card-info">';
@@ -651,7 +675,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                         echo '<div class="files-list hidden" id="filesListEdit">';
                         echo '<div class="files-table-wrapper">';
                         echo '<table class="files-table">';
-                        echo '<thead><tr><th>Arquivo</th><th>Data</th><th style="text-align: center;">Ações</th></tr></thead>';
+echo '<thead><tr><th style="width: 40px;"></th><th>Arquivo</th><th>Data</th><th style="text-align: center;">Ações</th></tr></thead>';
                         echo '<tbody>';
 
                         $index = 0;
@@ -660,8 +684,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                             $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
                             $dataArquivo = date("d/m/Y H:i", $anexo['timestamp']);
 
-                            echo '<tr id="row_' . $index . '">';
-                            echo '<td class="nmAnexo">';
+                           echo '<tr id="row_' . $index . '" data-filename="' . $nomeArquivo . '">';
+echo '<td class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></td>';
+echo '<td class="nmAnexo">';
                             echo '<a href="' . $linkArquivo . '" target="_blank">';
                             echo '<ion-icon name="document-outline"></ion-icon> ' . $nomeArquivo;
                             echo '</a>';
@@ -734,6 +759,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
         </div>
     </form>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
 <script>
     /**
@@ -1163,6 +1190,112 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
         }
     });
     <?php endif; ?>
+
+    // ============================================
+// Reordenação de Arquivos (Drag & Drop)
+// ============================================
+var sortableGrid = null;
+var sortableList = null;
+
+function initSortable() {
+    var gridEl = document.getElementById('filesGridEdit');
+    var listBody = document.querySelector('#filesListEdit .files-table tbody');
+
+    if (gridEl) {
+        sortableGrid = new Sortable(gridEl, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                syncOrderFromGrid();
+                saveOrder();
+            }
+        });
+    }
+
+    if (listBody) {
+        sortableList = new Sortable(listBody, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                syncOrderFromList();
+                saveOrder();
+            }
+        });
+    }
+}
+
+function getOrderFromGrid() {
+    var items = document.querySelectorAll('#filesGridEdit .file-card');
+    var order = [];
+    items.forEach(function(item) {
+        var filename = item.getAttribute('data-filename');
+        if (filename) order.push(filename);
+    });
+    return order;
+}
+
+function getOrderFromList() {
+    var rows = document.querySelectorAll('#filesListEdit .files-table tbody tr');
+    var order = [];
+    rows.forEach(function(row) {
+        var filename = row.getAttribute('data-filename');
+        if (filename) order.push(filename);
+    });
+    return order;
+}
+
+function syncOrderFromGrid() {
+    var order = getOrderFromGrid();
+    var listBody = document.querySelector('#filesListEdit .files-table tbody');
+    if (!listBody) return;
+
+    order.forEach(function(filename) {
+        var row = listBody.querySelector('tr[data-filename="' + CSS.escape(filename) + '"]');
+        if (row) listBody.appendChild(row);
+    });
+}
+
+function syncOrderFromList() {
+    var order = getOrderFromList();
+    var grid = document.getElementById('filesGridEdit');
+    if (!grid) return;
+
+    order.forEach(function(filename) {
+        var card = grid.querySelector('.file-card[data-filename="' + CSS.escape(filename) + '"]');
+        if (card) grid.appendChild(card);
+    });
+}
+
+function saveOrder() {
+    var order = getOrderFromGrid();
+
+    fetch('bd/licitacao/reorderAnexo.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            idLicitacao: <?php echo $idLicitacao; ?>,
+            order: order
+        })
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(data) {
+        if (!data.success) {
+            console.error('Erro ao salvar ordem:', data.message);
+        }
+    })
+    .catch(function(error) {
+        console.error('Erro ao salvar ordem:', error);
+    });
+}
+
+// Inicializa o Sortable quando o DOM estiver pronto
+initSortable();
 </script>
 
 <?php include_once 'includes/footer.inc.php'; ?>
