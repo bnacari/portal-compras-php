@@ -483,6 +483,12 @@
     vertical-align: middle;
 }
 
+.data-table td:first-child {
+    font-size: 12px;
+    white-space: nowrap;
+    max-width: 120px;
+}
+
 .data-table tbody tr {
     transition: background 0.15s ease;
 }
