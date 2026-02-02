@@ -85,13 +85,15 @@ if (isset($emailUsuario) && !empty($emailUsuario)) {
     // Atualizar a senha no banco de dados
     $queryUpdateSenha = "UPDATE USUARIO SET SENHA = :senha WHERE EMAIL_ADM = :email";
     $stmt = $pdoCAT->prepare($queryUpdateSenha);
-    $stmt->bindParam(':senha', $senhaHash);
-    $stmt->bindParam(':email', $emailUsuario);
+    $stmt->bindParam(':senha', $senhaHash, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $emailUsuario, PDO::PARAM_STR);
     $stmt->execute();
 
-    // Buscar dados do usuário
-    $querySelectPerfil = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$emailUsuario'";
-    $querySelectPerfil2 = $pdoCAT->query($querySelectPerfil);
+    // Buscar dados do usuário - Prepared Statement para evitar SQL Injection
+    $querySelectPerfil = "SELECT * FROM USUARIO WHERE EMAIL_ADM = :email";
+    $querySelectPerfil2 = $pdoCAT->prepare($querySelectPerfil);
+    $querySelectPerfil2->bindParam(':email', $emailUsuario, PDO::PARAM_STR);
+    $querySelectPerfil2->execute();
     $emailEnviado = false;
     
     while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
@@ -237,15 +239,18 @@ if (isset($emailUsuario) && !empty($emailUsuario)) {
 // =============================================================================================================
 } else if (isset($idLicitacao) && !empty($idLicitacao)) {
 
+    // Prepared Statement para evitar SQL Injection
     $querySelectAtualizacao = "SELECT ADM.NM_ADM, A.EMAIL_ADM, DL.* 
                                 FROM ATUALIZACAO A 
                                 LEFT JOIN USUARIO ADM ON ADM.ID_ADM = A.ID_ADM
                                 LEFT JOIN DETALHE_LICITACAO DL ON A.ID_LICITACAO = DL.ID_LICITACAO
-                                WHERE ADM.STATUS LIKE 'A'
+                                WHERE ADM.STATUS = 'A'
                                 AND A.DT_EXC_ATUALIZACAO IS NULL
-                                AND A.ID_LICITACAO = $idLicitacao";
+                                AND A.ID_LICITACAO = :idLicitacao";
 
-    $querySelectAtualizacao2 = $pdoCAT->query($querySelectAtualizacao);
+    $querySelectAtualizacao2 = $pdoCAT->prepare($querySelectAtualizacao);
+    $querySelectAtualizacao2->bindParam(':idLicitacao', $idLicitacao, PDO::PARAM_INT);
+    $querySelectAtualizacao2->execute();
 
     while ($registros = $querySelectAtualizacao2->fetch(PDO::FETCH_ASSOC)) :
         $nmUsuario = $registros['NM_ADM'];
