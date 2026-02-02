@@ -110,7 +110,7 @@ if (isset($_SESSION['idUsuario']) && $_SESSION['sucesso'] == 1 && $permitirAtual
                                   AND DT_EXC_ATUALIZACAO IS NULL";
     $stmtVerifica = $pdoCAT->query($queryVerificaAtualizacao);
     $registroAtualizacao = $stmtVerifica->fetch(PDO::FETCH_ASSOC);
-    
+
     if ($registroAtualizacao) {
         $usuarioJaCadastrado = true;
         $idAtualizacaoUsuario = $registroAtualizacao['ID_ATUALIZACAO'];
@@ -119,9 +119,12 @@ if (isset($_SESSION['idUsuario']) && $_SESSION['sucesso'] == 1 && $permitirAtual
 
 // Determina classe do status
 $statusClass = 'andamento';
-if ($statusLicitacao == 'Suspenso') $statusClass = 'suspenso';
-elseif ($statusLicitacao == 'Rascunho') $statusClass = 'rascunho';
-elseif ($statusLicitacao == 'Encerrado') $statusClass = 'encerrado';
+if ($statusLicitacao == 'Suspenso')
+    $statusClass = 'suspenso';
+elseif ($statusLicitacao == 'Rascunho')
+    $statusClass = 'rascunho';
+elseif ($statusLicitacao == 'Encerrado')
+    $statusClass = 'encerrado';
 
 // Verifica se usuário pode editar
 $podeEditar = false;
@@ -137,7 +140,8 @@ if (isset($_SESSION['perfil'])) {
 /**
  * Função auxiliar para determinar ícone do arquivo
  */
-function getFileIcon($filename) {
+function getFileIcon($filename)
+{
     $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     $icons = [
         'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
@@ -175,7 +179,8 @@ function getFileIcon($filename) {
                 </div>
             </div>
             <div class="page-header-status">
-                <span class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
+                <span
+                    class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
             </div>
         </div>
     </div>
@@ -184,44 +189,39 @@ function getFileIcon($filename) {
          Card de Notificação (se permitir atualizações)
          ============================================ -->
     <?php if ($permitirAtualizacao == 1 && isset($_SESSION['sucesso']) && $_SESSION['sucesso'] == 1): ?>
-    <div class="notification-card" id="notificationCard">
-        <div class="notification-content">
-            <div class="notification-icon">
-                <ion-icon name="<?php echo $usuarioJaCadastrado ? 'notifications' : 'notifications-outline'; ?>"></ion-icon>
-            </div>
-            <div class="notification-info">
-                <h3>Notificações por E-mail</h3>
-                <p id="notificationText">
+        <div class="notification-card" id="notificationCard">
+            <div class="notification-content">
+                <div class="notification-icon">
+                    <ion-icon
+                        name="<?php echo $usuarioJaCadastrado ? 'notifications' : 'notifications-outline'; ?>"></ion-icon>
+                </div>
+                <div class="notification-info">
+                    <h3>Notificações por E-mail</h3>
+                    <p id="notificationText">
+                        <?php if ($usuarioJaCadastrado): ?>
+                            Você receberá e-mails quando esta licitação for atualizada.
+                        <?php else: ?>
+                            Deseja receber e-mails quando houver atualizações nesta licitação?
+                        <?php endif; ?>
+                    </p>
+                </div>
+                <div class="notification-action">
                     <?php if ($usuarioJaCadastrado): ?>
-                        Você receberá e-mails quando esta licitação for atualizada.
-                    <?php else: ?>
-                        Deseja receber e-mails quando houver atualizações nesta licitação?
-                    <?php endif; ?>
-                </p>
-            </div>
-            <div class="notification-action">
-                <?php if ($usuarioJaCadastrado): ?>
-                    <button type="button" 
-                            class="btn btn-notification btn-unsubscribe" 
-                            id="btnNotificacao"
-                            data-inscrito="1"
+                        <button type="button" class="btn btn-notification btn-unsubscribe" id="btnNotificacao" data-inscrito="1"
                             onclick="toggleNotificacaoView(<?php echo $idLicitacao; ?>, 'cancelar')">
-                        <ion-icon name="notifications-off-outline"></ion-icon>
-                        <span>Cancelar Notificações</span>
-                    </button>
-                <?php else: ?>
-                    <button type="button" 
-                            class="btn btn-notification btn-subscribe" 
-                            id="btnNotificacao"
-                            data-inscrito="0"
+                            <ion-icon name="notifications-off-outline"></ion-icon>
+                            <span>Cancelar Notificações</span>
+                        </button>
+                    <?php else: ?>
+                        <button type="button" class="btn btn-notification btn-subscribe" id="btnNotificacao" data-inscrito="0"
                             onclick="toggleNotificacaoView(<?php echo $idLicitacao; ?>, 'inscrever')">
-                        <ion-icon name="notifications-outline"></ion-icon>
-                        <span>Receber Notificações</span>
-                    </button>
-                <?php endif; ?>
+                            <ion-icon name="notifications-outline"></ion-icon>
+                            <span>Receber Notificações</span>
+                        </button>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <!-- ============================================
@@ -249,7 +249,8 @@ function getFileIcon($filename) {
                 <div class="info-item">
                     <span class="info-label">Status</span>
                     <span class="info-value">
-                        <span class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
+                        <span
+                            class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
                     </span>
                 </div>
             </div>
@@ -260,17 +261,17 @@ function getFileIcon($filename) {
             </div>
 
             <?php if ($identificadorLicitacao): ?>
-            <div class="info-full">
-                <span class="info-label">Identificador</span>
-                <span class="info-value"><?php echo htmlspecialchars($identificadorLicitacao); ?></span>
-            </div>
+                <div class="info-full">
+                    <span class="info-label">Identificador</span>
+                    <span class="info-value"><?php echo htmlspecialchars($identificadorLicitacao); ?></span>
+                </div>
             <?php endif; ?>
 
             <?php if ($vlLicitacao): ?>
-            <div class="info-full">
-                <span class="info-label">Valor Estimado</span>
-                <span class="info-value"><?php echo htmlspecialchars($vlLicitacao); ?></span>
-            </div>
+                <div class="info-full">
+                    <span class="info-label">Valor Estimado</span>
+                    <span class="info-value"><?php echo htmlspecialchars($vlLicitacao); ?></span>
+                </div>
             <?php endif; ?>
         </div>
     </div>
@@ -296,19 +297,19 @@ function getFileIcon($filename) {
             </div>
 
             <?php if ($localLicitacao): ?>
-            <div class="info-full">
-                <span class="info-label">Local de Abertura</span>
-                <span class="info-value">
-                    <?php if (filter_var($localLicitacao, FILTER_VALIDATE_URL)): ?>
-                        <a href="<?php echo htmlspecialchars($localLicitacao); ?>" target="_blank" class="info-link">
-                            <ion-icon name="open-outline"></ion-icon>
+                <div class="info-full">
+                    <span class="info-label">Local de Abertura</span>
+                    <span class="info-value">
+                        <?php if (filter_var($localLicitacao, FILTER_VALIDATE_URL)): ?>
+                            <a href="<?php echo htmlspecialchars($localLicitacao); ?>" target="_blank" class="info-link">
+                                <ion-icon name="open-outline"></ion-icon>
+                                <?php echo htmlspecialchars($localLicitacao); ?>
+                            </a>
+                        <?php else: ?>
                             <?php echo htmlspecialchars($localLicitacao); ?>
-                        </a>
-                    <?php else: ?>
-                        <?php echo htmlspecialchars($localLicitacao); ?>
-                    <?php endif; ?>
-                </span>
-            </div>
+                        <?php endif; ?>
+                    </span>
+                </div>
             <?php endif; ?>
         </div>
     </div>
@@ -342,10 +343,10 @@ function getFileIcon($filename) {
             </div>
 
             <?php if ($obsLicitacao): ?>
-            <div class="info-full">
-                <span class="info-label">Observação</span>
-                <span class="info-value info-obs"><?php echo nl2br(htmlspecialchars($obsLicitacao)); ?></span>
-            </div>
+                <div class="info-full">
+                    <span class="info-label">Observação</span>
+                    <span class="info-value info-obs"><?php echo nl2br(htmlspecialchars($obsLicitacao)); ?></span>
+                </div>
             <?php endif; ?>
         </div>
     </div>
@@ -366,7 +367,7 @@ function getFileIcon($filename) {
             // Arquivos do diretório físico
             if (is_dir($directory)) {
                 $files = scandir($directory);
-                $files = array_diff($files, array('.', '..'));
+                $files = array_diff($files, array('.', '..', '_order.json'));
 
                 foreach ($files as $file) {
                     $anexos[] = array(
@@ -377,10 +378,32 @@ function getFileIcon($filename) {
                 }
             }
 
-            // Ordena por timestamp (mais recentes primeiro)
-            usort($anexos, function ($a, $b) {
-                return $b['timestamp'] - $a['timestamp'];
-            });
+            // Verifica se existe ordem personalizada salva
+            $orderFile = $directory . '/_order.json';
+            if (file_exists($orderFile)) {
+                $savedOrder = json_decode(file_get_contents($orderFile), true);
+                if (is_array($savedOrder)) {
+                    $anexosByName = [];
+                    foreach ($anexos as $anexo) {
+                        $anexosByName[$anexo['nmAnexo']] = $anexo;
+                    }
+                    $orderedAnexos = [];
+                    foreach ($savedOrder as $filename) {
+                        if (isset($anexosByName[$filename])) {
+                            $orderedAnexos[] = $anexosByName[$filename];
+                            unset($anexosByName[$filename]);
+                        }
+                    }
+                    foreach ($anexosByName as $anexo) {
+                        $orderedAnexos[] = $anexo;
+                    }
+                    $anexos = $orderedAnexos;
+                }
+            } else {
+                usort($anexos, function ($a, $b) {
+                    return $b['timestamp'] - $a['timestamp'];
+                });
+            }
 
             if (!empty($anexos)) {
                 // Header com toggle de visualização
@@ -464,10 +487,10 @@ function getFileIcon($filename) {
             Voltar para Licitações
         </a>
         <?php if ($podeEditar): ?>
-        <a href="licitacaoForm.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
-            <ion-icon name="create-outline"></ion-icon>
-            Editar Licitação
-        </a>
+            <a href="licitacaoForm.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
+                <ion-icon name="create-outline"></ion-icon>
+                Editar Licitação
+            </a>
         <?php endif; ?>
     </div>
 </div>
@@ -501,43 +524,43 @@ function getFileIcon($filename) {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            button.disabled = false;
-            button.style.opacity = '1';
+            .then(response => response.json())
+            .then(data => {
+                button.disabled = false;
+                button.style.opacity = '1';
 
-            if (data.success) {
-                // Atualizar visual do card
-                if (data.inscrito) {
-                    // Usuário agora está inscrito
-                    button.classList.remove('btn-subscribe');
-                    button.classList.add('btn-unsubscribe');
-                    button.onclick = function() { toggleNotificacaoView(idLicitacao, 'cancelar'); };
-                    button.innerHTML = '<ion-icon name="notifications-off-outline"></ion-icon><span>Cancelar Notificações</span>';
-                    icon.setAttribute('name', 'notifications');
-                    text.textContent = 'Você receberá e-mails quando esta licitação for atualizada.';
+                if (data.success) {
+                    // Atualizar visual do card
+                    if (data.inscrito) {
+                        // Usuário agora está inscrito
+                        button.classList.remove('btn-subscribe');
+                        button.classList.add('btn-unsubscribe');
+                        button.onclick = function () { toggleNotificacaoView(idLicitacao, 'cancelar'); };
+                        button.innerHTML = '<ion-icon name="notifications-off-outline"></ion-icon><span>Cancelar Notificações</span>';
+                        icon.setAttribute('name', 'notifications');
+                        text.textContent = 'Você receberá e-mails quando esta licitação for atualizada.';
+                    } else {
+                        // Usuário cancelou inscrição
+                        button.classList.remove('btn-unsubscribe');
+                        button.classList.add('btn-subscribe');
+                        button.onclick = function () { toggleNotificacaoView(idLicitacao, 'inscrever'); };
+                        button.innerHTML = '<ion-icon name="notifications-outline"></ion-icon><span>Receber Notificações</span>';
+                        icon.setAttribute('name', 'notifications-outline');
+                        text.textContent = 'Deseja receber e-mails quando houver atualizações nesta licitação?';
+                    }
+
+                    // Mostrar mensagem de sucesso
+                    alert(data.message);
                 } else {
-                    // Usuário cancelou inscrição
-                    button.classList.remove('btn-unsubscribe');
-                    button.classList.add('btn-subscribe');
-                    button.onclick = function() { toggleNotificacaoView(idLicitacao, 'inscrever'); };
-                    button.innerHTML = '<ion-icon name="notifications-outline"></ion-icon><span>Receber Notificações</span>';
-                    icon.setAttribute('name', 'notifications-outline');
-                    text.textContent = 'Deseja receber e-mails quando houver atualizações nesta licitação?';
+                    alert(data.message || 'Erro ao processar solicitação');
                 }
-
-                // Mostrar mensagem de sucesso
-                alert(data.message);
-            } else {
-                alert(data.message || 'Erro ao processar solicitação');
-            }
-        })
-        .catch(error => {
-            button.disabled = false;
-            button.style.opacity = '1';
-            console.error('Erro:', error);
-            alert('Erro ao processar solicitação');
-        });
+            })
+            .catch(error => {
+                button.disabled = false;
+                button.style.opacity = '1';
+                console.error('Erro:', error);
+                alert('Erro ao processar solicitação');
+            });
     }
 
     /**
@@ -567,7 +590,7 @@ function getFileIcon($filename) {
     }
 
     // Restaura preferência de visualização
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const savedView = localStorage.getItem('filesViewLicitacao');
         if (savedView && (savedView === 'grid' || savedView === 'list')) {
             toggleFilesView(savedView);
