@@ -721,7 +721,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                 <ion-icon name="<?php echo $btnSubmitIcon; ?>"></ion-icon>
                 <?php echo $btnSubmitText; ?>
             </button>
-            <a href="consultarLicitacao.php" class="btn btn-secondary">
+            <a href="licitacao.php" class="btn btn-secondary">
                 <ion-icon name="close-outline"></ion-icon>
                 Cancelar
             </a>
