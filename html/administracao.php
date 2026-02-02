@@ -263,7 +263,7 @@ if ($abaAtiva == 'estrutura') {
                             <ion-icon name="text-outline"></ion-icon>
                             Nome do Tipo <span class="required">*</span>
                         </label>
-                        <input type="text" name="nmTipo" class="form-control" placeholder="Digite o nome do tipo" required autofocus>
+                        <input type="text" name="nmTipo" class="form-control" placeholder="Digite o nome do tipo" required>
                     </div>
                     <div class="form-group" style="flex: 0 0 150px;">
                         <label class="form-label">
@@ -386,7 +386,7 @@ if ($abaAtiva == 'estrutura') {
                             <ion-icon name="checkmark-circle-outline"></ion-icon>
                             Nome do Critério <span class="required">*</span>
                         </label>
-                        <input type="text" name="nmCriterio" class="form-control" placeholder="Digite o nome do critério" required autofocus>
+                        <input type="text" name="nmCriterio" class="form-control" placeholder="Digite o nome do critério" required>
                     </div>
                     <div class="form-group auto-width">
                         <button type="submit" class="btn btn-primary">
@@ -500,7 +500,7 @@ if ($abaAtiva == 'estrutura') {
                             <ion-icon name="git-branch-outline"></ion-icon>
                             Nome da Forma <span class="required">*</span>
                         </label>
-                        <input type="text" name="nmForma" class="form-control" placeholder="Digite o nome da forma" required autofocus>
+                        <input type="text" name="nmForma" class="form-control" placeholder="Digite o nome da forma" required>
                     </div>
                     <div class="form-group auto-width">
                         <button type="submit" class="btn btn-primary">
@@ -895,7 +895,7 @@ if ($abaAtiva == 'estrutura') {
                             Nome, Login ou Matrícula
                         </label>
                         <input type="text" id="filtroNome" class="form-control" placeholder="Digite para pesquisar..." 
-                            style="text-transform: uppercase;" autofocus>
+                            style="text-transform: uppercase;">
                     </div>
                     <div class="form-group">
                         <label class="form-label">
