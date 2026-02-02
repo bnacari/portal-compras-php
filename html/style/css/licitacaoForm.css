@@ -711,6 +711,26 @@
     margin-top: 8px;
 }
 
+/* Ações dos arquivos na tabela - alinhamento horizontal */
+.files-table td:last-child {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 60px;
+}
+
+/* Garante que save-button fica oculto até edição */
+.files-table .action-btn.save-button {
+    display: none !important;
+}
+
+/* Quando em modo edição, exibe save inline */
+.files-table .action-btn.save-button.editing {
+    display: inline-flex !important;
+}
+
 /* ============================================
    Files Table (Lista)
    ============================================ */

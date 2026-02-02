@@ -1137,8 +1137,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             $cardNmAnexo.find('.edited-name').val(currentName).show();
 
             $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').hide();
-            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').css('display', 'flex').show();
-
+            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').addClass('editing');
+            
             var $input = $rowNmAnexo.find('.edited-name').is(':visible') ?
                 $rowNmAnexo.find('.edited-name') : $cardNmAnexo.find('.edited-name');
 
@@ -1203,7 +1203,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             $('#row_' + rowId + ' .nmAnexo a, #card_row_' + rowId + ' .nmAnexo a').show();
             $('#row_' + rowId + ' .edited-name, #card_row_' + rowId + ' .edited-name').hide().val(currentName);
             $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
-            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
+            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').removeClass('editing'); 
         }
 
         $(document).on('keydown', '.edited-name', function (e) {
