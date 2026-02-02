@@ -212,12 +212,12 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                 </div>
             </div>
             <?php if ($modoEdicao): ?>
-            <div class="header-right">
-                <a href="licitacaoView.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn-header-action">
-                    <ion-icon name="eye-outline"></ion-icon>
-                    Visualizar
-                </a>
-            </div>
+                <div class="header-right">
+                    <a href="licitacaoView.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn-header-action">
+                        <ion-icon name="eye-outline"></ion-icon>
+                        Visualizar
+                    </a>
+                </div>
             <?php endif; ?>
         </div>
     </div>
@@ -281,9 +281,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Código <span class="required-star">*</span>
                             </label>
                             <input type="text" id="codLicitacao" name="codLicitacao"
-                                value="<?php echo htmlspecialchars($tituloLicitacao) ?>" 
-                                class="form-control browser-default"
-                                placeholder="000/0000" maxlength="8" autocomplete="off" required>
+                                value="<?php echo htmlspecialchars($tituloLicitacao) ?>"
+                                class="form-control browser-default" placeholder="000/0000" maxlength="8"
+                                autocomplete="off" required>
                         </div>
                     </div>
 
@@ -295,15 +295,15 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Status <span class="required-star">*</span>
                             </label>
                             <?php if ($modoEdicao): ?>
-                            <select name="statusLicitacao" id="statusLicitacao" class="form-select" required>
-                                <option value='Em Andamento' <?php echo ($statusLicitacao === 'Em Andamento') ? 'selected' : ''; ?>>Em Andamento</option>
-                                <option value='Encerrado' <?php echo ($statusLicitacao === 'Encerrado') ? 'selected' : ''; ?>>Encerrada</option>
-                                <option value='Suspenso' <?php echo ($statusLicitacao === 'Suspenso') ? 'selected' : ''; ?>>Suspenso</option>
-                                <option value='Rascunho' <?php echo ($statusLicitacao === 'Rascunho') ? 'selected' : ''; ?>>Rascunho</option>
-                            </select>
+                                <select name="statusLicitacao" id="statusLicitacao" class="form-select" required>
+                                    <option value='Em Andamento' <?php echo ($statusLicitacao === 'Em Andamento') ? 'selected' : ''; ?>>Em Andamento</option>
+                                    <option value='Encerrado' <?php echo ($statusLicitacao === 'Encerrado') ? 'selected' : ''; ?>>Encerrada</option>
+                                    <option value='Suspenso' <?php echo ($statusLicitacao === 'Suspenso') ? 'selected' : ''; ?>>Suspenso</option>
+                                    <option value='Rascunho' <?php echo ($statusLicitacao === 'Rascunho') ? 'selected' : ''; ?>>Rascunho</option>
+                                </select>
                             <?php else: ?>
-                            <input type="text" class="form-control" value="Rascunho" readonly>
-                            <input type="hidden" name="statusLicitacao" value="Rascunho">
+                                <input type="text" class="form-control" value="Rascunho" readonly>
+                                <input type="hidden" name="statusLicitacao" id="statusLicitacao" value="Rascunho">
                             <?php endif; ?>
                         </div>
                     </div>
@@ -560,8 +560,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             </div>
             <div class="section-content">
                 <div class="checkbox-wrapper">
-                    <input type="checkbox" name="permitirAtualizacao" id="permitirAtualizacao" 
-                        <?php echo ($permitirAtualizacao == 1) ? 'checked' : ''; ?>>
+                    <input type="checkbox" name="permitirAtualizacao" id="permitirAtualizacao" <?php echo ($permitirAtualizacao == 1) ? 'checked' : ''; ?>>
                     <label for="permitirAtualizacao">
                         Permitir que os usuários sejam lembrados para futuras atualizações da licitação
                     </label>
@@ -863,27 +862,31 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
         const input = document.getElementById('codLicitacao');
         if (!input) return;
 
-        // Formata valor inicial se existir
+        // Formata valor inicial se existir (com padding de zeros)
         if (input.value) {
-            input.value = formatarCodigo(input.value);
+            input.value = formatarCodigoCompleto(input.value);
         }
 
-        // Evento de blur - completa com zeros à esquerda
+        // Evento de blur - SEMPRE completa com zeros à esquerda
         input.addEventListener('blur', function (e) {
             let valor = e.target.value.replace(/\D/g, '');
-            
-            if (valor.length > 0 && valor.length < 7) {
+
+            if (valor.length > 0) {
+                // Sempre padroniza para 7 dígitos com zeros à esquerda
                 valor = valor.padStart(7, '0');
-            }
-            
-            if (valor.length > 3) {
+                valor = valor.substring(0, 7);
                 valor = valor.substring(0, 3) + '/' + valor.substring(3);
             }
-            
+
             e.target.value = valor;
+
+            // Dispara validação após formatar
+            if (valor.length === 8) {
+                validarCodLicitacao();
+            }
         });
 
-        // Evento de input
+        // Evento de input - formata enquanto digita
         input.addEventListener('input', function (e) {
             let valor = e.target.value;
 
@@ -917,28 +920,45 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             }
         });
 
-        // Evento de paste
+        // Evento de paste - cola e formata com padding
         input.addEventListener('paste', function (e) {
             e.preventDefault();
             let texto = (e.clipboardData || window.clipboardData).getData('text');
             texto = texto.replace(/\D/g, '').substring(0, 7);
-            if (texto.length > 3) {
+
+            if (texto.length > 0) {
+                // Aplica padding com zeros à esquerda ao colar
+                texto = texto.padStart(7, '0');
                 texto = texto.substring(0, 3) + '/' + texto.substring(3);
             }
+
             e.target.value = texto;
         });
     }
 
-    function formatarCodigo(valor) {
-        // Remove tudo que não for número
+    /**
+     * Formata código COM padding de zeros à esquerda
+     * Exemplos:
+     *   "12026"    → "001/2026"
+     *   "1/2026"   → "001/2026"
+     *   "0012026"  → "001/2026"
+     *   "001/2026" → "001/2026"
+     */
+    function formatarCodigoCompleto(valor) {
         valor = valor.replace(/\D/g, '');
-        // Limita a 7 dígitos
+        if (valor.length > 0) {
+            valor = valor.padStart(7, '0');
+        }
         valor = valor.substring(0, 7);
-        // Aplica a máscara
         if (valor.length > 3) {
             valor = valor.substring(0, 3) + '/' + valor.substring(3);
         }
         return valor;
+    }
+
+    // Mantém compatibilidade
+    function formatarCodigo(valor) {
+        return formatarCodigoCompleto(valor);
     }
 
     // ============================================
@@ -1138,7 +1158,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 
             $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').hide();
             $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').addClass('editing');
-            
+
             var $input = $rowNmAnexo.find('.edited-name').is(':visible') ?
                 $rowNmAnexo.find('.edited-name') : $cardNmAnexo.find('.edited-name');
 
@@ -1203,7 +1223,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             $('#row_' + rowId + ' .nmAnexo a, #card_row_' + rowId + ' .nmAnexo a').show();
             $('#row_' + rowId + ' .edited-name, #card_row_' + rowId + ' .edited-name').hide().val(currentName);
             $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
-            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').removeClass('editing'); 
+            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').removeClass('editing');
         }
 
         $(document).on('keydown', '.edited-name', function (e) {
@@ -1338,12 +1358,18 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 
     function saveOrder() {
         var order = getOrderFromGrid();
+        var licId = idLicitacao || document.getElementById('idLicitacao').value || 0;
+
+        if (!licId || licId == 0) {
+            console.warn('saveOrder: ID da licitação não disponível (modo cadastro).');
+            return;
+        }
 
         fetch('bd/licitacao/reorderAnexo.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                idLicitacao: <?php echo $idLicitacao; ?>,
+                idLicitacao: licId,
                 order: order
             })
         })
