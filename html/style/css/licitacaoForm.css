@@ -910,16 +910,103 @@ form .dropdown-content {
     opacity: 1;
 }
 
-/* Drag handle na Tabela */
-td.drag-handle {
+/* ============================================
+   Drag & Drop - Reordenação de Anexos
+   ============================================ */
+
+/* Drag handle nos Cards */
+.files-grid .drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    color: #94a3b8;
+    font-size: 18px;
+    border-radius: 4px;
+    opacity: 0;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+.files-grid .drag-handle:active {
+    cursor: grabbing;
+}
+
+.files-grid .drag-handle:hover {
+    color: #3b82f6;
+    background: #eff6ff;
+}
+
+.files-grid .file-card {
+    position: relative;
+}
+
+.files-grid .file-card:hover .drag-handle {
+    opacity: 1;
+}
+
+/* Drag handle na Tabela — NÃO usar display:flex em <td> */
+.files-table td.drag-handle {
+    display: table-cell !important;
     width: 40px;
-    text-align: center;
+    min-width: 40px;
+    max-width: 40px;
     padding: 0 !important;
+    text-align: center;
+    vertical-align: middle;
+    cursor: grab;
+    color: #94a3b8;
+    transition: color 0.2s ease;
+}
+
+.files-table td.drag-handle:hover {
+    color: #3b82f6;
+}
+
+.files-table td.drag-handle:active {
+    cursor: grabbing;
+}
+
+.files-table td.drag-handle ion-icon {
+    display: inline-block;
+    font-size: 20px;
+    line-height: 1;
     vertical-align: middle;
 }
 
-td.drag-handle ion-icon {
-    font-size: 18px;
+/* Estados do SortableJS */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #eff6ff !important;
+    border-color: #93c5fd !important;
+}
+
+.sortable-chosen {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15) !important;
+    z-index: 10;
+}
+
+.sortable-drag {
+    opacity: 0.9;
+    transform: scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.files-table tbody tr.sortable-ghost {
+    background: #eff6ff !important;
+}
+
+.files-table tbody tr.sortable-ghost td {
+    border-color: #93c5fd;
+}
+
+.files-table tbody tr.sortable-chosen {
+    background: #f8fafc;
 }
 
 /* Estados do SortableJS */

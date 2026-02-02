@@ -195,8 +195,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
     </div>
 
     <!-- Formulário Principal -->
-    <form action="<?php echo $formAction; ?>" method="post" enctype="multipart/form-data" onsubmit="return validarFormulario()">
-        
+    <form action="<?php echo $formAction; ?>" method="post" enctype="multipart/form-data"
+        onsubmit="return validarFormulario()">
+
         <?php if ($modoEdicao): ?>
             <!-- Campo oculto com ID da licitação (apenas edição) -->
             <input type="hidden" name="idLicitacao" id="idLicitacao" value="<?php echo $idLicitacao ?>" readonly required>
@@ -225,7 +226,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Tipo de Contratação <span class="required-star">*</span>
                             </label>
                             <select name="tipoLicitacao" id="tipoLicitacao" class="form-select select2-tipo" required>
-                                <option value='' disabled <?php echo !$modoEdicao ? 'selected' : ''; ?>>Selecione uma opção</option>
+                                <option value='' disabled <?php echo !$modoEdicao ? 'selected' : ''; ?>>Selecione uma
+                                    opção</option>
                                 <?php
                                 if ($isAdmin == 1) {
                                     $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[TIPO_LICITACAO] WHERE DT_EXC_TIPO IS NULL AND NM_TIPO NOT LIKE 'ADMINISTRADOR' ORDER BY NM_TIPO";
@@ -250,10 +252,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 <ion-icon name="barcode-outline"></ion-icon>
                                 Código <span class="required-star">*</span>
                             </label>
-                            <input type="text" id="codLicitacao" name="codLicitacao" 
-                                value="<?php echo htmlspecialchars($tituloLicitacao) ?>" 
-                                class="form-control" placeholder="000/0000" 
-                                maxlength="8" autocomplete="off" required>
+                            <input type="text" id="codLicitacao" name="codLicitacao"
+                                value="<?php echo htmlspecialchars($tituloLicitacao) ?>" class="form-control"
+                                placeholder="000/0000" maxlength="8" autocomplete="off" required>
                         </div>
                     </div>
 
@@ -281,8 +282,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Responsável <span class="required-star">*</span>
                             </label>
                             <input type="text" id="respLicitacao" name="respLicitacao"
-                                value="<?php echo htmlspecialchars($respLicitacao) ?>" 
-                                class="form-control" placeholder="Nome do responsável" required>
+                                value="<?php echo htmlspecialchars($respLicitacao) ?>" class="form-control"
+                                placeholder="Nome do responsável" required>
                         </div>
                     </div>
                 </div>
@@ -295,8 +296,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 <ion-icon name="document-text-outline"></ion-icon>
                                 Objeto <span class="required-star">*</span>
                             </label>
-                            <textarea id="objLicitacao" name="objLicitacao" class="form-textarea" 
-                                placeholder="Descreva o objeto da licitação" required><?php echo htmlspecialchars($objLicitacao) ?></textarea>
+                            <textarea id="objLicitacao" name="objLicitacao" class="form-textarea"
+                                placeholder="Descreva o objeto da licitação"
+                                required><?php echo htmlspecialchars($objLicitacao) ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -310,8 +312,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Identificador
                             </label>
                             <input type="text" id="identificadorLicitacao" name="identificadorLicitacao"
-                                value="<?php echo htmlspecialchars($identificadorLicitacao) ?>" 
-                                class="form-control" placeholder="Identificador único (opcional)">
+                                value="<?php echo htmlspecialchars($identificadorLicitacao) ?>" class="form-control"
+                                placeholder="Identificador único (opcional)">
                         </div>
                     </div>
 
@@ -321,9 +323,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 <ion-icon name="cash-outline"></ion-icon>
                                 Valor Estimado
                             </label>
-                            <input type="text" id="vlLicitacao" name="vlLicitacao" 
-                                value="<?php echo htmlspecialchars($vlLicitacao) ?>" 
-                                class="form-control" placeholder="R$ 0,00">
+                            <input type="text" id="vlLicitacao" name="vlLicitacao"
+                                value="<?php echo htmlspecialchars($vlLicitacao) ?>" class="form-control"
+                                placeholder="R$ 0,00">
                         </div>
                     </div>
                 </div>
@@ -337,8 +339,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Local de Abertura
                             </label>
                             <input type="text" id="localLicitacao" name="localLicitacao"
-                                value="<?php echo htmlspecialchars($localLicitacao) ?>" 
-                                class="form-control" placeholder="URL ou endereço do local de abertura">
+                                value="<?php echo htmlspecialchars($localLicitacao) ?>" class="form-control"
+                                placeholder="URL ou endereço do local de abertura">
                         </div>
                     </div>
                 </div>
@@ -425,9 +427,12 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                             </label>
                             <select name="modoLicitacao" id="modoLicitacao" class="form-select">
                                 <option value='0' <?php echo ($modoLicitacao === '0' || $modoLicitacao === '') ? 'selected' : ''; ?>>Selecione uma opção</option>
-                                <option value='Aberta' <?php echo ($modoLicitacao === 'Aberta') ? 'selected' : ''; ?>>Aberta</option>
-                                <option value='Fechada' <?php echo ($modoLicitacao === 'Fechada') ? 'selected' : ''; ?>>Fechada</option>
-                                <option value='Hibrida' <?php echo ($modoLicitacao === 'Hibrida') ? 'selected' : ''; ?>>Híbrida</option>
+                                <option value='Aberta' <?php echo ($modoLicitacao === 'Aberta') ? 'selected' : ''; ?>>
+                                    Aberta</option>
+                                <option value='Fechada' <?php echo ($modoLicitacao === 'Fechada') ? 'selected' : ''; ?>>
+                                    Fechada</option>
+                                <option value='Hibrida' <?php echo ($modoLicitacao === 'Hibrida') ? 'selected' : ''; ?>>
+                                    Híbrida</option>
                             </select>
                         </div>
                     </div>
@@ -439,8 +444,10 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 <ion-icon name="options-outline"></ion-icon>
                                 Critério de Julgamento
                             </label>
-                            <select name="criterioLicitacao" id="criterioLicitacao" class="form-select select2-criterio">
-                                <option value='0' <?php echo (!$idCriterio) ? 'selected' : ''; ?>>Selecione uma opção</option>
+                            <select name="criterioLicitacao" id="criterioLicitacao"
+                                class="form-select select2-criterio">
+                                <option value='0' <?php echo (!$idCriterio) ? 'selected' : ''; ?>>Selecione uma opção
+                                </option>
                                 <?php
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[CRITERIO_LICITACAO] WHERE DT_EXC_CRITERIO IS NULL ORDER BY NM_CRITERIO";
                                 $querySelect = $pdoCAT->query($querySelect2);
@@ -462,7 +469,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Forma
                             </label>
                             <select name="formaLicitacao" id="formaLicitacao" class="form-select select2-forma">
-                                <option value='0' <?php echo (!$idForma) ? 'selected' : ''; ?>>Selecione uma opção</option>
+                                <option value='0' <?php echo (!$idForma) ? 'selected' : ''; ?>>Selecione uma opção
+                                </option>
                                 <?php
                                 $querySelect2 = "SELECT * FROM [portalcompras].[dbo].[FORMA] WHERE DT_EXC_FORMA IS NULL ORDER BY NM_FORMA";
                                 $querySelect = $pdoCAT->query($querySelect2);
@@ -486,8 +494,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Regime de Execução
                             </label>
                             <input type="text" id="regimeLicitacao" name="regimeLicitacao"
-                                value="<?php echo htmlspecialchars($regimeLicitacao) ?>" 
-                                class="form-control" placeholder="Ex: Empreitada por Preço Global">
+                                value="<?php echo htmlspecialchars($regimeLicitacao) ?>" class="form-control"
+                                placeholder="Ex: Empreitada por Preço Global">
                         </div>
                     </div>
                 </div>
@@ -500,7 +508,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                                 Observação
                             </label>
-                            <textarea id="obsLicitacao" name="obsLicitacao" class="form-textarea" 
+                            <textarea id="obsLicitacao" name="obsLicitacao" class="form-textarea"
                                 placeholder="Observações adicionais (opcional)"><?php echo htmlspecialchars($obsLicitacao) ?></textarea>
                         </div>
                     </div>
@@ -531,211 +539,212 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
              Seção: Anexos (apenas modo edição)
              ============================================ -->
         <?php if ($modoEdicao): ?>
-        <div class="section-card">
-            <div class="section-header">
-                <ion-icon name="attach-outline"></ion-icon>
-                <h2>Gerenciar Anexos</h2>
-            </div>
-            <div class="section-content">
-                <!-- Dropzone para upload -->
-                <div class="form-row">
-                    <div class="form-col-12">
-                        <div id="drop-zone" class="dropzone" onclick="handleClick(event)" 
-                            ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
-                            <ion-icon name="cloud-upload-outline"></ion-icon>
-                            <p>Arraste e solte os arquivos aqui ou clique para selecionar</p>
-                            <p>Apenas arquivos PDF ou ZIP</p>
+            <div class="section-card">
+                <div class="section-header">
+                    <ion-icon name="attach-outline"></ion-icon>
+                    <h2>Gerenciar Anexos</h2>
+                </div>
+                <div class="section-content">
+                    <!-- Dropzone para upload -->
+                    <div class="form-row">
+                        <div class="form-col-12">
+                            <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)"
+                                ondragover="handleDragOver(event)">
+                                <ion-icon name="cloud-upload-outline"></ion-icon>
+                                <p>Arraste e solte os arquivos aqui ou clique para selecionar</p>
+                                <p>Apenas arquivos PDF ou ZIP</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Lista de arquivos -->
-                <div id="filelist">
-                    <?php
-                    $directory = "uploads" . '/' . $idLicitacao;
-                    $anexos = array();
+                    <!-- Lista de arquivos -->
+                    <div id="filelist">
+                        <?php
+                        $directory = "uploads" . '/' . $idLicitacao;
+                        $anexos = array();
 
-                    /**
-                     * Função auxiliar para determinar ícone do arquivo
-                     */
-                    function getFileIcon($filename) {
-                        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-                        $icons = [
-                            'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
-                            'doc' => ['icon' => 'document', 'class' => 'doc'],
-                            'docx' => ['icon' => 'document', 'class' => 'doc'],
-                            'xls' => ['icon' => 'grid', 'class' => 'xls'],
-                            'xlsx' => ['icon' => 'grid', 'class' => 'xls'],
-                            'zip' => ['icon' => 'archive', 'class' => 'zip'],
-                            'rar' => ['icon' => 'archive', 'class' => 'zip'],
-                            'jpg' => ['icon' => 'image', 'class' => 'img'],
-                            'jpeg' => ['icon' => 'image', 'class' => 'img'],
-                            'png' => ['icon' => 'image', 'class' => 'img'],
-                        ];
-                        return $icons[$ext] ?? ['icon' => 'document', 'class' => 'default'];
-                    }
-
-                    // Arquivos do diretório físico
-                    if (is_dir($directory)) {
-                        $files = scandir($directory);
-                        $files = array_diff($files, array('.', '..', '_order.json'));
-
-                        foreach ($files as $file) {
-                            $anexos[] = array(
-                                'nmAnexo' => $file,
-                                'linkAnexo' => $directory . '/' . $file,
-                                'timestamp' => filemtime($directory . '/' . $file),
-                            );
-                        }
-                    }
-
-                   // Verifica se existe ordem personalizada salva
-$orderFile = $directory . '/_order.json';
-if (file_exists($orderFile)) {
-    $savedOrder = json_decode(file_get_contents($orderFile), true);
-    if (is_array($savedOrder)) {
-        $anexosByName = [];
-        foreach ($anexos as $anexo) {
-            $anexosByName[$anexo['nmAnexo']] = $anexo;
-        }
-        $orderedAnexos = [];
-        foreach ($savedOrder as $filename) {
-            if (isset($anexosByName[$filename])) {
-                $orderedAnexos[] = $anexosByName[$filename];
-                unset($anexosByName[$filename]);
-            }
-        }
-        // Arquivos novos (não presentes na ordem salva) vão ao final
-        foreach ($anexosByName as $anexo) {
-            $orderedAnexos[] = $anexo;
-        }
-        $anexos = $orderedAnexos;
-    }
-} else {
-    // Sem ordem personalizada: ordena por timestamp (mais recentes primeiro)
-    usort($anexos, function ($a, $b) {
-        return $b['timestamp'] - $a['timestamp'];
-    });
-}
-                    if (!empty($anexos)) {
-                        // Header com toggle de visualização
-                        echo '<div class="files-section-header">';
-                        echo '<div class="files-section-title">';
-                        echo '<ion-icon name="folder-open-outline"></ion-icon>';
-                        echo '<span>Arquivos do Diretório (' . count($anexos) . ')</span>';
-                        echo '</div>';
-                        echo '<div class="files-view-toggle">';
-                        echo '<button type="button" class="files-view-btn active" data-view="grid" onclick="toggleFilesViewEdit(\'grid\')">';
-                        echo '<ion-icon name="grid-outline"></ion-icon>';
-                        echo '<span>Cards</span>';
-                        echo '</button>';
-                        echo '<button type="button" class="files-view-btn" data-view="list" onclick="toggleFilesViewEdit(\'list\')">';
-                        echo '<ion-icon name="list-outline"></ion-icon>';
-                        echo '<span>Lista</span>';
-                        echo '</button>';
-                        echo '</div>';
-                        echo '</div>';
-
-                        // GRID VIEW
-                        echo '<div class="files-grid" id="filesGridEdit">';
-                        $index = 0;
-                        foreach ($anexos as $anexo) {
-                            $fileInfo = getFileIcon($anexo['nmAnexo']);
-                            $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
-                            $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
-
-                            echo '<div class="file-card" id="card_row_' . $index . '" data-filename="' . $nomeArquivo . '">';
-echo '<div class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></div>';
-echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
-                            echo '<ion-icon name="' . $fileInfo['icon'] . '-outline"></ion-icon>';
-                            echo '</div>';
-                            echo '<div class="file-card-info">';
-                            echo '<div class="file-card-name nmAnexo">';
-                            echo '<a href="' . $linkArquivo . '" target="_blank">' . $nomeArquivo . '</a>';
-                            echo '<input type="text" class="edited-name" style="display:none;" value="' . $nomeArquivo . '">';
-                            echo '</div>';
-                            echo '<div class="file-card-actions">';
-                            echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar nome">';
-                            echo '<ion-icon name="create-outline"></ion-icon>';
-                            echo '</button>';
-                            echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
-                            echo '<ion-icon name="checkmark-outline"></ion-icon>';
-                            echo '</button>';
-                            echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" title="Excluir">';
-                            echo '<ion-icon name="trash-outline"></ion-icon>';
-                            echo '</button>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</div>';
-                            $index++;
-                        }
-                        echo '</div>';
-
-                        // LIST VIEW
-                        echo '<div class="files-list hidden" id="filesListEdit">';
-                        echo '<div class="files-table-wrapper">';
-                        echo '<table class="files-table">';
-echo '<thead><tr><th style="width: 40px;"></th><th>Arquivo</th><th>Data</th><th style="text-align: center;">Ações</th></tr></thead>';
-                        echo '<tbody>';
-
-                        $index = 0;
-                        foreach ($anexos as $anexo) {
-                            $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
-                            $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
-                            $dataArquivo = date("d/m/Y H:i", $anexo['timestamp']);
-
-                           echo '<tr id="row_' . $index . '" data-filename="' . $nomeArquivo . '">';
-echo '<td class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></td>';
-echo '<td class="nmAnexo">';
-                            echo '<a href="' . $linkArquivo . '" target="_blank">';
-                            echo '<ion-icon name="document-outline"></ion-icon> ' . $nomeArquivo;
-                            echo '</a>';
-                            echo '<input type="text" class="edited-name" style="display:none;" value="' . $nomeArquivo . '">';
-                            echo '</td>';
-                            echo '<td>' . $dataArquivo . '</td>';
-                            echo '<td style="text-align: center;">';
-                            echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar">';
-                            echo '<ion-icon name="create-outline"></ion-icon>';
-                            echo '</button>';
-                            echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
-                            echo '<ion-icon name="checkmark-outline"></ion-icon>';
-                            echo '</button>';
-                            echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" title="Excluir">';
-                            echo '<ion-icon name="trash-outline"></ion-icon>';
-                            echo '</button>';
-                            echo '</td>';
-                            echo '</tr>';
-                            $index++;
+                        /**
+                         * Função auxiliar para determinar ícone do arquivo
+                         */
+                        function getFileIcon($filename)
+                        {
+                            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                            $icons = [
+                                'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
+                                'doc' => ['icon' => 'document', 'class' => 'doc'],
+                                'docx' => ['icon' => 'document', 'class' => 'doc'],
+                                'xls' => ['icon' => 'grid', 'class' => 'xls'],
+                                'xlsx' => ['icon' => 'grid', 'class' => 'xls'],
+                                'zip' => ['icon' => 'archive', 'class' => 'zip'],
+                                'rar' => ['icon' => 'archive', 'class' => 'zip'],
+                                'jpg' => ['icon' => 'image', 'class' => 'img'],
+                                'jpeg' => ['icon' => 'image', 'class' => 'img'],
+                                'png' => ['icon' => 'image', 'class' => 'img'],
+                            ];
+                            return $icons[$ext] ?? ['icon' => 'document', 'class' => 'default'];
                         }
 
-                        echo '</tbody></table>';
-                        echo '</div>';
-                        echo '</div>';
-                    } else {
-                        // Estado vazio
-                        echo '<div class="empty-state">';
-                        echo '<ion-icon name="folder-open-outline"></ion-icon>';
-                        echo '<p>Nenhum arquivo anexado</p>';
-                        echo '</div>';
-                    }
-                    ?>
+                        // Arquivos do diretório físico
+                        if (is_dir($directory)) {
+                            $files = scandir($directory);
+                            $files = array_diff($files, array('.', '..', '_order.json'));
+
+                            foreach ($files as $file) {
+                                $anexos[] = array(
+                                    'nmAnexo' => $file,
+                                    'linkAnexo' => $directory . '/' . $file,
+                                    'timestamp' => filemtime($directory . '/' . $file),
+                                );
+                            }
+                        }
+
+                        // Verifica se existe ordem personalizada salva
+                        $orderFile = $directory . '/_order.json';
+                        if (file_exists($orderFile)) {
+                            $savedOrder = json_decode(file_get_contents($orderFile), true);
+                            if (is_array($savedOrder)) {
+                                $anexosByName = [];
+                                foreach ($anexos as $anexo) {
+                                    $anexosByName[$anexo['nmAnexo']] = $anexo;
+                                }
+                                $orderedAnexos = [];
+                                foreach ($savedOrder as $filename) {
+                                    if (isset($anexosByName[$filename])) {
+                                        $orderedAnexos[] = $anexosByName[$filename];
+                                        unset($anexosByName[$filename]);
+                                    }
+                                }
+                                // Arquivos novos (não presentes na ordem salva) vão ao final
+                                foreach ($anexosByName as $anexo) {
+                                    $orderedAnexos[] = $anexo;
+                                }
+                                $anexos = $orderedAnexos;
+                            }
+                        } else {
+                            // Sem ordem personalizada: ordena por timestamp (mais recentes primeiro)
+                            usort($anexos, function ($a, $b) {
+                                return $b['timestamp'] - $a['timestamp'];
+                            });
+                        }
+                        if (!empty($anexos)) {
+                            // Header com toggle de visualização
+                            echo '<div class="files-section-header">';
+                            echo '<div class="files-section-title">';
+                            echo '<ion-icon name="folder-open-outline"></ion-icon>';
+                            echo '<span>Arquivos do Diretório (' . count($anexos) . ')</span>';
+                            echo '</div>';
+                            echo '<div class="files-view-toggle">';
+                            echo '<button type="button" class="files-view-btn active" data-view="grid" onclick="toggleFilesViewEdit(\'grid\')">';
+                            echo '<ion-icon name="grid-outline"></ion-icon>';
+                            echo '<span>Cards</span>';
+                            echo '</button>';
+                            echo '<button type="button" class="files-view-btn" data-view="list" onclick="toggleFilesViewEdit(\'list\')">';
+                            echo '<ion-icon name="list-outline"></ion-icon>';
+                            echo '<span>Lista</span>';
+                            echo '</button>';
+                            echo '</div>';
+                            echo '</div>';
+
+                            // GRID VIEW
+                            echo '<div class="files-grid" id="filesGridEdit">';
+                            $index = 0;
+                            foreach ($anexos as $anexo) {
+                                $fileInfo = getFileIcon($anexo['nmAnexo']);
+                                $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
+                                $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
+
+                                echo '<div class="file-card" id="card_row_' . $index . '" data-filename="' . $nomeArquivo . '">';
+                                echo '<div class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></div>';
+                                echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
+                                echo '<ion-icon name="' . $fileInfo['icon'] . '-outline"></ion-icon>';
+                                echo '</div>';
+                                echo '<div class="file-card-info">';
+                                echo '<div class="file-card-name nmAnexo">';
+                                echo '<a href="' . $linkArquivo . '" target="_blank">' . $nomeArquivo . '</a>';
+                                echo '<input type="text" class="edited-name" style="display:none;" value="' . $nomeArquivo . '">';
+                                echo '</div>';
+                                echo '<div class="file-card-actions">';
+                                echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar nome">';
+                                echo '<ion-icon name="create-outline"></ion-icon>';
+                                echo '</button>';
+                                echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
+                                echo '<ion-icon name="checkmark-outline"></ion-icon>';
+                                echo '</button>';
+                                echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" title="Excluir">';
+                                echo '<ion-icon name="trash-outline"></ion-icon>';
+                                echo '</button>';
+                                echo '</div>';
+                                echo '</div>';
+                                echo '</div>';
+                                $index++;
+                            }
+                            echo '</div>';
+
+                            // LIST VIEW
+                            echo '<div class="files-list hidden" id="filesListEdit">';
+                            echo '<div class="files-table-wrapper">';
+                            echo '<table class="files-table">';
+                            echo '<thead><tr><th style="width: 40px;"></th><th>Arquivo</th><th>Data</th><th style="text-align: center;">Ações</th></tr></thead>';
+                            echo '<tbody>';
+
+                            $index = 0;
+                            foreach ($anexos as $anexo) {
+                                $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
+                                $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
+                                $dataArquivo = date("d/m/Y H:i", $anexo['timestamp']);
+
+                                echo '<tr id="row_' . $index . '" data-filename="' . $nomeArquivo . '">';
+                                echo '<td class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></td>';
+                                echo '<td class="nmAnexo">';
+                                echo '<a href="' . $linkArquivo . '" target="_blank">';
+                                echo '<ion-icon name="document-outline"></ion-icon> ' . $nomeArquivo;
+                                echo '</a>';
+                                echo '<input type="text" class="edited-name" style="display:none;" value="' . $nomeArquivo . '">';
+                                echo '</td>';
+                                echo '<td>' . $dataArquivo . '</td>';
+                                echo '<td style="text-align: center;">';
+                                echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar">';
+                                echo '<ion-icon name="create-outline"></ion-icon>';
+                                echo '</button>';
+                                echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
+                                echo '<ion-icon name="checkmark-outline"></ion-icon>';
+                                echo '</button>';
+                                echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" title="Excluir">';
+                                echo '<ion-icon name="trash-outline"></ion-icon>';
+                                echo '</button>';
+                                echo '</td>';
+                                echo '</tr>';
+                                $index++;
+                            }
+
+                            echo '</tbody></table>';
+                            echo '</div>';
+                            echo '</div>';
+                        } else {
+                            // Estado vazio
+                            echo '<div class="empty-state">';
+                            echo '<ion-icon name="folder-open-outline"></ion-icon>';
+                            echo '<p>Nenhum arquivo anexado</p>';
+                            echo '</div>';
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
-        </div>
         <?php else: ?>
-        <!-- Aviso para cadastro -->
-        <div class="section-card">
-            <div class="section-header">
-                <ion-icon name="attach-outline"></ion-icon>
-                <h2>Anexos</h2>
-            </div>
-            <div class="section-content">
-                <div class="info-notice">
-                    <ion-icon name="information-circle-outline"></ion-icon>
-                    <p>Os anexos poderão ser adicionados após o cadastro da licitação.</p>
+            <!-- Aviso para cadastro -->
+            <div class="section-card">
+                <div class="section-header">
+                    <ion-icon name="attach-outline"></ion-icon>
+                    <h2>Anexos</h2>
+                </div>
+                <div class="section-content">
+                    <div class="info-notice">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <p>Os anexos poderão ser adicionados após o cadastro da licitação.</p>
+                    </div>
                 </div>
             </div>
-        </div>
         <?php endif; ?>
 
         <!-- ============================================
@@ -751,10 +760,10 @@ echo '<td class="nmAnexo">';
                 Cancelar
             </a>
             <?php if ($modoEdicao): ?>
-            <a href="licitacaoView.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
-                <ion-icon name="eye-outline"></ion-icon>
-                Visualizar
-            </a>
+                <a href="licitacaoView.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn btn-outline">
+                    <ion-icon name="eye-outline"></ion-icon>
+                    Visualizar
+                </a>
             <?php endif; ?>
         </div>
     </form>
@@ -777,7 +786,7 @@ echo '<td class="nmAnexo">';
     // ============================================
     // Inicialização
     // ============================================
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Destrói Materialize Select (evita conflitos)
         if (typeof M !== 'undefined') {
             $('form select').formSelect('destroy');
@@ -820,25 +829,25 @@ echo '<td class="nmAnexo">';
         }
 
         // Evento de input
-        input.addEventListener('input', function(e) {
+        input.addEventListener('input', function (e) {
             let valor = e.target.value;
-            
+
             // Remove tudo que não for número
             valor = valor.replace(/\D/g, '');
-            
+
             // Limita a 7 dígitos
             valor = valor.substring(0, 7);
-            
+
             // Aplica a máscara 000/0000
             if (valor.length > 3) {
                 valor = valor.substring(0, 3) + '/' + valor.substring(3);
             }
-            
+
             e.target.value = valor;
         });
 
         // Evento de keydown para impedir caracteres inválidos
-        input.addEventListener('keydown', function(e) {
+        input.addEventListener('keydown', function (e) {
             // Permite: backspace, delete, tab, escape, enter, setas
             if ([8, 9, 27, 13, 46, 37, 38, 39, 40].includes(e.keyCode)) {
                 return;
@@ -854,7 +863,7 @@ echo '<td class="nmAnexo">';
         });
 
         // Evento de paste
-        input.addEventListener('paste', function(e) {
+        input.addEventListener('paste', function (e) {
             e.preventDefault();
             let texto = (e.clipboardData || window.clipboardData).getData('text');
             texto = texto.replace(/\D/g, '').substring(0, 7);
@@ -906,11 +915,11 @@ echo '<td class="nmAnexo">';
     // ============================================
     // Validação do Código da Licitação
     // ============================================
-    $('#codLicitacao').on('input blur', function() {
+    $('#codLicitacao').on('input blur', function () {
         validarCodLicitacao();
     });
 
-    $('#tipoLicitacao').on('change', function() {
+    $('#tipoLicitacao').on('change', function () {
         if ($('#codLicitacao').val().length === 8) {
             validarCodLicitacao();
         }
@@ -931,7 +940,7 @@ echo '<td class="nmAnexo">';
                     tipoLicitacao: tipoLicitacao
                 },
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     if (response == 1) {
                         $('#codLicitacao').val('');
                         $('#codLicitacao').focus();
@@ -986,316 +995,316 @@ echo '<td class="nmAnexo">';
     }
 
     <?php if ($modoEdicao): ?>
-    // ============================================
-    // Upload de Arquivos (Drag & Drop) - Apenas edição
-    // ============================================
-    function handleClick(event) {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.multiple = true;
-        input.accept = '.pdf,.zip';
-        input.onchange = function(e) {
-            uploadFiles(e.target.files);
-        };
-        input.click();
-    }
-
-    function handleDrop(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        document.getElementById('drop-zone').classList.remove('dragover');
-        uploadFiles(event.dataTransfer.files);
-    }
-
-    function handleDragOver(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        document.getElementById('drop-zone').classList.add('dragover');
-    }
-
-    function uploadFiles(files) {
-        const formData = new FormData();
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const ext = file.name.split('.').pop().toLowerCase();
-
-            if (ext !== 'pdf' && ext !== 'zip') {
-                alert('Apenas arquivos PDF ou ZIP são permitidos: ' + file.name);
-                continue;
-            }
-
-            formData.append('files[]', file);
+        // ============================================
+        // Upload de Arquivos (Drag & Drop) - Apenas edição
+        // ============================================
+        function handleClick(event) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.multiple = true;
+            input.accept = '.pdf,.zip';
+            input.onchange = function (e) {
+                uploadFiles(e.target.files);
+            };
+            input.click();
         }
 
-        formData.append('idLicitacao', idLicitacao);
-
-        $.ajax({
-            url: 'bd/licitacao/uploadAnexo.php',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                alert('Erro ao fazer upload: ' + error);
-            }
-        });
-    }
-
-    // ============================================
-    // Edição de Nome de Arquivo
-    // ============================================
-    $(document).on('click', '.edit-button', function() {
-        var rowId = $(this).data('id');
-        var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
-        var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
-
-        var currentName = '';
-        if ($rowNmAnexo.length > 0 && $rowNmAnexo.find('a').length > 0) {
-            currentName = $rowNmAnexo.find('a').text().trim();
-        } else if ($cardNmAnexo.length > 0 && $cardNmAnexo.find('a').length > 0) {
-            currentName = $cardNmAnexo.find('a').text().trim();
+        function handleDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            document.getElementById('drop-zone').classList.remove('dragover');
+            uploadFiles(event.dataTransfer.files);
         }
 
-        if (!currentName) {
-            alert('Erro ao obter nome do arquivo');
-            return;
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            document.getElementById('drop-zone').classList.add('dragover');
         }
 
-        $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', currentName);
+        function uploadFiles(files) {
+            const formData = new FormData();
 
-        $rowNmAnexo.find('a').hide();
-        $rowNmAnexo.find('.edited-name').val(currentName).show();
-        $cardNmAnexo.find('a').hide();
-        $cardNmAnexo.find('.edited-name').val(currentName).show();
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const ext = file.name.split('.').pop().toLowerCase();
 
-        $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').hide();
-        $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').css('display', 'flex').show();
-
-        var $input = $rowNmAnexo.find('.edited-name').is(':visible') ? 
-            $rowNmAnexo.find('.edited-name') : $cardNmAnexo.find('.edited-name');
-        
-        if ($input.length > 0) {
-            $input.focus();
-            var dotIndex = currentName.lastIndexOf('.');
-            if (dotIndex > 0) {
-                $input[0].setSelectionRange(0, dotIndex);
-            }
-        }
-    });
-
-    $(document).on('click', '.save-button', function() {
-        var rowId = $(this).data('id');
-        var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
-
-        var newName = '';
-        var $rowInput = $('#row_' + rowId + ' .edited-name');
-        var $cardInput = $('#card_row_' + rowId + ' .edited-name');
-
-        if ($rowInput.is(':visible')) {
-            newName = $rowInput.val().trim();
-        } else if ($cardInput.is(':visible')) {
-            newName = $cardInput.val().trim();
-        }
-
-        if (!newName) {
-            alert('Nome do arquivo não pode ser vazio');
-            return;
-        }
-
-        renameFile(rowId, currentName, newName, directory);
-    });
-
-    function renameFile(rowId, currentName, newName, dir) {
-        $.ajax({
-            url: 'bd/licitacao/renameAnexo.php',
-            method: 'POST',
-            data: {
-                directory: dir,
-                currentName: currentName,
-                newName: newName
-            },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    location.reload();
-                } else {
-                    alert('Erro ao renomear arquivo: ' + response.message);
-                    cancelEdit(rowId);
+                if (ext !== 'pdf' && ext !== 'zip') {
+                    alert('Apenas arquivos PDF ou ZIP são permitidos: ' + file.name);
+                    continue;
                 }
-            },
-            error: function() {
-                alert('Erro ao renomear arquivo');
-                cancelEdit(rowId);
+
+                formData.append('files[]', file);
             }
-        });
-    }
 
-    function cancelEdit(rowId) {
-        var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
-        $('#row_' + rowId + ' .nmAnexo a, #card_row_' + rowId + ' .nmAnexo a').show();
-        $('#row_' + rowId + ' .edited-name, #card_row_' + rowId + ' .edited-name').hide().val(currentName);
-        $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
-        $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
-    }
+            formData.append('idLicitacao', idLicitacao);
 
-    $(document).on('keydown', '.edited-name', function(e) {
-        var $container = $(this).closest('[id^="row_"], [id^="card_row_"]');
-        var rowId = $container.attr('id').replace(/\D/g, '');
-
-        if (e.key === 'Escape') {
-            cancelEdit(rowId);
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').first().click();
-        }
-    });
-
-    $(document).on('input', '.edited-name', function() {
-        var value = $(this).val();
-        var sanitized = value.replace(/[<>:"/\\|?*]/g, '');
-        if (value !== sanitized) {
-            $(this).val(sanitized);
-            $(this).css('border-color', '#ef4444');
-            setTimeout(() => { $(this).css('border-color', ''); }, 500);
-        }
-    });
-
-    $(document).on('click', '.delete-button', function() {
-        var fileName = $(this).data('file');
-
-        if (confirm('Deseja realmente excluir o arquivo "' + fileName + '"?')) {
             $.ajax({
-                url: 'bd/licitacao/deleteAnexo.php',
-                method: 'POST',
-                data: {
-                    directory: directory,
-                    fileName: fileName
+                url: 'bd/licitacao/uploadAnexo.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    location.reload();
                 },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        location.reload();
-                    } else {
-                        alert('Erro ao excluir arquivo: ' + response.message);
-                    }
-                },
-                error: function() {
-                    alert('Erro ao excluir arquivo');
+                error: function (xhr, status, error) {
+                    alert('Erro ao fazer upload: ' + error);
                 }
             });
         }
-    });
+
+        // ============================================
+        // Edição de Nome de Arquivo
+        // ============================================
+        $(document).on('click', '.edit-button', function () {
+            var rowId = $(this).data('id');
+            var $rowNmAnexo = $('#row_' + rowId + ' .nmAnexo');
+            var $cardNmAnexo = $('#card_row_' + rowId + ' .nmAnexo');
+
+            var currentName = '';
+            if ($rowNmAnexo.length > 0 && $rowNmAnexo.find('a').length > 0) {
+                currentName = $rowNmAnexo.find('a').text().trim();
+            } else if ($cardNmAnexo.length > 0 && $cardNmAnexo.find('a').length > 0) {
+                currentName = $cardNmAnexo.find('a').text().trim();
+            }
+
+            if (!currentName) {
+                alert('Erro ao obter nome do arquivo');
+                return;
+            }
+
+            $('#row_' + rowId + ', #card_row_' + rowId).data('currentName', currentName);
+
+            $rowNmAnexo.find('a').hide();
+            $rowNmAnexo.find('.edited-name').val(currentName).show();
+            $cardNmAnexo.find('a').hide();
+            $cardNmAnexo.find('.edited-name').val(currentName).show();
+
+            $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').hide();
+            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').css('display', 'flex').show();
+
+            var $input = $rowNmAnexo.find('.edited-name').is(':visible') ?
+                $rowNmAnexo.find('.edited-name') : $cardNmAnexo.find('.edited-name');
+
+            if ($input.length > 0) {
+                $input.focus();
+                var dotIndex = currentName.lastIndexOf('.');
+                if (dotIndex > 0) {
+                    $input[0].setSelectionRange(0, dotIndex);
+                }
+            }
+        });
+
+        $(document).on('click', '.save-button', function () {
+            var rowId = $(this).data('id');
+            var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
+
+            var newName = '';
+            var $rowInput = $('#row_' + rowId + ' .edited-name');
+            var $cardInput = $('#card_row_' + rowId + ' .edited-name');
+
+            if ($rowInput.is(':visible')) {
+                newName = $rowInput.val().trim();
+            } else if ($cardInput.is(':visible')) {
+                newName = $cardInput.val().trim();
+            }
+
+            if (!newName) {
+                alert('Nome do arquivo não pode ser vazio');
+                return;
+            }
+
+            renameFile(rowId, currentName, newName, directory);
+        });
+
+        function renameFile(rowId, currentName, newName, dir) {
+            $.ajax({
+                url: 'bd/licitacao/renameAnexo.php',
+                method: 'POST',
+                data: {
+                    directory: dir,
+                    currentName: currentName,
+                    newName: newName
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao renomear arquivo: ' + response.message);
+                        cancelEdit(rowId);
+                    }
+                },
+                error: function () {
+                    alert('Erro ao renomear arquivo');
+                    cancelEdit(rowId);
+                }
+            });
+        }
+
+        function cancelEdit(rowId) {
+            var currentName = $('#row_' + rowId + ', #card_row_' + rowId).data('currentName');
+            $('#row_' + rowId + ' .nmAnexo a, #card_row_' + rowId + ' .nmAnexo a').show();
+            $('#row_' + rowId + ' .edited-name, #card_row_' + rowId + ' .edited-name').hide().val(currentName);
+            $('#row_' + rowId + ' .edit-button, #card_row_' + rowId + ' .edit-button').show();
+            $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').hide();
+        }
+
+        $(document).on('keydown', '.edited-name', function (e) {
+            var $container = $(this).closest('[id^="row_"], [id^="card_row_"]');
+            var rowId = $container.attr('id').replace(/\D/g, '');
+
+            if (e.key === 'Escape') {
+                cancelEdit(rowId);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                $('#row_' + rowId + ' .save-button, #card_row_' + rowId + ' .save-button').first().click();
+            }
+        });
+
+        $(document).on('input', '.edited-name', function () {
+            var value = $(this).val();
+            var sanitized = value.replace(/[<>:"/\\|?*]/g, '');
+            if (value !== sanitized) {
+                $(this).val(sanitized);
+                $(this).css('border-color', '#ef4444');
+                setTimeout(() => { $(this).css('border-color', ''); }, 500);
+            }
+        });
+
+        $(document).on('click', '.delete-button', function () {
+            var fileName = $(this).data('file');
+
+            if (confirm('Deseja realmente excluir o arquivo "' + fileName + '"?')) {
+                $.ajax({
+                    url: 'bd/licitacao/deleteAnexo.php',
+                    method: 'POST',
+                    data: {
+                        directory: directory,
+                        fileName: fileName
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Erro ao excluir arquivo: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Erro ao excluir arquivo');
+                    }
+                });
+            }
+        });
     <?php endif; ?>
 
     // ============================================
-// Reordenação de Arquivos (Drag & Drop)
-// ============================================
-var sortableGrid = null;
-var sortableList = null;
+    // Reordenação de Arquivos (Drag & Drop)
+    // ============================================
+    var sortableGrid = null;
+    var sortableList = null;
 
-function initSortable() {
-    var gridEl = document.getElementById('filesGridEdit');
-    var listBody = document.querySelector('#filesListEdit .files-table tbody');
+    function initSortable() {
+        var gridEl = document.getElementById('filesGridEdit');
+        var listBody = document.querySelector('#filesListEdit .files-table tbody');
 
-    if (gridEl) {
-        sortableGrid = new Sortable(gridEl, {
-            animation: 150,
-            handle: '.drag-handle',
-            ghostClass: 'sortable-ghost',
-            chosenClass: 'sortable-chosen',
-            dragClass: 'sortable-drag',
-            onEnd: function(evt) {
-                syncOrderFromGrid();
-                saveOrder();
-            }
-        });
-    }
-
-    if (listBody) {
-        sortableList = new Sortable(listBody, {
-            animation: 150,
-            handle: '.drag-handle',
-            ghostClass: 'sortable-ghost',
-            chosenClass: 'sortable-chosen',
-            dragClass: 'sortable-drag',
-            onEnd: function(evt) {
-                syncOrderFromList();
-                saveOrder();
-            }
-        });
-    }
-}
-
-function getOrderFromGrid() {
-    var items = document.querySelectorAll('#filesGridEdit .file-card');
-    var order = [];
-    items.forEach(function(item) {
-        var filename = item.getAttribute('data-filename');
-        if (filename) order.push(filename);
-    });
-    return order;
-}
-
-function getOrderFromList() {
-    var rows = document.querySelectorAll('#filesListEdit .files-table tbody tr');
-    var order = [];
-    rows.forEach(function(row) {
-        var filename = row.getAttribute('data-filename');
-        if (filename) order.push(filename);
-    });
-    return order;
-}
-
-function syncOrderFromGrid() {
-    var order = getOrderFromGrid();
-    var listBody = document.querySelector('#filesListEdit .files-table tbody');
-    if (!listBody) return;
-
-    order.forEach(function(filename) {
-        var row = listBody.querySelector('tr[data-filename="' + CSS.escape(filename) + '"]');
-        if (row) listBody.appendChild(row);
-    });
-}
-
-function syncOrderFromList() {
-    var order = getOrderFromList();
-    var grid = document.getElementById('filesGridEdit');
-    if (!grid) return;
-
-    order.forEach(function(filename) {
-        var card = grid.querySelector('.file-card[data-filename="' + CSS.escape(filename) + '"]');
-        if (card) grid.appendChild(card);
-    });
-}
-
-function saveOrder() {
-    var order = getOrderFromGrid();
-
-    fetch('bd/licitacao/reorderAnexo.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            idLicitacao: <?php echo $idLicitacao; ?>,
-            order: order
-        })
-    })
-    .then(function(response) { return response.json(); })
-    .then(function(data) {
-        if (!data.success) {
-            console.error('Erro ao salvar ordem:', data.message);
+        if (gridEl) {
+            sortableGrid = new Sortable(gridEl, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                onEnd: function (evt) {
+                    syncOrderFromGrid();
+                    saveOrder();
+                }
+            });
         }
-    })
-    .catch(function(error) {
-        console.error('Erro ao salvar ordem:', error);
-    });
-}
 
-// Inicializa o Sortable quando o DOM estiver pronto
-initSortable();
+        if (listBody) {
+            sortableList = new Sortable(listBody, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                onEnd: function (evt) {
+                    syncOrderFromList();
+                    saveOrder();
+                }
+            });
+        }
+    }
+
+    function getOrderFromGrid() {
+        var items = document.querySelectorAll('#filesGridEdit .file-card');
+        var order = [];
+        items.forEach(function (item) {
+            var filename = item.getAttribute('data-filename');
+            if (filename) order.push(filename);
+        });
+        return order;
+    }
+
+    function getOrderFromList() {
+        var rows = document.querySelectorAll('#filesListEdit .files-table tbody tr');
+        var order = [];
+        rows.forEach(function (row) {
+            var filename = row.getAttribute('data-filename');
+            if (filename) order.push(filename);
+        });
+        return order;
+    }
+
+    function syncOrderFromGrid() {
+        var order = getOrderFromGrid();
+        var listBody = document.querySelector('#filesListEdit .files-table tbody');
+        if (!listBody) return;
+
+        order.forEach(function (filename) {
+            var row = listBody.querySelector('tr[data-filename="' + CSS.escape(filename) + '"]');
+            if (row) listBody.appendChild(row);
+        });
+    }
+
+    function syncOrderFromList() {
+        var order = getOrderFromList();
+        var grid = document.getElementById('filesGridEdit');
+        if (!grid) return;
+
+        order.forEach(function (filename) {
+            var card = grid.querySelector('.file-card[data-filename="' + CSS.escape(filename) + '"]');
+            if (card) grid.appendChild(card);
+        });
+    }
+
+    function saveOrder() {
+        var order = getOrderFromGrid();
+
+        fetch('bd/licitacao/reorderAnexo.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idLicitacao: <?php echo $idLicitacao; ?>,
+                order: order
+            })
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                if (!data.success) {
+                    console.error('Erro ao salvar ordem:', data.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Erro ao salvar ordem:', error);
+            });
+    }
+
+    // Inicializa o Sortable quando o DOM estiver pronto
+    initSortable();
 </script>
 
 <?php include_once 'includes/footer.inc.php'; ?>
