@@ -178,19 +178,47 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 <div class="page-container">
 
     <!-- ============================================
-         Header da Página
+         Header Profissional - Padrão Administração
          ============================================ -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-info">
-                <div class="page-header-icon">
+    <div class="page-header-pro">
+        <div class="header-decoration">
+            <div class="decoration-circle-1"></div>
+            <div class="decoration-circle-2"></div>
+        </div>
+
+        <div class="header-top-row">
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <a href="licitacao.php">Licitações</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span><?php echo $modoEdicao ? 'Editar' : 'Nova'; ?></span>
+            </div>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
                     <ion-icon name="<?php echo $pageIcon; ?>"></ion-icon>
+                    <div class="icon-box-pulse"></div>
                 </div>
-                <div>
+                <div class="header-title-group">
                     <h1><?php echo $pageTitle; ?></h1>
-                    <p class="page-header-subtitle"><?php echo $pageSubtitle; ?></p>
+                    <p class="header-subtitle">
+                        <ion-icon name="document-text-outline"></ion-icon>
+                        <?php echo $pageSubtitle; ?>
+                    </p>
                 </div>
             </div>
+            <?php if ($modoEdicao): ?>
+            <div class="header-right">
+                <a href="licitacaoView.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn-header-action">
+                    <ion-icon name="eye-outline"></ion-icon>
+                    Visualizar
+                </a>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -253,7 +281,8 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 Código <span class="required-star">*</span>
                             </label>
                             <input type="text" id="codLicitacao" name="codLicitacao"
-                                value="<?php echo htmlspecialchars($tituloLicitacao) ?>" class="form-control"
+                                value="<?php echo htmlspecialchars($tituloLicitacao) ?>" 
+                                class="form-control browser-default"
                                 placeholder="000/0000" maxlength="8" autocomplete="off" required>
                         </div>
                     </div>
@@ -265,12 +294,17 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 <ion-icon name="toggle-outline"></ion-icon>
                                 Status <span class="required-star">*</span>
                             </label>
+                            <?php if ($modoEdicao): ?>
                             <select name="statusLicitacao" id="statusLicitacao" class="form-select" required>
                                 <option value='Em Andamento' <?php echo ($statusLicitacao === 'Em Andamento') ? 'selected' : ''; ?>>Em Andamento</option>
                                 <option value='Encerrado' <?php echo ($statusLicitacao === 'Encerrado') ? 'selected' : ''; ?>>Encerrada</option>
-                                <option value='Suspenso' <?php echo ($statusLicitacao === 'Suspenso') ? 'selected' : ''; ?>>Suspensa</option>
+                                <option value='Suspenso' <?php echo ($statusLicitacao === 'Suspenso') ? 'selected' : ''; ?>>Suspenso</option>
                                 <option value='Rascunho' <?php echo ($statusLicitacao === 'Rascunho') ? 'selected' : ''; ?>>Rascunho</option>
                             </select>
+                            <?php else: ?>
+                            <input type="text" class="form-control" value="Rascunho" readonly>
+                            <input type="hidden" name="statusLicitacao" value="Rascunho">
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -786,10 +820,23 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
     // ============================================
     // Inicialização
     // ============================================
+    // Exibe data e hora atual no header
+    document.addEventListener("DOMContentLoaded", function() {
+        const hoje = new Date();
+        const opcoes = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
+        const opcoesHora = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+        const dataFormatada = hoje.toLocaleDateString("pt-BR", opcoes);
+        const horaFormatada = hoje.toLocaleTimeString("pt-BR", opcoesHora);
+        const dataHora = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1) + " - " + horaFormatada;
+        const headerDate = document.getElementById("headerDate");
+        if (headerDate) {
+            headerDate.textContent = dataHora;
+        }
+    });
+
     $(document).ready(function () {
-        // Destrói Materialize Select (evita conflitos)
-        if (typeof M !== 'undefined') {
-            $('form select').formSelect('destroy');
+        if (typeof M !== "undefined") {
+            $("form select").formSelect("destroy");
         }
 
         // Inicializa Select2 nos dropdowns
@@ -827,6 +874,21 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
         if (input.value) {
             input.value = formatarCodigo(input.value);
         }
+
+        // Evento de blur - completa com zeros à esquerda
+        input.addEventListener('blur', function (e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            
+            if (valor.length > 0 && valor.length < 7) {
+                valor = valor.padStart(7, '0');
+            }
+            
+            if (valor.length > 3) {
+                valor = valor.substring(0, 3) + '/' + valor.substring(3);
+            }
+            
+            e.target.value = valor;
+        });
 
         // Evento de input
         input.addEventListener('input', function (e) {
