@@ -17,9 +17,9 @@ $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
 $_SESSION['msg'] = "Submenu desativado com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../cadSubMenu.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
 $acao = 'DESATIVADO';

@@ -14,7 +14,7 @@ $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
 $_SESSION['msg'] = "Forma desativada com sucesso.";
 
-$_SESSION['redirecionar'] = '../../cadForma.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=formas';
 $login = $_SESSION['login'];
 $tela = 'Forma';
 $acao = 'DESATIVADO';

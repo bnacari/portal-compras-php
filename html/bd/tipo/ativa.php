@@ -19,9 +19,9 @@ $queryUpdateTipo2 = $pdoCAT->query($queryUpdateTipo);
 
 $_SESSION['msg'] = "Tipo ativado com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../cadTipo.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=tipos';
 $login = $_SESSION['login'];
 $tela = 'Tipo';
 $acao = 'ATIVADO';

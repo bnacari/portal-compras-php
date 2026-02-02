@@ -34,9 +34,9 @@ $queryDeleteDETLicitacao2 = $pdoCAT->query($queryDeleteDETLicitacao);
 
 $_SESSION['msg'] = "Licitação excluída com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../consultarLicitacao.php';
+$_SESSION['redirecionar'] = '../licitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitação';
 $acao = 'Excluída';

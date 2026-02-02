@@ -30,7 +30,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 $_SESSION['msg'] = "ItemMenu atualizado com sucesso.";
 
-$_SESSION['redirecionar'] = '../../cadItemMenu.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'ItemMenu';
 $acao = 'ATUALIZADO';

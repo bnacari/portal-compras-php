@@ -7,7 +7,7 @@ if (isset($_GET['path'])) {
     $path = $_GET['path'];
 
 } else {
-    redirecionar("consultarLicitacao.php");
+    redirecionar("licitacao.php");
 }
 
 // $path = 'licitacao-cesan-no-039-2023/';
@@ -53,4 +53,4 @@ while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
 
 endwhile;
 
-redirecionar("viewLicitacao.php?idLicitacao=$idLicitacao");
+redirecionar("licitacaoView.php?idLicitacao=$idLicitacao");

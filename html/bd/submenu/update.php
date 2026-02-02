@@ -30,7 +30,7 @@ $queryUpdate2 = $pdoCAT->query($queryUpdate);
 
 $_SESSION['msg'] = "Submenu atualizado com sucesso.";
 
-$_SESSION['redirecionar'] = '../../cadSubMenu.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'SubMenu';
 $acao = 'ATUALIZADO';

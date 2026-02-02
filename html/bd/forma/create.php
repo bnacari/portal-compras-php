@@ -27,7 +27,7 @@ endwhile;
 
 $_SESSION['msg'] = "Forma cadastrada com sucesso.";
 
-$_SESSION['redirecionar'] = '../../cadForma.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=formas';
 $login = $_SESSION['login'];
 $tela = 'Forma';
 $acao = 'CRIADA';

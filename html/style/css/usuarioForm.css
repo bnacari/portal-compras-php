@@ -1,0 +1,600 @@
+/* ============================================
+   USUARIO FORM - Estilo Refatorado
+   Tela de Edição de Usuário
+   Baseado nos padrões do sistema
+   ============================================ */
+
+/* ============================================
+   Page Container
+   ============================================ */
+.page-container {
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   Page Header Profissional (Padrão Administração)
+   ============================================ */
+.page-header-pro {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 0;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.04),
+        0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.page-header-pro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+            #1e3a5f 0%,
+            #3b82f6 40%,
+            #60a5fa 60%,
+            #2d5a87 100%);
+    z-index: 2;
+}
+
+.header-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.decoration-circle-1 {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: -140px;
+    right: -40px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.decoration-circle-2 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    bottom: -100px;
+    left: 5%;
+    background: radial-gradient(circle, rgba(30, 58, 95, 0.03) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px 0 32px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.header-breadcrumb a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.header-breadcrumb a:hover {
+    color: #3b82f6;
+}
+
+.header-breadcrumb a ion-icon {
+    font-size: 14px;
+}
+
+.breadcrumb-sep {
+    font-size: 10px;
+    color: #cbd5e1;
+}
+
+.header-breadcrumb > span {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.header-date {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+.header-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 32px 24px 32px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.header-icon-box {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #2563eb;
+    flex-shrink: 0;
+}
+
+.icon-box-pulse {
+    position: absolute;
+    inset: -3px;
+    border-radius: 16px;
+    border: 2px solid rgba(59, 130, 246, 0.15);
+    animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.header-title-group h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.header-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #64748b;
+    margin: 6px 0 0 0;
+}
+
+.header-subtitle ion-icon {
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.btn-header-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-header-action:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-header-action ion-icon {
+    font-size: 16px;
+}
+
+/* ============================================
+   Section Card
+   ============================================ */
+.section-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.section-header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-header ion-icon {
+    font-size: 20px;
+    color: #93c5fd;
+}
+
+.section-header h2 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-body {
+    padding: 32px;
+}
+
+/* ============================================
+   Form Grid - 3 colunas
+   ============================================ */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+/* ============================================
+   Form Group
+   ============================================ */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.form-group label ion-icon {
+    font-size: 16px;
+    color: #64748b;
+}
+
+/* ============================================
+   Form Control - Input
+   ============================================ */
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+    color: #1e293b;
+    box-sizing: border-box;
+}
+
+.form-control:disabled,
+.form-control:read-only {
+    background-color: #f8fafc;
+    color: #64748b;
+    cursor: not-allowed;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ============================================
+   Select Wrapper
+   ============================================ */
+.select-wrapper {
+    position: relative;
+}
+
+/* ============================================
+   Help Text
+   ============================================ */
+.help-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #f59e0b;
+}
+
+.help-text ion-icon {
+    font-size: 14px;
+}
+
+/* ============================================
+   Form Actions - Botões
+   ============================================ */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-salvar,
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-salvar {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+    color: white;
+}
+
+.btn-salvar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+}
+
+.btn-cancelar {
+    background: #ffffff;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-cancelar:hover {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.btn-salvar ion-icon,
+.btn-cancelar ion-icon {
+    font-size: 18px;
+}
+
+/* ============================================
+   Select2 - Estilo Personalizado
+   ============================================ */
+.select2-container--default .select2-selection--multiple {
+    background-color: #fff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    min-height: 46px !important;
+    padding: 4px 8px !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: white !important;
+    padding: 4px 10px !important;
+    margin: 4px !important;
+    font-size: 12px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: rgba(255, 255, 255, 0.7) !important;
+    margin-right: 6px !important;
+    font-size: 14px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: white !important;
+    background: transparent !important;
+}
+
+.select2-dropdown {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    margin-top: 4px !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%) !important;
+    color: #ffffff !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%) !important;
+    color: #ffffff !important;
+}
+
+.select2-results__option {
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+}
+
+/* Select2 desabilitado */
+.select2-container--default.select2-container--disabled .select2-selection--multiple {
+    background-color: #f8fafc !important;
+    cursor: not-allowed !important;
+}
+
+/* ============================================
+   Responsivo - Tablet
+   ============================================ */
+@media (max-width: 992px) {
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .form-group:last-child {
+        grid-column: span 2;
+    }
+}
+
+/* ============================================
+   Responsivo - Mobile
+   ============================================ */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 16px;
+    }
+
+    .page-header-pro {
+        border-radius: 16px;
+    }
+
+    .header-top-row {
+        padding: 12px 20px 0 20px;
+    }
+
+    .header-main-row {
+        padding: 16px 20px 20px 20px;
+    }
+
+    .header-date {
+        display: none;
+    }
+
+    .header-title-group h1 {
+        font-size: 20px;
+    }
+
+    .btn-header-action {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .section-body {
+        padding: 24px 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .form-group:last-child {
+        grid-column: span 1;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-salvar,
+    .btn-cancelar {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ============================================
+   Responsivo - Mobile Pequeno
+   ============================================ */
+@media (max-width: 480px) {
+    .page-container {
+        padding: 12px;
+    }
+
+    .header-top-row {
+        padding: 10px 16px 0 16px;
+    }
+
+    .header-main-row {
+        padding: 14px 16px 16px 16px;
+    }
+
+    .header-icon-box {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    .header-title-group h1 {
+        font-size: 18px;
+    }
+
+    .header-subtitle {
+        font-size: 12px;
+    }
+
+    .section-card {
+        border-radius: 12px;
+    }
+
+    .section-header {
+        padding: 14px 16px;
+    }
+
+    .section-header h2 {
+        font-size: 14px;
+    }
+
+    .section-body {
+        padding: 20px 16px;
+    }
+
+    .form-group label {
+        font-size: 12px;
+    }
+
+    .form-control {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}

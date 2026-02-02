@@ -1,9 +1,11 @@
 <?php
+//update.php
+
 session_start();
 
 include_once '../conexao.php';
 include_once '../../redirecionar.php';
-include('../../protectPerfil.php');
+include('../../protectPerfil.php'); 
 
 $pattern = "/^\d{4}-\d{2}-\d{2}$/";
 $patternTime = "/^\d{2}:\d{2}$/";
@@ -82,10 +84,18 @@ $queryUpdate = "UPDATE [portalcompras].[dbo].DETALHE_LICITACAO
                     [ENVIO_ATUALIZACAO_LICITACAO]=$permitirAtualizacao
                 WHERE [ID_LICITACAO]=$idLicitacao";
 
-// var_dump($queryUpdate);
-// exit();
-
 $queryUpdate2 = $pdoCAT->query($queryUpdate);
+
+// ============================================
+// SE DESABILITOU NOTIFICAÇÕES, DESCADASTRA TODOS OS USUÁRIOS
+// ============================================
+if ($permitirAtualizacao == 0) {
+    $queryDescadastraUsuarios = "UPDATE [portalcompras].[dbo].ATUALIZACAO 
+                                  SET DT_EXC_ATUALIZACAO = getdate() 
+                                  WHERE ID_LICITACAO = $idLicitacao 
+                                  AND DT_EXC_ATUALIZACAO IS NULL";
+    $pdoCAT->query($queryDescadastraUsuarios);
+}
 
 // Caminho para a pasta de uploads
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -94,20 +104,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $fullPath = $uploadDirectory . '/' . $idLicitacao;
 
-    if (mkdir($fullPath, 0755, true)) {
+    if (!is_dir($fullPath)) {
+        mkdir($fullPath, 0755, true);
     }
 
-    foreach ($_FILES["anexos"]["error"] as $key => $error) {
+    if (isset($_FILES["anexos"]) && is_array($_FILES["anexos"]["error"])) {
+        foreach ($_FILES["anexos"]["error"] as $key => $error) {
+            if ($error == UPLOAD_ERR_OK) {
+                $nomeArquivo = $_FILES["anexos"]["name"][$key];
+                $caminhoTemporario = $_FILES["anexos"]["tmp_name"][$key];
+                $caminhoDestino = $fullPath . "/" . $nomeArquivo;
 
-        $nomeArquivo = $_FILES["anexos"]["name"][$key];
-        $caminhoTemporario = $_FILES["anexos"]["tmp_name"][$key];
-        $caminhoDestino = $fullPath . "/" . $nomeArquivo;
-
-        // Move o arquivo para o destino
-        if (move_uploaded_file($caminhoTemporario, $caminhoDestino)) {
-            echo "O arquivo $nomeArquivo foi enviado com sucesso.<br>";
-        } else {
-            echo "Ocorreu um erro ao enviar o arquivo $caminhoDestino.<br>";
+                // Move o arquivo para o destino
+                if (move_uploaded_file($caminhoTemporario, $caminhoDestino)) {
+                    // echo "O arquivo $nomeArquivo foi enviado com sucesso.<br>";
+                } else {
+                    // echo "Ocorreu um erro ao enviar o arquivo $caminhoDestino.<br>";
+                }
+            }
         }
     }
 }
@@ -115,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // $_SESSION['msg'] = "Licitação atualizada com sucesso!";
 
 $_SESSION['redirecionar'] = '../../envio.php?idLicitacao=' . $idLicitacao;
-// $_SESSION['redirecionar'] = '../../consultarLicitacao.php';
+// $_SESSION['redirecionar'] = '../../licitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitacao';
 $acao = 'Licitacao ' . $idLicitacao . ' ATUALIZADA';

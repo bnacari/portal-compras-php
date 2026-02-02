@@ -14,9 +14,9 @@ $queryUpdateLINK2 = $pdoCAT->query($queryUpdateLINK);
 
 $_SESSION['msg'] = "ItemMenu ativado com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../../cadItemMenu.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=estrutura';
 $login = $_SESSION['login'];
 $tela = 'ItemMenu';
 $acao = 'ATIVADO';

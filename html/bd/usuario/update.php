@@ -65,5 +65,5 @@ endwhile;
 
 $_SESSION['msg'] = "Usuário atualizado com sucesso.";
 
-$_SESSION['redirecionar'] = '../../consultarUsuario.php';
+$_SESSION['redirecionar'] = '../../administracao.php?aba=usuarios';
 redirecionar($_SESSION['redirecionar']);

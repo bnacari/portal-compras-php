@@ -12,10 +12,26 @@ $login      = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
 $senha = trim($_POST['senha']); // Sem filtro especial para permitir caracteres especiais
 $loginADM   = null;
 
+// Validação adicional de entrada
+$login = trim($login);
+if (strlen($login) > 100 || strlen($senha) > 255) {
+    $_SESSION['msg'] = 'Dados de entrada inválidos.';
+    header('Location: ../login.php');
+    exit();
+}
+
 if (strpos($login, '@') !== false && !empty($login) && !empty($senha)) {
 
-    $querySelect2 = "SELECT * FROM USUARIO WHERE EMAIL_ADM LIKE '$login' AND STATUS LIKE 'A'";
-    $querySelect = $pdoCAT->query($querySelect2);
+    // Prepared Statement para evitar SQL Injection
+    $querySelect2 = "SELECT * FROM USUARIO WHERE EMAIL_ADM = :login AND STATUS = 'A'";
+    $querySelect = $pdoCAT->prepare($querySelect2);
+    $querySelect->bindParam(':login', $login, PDO::PARAM_STR);
+    $querySelect->execute();
+
+    $idUsuario = null;
+    $emailUsuario = null;
+    $nmUsuario = null;
+    $senhaBanco = null;
 
     while ($registros = $querySelect->fetch(PDO::FETCH_ASSOC)) :
         $idUsuario = $registros['ID_ADM'];
@@ -67,13 +83,16 @@ if ($ldapcon) {
 
         $_SESSION['login'] = $login;
 
+        // Prepared Statement para evitar SQL Injection
         $querySelect2 = "SELECT U.ID_ADM, U.EMAIL_ADM, PU.ID_TIPO_LICITACAO, TL.NM_TIPO
                             FROM USUARIO U 
                             LEFT JOIN PERFIL_USUARIO PU ON U.ID_ADM = PU.ID_USUARIO
                             LEFT JOIN TIPO_LICITACAO TL ON TL.ID_TIPO = PU.ID_TIPO_LICITACAO 
-                         WHERE U.LGN_ADM = '$login' AND U.STATUS = 'A'";
+                         WHERE U.LGN_ADM = :login AND U.STATUS = 'A'";
 
-        $querySelect = $pdoCAT->query($querySelect2);
+        $querySelect = $pdoCAT->prepare($querySelect2);
+        $querySelect->bindParam(':login', $login, PDO::PARAM_STR);
+        $querySelect->execute();
 
         $perfilUsuario = array();
         $emailUsuario = null;

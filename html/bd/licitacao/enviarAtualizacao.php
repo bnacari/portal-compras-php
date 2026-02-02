@@ -28,7 +28,7 @@ $queryUpdateLici2 = $pdoCAT->query($queryUpdateLicitacao);
 
 $_SESSION['msg'] = "Usuário " . $emailUsuario . " receberá atualizações.";
 
-$_SESSION['redirecionar'] = '../consultarLicitacao.php';
+$_SESSION['redirecionar'] = '../licitacao.php';
 $login = $_SESSION['login'];
 $tela = 'Licitação';
 $acao = 'Receber Atualização';

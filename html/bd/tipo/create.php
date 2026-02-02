@@ -22,7 +22,7 @@ endwhile;
 
 $_SESSION['msg'] = "Tipo cadastrado com sucesso.";
 
-$_SESSION['redirecionar'] = '../cadTipo.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=tipos';
 $login = $_SESSION['login'];
 $tela = 'Tipo';
 $acao = 'CRIADO';

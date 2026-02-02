@@ -6,12 +6,12 @@ include_once '../../redirecionar.php';
 
 include_once('../../protectAdmin.php');
 
-$idMenu = filter_input(INPUT_GET, 'idMenu', FILTER_SANITIZE_SPECIAL_CHARS);
-$nmMenu = filter_input(INPUT_GET, 'nmMenu', FILTER_SANITIZE_SPECIAL_CHARS);
-$linkMenu = filter_input(INPUT_GET, 'linkMenu', FILTER_SANITIZE_SPECIAL_CHARS);
-
-// var_dump($idPublico);
-// var_dump($link);
+// Corrigido: INPUT_POST ao invés de INPUT_GET
+$idMenu = filter_input(INPUT_POST, 'idMenu', FILTER_SANITIZE_SPECIAL_CHARS);
+$nmMenu = filter_input(INPUT_POST, 'nmMenu', FILTER_SANITIZE_SPECIAL_CHARS);
+$linkMenu = filter_input(INPUT_POST, 'linkMenu', FILTER_SANITIZE_SPECIAL_CHARS);
+$redirect = filter_input(INPUT_POST, 'redirect', FILTER_SANITIZE_SPECIAL_CHARS) ?? 'administracao';
+$aba = filter_input(INPUT_POST, 'aba', FILTER_SANITIZE_SPECIAL_CHARS) ?? 'estrutura';
 
 $queryUpdate = "UPDATE [portalcompras].[dbo].[menu]
                 SET [LINK_MENU]='$linkMenu'
@@ -19,17 +19,11 @@ $queryUpdate = "UPDATE [portalcompras].[dbo].[menu]
                 WHERE [ID_MENU]=$idMenu
                 ";
 
-// var_dump($queryUpdate);
-// exit();
-
 $queryUpdate2 = $pdoCAT->query($queryUpdate);
-
-// var_dump($queryUpdate2);
 
 $_SESSION['msg'] = "Menu atualizado com sucesso.";
 
-
-$_SESSION['redirecionar'] = '../../cadMenu.php';
+$_SESSION['redirecionar'] = "../../{$redirect}.php?aba={$aba}";
 $login = $_SESSION['login'];
 $tela = 'Menu';
 $acao = 'ATUALIZADO';

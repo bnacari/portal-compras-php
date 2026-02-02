@@ -19,9 +19,9 @@ $queryUpdatePerfil2 = $pdoCAT->query($queryUpdatePerfil);
 
 $_SESSION['msg'] = "Perfil ativado com sucesso.";
 
-// header("Location: ../../consultarUsuario.php");
+// header("Location: ../../administracao.php?aba=usuarios");
 
-$_SESSION['redirecionar'] = '../cadPerfil.php';
+$_SESSION['redirecionar'] = '../administracao.php?aba=perfis';
 $login = $_SESSION['login'];
 $tela = 'Perfil';
 $acao = 'ATIVADO';
