@@ -1,5 +1,6 @@
 <?php
 include_once 'bd/conexao.php';
+
 session_start();
 
 $_SESSION['sucesso'] = 0;
