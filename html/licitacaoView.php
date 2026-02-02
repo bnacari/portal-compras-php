@@ -165,22 +165,47 @@ function getFileIcon($filename)
 <div class="page-container">
 
     <!-- ============================================
-         Header da Página
+         Header Profissional - Padrão Administração
          ============================================ -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-info">
-                <div class="page-header-icon">
+    <div class="page-header-pro">
+        <div class="header-decoration">
+            <div class="decoration-circle-1"></div>
+            <div class="decoration-circle-2"></div>
+        </div>
+
+        <div class="header-top-row">
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <a href="licitacao.php">Licitações</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span>Visualizar</span>
+            </div>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
                     <ion-icon name="document-text-outline"></ion-icon>
+                    <div class="icon-box-pulse"></div>
                 </div>
-                <div>
+                <div class="header-title-group">
                     <h1><?php echo htmlspecialchars($codLicitacao); ?></h1>
-                    <p class="page-header-subtitle"><?php echo htmlspecialchars($nmTipo ?? ''); ?></p>
+                    <p class="header-subtitle">
+                        <ion-icon name="pricetag-outline"></ion-icon>
+                        <?php echo htmlspecialchars($nmTipo ?? ''); ?>
+                    </p>
                 </div>
             </div>
-            <div class="page-header-status">
-                <span
-                    class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
+            <div class="header-right">
+                <span class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
+                <?php if ($podeEditar): ?>
+                <a href="licitacaoForm.php?idLicitacao=<?php echo $idLicitacao; ?>" class="btn-header-action">
+                    <ion-icon name="pencil-outline"></ion-icon>
+                    Editar
+                </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -588,6 +613,20 @@ function getFileIcon($filename)
 
         localStorage.setItem('filesViewLicitacao', view);
     }
+
+    // Exibe data e hora atual no header
+    document.addEventListener('DOMContentLoaded', function() {
+        const hoje = new Date();
+        const opcoes = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
+        const opcoesHora = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+        const dataFormatada = hoje.toLocaleDateString("pt-BR", opcoes);
+        const horaFormatada = hoje.toLocaleTimeString("pt-BR", opcoesHora);
+        const dataHora = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1) + " - " + horaFormatada;
+        const headerDate = document.getElementById("headerDate");
+        if (headerDate) {
+            headerDate.textContent = dataHora;
+        }
+    });
 
     // Restaura preferência de visualização
     document.addEventListener('DOMContentLoaded', function () {

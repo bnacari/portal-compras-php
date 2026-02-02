@@ -37,75 +37,184 @@ include('protect.php');
     }
 
     /* ============================================
-       Header da Página - Gradiente Padrão
+       Page Header Profissional (Padrão Administração)
        ============================================ */
-    .page-header {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-        border-radius: 16px;
-        padding: 28px 32px;
+    .page-header-pro {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 0;
         margin-bottom: 24px;
-        color: white;
         position: relative;
         overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.04),
+            0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
-    .page-header::before {
+    .page-header-pro::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg,
+                #1e3a5f 0%,
+                #3b82f6 40%,
+                #60a5fa 60%,
+                #2d5a87 100%);
+        z-index: 2;
+    }
+
+    .header-decoration {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .decoration-circle-1 {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        top: -140px;
+        right: -40px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
         border-radius: 50%;
     }
 
-    .page-header-content {
+    .decoration-circle-2 {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        left: 5%;
+        background: radial-gradient(circle, rgba(30, 58, 95, 0.03) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .header-top-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
+        padding: 16px 32px 0 32px;
         position: relative;
         z-index: 1;
     }
 
-    .page-header-info {
+    .header-breadcrumb {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 6px;
+        font-size: 12px;
+        color: #94a3b8;
     }
 
-    .page-header-icon {
-        width: 52px;
-        height: 52px;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
+    .header-breadcrumb a {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #94a3b8;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .header-breadcrumb a:hover {
+        color: #3b82f6;
+    }
+
+    .header-breadcrumb a ion-icon {
+        font-size: 14px;
+    }
+
+    .breadcrumb-sep {
+        font-size: 10px;
+        color: #cbd5e1;
+    }
+
+    .header-breadcrumb > span {
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .header-date {
+        font-size: 12px;
+        color: #94a3b8;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+    }
+
+    .header-main-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px 32px 24px 32px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .header-icon-box {
+        position: relative;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #bfdbfe;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 26px;
+        color: #2563eb;
+        flex-shrink: 0;
+    }
+
+    .icon-box-pulse {
+        position: absolute;
+        inset: -3px;
+        border-radius: 16px;
+        border: 2px solid rgba(59, 130, 246, 0.15);
+        animation: iconPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    }
+
+    .header-title-group h1 {
         font-size: 24px;
-    }
-
-    .page-header h1 {
-        font-size: 22px;
         font-weight: 700;
-        margin: 0 0 4px 0;
-        color: white;
+        color: #1e293b;
+        margin: 0;
     }
 
-    .page-header-subtitle {
+    .header-subtitle {
         display: flex;
         align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 14px;
+        color: #64748b;
+        margin: 6px 0 0 0;
     }
 
-    .page-header-subtitle p {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.7);
-        margin: 0;
+    .header-subtitle ion-icon {
+        font-size: 16px;
+        color: #94a3b8;
     }
 
     /* ============================================
@@ -200,17 +309,23 @@ include('protect.php');
             padding: 16px;
         }
 
-        .page-header {
-            padding: 20px;
-            border-radius: 12px;
+        .page-header-pro {
+            border-radius: 16px;
         }
 
-        .page-header-content {
-            flex-direction: column;
-            align-items: flex-start;
+        .header-top-row {
+            padding: 12px 20px 0 20px;
         }
 
-        .page-header h1 {
+        .header-main-row {
+            padding: 16px 20px 20px 20px;
+        }
+
+        .header-date {
+            display: none;
+        }
+
+        .header-title-group h1 {
             font-size: 18px;
         }
 
@@ -234,21 +349,25 @@ include('protect.php');
             padding: 12px;
         }
 
-        .page-header {
-            padding: 16px;
+        .header-top-row {
+            padding: 10px 16px 0 16px;
         }
 
-        .page-header-icon {
+        .header-main-row {
+            padding: 14px 16px 16px 16px;
+        }
+
+        .header-icon-box {
             width: 44px;
             height: 44px;
             font-size: 20px;
         }
 
-        .page-header h1 {
+        .header-title-group h1 {
             font-size: 16px;
         }
 
-        .page-header-subtitle p {
+        .header-subtitle {
             font-size: 12px;
         }
 
@@ -269,19 +388,35 @@ include('protect.php');
 <div class="page-container">
     
     <!-- ============================================
-         Header da Página
+         Header Profissional - Padrão Administração
          ============================================ -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-info">
-                <div class="page-header-icon">
+    <div class="page-header-pro">
+        <div class="header-decoration">
+            <div class="decoration-circle-1"></div>
+            <div class="decoration-circle-2"></div>
+        </div>
+
+        <div class="header-top-row">
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span>Notificações</span>
+            </div>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
                     <ion-icon name="notifications-outline"></ion-icon>
+                    <div class="icon-box-pulse"></div>
                 </div>
-                <div>
+                <div class="header-title-group">
                     <h1>Notificações de Licitações</h1>
-                    <div class="page-header-subtitle">
-                        <p>Gerencie as licitações que você acompanha e receberá atualizações por e-mail</p>
-                    </div>
+                    <p class="header-subtitle">
+                        <ion-icon name="bell-outline"></ion-icon>
+                        Gerencie as licitações que você acompanha e receberá atualizações por e-mail
+                    </p>
                 </div>
             </div>
         </div>
@@ -319,3 +454,21 @@ include('protect.php');
         </div>
     </div>
 </div>
+
+<!-- ============================================
+     Scripts - Exibe data e hora no header
+     ============================================ -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const hoje = new Date();
+        const opcoes = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const opcoesHora = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
+        const horaFormatada = hoje.toLocaleTimeString('pt-BR', opcoesHora);
+        const dataHora = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1) + ' - ' + horaFormatada;
+        const headerDate = document.getElementById('headerDate');
+        if (headerDate) {
+            headerDate.textContent = dataHora;
+        }
+    });
+</script>

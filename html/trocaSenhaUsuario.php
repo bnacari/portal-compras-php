@@ -37,65 +37,187 @@ include('protect.php');
     }
 
     /* ============================================
-       Header da Página - Gradiente Padrão
+       Page Header Profissional (Padrão Administração)
        ============================================ */
-    .page-header {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
-        border-radius: 16px;
-        padding: 28px 32px;
+    .page-header-pro {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 0;
         margin-bottom: 24px;
-        color: white;
         position: relative;
         overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.04),
+            0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
-    .page-header::before {
+    .page-header-pro::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -10%;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg,
+                #1e3a5f 0%,
+                #3b82f6 40%,
+                #60a5fa 60%,
+                #2d5a87 100%);
+        z-index: 2;
+    }
+
+    /* Decorações */
+    .header-decoration {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .decoration-circle-1 {
+        position: absolute;
         width: 300px;
         height: 300px;
-        background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+        top: -140px;
+        right: -40px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
         border-radius: 50%;
     }
 
-    .page-header-content {
+    .decoration-circle-2 {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        left: 5%;
+        background: radial-gradient(circle, rgba(30, 58, 95, 0.03) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    /* Top Row - Breadcrumb + Data */
+    .header-top-row {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 16px;
+        padding: 16px 32px 0 32px;
         position: relative;
         z-index: 1;
     }
 
-    .page-header-icon {
+    .header-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .header-breadcrumb a {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #94a3b8;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .header-breadcrumb a:hover {
+        color: #3b82f6;
+    }
+
+    .header-breadcrumb a ion-icon {
+        font-size: 14px;
+    }
+
+    .breadcrumb-sep {
+        font-size: 10px;
+        color: #cbd5e1;
+    }
+
+    .header-breadcrumb > span {
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .header-date {
+        font-size: 12px;
+        color: #94a3b8;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+    }
+
+    /* Main Row - Ícone + Título */
+    .header-main-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px 32px 24px 32px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .header-icon-box {
+        position: relative;
         width: 56px;
         height: 56px;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        border: 1px solid #bfdbfe;
         border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 26px;
+        color: #2563eb;
         flex-shrink: 0;
     }
 
-    .page-header-icon ion-icon {
-        font-size: 28px;
-        color: #93c5fd;
+    .icon-box-pulse {
+        position: absolute;
+        inset: -3px;
+        border-radius: 16px;
+        border: 2px solid rgba(59, 130, 246, 0.15);
+        animation: iconPulse 3s ease-in-out infinite;
     }
 
-    .page-header h1 {
-        font-size: 22px;
+    @keyframes iconPulse {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    }
+
+    .header-title-group h1 {
+        font-size: 24px;
         font-weight: 700;
-        margin: 0 0 4px 0;
-        color: white;
+        color: #1e293b;
+        margin: 0;
     }
 
-    .page-header-subtitle {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.7);
-        margin: 0;
+    .header-subtitle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #64748b;
+        margin: 6px 0 0 0;
+    }
+
+    .header-subtitle ion-icon {
+        font-size: 16px;
+        color: #94a3b8;
     }
 
     /* ============================================
@@ -538,16 +660,36 @@ include('protect.php');
 <div class="page-container">
 
     <!-- ============================================
-         Header da Página
+         Header Profissional - Padrão Administração
          ============================================ -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-icon">
-                <ion-icon name="key-outline"></ion-icon>
+    <div class="page-header-pro">
+        <div class="header-decoration">
+            <div class="decoration-circle-1"></div>
+            <div class="decoration-circle-2"></div>
+        </div>
+
+        <div class="header-top-row">
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span>Trocar Senha</span>
             </div>
-            <div>
-                <h1>Trocar Senha</h1>
-                <p class="page-header-subtitle">Atualize sua senha de acesso ao sistema</p>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
+                    <ion-icon name="key-outline"></ion-icon>
+                    <div class="icon-box-pulse"></div>
+                </div>
+                <div class="header-title-group">
+                    <h1>Trocar Senha</h1>
+                    <p class="header-subtitle">
+                        <ion-icon name="shield-checkmark-outline"></ion-icon>
+                        Atualize sua senha de acesso ao sistema
+                    </p>
+                </div>
             </div>
         </div>
     </div>

@@ -163,7 +163,7 @@ if ($modoEdicao) {
 $formAction = $modoEdicao ? 'bd/licitacao/update.php' : 'bd/licitacao/create.php';
 $pageTitle = $modoEdicao ? 'Editar Licitação ' . htmlspecialchars($tituloLicitacao) : 'Nova Licitação';
 $pageSubtitle = $modoEdicao ? htmlspecialchars($nmTipo . ' ' . $codLicitacao) : 'Preencha os dados para cadastrar uma nova licitação';
-$pageIcon = $modoEdicao ? 'create-outline' : 'add-circle-outline';
+$pageIcon = 'document-text-outline';
 $btnSubmitText = $modoEdicao ? 'Salvar Alterações' : 'Cadastrar Licitação';
 $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 ?>
@@ -820,23 +820,16 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
     // ============================================
     // Inicialização
     // ============================================
-    // Exibe data e hora atual no header
-    document.addEventListener("DOMContentLoaded", function() {
-        const hoje = new Date();
-        const opcoes = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
-        const opcoesHora = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
-        const dataFormatada = hoje.toLocaleDateString("pt-BR", opcoes);
-        const horaFormatada = hoje.toLocaleTimeString("pt-BR", opcoesHora);
-        const dataHora = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1) + " - " + horaFormatada;
-        const headerDate = document.getElementById("headerDate");
-        if (headerDate) {
-            headerDate.textContent = dataHora;
-        }
-    });
-
     $(document).ready(function () {
-        if (typeof M !== "undefined") {
-            $("form select").formSelect("destroy");
+        // Exibe data atual no header
+        const hoje = new Date();
+        const opcoes = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
+        $('#headerDate').text(dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1));
+
+        // Destrói Materialize Select (evita conflitos)
+        if (typeof M !== 'undefined') {
+            $('form select').formSelect('destroy');
         }
 
         // Inicializa Select2 nos dropdowns

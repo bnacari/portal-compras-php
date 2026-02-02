@@ -118,25 +118,46 @@ if (isset($existeUsuario)) {
 <div class="page-container">
     
     <!-- ============================================
-         Header da Página
+         Header Profissional - Padrão Administração
          ============================================ -->
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-header-info">
-                <div class="page-header-icon">
+    <div class="page-header-pro">
+        <div class="header-decoration">
+            <div class="decoration-circle-1"></div>
+            <div class="decoration-circle-2"></div>
+        </div>
+
+        <div class="header-top-row">
+            <div class="header-breadcrumb">
+                <a href="index.php"><ion-icon name="home-outline"></ion-icon> Início</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <a href="administracao.php?aba=usuarios">Usuários</a>
+                <ion-icon name="chevron-forward-outline" class="breadcrumb-sep"></ion-icon>
+                <span>Editar</span>
+            </div>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+
+        <div class="header-main-row">
+            <div class="header-left">
+                <div class="header-icon-box">
                     <ion-icon name="person-outline"></ion-icon>
+                    <div class="icon-box-pulse"></div>
                 </div>
-                <div>
+                <div class="header-title-group">
                     <h1>Editar Usuário</h1>
-                    <p class="page-header-subtitle"><?php echo htmlspecialchars($nmUsuario); ?></p>
+                    <p class="header-subtitle">
+                        <ion-icon name="person-circle-outline"></ion-icon>
+                        <?php echo htmlspecialchars($nmUsuario); ?>
+                    </p>
                 </div>
             </div>
-            
-            <!-- Botão Voltar -->
-            <button type="button" class="btn-voltar" id="btnVoltar">
-                <ion-icon name="arrow-back-outline"></ion-icon>
-                Voltar
-            </button>
+
+            <div class="header-right">
+                <button type="button" class="btn-header-action" id="btnVoltar">
+                    <ion-icon name="arrow-back-outline"></ion-icon>
+                    Voltar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -264,7 +285,18 @@ if (isset($existeUsuario)) {
      ============================================ -->
 <script>
 $(document).ready(function() {
-    
+    // Exibe data e hora atual no header
+    const hoje = new Date();
+    const opcoes = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
+    const opcoesHora = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+    const dataFormatada = hoje.toLocaleDateString("pt-BR", opcoes);
+    const horaFormatada = hoje.toLocaleTimeString("pt-BR", opcoesHora);
+    const dataHora = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1) + " - " + horaFormatada;
+    const headerDate = document.getElementById("headerDate");
+    if (headerDate) {
+        headerDate.textContent = dataHora;
+    }
+
     // ============================================
     // Inicializa Select2 com pesquisa
     // ============================================
