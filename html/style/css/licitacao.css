@@ -491,6 +491,7 @@
 
 .data-table tbody tr {
     transition: background 0.15s ease;
+    cursor: pointer;
 }
 
 .data-table tbody tr:hover {
@@ -610,8 +611,10 @@
    Ações da Tabela
    ============================================ */
 .acoes-cell {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 32px);
     gap: 6px;
+    justify-content: start;
 }
 
 .btn-acao {
@@ -687,6 +690,7 @@
     display: flex;
     flex-direction: column;
     min-height: 280px;
+    cursor: pointer;
 }
 
 .licitacao-card:hover {

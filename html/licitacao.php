@@ -686,7 +686,7 @@ if ($podeEditar) {
     // ============================================
     function getNotificationButton(item) {
         if (!item.ENVIO_ATUALIZACAO_LICITACAO || item.ENVIO_ATUALIZACAO_LICITACAO == 0) {
-            return '';
+            return '<span></span>';
         }
 
         if (item.USUARIO_INSCRITO && item.USUARIO_INSCRITO > 0) {
@@ -790,7 +790,7 @@ if ($podeEditar) {
             const notificationButton = getNotificationButton(item);
 
             html += `
-            <div class="licitacao-card">
+            <div class="licitacao-card" data-id="${item.ID_LICITACAO}" onclick="abrirVisualizacao(${item.ID_LICITACAO}, event)">
                 <div class="card-header">
                     <div class="card-header-left">
                         <div class="card-icon">
@@ -871,7 +871,7 @@ if ($podeEditar) {
             const notificationButton = getNotificationButton(item);
 
             html += `
-            <tr class="${rowClass}">
+            <tr class="${rowClass}" data-id="${item.ID_LICITACAO}" onclick="abrirVisualizacao(${item.ID_LICITACAO}, event)">
                 <td><strong>${codigo}</strong></td>
                 <td><span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span></td>
                 <td title="${item.OBJETO_LICITACAO || ''}">${objeto}</td>
@@ -887,7 +887,7 @@ if ($podeEditar) {
                         ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
                             `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
                                 <ion-icon name="create-outline"></ion-icon>
-                            </a>` : ''}
+                            </a>` : '<span></span>'}
                     </div>
                 </td>
             </tr>
@@ -895,6 +895,17 @@ if ($podeEditar) {
         });
 
         tbody.innerHTML = html;
+    }
+
+    // ============================================
+    // Abrir Visualização ao Clicar na Linha
+    // ============================================
+    function abrirVisualizacao(idLicitacao, event) {
+        // Não abrir se clicar em um botão ou link dentro da célula de ações
+        if (event.target.closest('.acoes-cell') || event.target.closest('.btn-acao')) {
+            return;
+        }
+        window.location.href = `licitacaoView.php?idLicitacao=${idLicitacao}`;
     }
 
     // ============================================
