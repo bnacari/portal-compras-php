@@ -2,7 +2,6 @@
 
 session_start();
 include_once '../conexao.php';
-include_once '../../redirecionar.php';
 
 // Sanitização e validação de entrada
 $nmUsuario = filter_input(INPUT_POST, 'nomeUsuarioNovo', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -37,7 +36,7 @@ if (strlen($senhaUsuario) < 6) {
 
 $senhaHash = password_hash($senhaUsuario, PASSWORD_DEFAULT);
 
-//verifica se o usuário digitou as senhas iguais
+// Verifica se o usuário digitou as senhas iguais
 if ($senhaUsuario != $senhaUsuario2) {
     echo "<script>alert('Senhas diferentes!');</script>";
     echo "<script>window.history.back();</script>";
@@ -51,32 +50,50 @@ $querySelectPerfil2->bindParam(':email', $emailUsuario, PDO::PARAM_STR);
 $querySelectPerfil2->execute();
 
 $email = null;
-while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)) :
+while ($registros = $querySelectPerfil2->fetch(PDO::FETCH_ASSOC)):
     $email = $registros['EMAIL_ADM'];
 endwhile;
 
-//verifica se o e-mail digitado já existe
+// Verifica se o e-mail digitado já existe
 if ($email == $emailUsuario) {
     echo "<script>alert('E-mail já cadastrado!');</script>";
     echo "<script>window.history.back();</script>";
     exit();
 }
 
-// Prepared Statement para INSERT - evita SQL Injection
-$queryAdmin2 = "INSERT INTO USUARIO (ID_ADM, NM_ADM, EMAIL_ADM, DT_CADASTRO, STATUS, LGN_ADM, EMAIL_ADM, ID_PERFIL, SENHA) 
-                VALUES (00000, :nmUsuario, :emailUsuario, GETDATE(), 'A', 'externo', :emailUsuario2, 6, :senhaHash)";
-$stmt = $pdoCAT->prepare($queryAdmin2);
-$stmt->bindParam(':nmUsuario', $nmUsuario, PDO::PARAM_STR);
-$stmt->bindParam(':emailUsuario', $emailUsuario, PDO::PARAM_STR);
-$stmt->bindParam(':emailUsuario2', $emailUsuario, PDO::PARAM_STR);
-$stmt->bindParam(':senhaHash', $senhaHash, PDO::PARAM_STR);
-$stmt->execute();
+try {
+    // INSERT do novo usuário
+    $queryAdmin2 = "INSERT INTO USUARIO (MAT_ADM, NM_ADM, EMAIL_ADM, DT_CADASTRO, STATUS, LGN_CRIADOR, LGN_ADM, ID_PERFIL, SENHA) 
+                    VALUES (0, :nmUsuario, :emailUsuario, GETDATE(), 'A', 'externo', :emailUsuario2, 6, :senhaHash)";
+    
+    $stmt = $pdoCAT->prepare($queryAdmin2);
+    $stmt->bindParam(':nmUsuario', $nmUsuario, PDO::PARAM_STR);
+    $stmt->bindParam(':emailUsuario', $emailUsuario, PDO::PARAM_STR);
+    $stmt->bindParam(':emailUsuario2', $emailUsuario, PDO::PARAM_STR);
+    $stmt->bindParam(':senhaHash', $senhaHash, PDO::PARAM_STR);
+    $stmt->execute();
 
-$_SESSION['msg'] = "Usuário cadastrado com sucesso.";
+    // Registrar no LOG - nomes corretos das colunas
+    $loginAuditoria = 'registro_externo';
+    $tela = 'Login';
+    $acao = 'Usuario externo cadastrado: ' . $nmUsuario;
+    
+    $queryLOG = "INSERT INTO AUDITORIA (LGN_AUDITORIA, DT_AUDITORIA, TELA_AUDITORIA, ACAO_AUDITORIA, ID_EVENTO) 
+                 VALUES (:login, GETDATE(), :tela, :acao, 1)";
+    $stmtLog = $pdoCAT->prepare($queryLOG);
+    $stmtLog->bindParam(':login', $loginAuditoria, PDO::PARAM_STR);
+    $stmtLog->bindParam(':tela', $tela, PDO::PARAM_STR);
+    $stmtLog->bindParam(':acao', $acao, PDO::PARAM_STR);
+    $stmtLog->execute();
 
-$_SESSION['redirecionar'] = '../../login.php';
-$login = $_SESSION['login'];
-$tela = 'Login';
-$acao = 'Usuário cadastrado: ' . $nmUsuario;
-$idEvento = 1;
-redirecionar("../../log.php?login=$login&tela=$tela&acao=$acao&idEvento=$idEvento");
+    // Define mensagem de sucesso e redireciona para login
+    $_SESSION['msg'] = "Usuário cadastrado com sucesso! Faça login para continuar.";
+    header("Location: ../../login.php");
+    exit();
+
+} catch (PDOException $e) {
+    error_log("Erro ao cadastrar usuário: " . $e->getMessage());
+    echo "<script>alert('Erro ao cadastrar usuário. Tente novamente.');</script>";
+    echo "<script>window.history.back();</script>";
+    exit();
+}
