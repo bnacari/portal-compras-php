@@ -782,7 +782,7 @@ if (isset($_SESSION['msg'])) {
 
                 <div class="modal-form-row">
                     <div class="modal-form-group">
-                        <label>
+                        <label> 
                             <ion-icon name="lock-closed-outline"></ion-icon>
                             Senha
                         </label>
