@@ -26,6 +26,10 @@ if (isset($_SESSION['msg'])) {
     <!-- Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
     <!-- reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     
@@ -403,6 +407,137 @@ if (isset($_SESSION['msg'])) {
             color: #1e40af;
         }
 
+        /* Modal Intro */
+        .modal-intro {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 16px;
+            border: 1px solid #93c5fd;
+        }
+
+        .modal-intro-icon {
+            width: 64px;
+            height: 64px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .modal-intro-icon ion-icon {
+            font-size: 32px;
+            color: #3b82f6;
+        }
+
+        .modal-intro p {
+            font-size: 14px;
+            color: #475569;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Modal Form Row (2 colunas) */
+        .modal-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Label com ícone */
+        .modal-form-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .modal-form-group label ion-icon {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        /* Botões com ícones */
+        .btn-primary ion-icon,
+        .btn-secondary ion-icon {
+            font-size: 18px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Modal container com font family */
+        .modal-container {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Ajuda Info Box */
+        .ajuda-info-box {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .ajuda-info-box h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ajuda-info-box p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .ajuda-link-box {
+            padding: 16px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            border: 1px solid #fcd34d;
+            text-align: center;
+        }
+
+        .ajuda-link-box p {
+            font-size: 13px;
+            color: #92400e;
+            margin: 0 0 8px 0;
+            font-weight: 500;
+        }
+
+        .ajuda-link-box a {
+            color: #b45309;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .ajuda-link-box a:hover {
+            color: #92400e;
+        }
+
         /* reCAPTCHA */
         .g-recaptcha {
             display: flex;
@@ -444,6 +579,10 @@ if (isset($_SESSION['msg'])) {
 
             .modal-footer button {
                 width: 100%;
+            }
+
+            .modal-form-row {
+                grid-template-columns: 1fr;
             }
 
             .g-recaptcha {
@@ -514,33 +653,45 @@ if (isset($_SESSION['msg'])) {
     <div class="modal-container" style="max-width: 480px;">
         <div class="modal-header">
             <h3>
-                <i class="fas fa-info-circle" style="color: #3b82f6;"></i>
+                <ion-icon name="help-circle-outline" style="color: #3b82f6; font-size: 22px;"></ion-icon>
                 Ajuda de Acesso
             </h3>
             <button type="button" class="modal-close" onclick="closeModal()">
-                <i class="fas fa-times"></i>
+                <ion-icon name="close-outline"></ion-icon>
             </button>
         </div>
 
-        <div class="modal-body" style="text-align: center; padding: 40px 32px;">
-            <p style="font-size: 15px; color: #64748b; line-height: 1.7; margin: 0 0 20px 0;">
-                <strong style="color: #0f172a;">Usuários CESAN:</strong><br>
-                Utilize o mesmo usuário (nome.sobrenome) e senha de acesso ao computador.
-            </p>
-            
-            <div style="padding: 16px; background: #f1f5f9; border-radius: 12px; border: 1px solid #e2e8f0;">
-                <p style="font-size: 14px; color: #475569; margin: 0 0 8px 0; font-weight: 500;">
+        <div class="modal-body">
+            <div class="modal-intro">
+                <div class="modal-intro-icon">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                </div>
+                <p>Selecione a opção de acordo com seu tipo de usuário.</p>
+            </div>
+
+            <div class="ajuda-info-box">
+                <h4>
+                    <ion-icon name="business-outline" style="color: #3b82f6;"></ion-icon>
+                    Usuários CESAN
+                </h4>
+                <p>Utilize o mesmo usuário <strong>(nome.sobrenome)</strong> e senha de acesso ao computador da empresa.</p>
+            </div>
+
+            <div class="ajuda-link-box">
+                <p>
+                    <ion-icon name="person-outline" style="font-size: 16px; vertical-align: middle;"></ion-icon>
                     Usuário externo?
                 </p>
-                <a href="javascript:void(0)" onclick="abrirModalRecuperacao()" style="color: #3b82f6; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                    <span style="font-size: 18px;">🔐</span>
-                    Clique aqui para recuperar sua senha
+                <a href="javascript:void(0)" onclick="abrirModalRecuperacao()">
+                    <ion-icon name="key-outline"></ion-icon>
+                    Recuperar minha senha
                 </a>
             </div>
         </div>
 
         <div class="modal-footer">
             <button type="button" class="btn-primary" onclick="closeModal()">
+                <ion-icon name="checkmark-outline"></ion-icon>
                 Entendi
             </button>
         </div>
@@ -596,43 +747,55 @@ if (isset($_SESSION['msg'])) {
     <div class="modal-container">
         <div class="modal-header">
             <h3>
-                <i class="fas fa-user-plus" style="color: #3b82f6;"></i>
+                <ion-icon name="person-add-outline" style="color: #3b82f6; font-size: 22px;"></ion-icon>
                 Registrar Usuário Externo
             </h3>
             <button type="button" class="modal-close" onclick="fecharModalRegistro()">
-                <i class="fas fa-times"></i>
+                <ion-icon name="close-outline"></ion-icon>
             </button>
         </div>
 
         <form id="formRegistro" method="POST" action="bd/usuario/create.php" onsubmit="return validarFormularioRegistro()">
             <div class="modal-body">
-                <div style="text-align: center; margin-bottom: 24px;">
-                    <div style="width: 60px; height: 60px; background: #dcfce7; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 28px;">
-                        👤
+                <div class="modal-intro">
+                    <div class="modal-intro-icon">
+                        <ion-icon name="person-circle-outline"></ion-icon>
                     </div>
-                    <p style="font-size: 14px; color: #64748b; margin: 0;">
-                        Preencha os dados abaixo para criar sua conta de acesso.
-                    </p>
+                    <p>Preencha os dados abaixo para criar sua conta de acesso ao Portal de Compras.</p>
                 </div>
 
                 <div class="modal-form-group">
-                    <label>Nome Completo</label>
+                    <label>
+                        <ion-icon name="person-outline"></ion-icon>
+                        Nome Completo
+                    </label>
                     <input type="text" name="nomeUsuarioNovo" id="nomeUsuarioNovo" placeholder="Seu nome completo" required maxlength="100">
                 </div>
 
                 <div class="modal-form-group">
-                    <label>E-mail</label>
+                    <label>
+                        <ion-icon name="mail-outline"></ion-icon>
+                        E-mail
+                    </label>
                     <input type="email" name="emailUsuarioNovo" id="emailUsuarioNovo" placeholder="seu.email@exemplo.com" required maxlength="100">
                 </div>
 
-                <div class="modal-form-group">
-                    <label>Senha</label>
-                    <input type="password" name="senhaUsuarioNovo" id="senhaUsuarioNovo" placeholder="Mínimo 6 caracteres" required maxlength="12">
-                </div>
+                <div class="modal-form-row">
+                    <div class="modal-form-group">
+                        <label>
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            Senha
+                        </label>
+                        <input type="password" name="senhaUsuarioNovo" id="senhaUsuarioNovo" placeholder="Mínimo 6 caracteres" required maxlength="12">
+                    </div>
 
-                <div class="modal-form-group">
-                    <label>Confirmar Senha</label>
-                    <input type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2" placeholder="Repita a senha" required maxlength="12">
+                    <div class="modal-form-group">
+                        <label>
+                            <ion-icon name="checkmark-circle-outline"></ion-icon>
+                            Confirmar Senha
+                        </label>
+                        <input type="password" name="senhaUsuarioNovo2" id="senhaUsuarioNovo2" placeholder="Repita a senha" required maxlength="12">
+                    </div>
                 </div>
 
                 <div class="g-recaptcha" data-sitekey="6LfMGqspAAAAAMtu9aVSVmCeIYxq_NIOv8boj6Go"></div>
@@ -642,9 +805,11 @@ if (isset($_SESSION['msg'])) {
 
             <div class="modal-footer">
                 <button type="button" class="btn-secondary" onclick="fecharModalRegistro()">
+                    <ion-icon name="close-outline"></ion-icon>
                     Cancelar
                 </button>
                 <button type="submit" class="btn-primary">
+                    <ion-icon name="checkmark-outline"></ion-icon>
                     Criar Conta
                 </button>
             </div>
