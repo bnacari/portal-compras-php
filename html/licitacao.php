@@ -276,6 +276,12 @@ if ($podeEditar) {
             <div class="cards-container" id="cardsContainer">
                 <!-- Preenchido via JavaScript -->
             </div>
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    Mostrando <span id="paginacaoInicioCards">0</span> a <span id="paginacaoFimCards">0</span> de <span id="paginacaoTotalCards">0</span>
+                </div>
+                <div class="pagination" id="paginacaoCards"></div>
+            </div>
         </div>
 
         <!-- View: Tabela -->
@@ -916,11 +922,17 @@ if ($podeEditar) {
         const inicio = (paginaAtualLic - 1) * registrosPorPagina + 1;
         const fim = Math.min(paginaAtualLic * registrosPorPagina, totalRegistros);
 
+        // Atualizar paginação da Tabela
         document.getElementById('paginacaoInicio').textContent = totalRegistros > 0 ? inicio : 0;
         document.getElementById('paginacaoFim').textContent = fim;
         document.getElementById('paginacaoTotal').textContent = totalRegistros;
 
-        const paginacao = document.getElementById('paginacao');
+        // Atualizar paginação dos Cards
+        document.getElementById('paginacaoInicioCards').textContent = totalRegistros > 0 ? inicio : 0;
+        document.getElementById('paginacaoFimCards').textContent = fim;
+        document.getElementById('paginacaoTotalCards').textContent = totalRegistros;
+
+        // Gerar botões de paginação
         let html = '';
 
         html += `<button onclick="irParaPagina(${paginaAtualLic - 1})" ${paginaAtualLic === 1 ? 'disabled' : ''}>
@@ -951,7 +963,9 @@ if ($podeEditar) {
         html += `<button onclick="irParaPagina(${paginaAtualLic + 1})" ${paginaAtualLic === totalPaginas || totalPaginas === 0 ? 'disabled' : ''}>
             <ion-icon name="chevron-forward-outline"></ion-icon></button>`;
 
-        paginacao.innerHTML = html;
+        // Aplicar em ambas as paginações
+        document.getElementById('paginacao').innerHTML = html;
+        document.getElementById('paginacaoCards').innerHTML = html;
     }
 
     function irParaPagina(pagina) {
