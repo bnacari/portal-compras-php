@@ -1346,6 +1346,389 @@ form .select-wrapper {
 
 /* ============================================
    CSS para Anexos - licitacaoForm.php
+   Com estilos para arquivos excluídos
+   ============================================ */
+
+/* Seção de anexos - Remove padding */
+.section-content.anexos-section {
+    padding: 0;
+}
+
+.section-content.anexos-section .dropzone-wrapper {
+    padding: 24px;
+    padding-bottom: 16px;
+}
+
+#filelist {
+    padding: 0;
+}
+
+/* Header dos arquivos */
+#filelist .files-section-header {
+    padding: 16px 24px;
+    margin: 0;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.files-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.files-section-title ion-icon {
+    font-size: 18px;
+    color: #64748b;
+}
+
+/* Contador de excluídos */
+.deleted-count {
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-left: 8px;
+}
+
+/* Tabela sem bordas extras */
+#filelist .files-table-wrapper {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    overflow-x: auto;
+}
+
+#filelist .files-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 0;
+}
+
+#filelist .files-table th {
+    background: #f8fafc;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+#filelist .files-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+#filelist .files-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#filelist .files-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Empty state */
+#filelist .empty-state {
+    padding: 48px 24px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+#filelist .empty-state ion-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+/* ============================================
+   Drag Handle
+   ============================================ */
+.drag-handle {
+    cursor: grab;
+    padding: 4px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: #64748b;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle ion-icon {
+    font-size: 18px;
+}
+
+.drag-handle-cell {
+    width: 40px;
+    text-align: center;
+    padding: 8px 4px !important;
+}
+
+/* ============================================
+   Estados do Sortable (Drag & Drop)
+   ============================================ */
+tr.sortable-ghost {
+    background: #e0f2fe !important;
+    opacity: 0.6;
+}
+
+tr.sortable-chosen {
+    background: #f0f9ff !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+tr.sortable-drag {
+    background: #ffffff !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   Linha de arquivo externo (ativo)
+   ============================================ */
+.external-row {
+    background: linear-gradient(90deg, #f0f9ff 0%, #ffffff 100%);
+}
+
+.external-row:hover {
+    background: linear-gradient(90deg, #e0f2fe 0%, #f8fafc 100%) !important;
+}
+
+.external-row td:first-child {
+    border-left: 3px solid #3b82f6;
+}
+
+/* ============================================
+   Linha de arquivo EXCLUÍDO
+   ============================================ */
+.deleted-row {
+    background: #fef2f2 !important;
+    opacity: 0.7;
+}
+
+.deleted-row:hover {
+    background: #fee2e2 !important;
+    opacity: 0.85;
+}
+
+.deleted-row td:first-child {
+    border-left: 3px solid #ef4444;
+}
+
+/* Nome do arquivo excluído */
+.deleted-file-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.deleted-file-name ion-icon {
+    font-size: 16px;
+    color: #d1d5db;
+}
+
+/* ============================================
+   Links na tabela
+   ============================================ */
+.files-table td a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #334155;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.files-table td a:hover {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+.files-table td a ion-icon {
+    font-size: 16px;
+    color: #64748b;
+}
+
+.external-row td a ion-icon {
+    color: #3b82f6;
+}
+
+/* ============================================
+   Badges
+   ============================================ */
+
+/* Badge "Externo" */
+.external-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    margin-left: 8px;
+    background: #dbeafe;
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Badge "Excluído" */
+.deleted-badge-inline {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    margin-left: 8px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Coluna de data */
+.file-date {
+    color: #64748b;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* ============================================
+   Botões de Ação
+   ============================================ */
+.file-actions {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0 2px;
+}
+
+.action-btn:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.action-btn ion-icon {
+    font-size: 16px;
+}
+
+/* Botão Editar */
+.action-btn.edit-button {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.action-btn.edit-button:hover {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+/* Botão Salvar (oculto por padrão) */
+.action-btn.save-button {
+    display: none;
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.action-btn.save-button.editing {
+    display: inline-flex;
+}
+
+.action-btn.save-button:hover {
+    background: #bbf7d0;
+    color: #15803d;
+}
+
+/* Botão Excluir */
+.action-btn.delete-button {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.action-btn.delete-button:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Botão Restaurar */
+.action-btn.restore-button {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.action-btn.restore-button:hover {
+    background: #bbf7d0;
+    color: #15803d;
+}
+
+/* ============================================
+   Input de edição de nome
+   ============================================ */
+.edited-name {
+    width: 100%;
+    padding: 6px 10px;
+    border: 2px solid #3b82f6;
+    border-radius: 6px;
+    font-size: 13px;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.edited-name:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    #filelist .files-table th:nth-child(3),
+    #filelist .files-table td:nth-child(3) {
+        display: none;
+    }
+    
+    .action-btn {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .action-btn ion-icon {
+        font-size: 14px;
+    }
+}
+/* ============================================
+   CSS para Anexos - licitacaoForm.php
    Adicione ao arquivo licitacaoForm.css
    ============================================ */
 

@@ -161,7 +161,7 @@ if ($modoEdicao) {
 
 // Define action do formulário e textos da página
 $formAction = $modoEdicao ? 'bd/licitacao/update.php' : 'bd/licitacao/create.php';
-$pageTitle = $modoEdicao ? 'Editar Licitação ' . htmlspecialchars($tituloLicitacao) : 'Nova Licitação';
+$pageTitle = $modoEdicao ? 'Editar ' . htmlspecialchars($codLicitacao) : 'Nova Licitação';
 $pageSubtitle = $modoEdicao ? htmlspecialchars($nmTipo . ' ' . $codLicitacao) : 'Preencha os dados para cadastrar uma nova licitação';
 $pageIcon = 'document-text-outline';
 $btnSubmitText = $modoEdicao ? 'Salvar Alterações' : 'Cadastrar Licitação';
@@ -570,6 +570,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 
         <!-- ============================================
              Seção: Anexos (apenas modo edição)
+             COM ARQUIVOS EXTERNOS EXCLUÍDOS PARA RESTAURAÇÃO
              ============================================ -->
         <?php if ($modoEdicao): ?>
             <div class="section-card">
@@ -590,34 +591,60 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                         </div>
                     </div>
 
-                    <!-- Lista de arquivos do diretório -->
+                    <!-- Lista de arquivos UNIFICADA -->
                     <div id="filelist">
                         <?php
                         $directory = "uploads" . '/' . $idLicitacao;
                         $anexos = array();
 
-                        /**
-                         * Função auxiliar para determinar ícone do arquivo
-                         */
-                        function getFileIcon($filename)
-                        {
-                            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-                            $icons = [
-                                'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
-                                'doc' => ['icon' => 'document', 'class' => 'doc'],
-                                'docx' => ['icon' => 'document', 'class' => 'doc'],
-                                'xls' => ['icon' => 'grid', 'class' => 'xls'],
-                                'xlsx' => ['icon' => 'grid', 'class' => 'xls'],
-                                'zip' => ['icon' => 'archive', 'class' => 'zip'],
-                                'rar' => ['icon' => 'archive', 'class' => 'zip'],
-                                'jpg' => ['icon' => 'image', 'class' => 'img'],
-                                'jpeg' => ['icon' => 'image', 'class' => 'img'],
-                                'png' => ['icon' => 'image', 'class' => 'img'],
-                            ];
-                            return $icons[$ext] ?? ['icon' => 'document', 'class' => 'default'];
+                        // ============================================
+                        // 1. Busca anexos EXTERNOS do banco (ATIVOS E EXCLUÍDOS)
+                        // ============================================
+                        if ($idLicitacao > 2000) {
+                            // Licitações 13.303 - Query com CTE (inclui excluídos)
+                            $queryAnexo = "WITH RankedAnexos AS (
+                                                SELECT
+                                                    ID_LICITACAO,
+                                                    NM_ANEXO,
+                                                    LINK_ANEXO,
+                                                    DT_EXC_ANEXO,
+                                                    ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
+                                                FROM ANEXO
+                                                WHERE ID_LICITACAO = $idLicitacao
+                                            )
+                                            SELECT
+                                                ID_LICITACAO,
+                                                MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN LINK_ANEXO END) AS NM_ANEXO,
+                                                MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO,
+                                                MAX(DT_EXC_ANEXO) AS DT_EXC_ANEXO
+                                            FROM RankedAnexos
+                                            GROUP BY ID_LICITACAO, rn";
+                        } else {
+                            // Licitações legadas (inclui excluídos)
+                            $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO, DT_EXC_ANEXO 
+                                           FROM ANEXO 
+                                           WHERE ID_LICITACAO = $idLicitacao";
                         }
 
-                        // Arquivos do diretório físico
+                        $queryAnexo2 = $pdoCAT->query($queryAnexo);
+
+                        while ($registros = $queryAnexo2->fetch(PDO::FETCH_ASSOC)) {
+                            if (!empty($registros['LINK_ANEXO'])) {
+                                $anexos[] = array(
+                                    'nmAnexo' => $registros['NM_ANEXO'] ?? basename($registros['LINK_ANEXO']),
+                                    'linkAnexo' => $registros['LINK_ANEXO'],
+                                    'timestamp' => null,
+                                    'isExternal' => true,
+                                    'isDeleted' => !empty($registros['DT_EXC_ANEXO']),
+                                    'dtExcAnexo' => $registros['DT_EXC_ANEXO'],
+                                    'orderKey' => 'ext:' . $registros['LINK_ANEXO']
+                                );
+                            }
+                        }
+
+                        // ============================================
+                        // 2. Busca arquivos FÍSICOS do diretório
+                        // ============================================
                         if (is_dir($directory)) {
                             $files = scandir($directory);
                             $files = array_diff($files, array('.', '..', '_order.json'));
@@ -627,263 +654,183 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                     'nmAnexo' => $file,
                                     'linkAnexo' => $directory . '/' . $file,
                                     'timestamp' => filemtime($directory . '/' . $file),
+                                    'isExternal' => false,
+                                    'isDeleted' => false,
+                                    'dtExcAnexo' => null,
+                                    'orderKey' => $file
                                 );
                             }
                         }
 
-                        // Verifica se existe ordem personalizada salva
+                        // ============================================
+                        // 3. Aplica ordenação salva (se existir)
+                        // ============================================
                         $orderFile = $directory . '/_order.json';
                         if (file_exists($orderFile)) {
                             $savedOrder = json_decode(file_get_contents($orderFile), true);
                             if (is_array($savedOrder)) {
-                                $anexosByName = [];
+                                $anexosByKey = [];
                                 foreach ($anexos as $anexo) {
-                                    $anexosByName[$anexo['nmAnexo']] = $anexo;
+                                    $anexosByKey[$anexo['orderKey']] = $anexo;
                                 }
                                 $orderedAnexos = [];
-                                foreach ($savedOrder as $filename) {
-                                    if (isset($anexosByName[$filename])) {
-                                        $orderedAnexos[] = $anexosByName[$filename];
-                                        unset($anexosByName[$filename]);
+                                foreach ($savedOrder as $key) {
+                                    if (isset($anexosByKey[$key])) {
+                                        $orderedAnexos[] = $anexosByKey[$key];
+                                        unset($anexosByKey[$key]);
                                     }
                                 }
-                                // Arquivos novos (não presentes na ordem salva) vão ao final
-                                foreach ($anexosByName as $anexo) {
+                                foreach ($anexosByKey as $anexo) {
                                     $orderedAnexos[] = $anexo;
                                 }
                                 $anexos = $orderedAnexos;
                             }
                         } else {
-                            // Sem ordem personalizada: ordena por timestamp (mais recentes primeiro)
+                            // Ordena: ativos primeiro, depois excluídos
                             usort($anexos, function ($a, $b) {
+                                // Excluídos vão para o final
+                                if ($a['isDeleted'] && !$b['isDeleted'])
+                                    return 1;
+                                if (!$a['isDeleted'] && $b['isDeleted'])
+                                    return -1;
+                                // Entre ativos, ordena por timestamp
+                                if ($a['timestamp'] === null && $b['timestamp'] === null)
+                                    return 0;
+                                if ($a['timestamp'] === null)
+                                    return 1;
+                                if ($b['timestamp'] === null)
+                                    return -1;
                                 return $b['timestamp'] - $a['timestamp'];
                             });
                         }
 
+                        // ============================================
+                        // 4. Renderiza a tabela
+                        // ============================================
                         if (!empty($anexos)) {
-                            // Header com toggle de visualização
+                            // Conta ativos e excluídos
+                            foreach ($anexos as $a) {
+                                if ($a['isDeleted'])
+                                    $countExcluidos++;
+                                else
+                                    $countAtivos++;
+                            }
+                            $nmAnexo = isset($registros['NM_ANEXO']) && $registros['NM_ANEXO']
+                                ? $registros['NM_ANEXO']
+                                : basename($registros['LINK_ANEXO']);
+                                
+                            // Header
                             echo '<div class="files-section-header">';
                             echo '<div class="files-section-title">';
                             echo '<ion-icon name="folder-open-outline"></ion-icon>';
-                            echo '<span>Arquivos do Diretório (' . count($anexos) . ')</span>';
-                            echo '</div>';
-                            echo '<div class="files-view-toggle">';
-                            echo '<button type="button" class="files-view-btn active" data-view="grid" onclick="toggleFilesViewEdit(\'grid\')">';
-                            echo '<ion-icon name="grid-outline"></ion-icon>';
-                            echo '<span>Cards</span>';
-                            echo '</button>';
-                            echo '<button type="button" class="files-view-btn" data-view="list" onclick="toggleFilesViewEdit(\'list\')">';
-                            echo '<ion-icon name="list-outline"></ion-icon>';
-                            echo '<span>Lista</span>';
-                            echo '</button>';
-                            echo '</div>';
-                            echo '</div>';
-
-                            // GRID VIEW
-                            echo '<div class="files-grid" id="filesGridEdit">';
-                            $index = 0;
-                            foreach ($anexos as $anexo) {
-                                $fileInfo = getFileIcon($anexo['nmAnexo']);
-                                $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
-                                $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
-
-                                echo '<div class="file-card" id="card_row_' . $index . '" data-filename="' . $nomeArquivo . '">';
-                                echo '<div class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></div>';
-                                echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
-                                echo '<ion-icon name="' . $fileInfo['icon'] . '-outline"></ion-icon>';
-                                echo '</div>';
-                                echo '<div class="file-card-info">';
-                                echo '<div class="file-card-name nmAnexo">';
-                                echo '<a href="' . $linkArquivo . '" target="_blank">' . $nomeArquivo . '</a>';
-                                echo '<input type="text" class="edited-name" style="display:none;" value="' . $nomeArquivo . '">';
-                                echo '</div>';
-                                echo '<div class="file-card-actions">';
-                                echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar nome">';
-                                echo '<ion-icon name="create-outline"></ion-icon>';
-                                echo '</button>';
-                                echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
-                                echo '<ion-icon name="checkmark-outline"></ion-icon>';
-                                echo '</button>';
-                                echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" title="Excluir">';
-                                echo '<ion-icon name="trash-outline"></ion-icon>';
-                                echo '</button>';
-                                echo '</div>';
-                                echo '</div>';
-                                echo '</div>';
-                                $index++;
+                            echo '<span>Arquivos (' . $countAtivos . ')</span>';
+                            if ($countExcluidos > 0) {
+                                echo '<span class="deleted-count">+ ' . $countExcluidos . ' excluído(s)</span>';
                             }
                             echo '</div>';
+                            echo '</div>';
 
-                            // LIST VIEW
-                            echo '<div class="files-list hidden" id="filesListEdit">';
+                            // Tabela
                             echo '<div class="files-table-wrapper">';
                             echo '<table class="files-table">';
-                            echo '<thead><tr><th style="width: 40px;"></th><th>Arquivo</th><th>Data</th><th style="text-align: center;">Ações</th></tr></thead>';
-                            echo '<tbody>';
+                            echo '<thead><tr>';
+                            echo '<th style="width: 40px;"></th>';
+                            echo '<th>Arquivo</th>';
+                            echo '<th style="width: 150px;">Data</th>';
+                            echo '<th style="width: 100px; text-align: center;">Ações</th>';
+                            echo '</tr></thead>';
+                            echo '<tbody id="filesTableBody">';
 
                             $index = 0;
                             foreach ($anexos as $anexo) {
                                 $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
                                 $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
-                                $dataArquivo = date("d/m/Y H:i", $anexo['timestamp']);
+                                $dataArquivo = $anexo['timestamp'] ? date("d/m/Y H:i", $anexo['timestamp']) : '-';
+                                $isExternal = $anexo['isExternal'];
+                                $isDeleted = $anexo['isDeleted'];
+                                $dtExcAnexo = $anexo['dtExcAnexo'] ?? '';
+                                $orderKey = htmlspecialchars($anexo['orderKey']);
 
-                                echo '<tr id="row_' . $index . '" data-filename="' . $nomeArquivo . '">';
-                                echo '<td class="drag-handle" title="Arrastar para reordenar"><ion-icon name="reorder-three-outline"></ion-icon></td>';
+                                // Classes CSS
+                                $rowClasses = [];
+                                if ($isExternal)
+                                    $rowClasses[] = 'external-row';
+                                if ($isDeleted)
+                                    $rowClasses[] = 'deleted-row';
+                                $rowClass = implode(' ', $rowClasses);
+
+                                $iconName = $isExternal ? 'link' : 'document';
+
+                                echo '<tr id="row_' . $index . '" class="' . $rowClass . '" data-order-key="' . $orderKey . '" data-is-external="' . ($isExternal ? '1' : '0') . '">';
+
+                                // Coluna: Drag handle
+                                echo '<td class="drag-handle-cell">';
+                                if (!$isDeleted) {
+                                    echo '<div class="drag-handle"><ion-icon name="menu-outline"></ion-icon></div>';
+                                }
+                                echo '</td>';
+
+                                // Coluna: Nome do arquivo
                                 echo '<td class="nmAnexo">';
-                                echo '<a href="' . $linkArquivo . '" target="_blank">';
-                                echo '<ion-icon name="document-outline"></ion-icon> ' . $nomeArquivo;
-                                echo '</a>';
-                                echo '<input type="text" class="edited-name" style="display:none;" value="' . $nomeArquivo . '">';
+                                if ($isDeleted) {
+                                    echo '<span class="deleted-file-name">';
+                                    echo '<ion-icon name="' . $iconName . '-outline"></ion-icon> ' . $nomeArquivo;
+                                    echo '</span>';
+                                } else {
+                                    echo '<a href="' . $linkArquivo . '" target="_blank">';
+                                    echo '<ion-icon name="' . $iconName . '-outline"></ion-icon> ' . $nomeArquivo;
+                                    echo '</a>';
+                                }
+                                echo '<input type="text" class="edited-name" style="display:none;" />';
+                                if ($isExternal && !$isDeleted) {
+                                    echo ' <span class="external-badge-inline">Externo</span>';
+                                }
+                                if ($isDeleted) {
+                                    echo ' <span class="deleted-badge-inline">Excluído</span>';
+                                }
                                 echo '</td>';
-                                echo '<td>' . $dataArquivo . '</td>';
-                                echo '<td style="text-align: center;">';
-                                echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar">';
-                                echo '<ion-icon name="create-outline"></ion-icon>';
-                                echo '</button>';
-                                echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
-                                echo '<ion-icon name="checkmark-outline"></ion-icon>';
-                                echo '</button>';
-                                echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" title="Excluir">';
-                                echo '<ion-icon name="trash-outline"></ion-icon>';
-                                echo '</button>';
+
+                                // Coluna: Data
+                                echo '<td class="file-date">' . $dataArquivo . '</td>';
+
+                                // Coluna: Ações
+                                echo '<td class="file-actions">';
+                                if ($isDeleted) {
+                                    // Botão Restaurar (para excluídos)
+                                    echo '<button type="button" class="action-btn restore-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" data-link="' . $linkArquivo . '" data-dt-exc="' . htmlspecialchars($dtExcAnexo) . '" title="Restaurar">';
+                                    echo '<ion-icon name="refresh-outline"></ion-icon>';
+                                    echo '</button>';
+                                } else {
+                                    if (!$isExternal) {
+                                        // Botões de edição apenas para arquivos físicos
+                                        echo '<button type="button" class="action-btn edit-button" data-id="' . $index . '" title="Editar">';
+                                        echo '<ion-icon name="create-outline"></ion-icon>';
+                                        echo '</button>';
+                                        echo '<button type="button" class="action-btn save-button" data-id="' . $index . '" title="Salvar">';
+                                        echo '<ion-icon name="checkmark-outline"></ion-icon>';
+                                        echo '</button>';
+                                    }
+                                    // Botão Excluir
+                                    echo '<button type="button" class="action-btn delete-button" data-id="' . $index . '" data-file="' . $nomeArquivo . '" data-is-external="' . ($isExternal ? '1' : '0') . '" data-link="' . $linkArquivo . '" title="Excluir">';
+                                    echo '<ion-icon name="trash-outline"></ion-icon>';
+                                    echo '</button>';
+                                }
                                 echo '</td>';
+
                                 echo '</tr>';
                                 $index++;
                             }
 
                             echo '</tbody></table>';
                             echo '</div>';
-                            echo '</div>';
                         } else {
-                            // Estado vazio para arquivos do diretório
                             echo '<div class="empty-state">';
                             echo '<ion-icon name="folder-open-outline"></ion-icon>';
-                            echo '<p>Nenhum arquivo anexado no diretório</p>';
+                            echo '<p>Nenhum arquivo anexado</p>';
                             echo '</div>';
                         }
                         ?>
                     </div>
-
-                    <!-- ============================================
-                         CORREÇÃO: Anexos do Banco de Dados (Links Externos)
-                         ============================================ -->
-                    <?php
-                    // Busca anexos do banco de dados
-                    $anexosBD = array();
-
-                    if ($idLicitacao > 2000) {
-                        // Licitações 13.303 - Query com CTE
-                        $queryAnexo = "WITH RankedAnexos AS (
-                                            SELECT
-                                                ID_LICITACAO,
-                                                NM_ANEXO,
-                                                LINK_ANEXO,
-                                                DT_EXC_ANEXO,
-                                                ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
-                                            FROM ANEXO
-                                            WHERE ID_LICITACAO = $idLicitacao
-                                        )
-                                        SELECT
-                                            ID_LICITACAO,
-                                            MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN LINK_ANEXO END) AS NM_ANEXO,
-                                            MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO,
-                                            MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN DT_EXC_ANEXO END) AS DT_EXC_ANEXO
-                                        FROM RankedAnexos
-                                        GROUP BY ID_LICITACAO, rn";
-                    } else {
-                        // Licitações legadas (TACLACODE)
-                        $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO, DT_EXC_ANEXO 
-                                       FROM ANEXO 
-                                       WHERE ID_LICITACAO = $idLicitacao";
-                    }
-
-                    $queryAnexo2 = $pdoCAT->query($queryAnexo);
-
-                    while ($registros = $queryAnexo2->fetch(PDO::FETCH_ASSOC)) {
-                        if (!empty($registros['LINK_ANEXO'])) {
-                            $anexosBD[] = array(
-                                'nmAnexo' => $registros['NM_ANEXO'] ?? basename($registros['LINK_ANEXO']),
-                                'linkAnexo' => $registros['LINK_ANEXO'],
-                                'dtExcAnexo' => $registros['DT_EXC_ANEXO'],
-                            );
-                        }
-                    }
-
-                    // Exibe seção de anexos do banco se houver registros
-                    if (!empty($anexosBD)):
-                        ?>
-                        <div class="external-files-section">
-                            <div class="files-section-header">
-                                <div class="files-section-title">
-                                    <ion-icon name="link-outline"></ion-icon>
-                                    <span>Anexos Externos (
-                                        <?php echo count($anexosBD); ?>)
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="files-table-wrapper">
-                                <table class="files-table external-files-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Arquivo</th>
-                                            <th style="width: 120px;">Status</th>
-                                            <th style="width: 80px; text-align: center;">Ação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($anexosBD as $anexo):
-                                            $isExcluido = !empty($anexo['dtExcAnexo']);
-                                            $nmAnexoEscaped = str_replace("'", "\\'", $anexo['nmAnexo'] ?? '');
-                                            $linkAnexoEscaped = str_replace("'", "\\'", $anexo['linkAnexo']);
-                                            $dtExcEscaped = str_replace("'", "\\'", $anexo['dtExcAnexo'] ?? '');
-                                            ?>
-                                            <tr class="<?php echo $isExcluido ? 'row-excluded' : ''; ?>">
-                                                <td>
-                                                    <a href="<?php echo htmlspecialchars($anexo['linkAnexo']); ?>" target="_blank"
-                                                        class="external-link">
-                                                        <ion-icon name="link-outline"></ion-icon>
-                                                        <?php echo htmlspecialchars($anexo['nmAnexo'] ?? 'Link externo'); ?>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <?php if ($isExcluido): ?>
-                                                        <span class="status-badge status-excluded">
-                                                            <ion-icon name="close-circle-outline"></ion-icon>
-                                                            Excluído
-                                                        </span>
-                                                    <?php else: ?>
-                                                        <span class="status-badge status-active">
-                                                            <ion-icon name="checkmark-circle-outline"></ion-icon>
-                                                            Ativo
-                                                        </span>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td style="text-align: center;">
-                                                    <?php if ($isExcluido): ?>
-                                                        <!-- Restaurar: passa dtExcAnexo para o PHP identificar que é restauração -->
-                                                        <a href="javascript:void(0);"
-                                                            onclick="confirmDelete('<?php echo $nmAnexoEscaped; ?>', '<?php echo $linkAnexoEscaped; ?>', '<?php echo $idLicitacao; ?>', '<?php echo $dtExcEscaped; ?>')"
-                                                            class="action-btn restore-btn" title="Restaurar">
-                                                            <ion-icon name="refresh-outline"></ion-icon>
-                                                        </a>
-                                                    <?php else: ?>
-                                                        <!-- Excluir: não passa dtExcAnexo -->
-                                                        <a href="javascript:void(0);"
-                                                            onclick="confirmDelete('<?php echo $nmAnexoEscaped; ?>', '<?php echo $linkAnexoEscaped; ?>', '<?php echo $idLicitacao; ?>')"
-                                                            class="action-btn delete-btn" title="Excluir">
-                                                            <ion-icon name="trash-outline"></ion-icon>
-                                                        </a>
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
                 </div>
             </div>
         <?php else: ?>
@@ -1399,71 +1346,10 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             }
         });
 
-        $(document).on('click', '.delete-button', function () {
-            var fileName = $(this).data('file');
 
-            if (confirm('Deseja realmente excluir o arquivo "' + fileName + '"?')) {
-                $.ajax({
-                    url: 'bd/licitacao/deleteAnexo.php',
-                    method: 'POST',
-                    data: {
-                        directory: directory,
-                        fileName: fileName
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.success) {
-                            location.reload();
-                        } else {
-                            alert('Erro ao excluir arquivo: ' + response.message);
-                        }
-                    },
-                    error: function () {
-                        alert('Erro ao excluir arquivo');
-                    }
-                });
-            }
-        });
     <?php endif; ?>
 
-    // ============================================
-    // Reordenação de Arquivos (Drag & Drop)
-    // ============================================
-    var sortableGrid = null;
-    var sortableList = null;
 
-    function initSortable() {
-        var gridEl = document.getElementById('filesGridEdit');
-        var listBody = document.querySelector('#filesListEdit .files-table tbody');
-
-        if (gridEl) {
-            sortableGrid = new Sortable(gridEl, {
-                animation: 150,
-                handle: '.drag-handle',
-                ghostClass: 'sortable-ghost',
-                chosenClass: 'sortable-chosen',
-                dragClass: 'sortable-drag',
-                onEnd: function (evt) {
-                    syncOrderFromGrid();
-                    saveOrder();
-                }
-            });
-        }
-
-        if (listBody) {
-            sortableList = new Sortable(listBody, {
-                animation: 150,
-                handle: '.drag-handle',
-                ghostClass: 'sortable-ghost',
-                chosenClass: 'sortable-chosen',
-                dragClass: 'sortable-drag',
-                onEnd: function (evt) {
-                    syncOrderFromList();
-                    saveOrder();
-                }
-            });
-        }
-    }
 
     function getOrderFromGrid() {
         var items = document.querySelectorAll('#filesGridEdit .file-card');
@@ -1507,20 +1393,28 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
         });
     }
 
+
+
+    /**
+  * Salva a ordem dos arquivos
+  */
     function saveOrder() {
-        var order = getOrderFromGrid();
-        var licId = idLicitacao || document.getElementById('idLicitacao').value || 0;
+        var rows = document.querySelectorAll('#filesTableBody tr:not(.deleted-row)');
+        var order = [];
 
-        if (!licId || licId == 0) {
-            console.warn('saveOrder: ID da licitação não disponível (modo cadastro).');
-            return;
-        }
+        rows.forEach(function (row) {
+            var orderKey = row.getAttribute('data-order-key');
+            if (orderKey) {
+                order.push(orderKey);
+            }
+        });
 
+        // Salva via AJAX
         fetch('bd/licitacao/reorderAnexo.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                idLicitacao: licId,
+                idLicitacao: idLicitacao,
                 order: order
             })
         })
@@ -1531,9 +1425,16 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                 }
             })
             .catch(function (error) {
-                console.error('Erro ao salvar ordem:', error);
+                console.error('Erro ao salvar ordem dos arquivos:', error);
             });
     }
+
+    // Inicializa o Sortable quando o DOM estiver pronto
+    $(document).ready(function () {
+        if (modoEdicao) {
+            initSortable();
+        }
+    });
 
     // Inicializa o Sortable quando o DOM estiver pronto
     initSortable();
@@ -1572,6 +1473,205 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
             });
         }
     }
+
+
+    // ============================================
+    // Exclusão de Arquivos (físicos e externos)
+    // ============================================
+    $(document).on('click', '.delete-button', function () {
+        var $btn = $(this);
+        var fileName = $btn.data('file');
+        var isExternal = $btn.data('is-external') == '1';
+        var link = $btn.data('link');
+
+        var mensagem = isExternal
+            ? 'Deseja excluir este link externo?\n\n"' + fileName + '"'
+            : 'Deseja realmente excluir o arquivo "' + fileName + '"?';
+
+        if (confirm(mensagem)) {
+            if (isExternal) {
+                // Exclusão de anexo externo (banco de dados)
+                $.ajax({
+                    url: 'excluir_arquivo.php',
+                    type: 'GET',
+                    data: {
+                        file: fileName,
+                        directory: link,
+                        idLicitacao: idLicitacao
+                    },
+                    success: function (response) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Erro ao excluir anexo externo:', error);
+                        alert('Erro ao excluir o anexo externo.');
+                    }
+                });
+            } else {
+                // Exclusão de arquivo físico (diretório)
+                $.ajax({
+                    url: 'bd/licitacao/deleteAnexo.php',
+                    method: 'POST',
+                    data: {
+                        directory: directory,
+                        fileName: fileName
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Erro ao excluir arquivo: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Erro ao excluir arquivo');
+                    }
+                });
+            }
+        }
+    });
+
+    // ============================================
+    // Restauração de Arquivos Externos Excluídos
+    // ============================================
+    $(document).on('click', '.restore-button', function () {
+        var $btn = $(this);
+        var fileName = $btn.data('file');
+        var link = $btn.data('link');
+        var dtExc = $btn.data('dt-exc');
+
+        if (confirm('Deseja restaurar este anexo?\n\n"' + fileName + '"')) {
+            $.ajax({
+                url: 'excluir_arquivo.php',
+                type: 'GET',
+                data: {
+                    file: fileName,
+                    directory: link,
+                    idLicitacao: idLicitacao,
+                    dtExcAnexo: dtExc  // Passa a data de exclusão para indicar restauração
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro ao restaurar anexo:', error);
+                    alert('Erro ao restaurar o anexo.');
+                }
+            });
+        }
+    });
+
+    // ============================================
+    // Reordenação de Arquivos (Drag & Drop) - Tabela
+    // ============================================
+    function initSortable() {
+        var tableBody = document.getElementById('filesTableBody');
+
+        if (tableBody) {
+            new Sortable(tableBody, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                filter: '.deleted-row', // Não permite arrastar linhas excluídas
+                onEnd: function () {
+                    saveOrder();
+                }
+            });
+        }
+    }
+
+    /**
+     * Sincroniza a ordem da lista com o grid
+     */
+    function syncOrderFromList() {
+        var listRows = document.querySelectorAll('#filesListEdit tbody tr');
+        var gridContainer = document.getElementById('filesGridEdit');
+
+        if (!gridContainer) return;
+
+        var newOrder = [];
+        listRows.forEach(function (row) {
+            var orderKey = row.getAttribute('data-order-key');
+            newOrder.push(orderKey);
+        });
+
+        // Reordena o grid baseado na nova ordem
+        newOrder.forEach(function (key) {
+            var card = gridContainer.querySelector('[data-order-key="' + key + '"]');
+            if (card) {
+                gridContainer.appendChild(card);
+            }
+        });
+    }
+
+    /**
+     * Sincroniza a ordem do grid com a lista
+     */
+    function syncOrderFromGrid() {
+        var gridCards = document.querySelectorAll('#filesGridEdit .file-card-edit');
+        var listBody = document.querySelector('#filesListEdit tbody');
+
+        if (!listBody) return;
+
+        var newOrder = [];
+        gridCards.forEach(function (card) {
+            var orderKey = card.getAttribute('data-order-key');
+            newOrder.push(orderKey);
+        });
+
+        // Reordena a lista baseado na nova ordem
+        newOrder.forEach(function (key) {
+            var row = listBody.querySelector('[data-order-key="' + key + '"]');
+            if (row) {
+                listBody.appendChild(row);
+            }
+        });
+    }
+
+    /**
+     * Salva a ordem dos arquivos (físicos e externos)
+     * Usa o atributo data-order-key que inclui prefixo "ext:" para externos
+     */
+    function saveFileOrder() {
+        var gridCards = document.querySelectorAll('#filesGridEdit .file-card-edit');
+        var order = [];
+
+        gridCards.forEach(function (card) {
+            var orderKey = card.getAttribute('data-order-key');
+            if (orderKey) {
+                order.push(orderKey);
+            }
+        });
+
+        // Salva via AJAX (usando fetch com JSON)
+        fetch('bd/licitacao/reorderAnexo.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idLicitacao: idLicitacao,
+                order: order
+            })
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                if (!data.success) {
+                    console.error('Erro ao salvar ordem:', data.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Erro ao salvar ordem dos arquivos:', error);
+            });
+    }
+
+    // Inicializa o Sortable quando o DOM estiver pronto
+    $(document).ready(function () {
+        if (modoEdicao) {
+            initSortable();
+        }
+    });
 </script>
 
 <?php include_once 'includes/footer.inc.php'; ?>

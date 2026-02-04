@@ -358,7 +358,8 @@ if (isset($_SESSION['perfil'])) {
     </div>
 
     <!-- ============================================
-         Seção: Documentos Anexados
+         Seção: Documentos Anexados (VERSÃO UNIFICADA)
+         Substitua a seção "Documentos Anexados" no licitacaoView.php
          ============================================ -->
     <div class="section-card">
         <div class="section-header">
@@ -371,19 +372,19 @@ if (isset($_SESSION['perfil'])) {
             $anexos = array();
 
             // ============================================
-            // CORREÇÃO: Busca anexos do BANCO DE DADOS (links externos)
+            // 1. Busca anexos EXTERNOS do banco de dados
             // ============================================
             if ($idLicitacao > 2000) {
-                // Licitações 13.303 - Query com CTE para agrupar descrição e arquivo
+                // Licitações 13.303 - Query com CTE
                 $queryAnexo = "WITH RankedAnexos AS (
                                     SELECT
                                         ID_LICITACAO,
                                         NM_ANEXO,
                                         LINK_ANEXO,
+                                        DT_EXC_ANEXO,
                                         ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
                                     FROM ANEXO
-                                    WHERE ID_LICITACAO = $idLicitacao
-                                    AND DT_EXC_ANEXO IS NULL
+                                    WHERE ID_LICITACAO = $idLicitacao AND DT_EXC_ANEXO IS NULL
                                 )
                                 SELECT
                                     ID_LICITACAO,
@@ -395,27 +396,25 @@ if (isset($_SESSION['perfil'])) {
                 // Licitações legadas (TACLACODE)
                 $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO 
                                FROM ANEXO 
-                               WHERE ID_LICITACAO = $idLicitacao 
-                               AND DT_EXC_ANEXO IS NULL";
+                               WHERE ID_LICITACAO = $idLicitacao AND DT_EXC_ANEXO IS NULL";
             }
 
             $queryAnexo2 = $pdoCAT->query($queryAnexo);
 
-            // Obtém anexos do banco de dados (links externos)
             while ($registros = $queryAnexo2->fetch(PDO::FETCH_ASSOC)) {
-                // Só adiciona se tiver link válido
                 if (!empty($registros['LINK_ANEXO'])) {
                     $anexos[] = array(
                         'nmAnexo' => $registros['NM_ANEXO'] ?? basename($registros['LINK_ANEXO']),
                         'linkAnexo' => $registros['LINK_ANEXO'],
-                        'timestamp' => null, // Links externos não têm timestamp local
-                        'isExternal' => true // Flag para identificar links externos
+                        'timestamp' => null,
+                        'isExternal' => true,
+                        'orderKey' => 'ext:' . $registros['LINK_ANEXO']
                     );
                 }
             }
 
             // ============================================
-            // Arquivos do diretório físico (uploads locais)
+            // 2. Busca arquivos FÍSICOS do diretório
             // ============================================
             if (is_dir($directory)) {
                 $files = scandir($directory);
@@ -426,85 +425,72 @@ if (isset($_SESSION['perfil'])) {
                         'nmAnexo' => $file,
                         'linkAnexo' => $directory . '/' . $file,
                         'timestamp' => filemtime($directory . '/' . $file),
-                        'isExternal' => false
+                        'isExternal' => false,
+                        'orderKey' => $file
                     );
                 }
             }
 
             // ============================================
-            // Ordenação dos arquivos
+            // 3. Aplica ordenação salva (se existir)
             // ============================================
-            // Verifica se existe ordem personalizada salva (apenas para arquivos locais)
             $orderFile = $directory . '/_order.json';
             if (file_exists($orderFile)) {
                 $savedOrder = json_decode(file_get_contents($orderFile), true);
                 if (is_array($savedOrder)) {
-                    // Separa anexos externos dos locais
-                    $anexosExternos = array_filter($anexos, function ($a) {
-                        return !empty($a['isExternal']); });
-                    $anexosLocais = array_filter($anexos, function ($a) {
-                        return empty($a['isExternal']); });
-
-                    // Ordena apenas os locais
-                    $anexosByName = [];
-                    foreach ($anexosLocais as $anexo) {
-                        $anexosByName[$anexo['nmAnexo']] = $anexo;
+                    $anexosByKey = [];
+                    foreach ($anexos as $anexo) {
+                        $anexosByKey[$anexo['orderKey']] = $anexo;
                     }
                     $orderedAnexos = [];
-                    foreach ($savedOrder as $filename) {
-                        if (isset($anexosByName[$filename])) {
-                            $orderedAnexos[] = $anexosByName[$filename];
-                            unset($anexosByName[$filename]);
+                    foreach ($savedOrder as $key) {
+                        if (isset($anexosByKey[$key])) {
+                            $orderedAnexos[] = $anexosByKey[$key];
+                            unset($anexosByKey[$key]);
                         }
                     }
-                    // Arquivos novos (não presentes na ordem salva) vão ao final
-                    foreach ($anexosByName as $anexo) {
+                    // Arquivos novos vão ao final
+                    foreach ($anexosByKey as $anexo) {
                         $orderedAnexos[] = $anexo;
                     }
-
-                    // Combina: externos primeiro, depois locais ordenados
-                    $anexos = array_merge(array_values($anexosExternos), $orderedAnexos);
+                    $anexos = $orderedAnexos;
                 }
             } else {
-                // Sem ordem personalizada: ordena por timestamp (mais recentes primeiro)
-                // Anexos externos (sem timestamp) ficam no início
+                // Ordena por timestamp (externos sem timestamp vão ao final)
                 usort($anexos, function ($a, $b) {
-                    // Se ambos são externos ou ambos são locais, mantém ordem
-                    if (empty($a['timestamp']) && empty($b['timestamp']))
+                    if ($a['timestamp'] === null && $b['timestamp'] === null)
                         return 0;
-                    // Externos primeiro
-                    if (empty($a['timestamp']))
-                        return -1;
-                    if (empty($b['timestamp']))
+                    if ($a['timestamp'] === null)
                         return 1;
-                    // Entre locais, mais recentes primeiro
+                    if ($b['timestamp'] === null)
+                        return -1;
                     return $b['timestamp'] - $a['timestamp'];
                 });
             }
 
             // ============================================
-            // Função auxiliar para ícones
+            // 4. Função auxiliar para ícones
             // ============================================
             function getFileIcon($filename)
             {
                 $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                 $icons = [
                     'pdf' => ['icon' => 'document-text', 'class' => 'pdf'],
-                    'doc' => ['icon' => 'document', 'class' => 'doc'],
-                    'docx' => ['icon' => 'document', 'class' => 'doc'],
-                    'xls' => ['icon' => 'grid', 'class' => 'xls'],
-                    'xlsx' => ['icon' => 'grid', 'class' => 'xls'],
+                    'doc' => ['icon' => 'document', 'class' => 'word'],
+                    'docx' => ['icon' => 'document', 'class' => 'word'],
+                    'xls' => ['icon' => 'grid', 'class' => 'excel'],
+                    'xlsx' => ['icon' => 'grid', 'class' => 'excel'],
                     'zip' => ['icon' => 'archive', 'class' => 'zip'],
                     'rar' => ['icon' => 'archive', 'class' => 'zip'],
-                    'jpg' => ['icon' => 'image', 'class' => 'img'],
-                    'jpeg' => ['icon' => 'image', 'class' => 'img'],
-                    'png' => ['icon' => 'image', 'class' => 'img'],
+                    'jpg' => ['icon' => 'image', 'class' => 'image'],
+                    'jpeg' => ['icon' => 'image', 'class' => 'image'],
+                    'png' => ['icon' => 'image', 'class' => 'image'],
                 ];
                 return $icons[$ext] ?? ['icon' => 'document', 'class' => 'default'];
             }
 
             // ============================================
-            // Renderização dos anexos
+            // 5. Renderiza a lista de arquivos
             // ============================================
             if (!empty($anexos)) {
                 // Header com toggle de visualização
@@ -523,57 +509,61 @@ if (isset($_SESSION['perfil'])) {
                 echo '</div>';
                 echo '</div>';
 
-                // GRID VIEW
+                // ========== GRID VIEW ==========
                 echo '<div class="files-grid" id="filesGrid">';
                 foreach ($anexos as $anexo) {
-                    $fileInfo = getFileIcon($anexo['nmAnexo'] ?? '');
-                    $nomeArquivo = htmlspecialchars($anexo['nmAnexo'] ?? basename($anexo['linkAnexo']));
+                    $fileInfo = getFileIcon($anexo['nmAnexo']);
+                    $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
                     $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
-                    $dataArquivo = !empty($anexo['timestamp']) ? date("d/m/Y H:i", $anexo['timestamp']) : '';
-                    $isExternal = !empty($anexo['isExternal']);
+                    $dataArquivo = $anexo['timestamp'] ? date("d/m/Y H:i", $anexo['timestamp']) : '';
+                    $isExternal = $anexo['isExternal'];
 
-                    // Ícone especial para links externos
-                    if ($isExternal) {
-                        $fileInfo = ['icon' => 'link', 'class' => 'external'];
-                    }
+                    // Classes para externos
+                    $externalClass = $isExternal ? 'external-link' : '';
+                    $iconClass = $isExternal ? 'external' : $fileInfo['class'];
+                    $iconName = $isExternal ? 'link' : $fileInfo['icon'];
 
-                    echo '<a href="' . $linkArquivo . '" target="_blank" class="file-card' . ($isExternal ? ' external-link' : '') . '">';
-                    echo '<div class="file-card-icon ' . $fileInfo['class'] . '">';
-                    echo '<ion-icon name="' . $fileInfo['icon'] . '-outline"></ion-icon>';
+                    echo '<a href="' . $linkArquivo . '" target="_blank" class="file-card ' . $externalClass . '">';
+                    echo '<div class="file-card-icon ' . $iconClass . '">';
+                    echo '<ion-icon name="' . $iconName . '-outline"></ion-icon>';
                     echo '</div>';
                     echo '<div class="file-card-info">';
                     echo '<span class="file-card-name">' . $nomeArquivo . '</span>';
-                    if ($dataArquivo) {
-                        echo '<span class="file-card-date">' . $dataArquivo . '</span>';
-                    } elseif ($isExternal) {
+                    if ($isExternal) {
                         echo '<span class="file-card-date external-badge">Link externo</span>';
+                    } else {
+                        echo '<span class="file-card-date">' . $dataArquivo . '</span>';
                     }
                     echo '</div>';
                     echo '</a>';
                 }
                 echo '</div>';
 
-                // LIST VIEW
+                // ========== LIST VIEW ==========
                 echo '<div class="files-list hidden" id="filesList">';
                 echo '<div class="files-table-wrapper">';
                 echo '<table class="files-table">';
-                echo '<thead><tr><th>Arquivo</th><th>Tipo</th><th>Data</th></tr></thead>';
+                echo '<thead><tr><th>Arquivo</th><th>Data</th></tr></thead>';
                 echo '<tbody>';
 
                 foreach ($anexos as $anexo) {
-                    $nomeArquivo = htmlspecialchars($anexo['nmAnexo'] ?? basename($anexo['linkAnexo']));
+                    $nomeArquivo = htmlspecialchars($anexo['nmAnexo']);
                     $linkArquivo = htmlspecialchars($anexo['linkAnexo']);
-                    $dataArquivo = !empty($anexo['timestamp']) ? date("d/m/Y H:i", $anexo['timestamp']) : '-';
-                    $isExternal = !empty($anexo['isExternal']);
-                    $tipoArquivo = $isExternal ? 'Externo' : 'Local';
+                    $dataArquivo = $anexo['timestamp'] ? date("d/m/Y H:i", $anexo['timestamp']) : '-';
+                    $isExternal = $anexo['isExternal'];
 
-                    echo '<tr>';
+                    $rowClass = $isExternal ? 'external-row' : '';
+                    $iconName = $isExternal ? 'link' : 'document';
+
+                    echo '<tr class="' . $rowClass . '">';
                     echo '<td>';
                     echo '<a href="' . $linkArquivo . '" target="_blank">';
-                    echo '<ion-icon name="' . ($isExternal ? 'link' : 'document') . '-outline"></ion-icon> ' . $nomeArquivo;
+                    echo '<ion-icon name="' . $iconName . '-outline"></ion-icon> ' . $nomeArquivo;
                     echo '</a>';
+                    if ($isExternal) {
+                        echo ' <span class="external-badge-inline">Externo</span>';
+                    }
                     echo '</td>';
-                    echo '<td class="file-type">' . $tipoArquivo . '</td>';
                     echo '<td class="file-date">' . $dataArquivo . '</td>';
                     echo '</tr>';
                 }
@@ -583,7 +573,7 @@ if (isset($_SESSION['perfil'])) {
                 echo '</div>';
             } else {
                 // Estado vazio
-                echo '<div class="empty-state" style="padding: 48px 24px;">';
+                echo '<div class="empty-state">';
                 echo '<ion-icon name="folder-open-outline"></ion-icon>';
                 echo '<p>Nenhum documento anexado</p>';
                 echo '</div>';
