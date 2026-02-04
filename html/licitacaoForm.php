@@ -782,9 +782,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                     echo '</a>';
                                 }
                                 echo '<input type="text" class="edited-name" style="display:none;" />';
-                                if ($isExternal && !$isDeleted) {
-                                    echo ' <span class="external-badge-inline">Externo</span>';
-                                }
+                               
                                 if ($isDeleted) {
                                     echo ' <span class="deleted-badge-inline">Excluído</span>';
                                 }

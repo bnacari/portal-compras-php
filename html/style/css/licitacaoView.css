@@ -1029,18 +1029,6 @@
     font-weight: 500;
 }
 
-/* Linha de arquivo externo na TABELA */
-.external-row {
-    background: linear-gradient(90deg, #f0f9ff 0%, #ffffff 100%);
-}
-
-.external-row:hover {
-    background: linear-gradient(90deg, #e0f2fe 0%, #f8fafc 100%);
-}
-
-.external-row td:first-child {
-    border-left: 3px solid #3b82f6;
-}
 
 /* Badge inline "Externo" na tabela */
 .external-badge-inline {
@@ -1369,6 +1357,17 @@ tr.sortable-chosen {
     border-bottom: 1px solid #e2e8f0;
     background: #f8fafc;
 }
+.section-content.files-section {
+    padding: 0;
+}
+
+/* Header dos arquivos */
+.section-content.files-section .files-section-header {
+    padding: 16px 24px;
+    margin: 0;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
 
 .files-section-title {
     display: flex;
@@ -1441,36 +1440,13 @@ tr.sortable-chosen {
     color: #64748b;
 }
 
-/* Linha externa */
-.external-row {
-    background: linear-gradient(90deg, #f0f9ff 0%, #ffffff 100%);
-}
-
-.external-row:hover {
-    background: linear-gradient(90deg, #e0f2fe 0%, #f8fafc 100%) !important;
-}
-
+/* Linha externa - APENAS barra azul lateral */
 .external-row td:first-child {
     border-left: 3px solid #3b82f6;
 }
 
 .external-row td a ion-icon {
     color: #3b82f6;
-}
-
-/* Badge externo */
-.external-badge-inline {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    margin-left: 8px;
-    background: #dbeafe;
-    color: #2563eb;
-    font-size: 10px;
-    font-weight: 600;
-    border-radius: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 /* Data */
