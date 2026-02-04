@@ -577,9 +577,9 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                     <ion-icon name="attach-outline"></ion-icon>
                     <h2>Gerenciar Anexos</h2>
                 </div>
-                <div class="section-content">
+                <div class="section-content anexos-section">
                     <!-- Dropzone para upload -->
-                    <div class="form-row">
+                    <div class="form-row dropzone-wrapper">
                         <div class="form-col-12">
                             <div id="drop-zone" class="dropzone" onclick="handleClick(event)" ondrop="handleDrop(event)"
                                 ondragover="handleDragOver(event)">
@@ -590,7 +590,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                         </div>
                     </div>
 
-                    <!-- Lista de arquivos -->
+                    <!-- Lista de arquivos do diretório -->
                     <div id="filelist">
                         <?php
                         $directory = "uploads" . '/' . $idLicitacao;
@@ -659,6 +659,7 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                                 return $b['timestamp'] - $a['timestamp'];
                             });
                         }
+
                         if (!empty($anexos)) {
                             // Header com toggle de visualização
                             echo '<div class="files-section-header">';
@@ -754,14 +755,135 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
                             echo '</div>';
                             echo '</div>';
                         } else {
-                            // Estado vazio
+                            // Estado vazio para arquivos do diretório
                             echo '<div class="empty-state">';
                             echo '<ion-icon name="folder-open-outline"></ion-icon>';
-                            echo '<p>Nenhum arquivo anexado</p>';
+                            echo '<p>Nenhum arquivo anexado no diretório</p>';
                             echo '</div>';
                         }
                         ?>
                     </div>
+
+                    <!-- ============================================
+                         CORREÇÃO: Anexos do Banco de Dados (Links Externos)
+                         ============================================ -->
+                    <?php
+                    // Busca anexos do banco de dados
+                    $anexosBD = array();
+
+                    if ($idLicitacao > 2000) {
+                        // Licitações 13.303 - Query com CTE
+                        $queryAnexo = "WITH RankedAnexos AS (
+                                            SELECT
+                                                ID_LICITACAO,
+                                                NM_ANEXO,
+                                                LINK_ANEXO,
+                                                DT_EXC_ANEXO,
+                                                ROW_NUMBER() OVER (PARTITION BY ID_LICITACAO, CASE WHEN NM_ANEXO LIKE '%_descricao' THEN 1 ELSE 2 END ORDER BY NM_ANEXO) AS rn
+                                            FROM ANEXO
+                                            WHERE ID_LICITACAO = $idLicitacao
+                                        )
+                                        SELECT
+                                            ID_LICITACAO,
+                                            MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN LINK_ANEXO END) AS NM_ANEXO,
+                                            MAX(CASE WHEN NM_ANEXO like '%_arquivo' THEN LINK_ANEXO END) AS LINK_ANEXO,
+                                            MAX(CASE WHEN NM_ANEXO like '%_descricao' THEN DT_EXC_ANEXO END) AS DT_EXC_ANEXO
+                                        FROM RankedAnexos
+                                        GROUP BY ID_LICITACAO, rn";
+                    } else {
+                        // Licitações legadas (TACLACODE)
+                        $queryAnexo = "SELECT ID_LICITACAO, NM_ANEXO, LINK_ANEXO, DT_EXC_ANEXO 
+                                       FROM ANEXO 
+                                       WHERE ID_LICITACAO = $idLicitacao";
+                    }
+
+                    $queryAnexo2 = $pdoCAT->query($queryAnexo);
+
+                    while ($registros = $queryAnexo2->fetch(PDO::FETCH_ASSOC)) {
+                        if (!empty($registros['LINK_ANEXO'])) {
+                            $anexosBD[] = array(
+                                'nmAnexo' => $registros['NM_ANEXO'] ?? basename($registros['LINK_ANEXO']),
+                                'linkAnexo' => $registros['LINK_ANEXO'],
+                                'dtExcAnexo' => $registros['DT_EXC_ANEXO'],
+                            );
+                        }
+                    }
+
+                    // Exibe seção de anexos do banco se houver registros
+                    if (!empty($anexosBD)):
+                        ?>
+                        <div class="external-files-section">
+                            <div class="files-section-header">
+                                <div class="files-section-title">
+                                    <ion-icon name="link-outline"></ion-icon>
+                                    <span>Anexos Externos (
+                                        <?php echo count($anexosBD); ?>)
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="files-table-wrapper">
+                                <table class="files-table external-files-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Arquivo</th>
+                                            <th style="width: 120px;">Status</th>
+                                            <th style="width: 80px; text-align: center;">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($anexosBD as $anexo):
+                                            $isExcluido = !empty($anexo['dtExcAnexo']);
+                                            $nmAnexoEscaped = str_replace("'", "\\'", $anexo['nmAnexo'] ?? '');
+                                            $linkAnexoEscaped = str_replace("'", "\\'", $anexo['linkAnexo']);
+                                            $dtExcEscaped = str_replace("'", "\\'", $anexo['dtExcAnexo'] ?? '');
+                                            ?>
+                                            <tr class="<?php echo $isExcluido ? 'row-excluded' : ''; ?>">
+                                                <td>
+                                                    <a href="<?php echo htmlspecialchars($anexo['linkAnexo']); ?>" target="_blank"
+                                                        class="external-link">
+                                                        <ion-icon name="link-outline"></ion-icon>
+                                                        <?php echo htmlspecialchars($anexo['nmAnexo'] ?? 'Link externo'); ?>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <?php if ($isExcluido): ?>
+                                                        <span class="status-badge status-excluded">
+                                                            <ion-icon name="close-circle-outline"></ion-icon>
+                                                            Excluído
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span class="status-badge status-active">
+                                                            <ion-icon name="checkmark-circle-outline"></ion-icon>
+                                                            Ativo
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <?php if ($isExcluido): ?>
+                                                        <!-- Restaurar: passa dtExcAnexo para o PHP identificar que é restauração -->
+                                                        <a href="javascript:void(0);"
+                                                            onclick="confirmDelete('<?php echo $nmAnexoEscaped; ?>', '<?php echo $linkAnexoEscaped; ?>', '<?php echo $idLicitacao; ?>', '<?php echo $dtExcEscaped; ?>')"
+                                                            class="action-btn restore-btn" title="Restaurar">
+                                                            <ion-icon name="refresh-outline"></ion-icon>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <!-- Excluir: não passa dtExcAnexo -->
+                                                        <a href="javascript:void(0);"
+                                                            onclick="confirmDelete('<?php echo $nmAnexoEscaped; ?>', '<?php echo $linkAnexoEscaped; ?>', '<?php echo $idLicitacao; ?>')"
+                                                            class="action-btn delete-btn" title="Excluir">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </a>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
             </div>
         <?php else: ?>
@@ -816,6 +938,35 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
     const idLicitacao = <?php echo $idLicitacao ? $idLicitacao : '0'; ?>;
     const directory = '<?php echo $modoEdicao ? $directory : ''; ?>';
 
+
+    // ============================================
+    // Função para Excluir/Restaurar Anexos Externos (BD)
+    // ============================================
+    function confirmDelete(file, directory, idLicitacao, dtExcAnexo) {
+        var mensagem = dtExcAnexo
+            ? 'Deseja restaurar este anexo externo?'
+            : 'Tem certeza que deseja excluir este anexo externo?';
+
+        if (confirm(mensagem)) {
+            $.ajax({
+                url: 'excluir_arquivo.php',
+                type: 'GET',
+                data: {
+                    file: file,
+                    directory: directory,
+                    idLicitacao: idLicitacao,
+                    dtExcAnexo: dtExcAnexo || ''
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro AJAX:', status, error);
+                    alert('Erro ao processar a solicitação.');
+                }
+            });
+        }
+    }
     // ============================================
     // Inicialização
     // ============================================
@@ -1386,6 +1537,41 @@ $btnSubmitIcon = $modoEdicao ? 'save-outline' : 'checkmark-circle-outline';
 
     // Inicializa o Sortable quando o DOM estiver pronto
     initSortable();
+
+    /**
+     * Função para confirmar exclusão/restauração de anexos externos (banco de dados)
+     * 
+     * @param {string} file - Nome do arquivo
+     * @param {string} directory - Link/caminho do arquivo
+     * @param {string} idLicitacao - ID da licitação
+     * @param {string} dtExcAnexo - Data de exclusão (se existir, é para restaurar)
+     */
+    function confirmDeleteExternal(file, directory, idLicitacao, dtExcAnexo) {
+        var acao = dtExcAnexo ? 'restaurar' : 'excluir';
+        var mensagem = dtExcAnexo
+            ? 'Deseja restaurar este anexo externo?'
+            : 'Tem certeza que deseja excluir este anexo externo?';
+
+        if (confirm(mensagem)) {
+            $.ajax({
+                url: 'excluir_arquivo.php',
+                type: 'GET',
+                data: {
+                    file: file,
+                    directory: directory,
+                    idLicitacao: idLicitacao,
+                    dtExcAnexo: dtExcAnexo || ''
+                },
+                success: function (response) {
+                    // Recarrega a página para atualizar a lista
+                    location.reload();
+                },
+                error: function () {
+                    alert('Erro ao ' + acao + ' o anexo externo.');
+                }
+            });
+        }
+    }
 </script>
 
 <?php include_once 'includes/footer.inc.php'; ?>

@@ -110,7 +110,7 @@
     color: #cbd5e1;
 }
 
-.header-breadcrumb > span {
+.header-breadcrumb>span {
     color: #64748b;
     font-weight: 500;
 }
@@ -164,10 +164,13 @@
 }
 
 @keyframes iconPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0;
         transform: scale(1);
     }
+
     50% {
         opacity: 1;
         transform: scale(1.05);
@@ -857,6 +860,10 @@
         padding: 16px;
     }
 
+    .header-date {
+        display: none;
+    }
+
     .page-header {
         padding: 24px;
         border-radius: 12px;
@@ -939,4 +946,190 @@
     .info-value {
         font-size: 14px;
     }
+}
+
+/* ============================================
+   CSS para Anexos Externos - licitacaoForm.php
+   Adicione ao arquivo licitacaoForm.css
+   ============================================ */
+
+/* Seção de arquivos externos */
+.external-files-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 2px dashed #e2e8f0;
+}
+
+/* Tabela de anexos externos - sem borda extra */
+.external-files-section .files-table-wrapper {
+    border: none;
+    border-radius: 0;
+    margin: 0 -24px;
+    width: calc(100% + 48px);
+}
+
+.external-files-section .files-table {
+    border-radius: 0;
+}
+
+/* Link externo na tabela */
+.external-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.external-link:hover {
+    text-decoration: underline;
+}
+
+.external-link ion-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge ion-icon {
+    font-size: 14px;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-excluded {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Linha excluída na tabela */
+.row-excluded {
+    background: #fef2f2 !important;
+    opacity: 0.7;
+}
+
+.row-excluded:hover {
+    background: #fee2e2 !important;
+}
+
+.row-excluded .external-link {
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+/* Botões de ação para anexos externos */
+.action-btn.restore-btn {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.action-btn.restore-btn:hover {
+    background: #bbf7d0;
+    color: #15803d;
+}
+
+.action-btn.delete-btn {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.action-btn.delete-btn:hover {
+    background: #fecaca;
+    color: #b91c1c;
+}
+
+/* ============================================
+   CSS para Links Externos no licitacaoView.php
+   Adicione ao arquivo licitacaoView.css
+   ============================================ */
+
+/* Ícone para links externos */
+.file-card-icon.external {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+/* Card de link externo */
+.file-card.external-link {
+    border-style: dashed;
+    border-color: #93c5fd;
+}
+
+.file-card.external-link:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+/* Badge de link externo */
+.file-card-date.external-badge {
+    color: #3b82f6;
+    font-style: italic;
+    font-size: 11px;
+}
+
+/* Coluna de tipo na tabela */
+.files-table .file-type {
+    color: #64748b;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* ============================================
+   CORREÇÃO: Remove espaçamento interno da tabela
+   Específico para licitacaoView.php
+   ============================================ */
+
+/* Classe para remover padding do section-content */
+.section-content.files-section {
+    padding: 0;
+}
+
+/* Header dos arquivos com padding interno */
+.section-content.files-section .files-section-header {
+    padding: 16px 24px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Grid view com padding */
+.section-content.files-section .files-grid {
+    padding: 20px 24px;
+}
+
+/* Lista sem padding extra */
+.section-content.files-section .files-list {
+    margin: 0;
+}
+
+/* Remove border e border-radius da tabela wrapper */
+.section-content.files-section .files-table-wrapper {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+/* Estado vazio com padding */
+.section-content.files-section .empty-state {
+    padding: 48px 24px;
+}
+
+/* Última linha da tabela sem borda inferior */
+.files-table tbody tr:last-child td {
+    border-bottom: none;
 }
