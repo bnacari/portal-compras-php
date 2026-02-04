@@ -58,8 +58,12 @@ if (($_SESSION['sucesso'] != 1 && $statusLicitacao == 'Rascunho') || ($_SESSION[
     redirecionar($_SESSION['redirecionar']);
 }
 
+$nmTipo = '';
+$nmCriterio = '';
+$nmForma = '';
+
 // Busca nome do tipo de licitação
-if (isset($tipoLicitacao)) {
+if (isset($tipoLicitacao) && $tipoLicitacao) {
     $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[TIPO_LICITACAO] WHERE ID_TIPO = $tipoLicitacao";
     $querySelect = $pdoCAT->query($querySelect2);
 
@@ -69,7 +73,7 @@ if (isset($tipoLicitacao)) {
 }
 
 // Busca nome do critério
-if ($criterioLicitacao && $criterioLicitacao != '0') {
+if (isset($criterioLicitacao) && $criterioLicitacao && $criterioLicitacao != '0') {
     $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[CRITERIO_LICITACAO] WHERE ID_CRITERIO = $criterioLicitacao";
     $querySelect = $pdoCAT->query($querySelect2);
 
@@ -79,7 +83,7 @@ if ($criterioLicitacao && $criterioLicitacao != '0') {
 }
 
 // Busca nome da forma
-if ($formaLicitacao && $formaLicitacao != '0') {
+if (isset($formaLicitacao) && $formaLicitacao && $formaLicitacao != '0') {
     $querySelect2 = "SELECT * FROM [PortalCompras].[dbo].[FORMA] WHERE ID_FORMA = $formaLicitacao";
     $querySelect = $pdoCAT->query($querySelect2);
 
@@ -240,44 +244,56 @@ if (isset($_SESSION['perfil'])) {
         </div>
         <div class="section-content">
             <div class="info-grid">
+                <?php if ($codLicitacao): ?>
                 <div class="info-item">
                     <span class="info-label">Código</span>
                     <span class="info-value"><?php echo htmlspecialchars($codLicitacao); ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if (isset($nmTipo) && $nmTipo): ?>
                 <div class="info-item">
                     <span class="info-label">Tipo</span>
-                    <span class="info-value"><?php echo htmlspecialchars($nmTipo ?? '-'); ?></span>
+                    <span class="info-value"><?php echo htmlspecialchars($nmTipo); ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if ($respLicitacao): ?>
                 <div class="info-item">
                     <span class="info-label">Responsável</span>
-                    <span class="info-value"><?php echo htmlspecialchars($respLicitacao ?: '-'); ?></span>
+                    <span class="info-value"><?php echo htmlspecialchars($respLicitacao); ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if ($statusLicitacao): ?>
                 <div class="info-item">
                     <span class="info-label">Status</span>
                     <span class="info-value">
-                        <span
-                            class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
+                        <span class="status-badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusLicitacao); ?></span>
                     </span>
                 </div>
+                <?php endif; ?>
             </div>
 
+            <?php if ($objLicitacao): ?>
             <div class="info-full">
                 <span class="info-label">Objeto</span>
-                <span class="info-value info-object"><?php echo nl2br(htmlspecialchars($objLicitacao ?: '-')); ?></span>
+                <span class="info-value info-object"><?php echo nl2br(htmlspecialchars($objLicitacao)); ?></span>
             </div>
-
-            <?php if ($identificadorLicitacao): ?>
-                <div class="info-full">
-                    <span class="info-label">Identificador</span>
-                    <span class="info-value"><?php echo htmlspecialchars($identificadorLicitacao); ?></span>
-                </div>
             <?php endif; ?>
 
-            <?php if ($vlLicitacao): ?>
-                <div class="info-full">
-                    <span class="info-label">Valor Estimado</span>
-                    <span class="info-value"><?php echo htmlspecialchars($vlLicitacao); ?></span>
-                </div>
+            <?php if ($identificadorLicitacao): ?>
+            <div class="info-full">
+                <span class="info-label">Identificador</span>
+                <span class="info-value"><?php echo htmlspecialchars($identificadorLicitacao); ?></span>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($vlLicitacao && $vlLicitacao != '0' && $vlLicitacao != '0.00'): ?>
+            <div class="info-full">
+                <span class="info-label">Valor Estimado</span>
+                <span class="info-value"><?php echo htmlspecialchars($vlLicitacao); ?></span>
+            </div>
             <?php endif; ?>
         </div>
     </div>
@@ -292,35 +308,40 @@ if (isset($_SESSION['perfil'])) {
         </div>
         <div class="section-content">
             <div class="info-grid">
+                <?php if ($dtAberLicitacao && strpos($dtAberLicitacao, '1969') === false && strpos($dtAberLicitacao, '31/12') === false): ?>
                 <div class="info-item">
                     <span class="info-label">Data de Abertura</span>
-                    <span class="info-value"><?php echo $dtAberLicitacao ?: '-'; ?></span>
+                    <span class="info-value"><?php echo $dtAberLicitacao; ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if ($dtIniSessLicitacao && strpos($dtIniSessLicitacao, '1969') === false && strpos($dtIniSessLicitacao, '31/12') === false): ?>
                 <div class="info-item">
                     <span class="info-label">Data da Sessão de Disputa</span>
-                    <span class="info-value"><?php echo $dtIniSessLicitacao ?: '-'; ?></span>
+                    <span class="info-value"><?php echo $dtIniSessLicitacao; ?></span>
                 </div>
+                <?php endif; ?>
             </div>
 
             <?php if ($localLicitacao): ?>
-                <div class="info-full">
-                    <span class="info-label">Local de Abertura</span>
-                    <span class="info-value">
-                        <?php if (filter_var($localLicitacao, FILTER_VALIDATE_URL)): ?>
-                            <a href="<?php echo htmlspecialchars($localLicitacao); ?>" target="_blank" class="info-link">
-                                <ion-icon name="open-outline"></ion-icon>
-                                <?php echo htmlspecialchars($localLicitacao); ?>
-                            </a>
-                        <?php else: ?>
+            <div class="info-full">
+                <span class="info-label">Local de Abertura</span>
+                <span class="info-value">
+                    <?php if (filter_var($localLicitacao, FILTER_VALIDATE_URL)): ?>
+                        <a href="<?php echo htmlspecialchars($localLicitacao); ?>" target="_blank" class="info-link">
+                            <ion-icon name="open-outline"></ion-icon>
                             <?php echo htmlspecialchars($localLicitacao); ?>
-                        <?php endif; ?>
-                    </span>
-                </div>
+                        </a>
+                    <?php else: ?>
+                        <?php echo htmlspecialchars($localLicitacao); ?>
+                    <?php endif; ?>
+                </span>
+            </div>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- ============================================
+   <!-- ============================================
          Seção: Detalhes da Licitação
          ============================================ -->
     <div class="section-card">
@@ -330,29 +351,40 @@ if (isset($_SESSION['perfil'])) {
         </div>
         <div class="section-content">
             <div class="info-grid">
+                <?php if ($modoLicitacao && $modoLicitacao != '0'): ?>
                 <div class="info-item">
                     <span class="info-label">Modo de Disputa</span>
-                    <span class="info-value"><?php echo htmlspecialchars($modoLicitacao ?: '-'); ?></span>
+                    <span class="info-value"><?php echo htmlspecialchars($modoLicitacao); ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if ($nmCriterio): ?>
                 <div class="info-item">
                     <span class="info-label">Critério de Julgamento</span>
-                    <span class="info-value"><?php echo htmlspecialchars($nmCriterio ?? '-'); ?></span>
+                    <span class="info-value"><?php echo htmlspecialchars($nmCriterio); ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if ($nmForma): ?>
                 <div class="info-item">
                     <span class="info-label">Forma</span>
-                    <span class="info-value"><?php echo htmlspecialchars($nmForma ?? '-'); ?></span>
+                    <span class="info-value"><?php echo htmlspecialchars($nmForma); ?></span>
                 </div>
+                <?php endif; ?>
+
+                <?php if ($regimeLicitacao && $regimeLicitacao != '0'): ?>
                 <div class="info-item">
                     <span class="info-label">Regime de Execução</span>
-                    <span class="info-value"><?php echo htmlspecialchars($regimeLicitacao ?: '-'); ?></span>
+                    <span class="info-value"><?php echo htmlspecialchars($regimeLicitacao); ?></span>
                 </div>
+                <?php endif; ?>
             </div>
 
             <?php if ($obsLicitacao): ?>
-                <div class="info-full">
-                    <span class="info-label">Observação</span>
-                    <span class="info-value info-obs"><?php echo nl2br(htmlspecialchars($obsLicitacao)); ?></span>
-                </div>
+            <div class="info-full">
+                <span class="info-label">Observação</span>
+                <span class="info-value info-obs"><?php echo nl2br(htmlspecialchars($obsLicitacao)); ?></span>
+            </div>
             <?php endif; ?>
         </div>
     </div>
