@@ -1467,3 +1467,100 @@ tr.sortable-chosen {
     font-size: 48px;
     margin-bottom: 12px;
 }
+
+/* ============================================
+   RESPONSIVE: Anexos - licitacaoView.php
+   Converte tabela em cards no mobile
+   ============================================ */
+
+@media (max-width: 768px) {
+
+    /* Esconde o header da tabela no mobile */
+    .section-content.files-section .files-table thead {
+        display: none;
+    }
+
+    /* Remove overflow-x para eliminar scroll horizontal */
+    .section-content.files-section .files-table-wrapper {
+        overflow-x: visible;
+    }
+
+    /* Cada linha vira um bloco empilhado */
+    .section-content.files-section .files-table,
+    .section-content.files-section .files-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .section-content.files-section .files-table tbody tr {
+        display: flex;
+        flex-direction: column;
+        padding: 14px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        gap: 6px;
+    }
+
+    .section-content.files-section .files-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .section-content.files-section .files-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    /* Células viram blocos */
+    .section-content.files-section .files-table td {
+        display: block;
+        padding: 0;
+        border-bottom: none;
+    }
+
+    /* Nome do arquivo - ocupa toda a largura e quebra linha */
+    .section-content.files-section .files-table td:first-child a {
+        word-break: break-word;
+        white-space: normal;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    /* Data - estilo secundário abaixo do nome */
+    .section-content.files-section .files-table td.file-date {
+        font-size: 12px;
+        color: #94a3b8;
+        white-space: normal;
+    }
+
+    /* Barra azul lateral para links externos */
+    .section-content.files-section .files-table tbody tr.external-row {
+        border-left: 3px solid #3b82f6;
+        padding-left: 17px;
+    }
+
+    .section-content.files-section .files-table tbody tr.external-row td:first-child {
+        border-left: none;
+    }
+
+    /* Header da seção de arquivos - padding menor */
+    .section-content.files-section .files-section-header {
+        padding: 14px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .section-content.files-section .files-table tbody tr {
+        padding: 12px 16px;
+    }
+
+    .section-content.files-section .files-table td:first-child a {
+        font-size: 13px;
+    }
+
+    .section-content.files-section .files-section-header {
+        padding: 12px 16px;
+    }
+
+    .section-content.files-section .files-table tbody tr.external-row {
+        padding-left: 13px;
+    }
+}
