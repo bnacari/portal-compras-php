@@ -43,12 +43,15 @@ try {
     $dtIniLicitacaoFilter = isset($_POST['dtIniLicitacao']) ? trim($_POST['dtIniLicitacao']) : '';
     $dtFimLicitacaoFilter = isset($_POST['dtFimLicitacao']) ? trim($_POST['dtFimLicitacao']) : '';
     $tipoLicitacao = isset($_POST['tipoLicitacao']) ? trim($_POST['tipoLicitacao']) : '';
+    $somentesFavoritos = isset($_POST['somenteFavoritos']) ? trim($_POST['somenteFavoritos']) : '0';
     $pagina = isset($_POST['pagina']) ? intval($_POST['pagina']) : 1;
     $limite = isset($_POST['limite']) ? intval($_POST['limite']) : 20;
 
     // Validar valores
-    if ($pagina < 1) $pagina = 1;
-    if ($limite < 1) $limite = 20;
+    if ($pagina < 1)
+        $pagina = 1;
+    if ($limite < 1)
+        $limite = 20;
     $offset = ($pagina - 1) * $limite;
 
     // Construir WHERE
@@ -78,6 +81,16 @@ try {
     if (!empty($dtIniLicitacaoFilter) && !empty($dtFimLicitacaoFilter)) {
         $whereConditions[] = "L.DT_LICITACAO BETWEEN '" . $dtIniLicitacaoFilter . "' AND '" . $dtFimLicitacaoFilter . " 23:59:59'";
     }
+
+    if ($somentesFavoritos === '1' && $idUsuarioLogado > 0) {
+        $whereConditions[] = "EXISTS (
+        SELECT 1 FROM FAVORITO_LICITACAO F 
+        WHERE F.ID_LICITACAO = L.ID_LICITACAO 
+        AND F.ID_ADM = $idUsuarioLogado 
+        AND F.DT_EXC_FAVORITO IS NULL
+    )";
+    }
+
 
     $whereClause = implode(" AND ", $whereConditions);
     $emailEscaped = str_replace("'", "''", $emailUsuario);
@@ -127,30 +140,34 @@ try {
     $statsResult = $stmtStats ? $stmtStats->fetch(PDO::FETCH_ASSOC) : null;
 
     $stats = array(
-        'total_geral'     => $statsResult ? intval($statsResult['total_geral']) : 0,
+        'total_geral' => $statsResult ? intval($statsResult['total_geral']) : 0,
         'total_andamento' => $statsResult ? intval($statsResult['total_andamento']) : 0,
         'total_encerrado' => $statsResult ? intval($statsResult['total_encerrado']) : 0,
-        'total_suspenso'  => $statsResult ? intval($statsResult['total_suspenso']) : 0
+        'total_suspenso' => $statsResult ? intval($statsResult['total_suspenso']) : 0
     );
 
     // Query principal - ATUALIZADA com campos de notificação
     $querySelect = "SELECT  
-                        D.*, 
-                        L.ID_LICITACAO, 
-                        L.DT_LICITACAO, 
-                        TIPO.NM_TIPO, 
-                        TIPO.SGL_TIPO,
-                        D.ENVIO_ATUALIZACAO_LICITACAO,
-                        (SELECT COUNT(*) FROM ATUALIZACAO A 
-                         WHERE A.ID_LICITACAO = L.ID_LICITACAO 
-                         AND A.ID_ADM = $idUsuarioLogado 
-                         AND A.DT_EXC_ATUALIZACAO IS NULL) AS USUARIO_INSCRITO
-                    FROM LICITACAO L
-                    LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
-                    LEFT JOIN TIPO_LICITACAO TIPO ON D.TIPO_LICITACAO = TIPO.ID_TIPO
-                    WHERE " . $whereClause . "
-                    ORDER BY L.DT_LICITACAO DESC
-                    OFFSET " . $offset . " ROWS FETCH NEXT " . $limite . " ROWS ONLY";
+                    D.*, 
+                    L.ID_LICITACAO, 
+                    L.DT_LICITACAO, 
+                    TIPO.NM_TIPO, 
+                    TIPO.SGL_TIPO,
+                    D.ENVIO_ATUALIZACAO_LICITACAO,
+                    (SELECT COUNT(*) FROM ATUALIZACAO A 
+                     WHERE A.ID_LICITACAO = L.ID_LICITACAO 
+                     AND A.ID_ADM = $idUsuarioLogado 
+                     AND A.DT_EXC_ATUALIZACAO IS NULL) AS USUARIO_INSCRITO,
+                    (SELECT COUNT(*) FROM FAVORITO_LICITACAO F 
+                     WHERE F.ID_LICITACAO = L.ID_LICITACAO 
+                     AND F.ID_ADM = $idUsuarioLogado 
+                     AND F.DT_EXC_FAVORITO IS NULL) AS USUARIO_FAVORITO
+                FROM LICITACAO L
+                LEFT JOIN DETALHE_LICITACAO D ON D.ID_LICITACAO = L.ID_LICITACAO
+                LEFT JOIN TIPO_LICITACAO TIPO ON D.TIPO_LICITACAO = TIPO.ID_TIPO
+                WHERE " . $whereClause . "
+                ORDER BY L.DT_LICITACAO DESC
+                OFFSET " . $offset . " ROWS FETCH NEXT " . $limite . " ROWS ONLY";
 
     $stmt = $pdoCAT->query($querySelect);
     if (!$stmt) {

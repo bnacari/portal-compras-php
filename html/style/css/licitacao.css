@@ -1975,7 +1975,8 @@
 }
 
 .page-header-unified .decoration-line {
-    display: none; /* Já temos o ::before do container */
+    display: none;
+    /* Já temos o ::before do container */
 }
 
 /* ============================================
@@ -2020,7 +2021,7 @@
     color: #cbd5e1;
 }
 
-.page-header-unified .header-breadcrumb > span {
+.page-header-unified .header-breadcrumb>span {
     color: #64748b;
     font-weight: 500;
 }
@@ -2076,8 +2077,17 @@
 }
 
 @keyframes iconPulse {
-    0%, 100% { opacity: 0; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
 }
 
 .page-header-unified .header-title-group h1 {
@@ -2275,8 +2285,15 @@
 }
 
 @keyframes countUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .page-header-unified .stat-number.loaded {
@@ -2373,8 +2390,8 @@
     max-height: 500px;
     overflow: hidden;
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease;
+        padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease;
     opacity: 1;
 }
 
@@ -2405,8 +2422,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .filters-summary-text {
@@ -2613,5 +2637,150 @@
 
     .filters-section .filters-grid-row2 {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   FAVORITOS - Estilos para Licitações Favoritas
+   Adicionar ao final do arquivo style/css/licitacao.css
+   ============================================ */
+
+/* Toggle de Favoritos (no table-header) */
+.favoritos-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.favoritos-toggle:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+.favoritos-toggle input[type="checkbox"] {
+    display: none;
+}
+
+/* Estado desmarcado: mostra star-outline, esconde star */
+.favoritos-toggle .star-checked {
+    display: none;
+    font-size: 16px;
+    color: #f59e0b;
+}
+
+.favoritos-toggle .star-unchecked {
+    display: inline-flex;
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+/* Estado marcado: mostra star, esconde star-outline */
+.favoritos-toggle input[type="checkbox"]:checked~.star-checked {
+    display: inline-flex;
+}
+
+.favoritos-toggle input[type="checkbox"]:checked~.star-unchecked {
+    display: none;
+}
+
+.favoritos-toggle input[type="checkbox"]:checked~span {
+    color: #d97706;
+    font-weight: 600;
+}
+
+.favoritos-toggle:has(input:checked) {
+    background: #fffbeb;
+    border-color: #fbbf24;
+    color: #d97706;
+}
+
+/* Botão de Favorito (estrela) nos Cards e Tabela */
+.btn-acao.favorito {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    transition: all 0.2s ease;
+    color: #cbd5e1;
+    font-size: 18px;
+}
+
+.btn-acao.favorito:hover {
+    background: #fffbeb;
+    color: #f59e0b;
+    transform: scale(1.1);
+}
+
+.btn-acao.favorito.active {
+    color: #f59e0b;
+}
+
+.btn-acao.favorito.active:hover {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Animação ao clicar */
+.btn-acao.favorito ion-icon {
+    transition: transform 0.2s ease;
+}
+
+.btn-acao.favorito:active ion-icon {
+    transform: scale(0.8);
+}
+
+/* ============================================
+   Responsivo
+   ============================================ */
+@media (max-width: 768px) {
+    .favoritos-toggle {
+        font-size: 12px;
+        padding: 5px 10px;
+        gap: 4px;
+    }
+
+    .favoritos-toggle span {
+        display: none;
+    }
+
+    .favoritos-toggle .star-checked,
+    .favoritos-toggle .star-unchecked {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-header {
+        flex-wrap: wrap;
+    }
+
+    .table-actions {
+        width: 100%;
+    }
+
+    .favoritos-toggle {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .favoritos-toggle span {
+        display: inline;
     }
 }

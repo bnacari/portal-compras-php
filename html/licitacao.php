@@ -99,10 +99,12 @@ if ($podeEditar) {
             <div class="header-right">
                 <!-- Toggle de Visualização -->
                 <div class="view-toggle">
-                    <button type="button" onclick="toggleView('cards')" id="btnViewCards" class="active" title="Visualização em Cards">
+                    <button type="button" onclick="toggleView('cards')" id="btnViewCards" class="active"
+                        title="Visualização em Cards">
                         <ion-icon name="grid-outline"></ion-icon>
                     </button>
-                    <button type="button" onclick="toggleView('table')" id="btnViewTable" title="Visualização em Tabela">
+                    <button type="button" onclick="toggleView('table')" id="btnViewTable"
+                        title="Visualização em Tabela">
                         <ion-icon name="list-outline"></ion-icon>
                     </button>
                 </div>
@@ -172,7 +174,8 @@ if ($podeEditar) {
                         <ion-icon name="refresh-outline"></ion-icon>
                         Limpar Filtros
                     </button>
-                    <button type="button" class="btn-toggle-filters" id="btnToggleFilters" onclick="toggleFilters()" title="Recolher filtros">
+                    <button type="button" class="btn-toggle-filters" id="btnToggleFilters" onclick="toggleFilters()"
+                        title="Recolher filtros">
                         <ion-icon name="chevron-up-outline" id="iconToggleFilters"></ion-icon>
                     </button>
                 </div>
@@ -267,7 +270,14 @@ if ($podeEditar) {
                 <strong id="totalRegistros">0</strong> licitação(ões) encontrada(s)
             </div>
             <div class="table-actions">
-                <!-- Ações podem ser adicionadas aqui -->
+                <?php if (isset($_SESSION['idUsuario']) && $_SESSION['sucesso'] == 1): ?>
+                    <label class="favoritos-toggle" id="favoritosToggle" title="Mostrar apenas licitações favoritas">
+                        <input type="checkbox" id="chkSomenteFavoritos" onchange="toggleFiltroFavoritos()">
+                        <ion-icon name="star" class="star-checked"></ion-icon>
+                        <ion-icon name="star-outline" class="star-unchecked"></ion-icon>
+                        <span>Somente Favoritos</span>
+                    </label>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -278,7 +288,8 @@ if ($podeEditar) {
             </div>
             <div class="pagination-container">
                 <div class="pagination-info">
-                    Mostrando <span id="paginacaoInicioCards">0</span> a <span id="paginacaoFimCards">0</span> de <span id="paginacaoTotalCards">0</span>
+                    Mostrando <span id="paginacaoInicioCards">0</span> a <span id="paginacaoFimCards">0</span> de <span
+                        id="paginacaoTotalCards">0</span>
                 </div>
                 <div class="pagination" id="paginacaoCards"></div>
             </div>
@@ -306,7 +317,8 @@ if ($podeEditar) {
             </div>
             <div class="pagination-container">
                 <div class="pagination-info">
-                    Mostrando <span id="paginacaoInicio">0</span> a <span id="paginacaoFim">0</span> de <span id="paginacaoTotal">0</span>
+                    Mostrando <span id="paginacaoInicio">0</span> a <span id="paginacaoFim">0</span> de <span
+                        id="paginacaoTotal">0</span>
                 </div>
                 <div class="pagination" id="paginacao"></div>
             </div>
@@ -337,7 +349,7 @@ if ($podeEditar) {
     // ============================================
     // Inicialização
     // ============================================
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Inicializar Select2
         $('.select2-tipo').select2({
             placeholder: 'Selecione o tipo...',
@@ -346,31 +358,31 @@ if ($podeEditar) {
         });
 
         // Listeners para auto-pesquisa
-        document.getElementById('tituloLicitacao').addEventListener('input', debounce(function() {
+        document.getElementById('tituloLicitacao').addEventListener('input', debounce(function () {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
         }, 400));
 
-        $('input[name="statusLicitacao"]').on('change', function() {
+        $('input[name="statusLicitacao"]').on('change', function () {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
         });
 
-        $('#tipoLicitacao').on('change', function() {
+        $('#tipoLicitacao').on('change', function () {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
         });
 
-        document.getElementById('dtIniLicitacao').addEventListener('change', function() {
+        document.getElementById('dtIniLicitacao').addEventListener('change', function () {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
         });
 
-        document.getElementById('dtFimLicitacao').addEventListener('change', function() {
+        document.getElementById('dtFimLicitacao').addEventListener('change', function () {
             paginaAtualLic = 1;
             salvarFiltros();
             pesquisar();
@@ -434,7 +446,7 @@ if ($podeEditar) {
 
     function atualizarResumoFiltros() {
         const filtrosAtivos = [];
-        
+
         const titulo = document.getElementById('tituloLicitacao').value.trim();
         if (titulo) filtrosAtivos.push('Busca: "' + titulo + '"');
 
@@ -457,6 +469,9 @@ if ($podeEditar) {
             summaryText.innerHTML = '<ion-icon name="funnel-outline"></ion-icon> ' + filtrosAtivos.join(' <span class="summary-separator">•</span> ');
         } else {
             summaryText.innerHTML = '<ion-icon name="funnel-outline"></ion-icon> Nenhum filtro ativo';
+        }
+        if (document.getElementById('chkSomenteFavoritos') && document.getElementById('chkSomenteFavoritos').checked) {
+            filtrosAtivos.push('★ Favoritos');
         }
     }
 
@@ -527,11 +542,12 @@ if ($podeEditar) {
             status: $('input[name="statusLicitacao"]:checked').val(),
             dataInicial: document.getElementById('dtIniLicitacao').value,
             dataFinal: document.getElementById('dtFimLicitacao').value,
+            somenteFavoritos: document.getElementById('chkSomenteFavoritos') ? document.getElementById('chkSomenteFavoritos').checked : false,
             pagina: paginaAtualLic
         };
         try {
             localStorage.setItem(STORAGE_KEY_FILTERS, JSON.stringify(state));
-        } catch (e) {}
+        } catch (e) { }
 
         // Atualizar resumo se filtros estão recolhidos
         if (document.getElementById('filtersSection').classList.contains('collapsed')) {
@@ -554,6 +570,9 @@ if ($podeEditar) {
             if (state.dataInicial) document.getElementById('dtIniLicitacao').value = state.dataInicial;
             if (state.dataFinal) document.getElementById('dtFimLicitacao').value = state.dataFinal;
             if (state.pagina) paginaAtualLic = parseInt(state.pagina);
+            if (state.somenteFavoritos && document.getElementById('chkSomenteFavoritos')) {
+                document.getElementById('chkSomenteFavoritos').checked = state.somenteFavoritos;
+            }
         } catch (e) {
             console.error('Erro ao restaurar filtros:', e);
         }
@@ -576,6 +595,7 @@ if ($podeEditar) {
         if (document.getElementById('filtersSection').classList.contains('collapsed')) {
             atualizarResumoFiltros();
         }
+        if (document.getElementById('chkSomenteFavoritos')) document.getElementById('chkSomenteFavoritos').checked = false;
     }
 
     // ============================================
@@ -620,7 +640,7 @@ if ($podeEditar) {
         formData.append('dtFimLicitacao', document.getElementById('dtFimLicitacao').value);
         formData.append('pagina', paginaAtualLic);
         formData.append('limite', registrosPorPagina);
-
+        formData.append('somenteFavoritos', document.getElementById('chkSomenteFavoritos') && document.getElementById('chkSomenteFavoritos').checked ? '1' : '0');
         fetch('bd/licitacao/readAjax.php', {
             method: 'POST',
             body: formData
@@ -728,9 +748,9 @@ if ($podeEditar) {
         formData.append('acao', acao);
 
         fetch('bd/licitacao/toggleNotificacao.php', {
-                method: 'POST',
-                body: formData
-            })
+            method: 'POST',
+            body: formData
+        })
             .then(response => response.json())
             .then(data => {
                 button.disabled = false;
@@ -741,7 +761,7 @@ if ($podeEditar) {
                         button.classList.remove('available');
                         button.classList.add('subscribed');
                         button.title = 'Você está recebendo notificações - Clique para cancelar';
-                        button.onclick = function() {
+                        button.onclick = function () {
                             toggleNotificacao(idLicitacao, 'cancelar', this);
                         };
                         button.innerHTML = '<ion-icon name="notifications"></ion-icon>';
@@ -749,7 +769,7 @@ if ($podeEditar) {
                         button.classList.remove('subscribed');
                         button.classList.add('available');
                         button.title = 'Clique para receber notificações';
-                        button.onclick = function() {
+                        button.onclick = function () {
                             toggleNotificacao(idLicitacao, 'inscrever', this);
                         };
                         button.innerHTML = '<ion-icon name="notifications-outline"></ion-icon>';
@@ -786,7 +806,7 @@ if ($podeEditar) {
         }
 
         let html = '';
-        dados.forEach(function(item) {
+        dados.forEach(function (item) {
             const statusClass = getStatusClass(item.STATUS_LICITACAO);
             const tipoClass = getTipoClass(item.NM_TIPO);
             const tipoAbrev = getTipoAbreviado(item.NM_TIPO);
@@ -794,6 +814,7 @@ if ($podeEditar) {
             const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
             const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 100) : '-';
             const notificationButton = getNotificationButton(item);
+            const favoriteButton = getFavoriteButton(item);
 
             html += `
             <div class="licitacao-card" data-id="${item.ID_LICITACAO}" onclick="abrirVisualizacao(${item.ID_LICITACAO}, event)">
@@ -827,12 +848,13 @@ if ($podeEditar) {
                 <div class="card-footer">
                     <span class="badge badge-tipo ${tipoClass}" title="${item.NM_TIPO || ''}">${tipoAbrev}</span>
                     <div class="card-footer-actions">
+                        ${favoriteButton}
                         ${notificationButton}
                         <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
                             <ion-icon name="eye-outline"></ion-icon>
                         </a>
                         ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
-                            `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
+                    `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
                                 <ion-icon name="create-outline"></ion-icon>
                             </a>` : ''}
                     </div>
@@ -866,7 +888,7 @@ if ($podeEditar) {
         }
 
         let html = '';
-        dados.forEach(function(item) {
+        dados.forEach(function (item) {
             const statusClass = getStatusClass(item.STATUS_LICITACAO);
             const rowClass = getRowClass(item.STATUS_LICITACAO);
             const tipoClass = getTipoClass(item.NM_TIPO);
@@ -875,6 +897,7 @@ if ($podeEditar) {
             const codigo = (item.SGL_TIPO || '') + ' ' + (item.COD_LICITACAO || '');
             const objeto = item.OBJETO_LICITACAO ? truncarTexto(item.OBJETO_LICITACAO, 80) : '-';
             const notificationButton = getNotificationButton(item);
+            const favoriteButton = getFavoriteButton(item);
 
             html += `
             <tr class="${rowClass}" data-id="${item.ID_LICITACAO}" onclick="abrirVisualizacao(${item.ID_LICITACAO}, event)">
@@ -885,15 +908,16 @@ if ($podeEditar) {
                 <td>${dataAbertura}</td>
                 <td>${item.PREG_RESP_LICITACAO || '-'}</td>
                 <td>
-                    <div class="acoes-cell">
+                   <div class="card-footer-actions">
+                        ${favoriteButton}
                         ${notificationButton}
                         <a href="licitacaoView.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao visualizar" title="Visualizar">
                             <ion-icon name="eye-outline"></ion-icon>
                         </a>
                         ${podeEditar && item.STATUS_LICITACAO !== 'Encerrado' ?
-                            `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
+                    `<a href="licitacaoForm.php?idLicitacao=${item.ID_LICITACAO}" class="btn-acao editar" title="Editar">
                                 <ion-icon name="create-outline"></ion-icon>
-                            </a>` : '<span></span>'}
+                            </a>` : ''}
                     </div>
                 </td>
             </tr>
@@ -1083,6 +1107,92 @@ if ($podeEditar) {
         }
 
         requestAnimationFrame(animar);
+    }
+
+    // ============================================
+    // Função auxiliar para gerar o botão de favorito (estrela)
+    // ============================================
+    function getFavoriteButton(item) {
+        // Só mostra favorito para usuários logados
+        <?php if (!isset($_SESSION['idUsuario']) || $_SESSION['sucesso'] != 1): ?>
+            return '';
+        <?php else: ?>
+            if (item.USUARIO_FAVORITO && item.USUARIO_FAVORITO > 0) {
+                return `
+            <button type="button" 
+                    class="btn-acao favorito active" 
+                    title="Remover dos favoritos"
+                    onclick="event.stopPropagation(); toggleFavorito(${item.ID_LICITACAO}, this)">
+                <ion-icon name="star"></ion-icon>
+            </button>`;
+            }
+
+            return `
+        <button type="button" 
+                class="btn-acao favorito" 
+                title="Adicionar aos favoritos"
+                onclick="event.stopPropagation(); toggleFavorito(${item.ID_LICITACAO}, this)">
+            <ion-icon name="star-outline"></ion-icon>
+        </button>`;
+        <?php endif; ?>
+    }
+
+    // ============================================
+    // Função para toggle de favorito via AJAX
+    // ============================================
+    function toggleFavorito(idLicitacao, button) {
+        button.disabled = true;
+        button.style.opacity = '0.5';
+
+        const formData = new FormData();
+        formData.append('idLicitacao', idLicitacao);
+
+        fetch('bd/licitacao/toggleFavorito.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                button.disabled = false;
+                button.style.opacity = '1';
+
+                if (data.success) {
+                    if (data.favorito) {
+                        button.classList.add('active');
+                        button.title = 'Remover dos favoritos';
+                        button.innerHTML = '<ion-icon name="star"></ion-icon>';
+                    } else {
+                        button.classList.remove('active');
+                        button.title = 'Adicionar aos favoritos';
+                        button.innerHTML = '<ion-icon name="star-outline"></ion-icon>';
+
+                        // Se está filtrando somente favoritos, recarregar a lista
+                        if (document.getElementById('chkSomenteFavoritos') &&
+                            document.getElementById('chkSomenteFavoritos').checked) {
+                            pesquisar();
+                        }
+                    }
+
+                    showToast(data.message, 'sucesso');
+                } else {
+                    showToast(data.message || 'Erro ao processar solicitação', 'erro');
+                }
+            })
+            .catch(error => {
+                button.disabled = false;
+                button.style.opacity = '1';
+                console.error('Erro:', error);
+                showToast('Erro ao processar solicitação', 'erro');
+            });
+    }
+
+    // ============================================
+    // Função para toggle do filtro de favoritos
+    // ============================================
+    function toggleFiltroFavoritos() {
+        paginaAtualLic = 1;
+        salvarFiltros();
+        pesquisar();
     }
 </script>
 
